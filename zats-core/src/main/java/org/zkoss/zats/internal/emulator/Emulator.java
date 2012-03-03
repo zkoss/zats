@@ -1,9 +1,8 @@
 package org.zkoss.zats.internal.emulator;
 
 import java.io.Closeable;
+import java.util.Map;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 public interface Emulator extends Closeable
 {
@@ -21,8 +20,8 @@ public interface Emulator extends Closeable
 	int getPort();
 
 	/**
-	 * get the URL of this address the emulator bound.
-	 * @return URL (eg. http://127.0.0.1:12345)
+	 * get the URL address.
+	 * @return URL.
 	 */
 	String getAddress();
 
@@ -33,14 +32,26 @@ public interface Emulator extends Closeable
 	ServletContext getServletContext();
 
 	/**
-	 * get the last servlet request object in the emulator.
-	 * @return servlet request or null if it was not connected yet.
+	 * get the attributes of last request.
+	 * @return attributes.
 	 */
-	HttpServletRequest getLastServletRequest();
+	Map<String, Object> getRequestAttributes();
 
 	/**
-	 * get the last servlet response object in the emulator.
-	 * @return servlet response or null if it was not connected yet.
+	 * get the parameters of last request.
+	 * @return parameters.
 	 */
-	HttpServletResponse getLastServletResponse();
+	Map<String, String[]> getRequestParameters();
+
+	/**
+	 * get the session's attributes of last request.
+	 * @return attributes.
+	 */
+	Map<String, Object> getSessionAttributes();
+
+	/**
+	 * get the session ID of last request.
+	 * @return ID or null if no session created.
+	 */
+	String getSessionId();
 }
