@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,21 +20,20 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.zkoss.zats.internal.emulator.Emulator;
+import org.zkoss.zats.internal.emulator.EmulatorBuilder;
 
-public class JettyEmulatorTest extends HttpServlet
+public class EmulatorTest extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 
-	private JettyEmulator emulator;
+	private Emulator emulator;
 
 	@Before
 	public void before() throws Exception
 	{
-		URL descriptor = JettyEmulatorTest.class.getResource("WEB-INF/web.xml");
-		String contentPath = System.getProperty("java.io.tmpdir", ".");
-		assertNotNull(descriptor);
-		assertTrue(new File(contentPath).exists());
-		emulator = new JettyEmulator(contentPath, descriptor.toString());
+		emulator = new EmulatorBuilder(System.getProperty("java.io.tmpdir", "."))
+			.descriptor(EmulatorTest.class.getResource("WEB-INF/web.xml"))
+			.create();
 	}
 
 	@After
