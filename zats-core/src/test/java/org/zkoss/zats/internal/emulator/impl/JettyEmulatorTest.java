@@ -61,6 +61,7 @@ public class JettyEmulatorTest extends HttpServlet
 		assertNull(e.getSessionId());
 		assertEquals(0, e.getRequestParameters().size());
 
+		// first request
 		String msg = "hello";
 		HttpURLConnection huc = (HttpURLConnection)url.openConnection();
 		huc.setRequestMethod("GET");
@@ -79,21 +80,27 @@ public class JettyEmulatorTest extends HttpServlet
 		assertEquals(msg, e.getRequestAttributes().get("msg"));
 		assertEquals(msg, sc.getAttribute("msg"));
 
-		url = new URL(e.getAddress() + "/?msg=cool");
-		msg = "cool";
-		huc = (HttpURLConnection)url.openConnection();
+		// repeat request many times
+		for(int i = 0; i < 10; ++i)
+			check(e, "cool" + i, new URL(e.getAddress() + "/?msg=cool" + i));
+	}
+
+	private void check(Emulator e, String msg, URL url) throws Exception
+	{
+		System.out.println(url);
+		HttpURLConnection huc = (HttpURLConnection)url.openConnection();
 		huc.setRequestMethod("GET");
 		huc.addRequestProperty("Host", e.getHost() + ":" + e.getPort());
 		huc.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)");
 		huc.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 		huc.addRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
 		huc.connect();
-		is = huc.getInputStream();
-		r = new BufferedReader(new InputStreamReader(is));
+		InputStream is = huc.getInputStream();
+		BufferedReader r = new BufferedReader(new InputStreamReader(is));
 		assertEquals(msg, r.readLine());
 		r.close();
 		huc.disconnect();
-		assertEquals(msg, sc.getAttribute("msg"));
+		assertEquals(msg, e.getServletContext().getAttribute("msg"));
 		assertEquals(msg, e.getRequestAttributes().get("msg"));
 		assertEquals(msg, e.getSessionAttributes().get("msg"));
 		assertNotNull(e.getSessionId());
