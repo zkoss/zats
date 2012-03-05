@@ -39,11 +39,19 @@ public class Conversations
 		c.get().open(zulPath);
 	}
 
+	/**
+	 * get the desktop from specify zul.
+	 * @return desktop.
+	 */
 	public static DesktopNode getDesktop()
 	{
 		return c.get().getDesktop();
 	}
 
+	/**
+	 * get the session.
+	 * @return session or null if it doesn't have.
+	 */
 	public static HttpSession getSession()
 	{
 		return c.get().getSession();
