@@ -18,6 +18,12 @@
 			<artifactId>jetty-webapp</artifactId>
 			<version>8.1.1.v20120215</version>
 		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zhtml</artifactId>
+			<version>6.0.0</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

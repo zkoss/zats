@@ -41,9 +41,9 @@ public class JettyEmulator implements Emulator
 	private Map<String, Object> requestAttributes;
 	private Map<String, String[]> requestParameters;
 
-	public JettyEmulator(String contentPath, String descriptor)
+	public JettyEmulator(String contentRoot, String descriptor)
 	{
-		if(contentPath == null)
+		if(contentRoot == null)
 			throw new IllegalArgumentException("contentPath can't be null.");
 		if(descriptor == null)
 			throw new IllegalArgumentException("descriptor can't be null.");
@@ -57,7 +57,7 @@ public class JettyEmulator implements Emulator
 			// create server
 			server = new Server(new InetSocketAddress(getHost(), 0));
 			final WebAppContext contextHandler = new WebAppContext();
-			contextHandler.setResourceBase(contentPath);
+			contextHandler.setResourceBase(contentRoot);
 			contextHandler.setDescriptor(descriptor);
 			contextHandler.setContextPath("/");
 			contextHandler.setParentLoaderPriority(true);
@@ -97,7 +97,7 @@ public class JettyEmulator implements Emulator
 		}
 		catch(Exception e)
 		{
-			throw new EmulatorException(e);
+			throw new EmulatorException("", e);
 		}
 	}
 

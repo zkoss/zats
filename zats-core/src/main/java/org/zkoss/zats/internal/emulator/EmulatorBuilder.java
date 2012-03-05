@@ -10,19 +10,19 @@ import org.zkoss.zats.internal.emulator.impl.JettyEmulator;
  */
 public class EmulatorBuilder
 {
-	private String contentPath;
+	private String contentRoot;
 	private String descriptor;
 
 	/**
 	 * Constructor.
-	 * @param contentPath the web application root path.
+	 * @param contentRoot the web application root path.
 	 */
-	public EmulatorBuilder(String contentPath)
+	public EmulatorBuilder(String contentRoot)
 	{
-		if(contentPath == null)
+		if(contentRoot == null)
 			throw new NullPointerException();
-		this.contentPath = contentPath;
-		this.descriptor = (contentPath + "/WEB-INF/web.xml").replaceAll("//+", "/");
+		this.contentRoot = contentRoot;
+		this.descriptor = (contentRoot + "/WEB-INF/web.xml").replaceAll("//+", "/");
 	}
 
 	/**
@@ -65,6 +65,6 @@ public class EmulatorBuilder
 	 */
 	public Emulator create()
 	{
-		return new JettyEmulator(contentPath, descriptor);
+		return new JettyEmulator(contentRoot, descriptor);
 	}
 }
