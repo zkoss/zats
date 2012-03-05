@@ -20,7 +20,7 @@ public class ConversationsTest
 	public void setUp() throws Exception
 	{
 		logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-		logger.setLevel(Level.ALL);
+		logger.setLevel(Level.INFO);
 		Conversations.start();
 	}
 

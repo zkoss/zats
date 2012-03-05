@@ -27,16 +27,13 @@ public class EmulatorConversation implements Conversation
 	public EmulatorConversation()
 	{
 		logger = Logger.getLogger(EmulatorConversation.class.getName());
-		logger.setLevel(Level.ALL);
-		logger.finest("cool");
-		System.out.println(logger.getName());
+		logger.setLevel(Level.INFO);
 		// prepare environment
 		String tmpDir = System.getProperty("java.io.tmpdir", ".");
 		File webinf = new File(tmpDir, System.currentTimeMillis() + "/WEB-INF");
 		if(!webinf.mkdirs())
 			throw new ConversationException("can't create temp directory");
 		File web = webinf.getParentFile();
-		// copy("WEB-INF/web.xml", web);
 		copy("WEB-INF/zk.xml", web);
 		// create emulator
 		emulator = new EmulatorBuilder(web).descriptor(EmulatorConversation.class.getResource("WEB-INF/web.xml")).create();
@@ -130,6 +127,7 @@ public class EmulatorConversation implements Conversation
 
 	public void open(String zulPath)
 	{
+		System.out.println(zulPath);
 		HttpURLConnection huc = null;
 		try
 		{
@@ -142,13 +140,15 @@ public class EmulatorConversation implements Conversation
 			huc.addRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
 			huc.connect();
 			InputStream is = huc.getInputStream();
-			if(logger.isLoggable(Level.ALL))
-				logger.finest(getReplyString(is, huc.getContentEncoding()));
+			System.out.println("kk");
+			logger.info("kk");
+			if(logger.isLoggable(Level.INFO))
+				logger.info(getReplyString(is, huc.getContentEncoding()));
 			close(is);
 		}
 		catch(Exception e)
 		{
-			new ConversationException("", e);
+			throw new ConversationException("", e);
 		}
 		finally
 		{
