@@ -7,16 +7,16 @@ import org.junit.Test;
 import org.zkoss.zats.core.component.DesktopNode;
 import org.zkoss.zats.core.component.operation.Clickable;
 
-public class ConversationsTest
+public class ConversationsTest 
 {
 	@Test
 	public void test()
 	{
-		assertNull(Conversations.getSession());
-		assertNull(Conversations.getDesktop());
-
 		String zul = ConversationsTest.class.getResource("test.zul").getPath().substring(1);
 		Conversations.open(zul);
+
+		assertNull(Conversations.getSession());
+		assertNull(Conversations.getDesktop());
 
 		HttpSession session = Conversations.getSession();
 		DesktopNode desktop = Conversations.getDesktop();

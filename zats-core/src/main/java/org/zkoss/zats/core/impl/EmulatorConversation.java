@@ -3,6 +3,7 @@ package org.zkoss.zats.core.impl;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,6 +24,7 @@ public class EmulatorConversation implements Conversation
 {
 	private Emulator emulator;
 	private Logger logger;
+	private File web;
 
 	public EmulatorConversation()
 	{
@@ -33,19 +35,23 @@ public class EmulatorConversation implements Conversation
 		File webinf = new File(tmpDir, System.currentTimeMillis() + "/WEB-INF");
 		if(!webinf.mkdirs())
 			throw new ConversationException("can't create temp directory");
-		File web = webinf.getParentFile();
-		copy("WEB-INF/zk.xml", web);
-		// create emulator
-		emulator = new EmulatorBuilder(web).descriptor(EmulatorConversation.class.getResource("WEB-INF/web.xml")).create();
+		web = webinf.getParentFile();
+		copy(EmulatorConversation.class.getResourceAsStream("WEB-INF/zk.xml"), new File(web , "WEB-INF/zk.xml"));
 	}
 
 	public void open(String zulPath)
 	{
-		System.out.println(zulPath);
 		HttpURLConnection huc = null;
 		try
 		{
-			URL url = new URL(emulator.getAddress() + zulPath.trim());
+			// create emulator
+			File zul = new File(zulPath);
+			copy(new FileInputStream(zul) , new File(web , zul.getName()));
+			emulator = new EmulatorBuilder(web)
+				.descriptor(EmulatorConversation.class.getResource("WEB-INF/web.xml"))
+				.create();
+
+			URL url = new URL(emulator.getAddress() + "/" + zul.getName());
 			huc = (HttpURLConnection)url.openConnection();
 			huc.setRequestMethod("GET");
 			huc.addRequestProperty("Host", emulator.getHost() + ":" + emulator.getPort());
@@ -54,8 +60,6 @@ public class EmulatorConversation implements Conversation
 			huc.addRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
 			huc.connect();
 			InputStream is = huc.getInputStream();
-			System.out.println("kk");
-			logger.info("kk");
 			if(logger.isLoggable(Level.INFO))
 				logger.info(getReplyString(is, huc.getContentEncoding()));
 			close(is);
@@ -71,19 +75,17 @@ public class EmulatorConversation implements Conversation
 		}
 	}
 
-	private void copy(String file, File root)
+	private void copy(InputStream src, File dest)
 	{
-		InputStream is = null;
 		OutputStream os = null;
 		try
 		{
-			is = EmulatorConversation.class.getResourceAsStream(file);
-			os = new FileOutputStream(new File(root, file));
+			os = new FileOutputStream(dest);
 			byte[] buf = new byte[65536];
 			int len;
 			while(true)
 			{
-				len = is.read(buf);
+				len = src.read(buf);
 				if(len < 0)
 					break;
 				os.write(buf, 0, len);
@@ -95,7 +97,7 @@ public class EmulatorConversation implements Conversation
 		}
 		finally
 		{
-			close(is);
+			close(src);
 			close(os);
 		}
 	}

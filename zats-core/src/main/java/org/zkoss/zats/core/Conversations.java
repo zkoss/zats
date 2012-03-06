@@ -6,7 +6,7 @@ import org.zkoss.zats.core.impl.EmulatorConversation;
 
 public class Conversations
 {
-	private static ThreadLocal<Conversation> c = new ThreadLocal<Conversation>();
+	private static ThreadLocal<Conversation> local = new ThreadLocal<Conversation>();
 
 	/**
 	 * start a conversation and navigate to specify zul path.
@@ -18,7 +18,7 @@ public class Conversations
 		close();
 		Conversation conversation = new EmulatorConversation();
 		conversation.open(zulPath);
-		c.set(conversation);
+		local.set(conversation);
 	}
 
 	/**
@@ -26,10 +26,10 @@ public class Conversations
 	 */
 	public static void close()
 	{
-		if(c.get() != null)
+		if(local.get() != null)
 		{
-			c.get().close();
-			c.remove();
+			local.get().close();
+			local.remove();
 		}
 	}
 
@@ -39,7 +39,9 @@ public class Conversations
 	 */
 	public static DesktopNode getDesktop()
 	{
-		return c.get().getDesktop();
+		if(local.get() == null)
+			throw new ConversationException("conversation is close");
+		return local.get().getDesktop();
 	}
 
 	/**
@@ -48,6 +50,8 @@ public class Conversations
 	 */
 	public static HttpSession getSession()
 	{
-		return c.get().getSession();
+		if(local.get() == null)
+			throw new ConversationException("conversation is close");
+		return local.get().getSession();
 	}
 }

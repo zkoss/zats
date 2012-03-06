@@ -63,7 +63,6 @@ public class JettyEmulator implements Emulator
 			// create server
 			server = new Server(new InetSocketAddress(getHost(), 0));
 			final WebAppContext contextHandler = new WebAppContext();
-// 			contextHandler.setResourceBase(contentRoot);
 			contextHandler.setBaseResource(new ResourceCollection(resources));
 			contextHandler.setDescriptor(descriptor);
 			contextHandler.setContextPath("/");

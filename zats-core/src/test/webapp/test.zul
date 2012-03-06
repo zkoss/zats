@@ -1,0 +1,9 @@
+<zk>
+	<window id="win" title="test" border="normal" width="300px"
+		apply="org.zkoss.zats.core.TestComposer">
+		<vbox>
+			<label id="msg" />
+			<button id="btn" label="go" />
+		</vbox>
+	</window>
+</zk>
