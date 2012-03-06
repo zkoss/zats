@@ -9,34 +9,28 @@ public class Conversations
 	private static ThreadLocal<Conversation> c = new ThreadLocal<Conversation>();
 
 	/**
-	 * start a conversation.
+	 * start a conversation and navigate to specify zul path.
 	 * if there is a existed conversation, this will close last one and start a new conversation.
+	 * @param zulPath the path of zul file.
 	 */
-	public static void start()
+	public static void open(String zulPath)
 	{
-		stop();
-		c.set(new EmulatorConversation());
+		close();
+		Conversation conversation = new EmulatorConversation();
+		conversation.open(zulPath);
+		c.set(conversation);
 	}
 
 	/**
 	 * close conversation and release resources.
 	 */
-	public static void stop()
+	public static void close()
 	{
 		if(c.get() != null)
 		{
-			c.get().destory();
+			c.get().close();
 			c.remove();
 		}
-	}
-
-	/**
-	 * navigate to specify zul path.
-	 * @param zulPath the path of zul file.
-	 */
-	public static void open(String zulPath)
-	{
-		c.get().open(zulPath);
 	}
 
 	/**

@@ -1,6 +1,8 @@
 package org.zkoss.zats.core.component.operation;
 
-public interface Operation
+import org.zkoss.zats.core.component.ComponentNode;
+
+public interface Operation extends ComponentNode
 {
 
 }

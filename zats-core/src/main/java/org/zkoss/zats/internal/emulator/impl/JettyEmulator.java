@@ -23,6 +23,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.util.component.LifeCycle.Listener;
+import org.eclipse.jetty.util.resource.ResourceCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.zkoss.zats.internal.emulator.Emulator;
 import org.zkoss.zats.internal.emulator.EmulatorException;
@@ -43,7 +44,12 @@ public class JettyEmulator implements Emulator
 
 	public JettyEmulator(String contentRoot, String descriptor)
 	{
-		if(contentRoot == null)
+		this(new String[]{ contentRoot }, descriptor);
+	}
+
+	public JettyEmulator(String[] resources, String descriptor)
+	{
+		if(resources == null || resources.length <= 0)
 			throw new IllegalArgumentException("contentPath can't be null.");
 		if(descriptor == null)
 			throw new IllegalArgumentException("descriptor can't be null.");
@@ -57,7 +63,8 @@ public class JettyEmulator implements Emulator
 			// create server
 			server = new Server(new InetSocketAddress(getHost(), 0));
 			final WebAppContext contextHandler = new WebAppContext();
-			contextHandler.setResourceBase(contentRoot);
+// 			contextHandler.setResourceBase(contentRoot);
+			contextHandler.setBaseResource(new ResourceCollection(resources));
 			contextHandler.setDescriptor(descriptor);
 			contextHandler.setContextPath("/");
 			contextHandler.setParentLoaderPriority(true);

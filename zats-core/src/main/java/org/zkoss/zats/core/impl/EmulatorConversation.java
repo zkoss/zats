@@ -39,6 +39,38 @@ public class EmulatorConversation implements Conversation
 		emulator = new EmulatorBuilder(web).descriptor(EmulatorConversation.class.getResource("WEB-INF/web.xml")).create();
 	}
 
+	public void open(String zulPath)
+	{
+		System.out.println(zulPath);
+		HttpURLConnection huc = null;
+		try
+		{
+			URL url = new URL(emulator.getAddress() + zulPath.trim());
+			huc = (HttpURLConnection)url.openConnection();
+			huc.setRequestMethod("GET");
+			huc.addRequestProperty("Host", emulator.getHost() + ":" + emulator.getPort());
+			huc.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)");
+			huc.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+			huc.addRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
+			huc.connect();
+			InputStream is = huc.getInputStream();
+			System.out.println("kk");
+			logger.info("kk");
+			if(logger.isLoggable(Level.INFO))
+				logger.info(getReplyString(is, huc.getContentEncoding()));
+			close(is);
+		}
+		catch(Exception e)
+		{
+			throw new ConversationException("", e);
+		}
+		finally
+		{
+			if(huc != null)
+				huc.disconnect();
+		}
+	}
+
 	private void copy(String file, File root)
 	{
 		InputStream is = null;
@@ -107,53 +139,16 @@ public class EmulatorConversation implements Conversation
 		return reply;
 	}
 
-	public synchronized void destory()
+	public synchronized void close()
 	{
-		if(emulator == null)
-			return;
 		try
 		{
-			emulator.close();
-		}
-		catch(Exception e)
-		{
-			throw new ConversationException("", e);
+			if(emulator == null)
+				emulator.close();
 		}
 		finally
 		{
 			emulator = null;
-		}
-	}
-
-	public void open(String zulPath)
-	{
-		System.out.println(zulPath);
-		HttpURLConnection huc = null;
-		try
-		{
-			URL url = new URL(emulator.getAddress() + zulPath.trim());
-			huc = (HttpURLConnection)url.openConnection();
-			huc.setRequestMethod("GET");
-			huc.addRequestProperty("Host", emulator.getHost() + ":" + emulator.getPort());
-			huc.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)");
-			huc.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-			huc.addRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
-			huc.connect();
-			InputStream is = huc.getInputStream();
-			System.out.println("kk");
-			logger.info("kk");
-			if(logger.isLoggable(Level.INFO))
-				logger.info(getReplyString(is, huc.getContentEncoding()));
-			close(is);
-		}
-		catch(Exception e)
-		{
-			throw new ConversationException("", e);
-		}
-		finally
-		{
-			if(huc != null)
-				huc.disconnect();
 		}
 	}
 

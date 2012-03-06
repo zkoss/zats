@@ -2,6 +2,8 @@ package org.zkoss.zats.internal.emulator;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import org.zkoss.zats.internal.emulator.impl.JettyEmulator;
 
 /**
@@ -12,6 +14,7 @@ public class EmulatorBuilder
 {
 	private String contentRoot;
 	private String descriptor;
+	private List<String> resources;
 
 	/**
 	 * Constructor.
@@ -23,6 +26,8 @@ public class EmulatorBuilder
 			throw new NullPointerException();
 		this.contentRoot = contentRoot;
 		this.descriptor = (contentRoot + "/WEB-INF/web.xml").replaceAll("//+", "/");
+		this.resources = new ArrayList<String>();
+		this.resources.add(contentRoot);
 	}
 
 	/**
@@ -32,6 +37,27 @@ public class EmulatorBuilder
 	public EmulatorBuilder(File contentPath)
 	{
 		this(contentPath.getAbsolutePath());
+	}
+
+	/**
+	 * add additional resource directory.
+	 * @param resourceRoot directory path.
+	 * @return self reference.
+	 */
+	public EmulatorBuilder addResource(String resourceRoot)
+	{
+		resources.add(resourceRoot);
+		return this;
+	}
+
+	/**
+	 * add additional resource directory.
+	 * @param resourceRoot directory path.
+	 * @return self reference.
+	 */
+	public EmulatorBuilder addResource(File resourceRoot)
+	{
+		return addResource(resourceRoot.getAbsolutePath());
 	}
 
 	/**
@@ -65,6 +91,9 @@ public class EmulatorBuilder
 	 */
 	public Emulator create()
 	{
-		return new JettyEmulator(contentRoot, descriptor);
+		if(resources.size() <= 1)
+			return new JettyEmulator(contentRoot, descriptor);
+		else
+			return new JettyEmulator(resources.toArray(new String[0]), descriptor);
 	}
 }

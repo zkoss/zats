@@ -54,4 +54,6 @@ public interface Emulator extends Closeable
 	 * @return ID or null if no session created.
 	 */
 	String getSessionId();
+
+	void close();
 }

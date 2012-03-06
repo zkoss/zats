@@ -2,34 +2,13 @@ package org.zkoss.zats.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.zkoss.zats.core.component.DesktopNode;
 import org.zkoss.zats.core.component.operation.Clickable;
 
 public class ConversationsTest
 {
-
-	private Logger logger;
-
-	@Before
-	public void setUp() throws Exception
-	{
-		logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-		logger.setLevel(Level.INFO);
-		Conversations.start();
-	}
-
-	@After
-	public void tearDown() throws Exception
-	{
-		Conversations.stop();
-	}
-
 	@Test
 	public void test()
 	{
@@ -52,5 +31,7 @@ public class ConversationsTest
 			assertEquals("d" + i, desktop.getAttribute("msg"));
 			assertEquals("" + i, Searcher.findFirst(desktop, "$msg").getAttribute("value"));
 		}
+
+		Conversations.close();
 	}
 }
