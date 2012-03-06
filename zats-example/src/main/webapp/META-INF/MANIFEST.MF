@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Specification-Title: zats-example
+Specification-Version: 0.0.1-SNAPSHOT
+Implementation-Title: org.zkoss.zk.zats_example
+Implementation-Version: 0.0.1-SNAPSHOT

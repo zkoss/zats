@@ -1,0 +1,10 @@
+<zk>
+	<window id="win" title="test" border="normal" width="300px"
+		apply="org.zkoss.zk.zats.example.TestComposer">
+		<vbox>
+			<label id="msg" />
+			<button id="btn" label="go" />
+			<button id="dump" label="dump" />
+		</vbox>
+	</window>
+</zk>
