@@ -16,7 +16,7 @@ public class Searcher
 	 * @param selector the selector string.
 	 * @return a list contained matched components.
 	 */
-	public static List<ComponentNode> find(Node root, String selector)
+	public static List<ComponentNode> findAll(Node root, String selector)
 	{
 		return null;
 	}
@@ -27,7 +27,7 @@ public class Searcher
 	 * @param selector the selector string.
 	 * @return matched component or null if not found.
 	 */
-	public static ComponentNode findFirst(Node root, String selector)
+	public static ComponentNode find(Node root, String selector)
 	{
 		return null;
 	}

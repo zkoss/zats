@@ -3,6 +3,7 @@ package org.zkoss.zats.core.component;
 import java.util.List;
 import org.zkoss.zats.core.ConversationException;
 import org.zkoss.zats.core.component.operation.Operation;
+import org.zkoss.zk.ui.Component;
 
 /**
  * The basic component.
@@ -10,6 +11,13 @@ import org.zkoss.zats.core.component.operation.Operation;
  */
 public interface ComponentNode extends Node
 {
+
+	/**
+	 * get UUID. of this node.
+	 * @return UUID.
+	 */
+	String getUuid();
+
 	/**
 	 * get children nodes.
 	 * @return always return a list of children (may be empty).
@@ -48,4 +56,12 @@ public interface ComponentNode extends Node
 	 * @return operation object.
 	 */
 	<T extends Operation> T as(Class<T> c);
+
+	/**
+	 * cast the component node to native ZK component.
+	 * if fail to cast, it will throw {@link ClassCastException}.
+	 * @param c the class cast to.
+	 * @return object of specify class.
+	 */
+	<T extends Component> T cast(Class<T> c);
 }

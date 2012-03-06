@@ -3,7 +3,6 @@ package org.zkoss.zats.core.impl;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -38,19 +37,31 @@ public class EmulatorConversation implements Conversation
 		copy(EmulatorConversation.class.getResourceAsStream("WEB-INF/zk.xml"), new File(web, "WEB-INF/zk.xml"));
 	}
 
+	public void start(String resourceRoot)
+	{
+		// create emulator
+		emulator = new EmulatorBuilder(web).addResource(resourceRoot).descriptor(EmulatorConversation.class.getResource("WEB-INF/web.xml")).create();
+	}
+
+	public synchronized void stop()
+	{
+		try
+		{
+			if(emulator == null)
+				emulator.close();
+		}
+		finally
+		{
+			emulator = null;
+		}
+	}
+
 	public void open(String zulPath)
 	{
 		HttpURLConnection huc = null;
 		try
 		{
-			// create emulator
-			File zul = new File(zulPath);
-			copy(new FileInputStream(zul), new File(web, zul.getName()));
-			emulator = new EmulatorBuilder(web)
-				.descriptor(EmulatorConversation.class.getResource("WEB-INF/web.xml"))
-				.create();
-
-			URL url = new URL(emulator.getAddress() + "/" + zul.getName());
+			URL url = new URL(emulator.getAddress() + zulPath);
 			huc = (HttpURLConnection)url.openConnection();
 			huc.setRequestMethod("GET");
 			huc.addRequestProperty("Host", emulator.getHost() + ":" + emulator.getPort());
@@ -72,6 +83,11 @@ public class EmulatorConversation implements Conversation
 			if(huc != null)
 				huc.disconnect();
 		}
+	}
+
+	public void clean()
+	{
+		// TODO clean desktop
 	}
 
 	private void copy(InputStream src, File dest)
@@ -138,19 +154,6 @@ public class EmulatorConversation implements Conversation
 			close(r);
 		}
 		return reply;
-	}
-
-	public synchronized void close()
-	{
-		try
-		{
-			if(emulator == null)
-				emulator.close();
-		}
-		finally
-		{
-			emulator = null;
-		}
 	}
 
 	public DesktopNode getDesktop()

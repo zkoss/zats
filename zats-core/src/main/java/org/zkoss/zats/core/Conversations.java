@@ -8,6 +8,32 @@ public class Conversations
 {
 	private static ThreadLocal<Conversation> local = new ThreadLocal<Conversation>();
 
+	public static void start(String resourceRoot)
+	{
+		stop();
+		try
+		{
+			local.set(new EmulatorConversation());
+			local.get().start(resourceRoot);
+		}
+		catch(Throwable e)
+		{
+			local.remove();
+			throw new ConversationException("", e);
+		}
+	}
+
+	/**
+	 * close conversation and release resources.
+	 */
+	public static void stop()
+	{
+		if(local.get() == null)
+			return;
+		local.get().stop();
+		local.remove();
+	}
+
 	/**
 	 * start a conversation and navigate to specify zul path.
 	 * if there is a existed conversation, this will close last one and start a new conversation.
@@ -15,22 +41,16 @@ public class Conversations
 	 */
 	public static void open(String zulPath)
 	{
-		close();
-		Conversation conversation = new EmulatorConversation();
-		conversation.open(zulPath);
-		local.set(conversation);
+		if(local.get() == null)
+			throw new ConversationException("conversation is close");
+		local.get().open(zulPath);
 	}
 
-	/**
-	 * close conversation and release resources.
-	 */
-	public static void close()
+	public static void clean()
 	{
-		if(local.get() != null)
-		{
-			local.get().close();
-			local.remove();
-		}
+		if(local.get() == null)
+			return;
+		local.get().clean();
 	}
 
 	/**

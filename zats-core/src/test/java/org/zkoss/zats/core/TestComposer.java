@@ -4,7 +4,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Label;
 
-public class TestComposer extends GenericForwardComposer<Component>
+public class TestComposer extends GenericForwardComposer
 {
 	private static final long serialVersionUID = 1L;
 	private Label msg;

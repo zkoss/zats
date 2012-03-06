@@ -15,12 +15,6 @@ public interface Node
 	String getId();
 
 	/**
-	 * get UUID. of this node.
-	 * @return UUID.
-	 */
-	String getUUID();
-
-	/**
 	 * get type name of this node.
 	 * @return type name
 	 */
