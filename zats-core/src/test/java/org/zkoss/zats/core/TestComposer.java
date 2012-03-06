@@ -15,10 +15,21 @@ public class TestComposer extends GenericForwardComposer<Component>
 	{
 		super.doAfterCompose(comp);
 		msg.setValue("hello");
+		desktop.setAttribute("msg", "desktop");
+		session.setAttribute("msg", "session");
 	}
 
 	public void onClick$btn()
 	{
-		msg.setValue(String.valueOf(count++));
+		msg.setValue("" + count);
+		desktop.setAttribute("msg", "d" + count);
+		session.setAttribute("msg", "s" + count);
+		++count;
+	}
+
+	public void onClick$dump()
+	{
+		System.out.println("msg in desktop: " + desktop.getAttribute("msg"));
+		System.out.println("msg in session: " + session.getAttribute("msg"));
 	}
 }

@@ -4,6 +4,7 @@
 		<vbox>
 			<label id="msg" />
 			<button id="btn" label="go" />
+			<button id="dump" label="dump" />
 		</vbox>
 	</window>
 </zk>

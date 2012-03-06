@@ -29,14 +29,13 @@ public class EmulatorConversation implements Conversation
 	public EmulatorConversation()
 	{
 		logger = Logger.getLogger(EmulatorConversation.class.getName());
-		logger.setLevel(Level.INFO);
 		// prepare environment
 		String tmpDir = System.getProperty("java.io.tmpdir", ".");
 		File webinf = new File(tmpDir, System.currentTimeMillis() + "/WEB-INF");
 		if(!webinf.mkdirs())
 			throw new ConversationException("can't create temp directory");
 		web = webinf.getParentFile();
-		copy(EmulatorConversation.class.getResourceAsStream("WEB-INF/zk.xml"), new File(web , "WEB-INF/zk.xml"));
+		copy(EmulatorConversation.class.getResourceAsStream("WEB-INF/zk.xml"), new File(web, "WEB-INF/zk.xml"));
 	}
 
 	public void open(String zulPath)
@@ -46,7 +45,7 @@ public class EmulatorConversation implements Conversation
 		{
 			// create emulator
 			File zul = new File(zulPath);
-			copy(new FileInputStream(zul) , new File(web , zul.getName()));
+			copy(new FileInputStream(zul), new File(web, zul.getName()));
 			emulator = new EmulatorBuilder(web)
 				.descriptor(EmulatorConversation.class.getResource("WEB-INF/web.xml"))
 				.create();
