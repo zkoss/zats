@@ -8,7 +8,7 @@ import org.zkoss.zats.core.component.operation.OperationManager;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 
-public class GenericClickableHandler implements OperationBuilder<Clickable>
+public class GenericClickableBuilder implements OperationBuilder<Clickable>
 {
 	public Clickable getOperation(final Component target)
 	{
@@ -24,5 +24,4 @@ public class GenericClickableHandler implements OperationBuilder<Clickable>
 			}
 		};
 	}
-
 }

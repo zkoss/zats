@@ -84,10 +84,11 @@ public class DefaultComponentNode implements ComponentNode
 		return pageNode;
 	}
 
-	public <T extends Operation> T as(Class<T> c)
+	public <T extends Operation> T as(Class<T> operation)
 	{
-		OperationBuilder<T> handler = OperationManager.getHandler(comp.getClass(), c);
-		// TODO if(handler == null)
+		OperationBuilder<T> handler = OperationManager.getBuilder(comp.getClass(), operation);
+		if(handler == null)
+			throw new UnsupportedOperationException(getType() + " doesn't support " + operation.getName());
 		return handler.getOperation(comp);
 	}
 
