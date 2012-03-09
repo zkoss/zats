@@ -2,24 +2,27 @@ package org.zkoss.zats.core.component.operation.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.zkoss.zats.core.component.ComponentNode;
 import org.zkoss.zats.core.component.operation.Clickable;
 import org.zkoss.zats.core.component.operation.OperationBuilder;
 import org.zkoss.zats.core.component.operation.OperationManager;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 
 public class GenericClickableBuilder implements OperationBuilder<Clickable>
 {
-	public Clickable getOperation(final Component target)
+	public Clickable getOperation(final ComponentNode target)
 	{
 		return new Clickable()
 		{
 			public Clickable click()
 			{
-				String name = Events.ON_CLICK;
-				String uuid = target.getUuid();
 				Map<String, Object> data = new HashMap<String, Object>();
-				OperationManager.post(target, "onClick", data);
+				data.put("which", 1); // left button
+				data.put("pageX", 0);
+				data.put("pageY", 0);
+				data.put("x", 0);
+				data.put("y", 0);
+				OperationManager.post(target, Events.ON_CLICK, data);
 				return this;
 			}
 		};

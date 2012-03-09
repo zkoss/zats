@@ -10,28 +10,39 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.MessageFormat;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
+import org.eclipse.jetty.util.UrlEncoded;
+import org.zkoss.json.JSONValue;
 import org.zkoss.zats.core.Conversation;
 import org.zkoss.zats.core.ConversationException;
+import org.zkoss.zats.core.component.ComponentNode;
 import org.zkoss.zats.core.component.DesktopNode;
 import org.zkoss.zats.core.component.impl.DefaultDesktopNode;
+import org.zkoss.zats.core.component.operation.OperationManager;
+import org.zkoss.zats.core.component.operation.OperationObserver;
 import org.zkoss.zats.internal.emulator.Emulator;
 import org.zkoss.zats.internal.emulator.EmulatorBuilder;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 
-public class EmulatorConversation implements Conversation
+public class EmulatorConversation implements Conversation, OperationObserver
 {
 	private Emulator emulator;
 	private Logger logger;
 	private File web;
 	private DesktopNode desktopNode;
+	private List<String> cookies;
 
 	public EmulatorConversation()
 	{
 		logger = Logger.getLogger(EmulatorConversation.class.getName());
+		cookies = new LinkedList<String>();
 		// prepare environment
 		String tmpDir = System.getProperty("java.io.tmpdir", ".");
 		File webinf = new File(tmpDir, System.currentTimeMillis() + "/WEB-INF");
@@ -45,6 +56,8 @@ public class EmulatorConversation implements Conversation
 	{
 		// create emulator
 		emulator = new EmulatorBuilder(web).addResource(resourceRoot).descriptor(EmulatorConversation.class.getResource("WEB-INF/web.xml")).create();
+		// observer operation event
+		OperationManager.addObserver(this);
 	}
 
 	public synchronized void stop()
@@ -57,28 +70,22 @@ public class EmulatorConversation implements Conversation
 		finally
 		{
 			emulator = null;
+			OperationManager.removeObserver(this);
 		}
 	}
 
 	public void open(String zulPath)
 	{
-		HttpURLConnection huc = null;
+		InputStream is = null;
 		try
 		{
 			// load zul page
-			URL url = new URL(emulator.getAddress() + zulPath);
-			huc = (HttpURLConnection)url.openConnection();
-			huc.setRequestMethod("GET");
-			huc.addRequestProperty("Host", emulator.getHost() + ":" + emulator.getPort());
-			huc.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)");
-			huc.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-			huc.addRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
+			HttpURLConnection huc = getConnection(zulPath, "GET");
 			huc.connect();
-			InputStream is = huc.getInputStream();
+			cookies = huc.getHeaderFields().get("Set-Cookie");
+			is = huc.getInputStream();
 			if(logger.isLoggable(Level.INFO))
 				logger.info(getReplyString(is, huc.getContentEncoding()));
-			close(is);
-
 			// get specified objects such as Desktop
 			Desktop desktop = (Desktop)emulator.getRequestAttributes().get("javax.zkoss.zk.ui.desktop");
 			desktopNode = new DefaultDesktopNode(desktop);
@@ -89,8 +96,7 @@ public class EmulatorConversation implements Conversation
 		}
 		finally
 		{
-			if(huc != null)
-				huc.disconnect();
+			close(is);
 		}
 	}
 
@@ -113,6 +119,7 @@ public class EmulatorConversation implements Conversation
 		finally
 		{
 			desktopNode = null;
+			cookies = new LinkedList<String>();
 		}
 	}
 
@@ -126,6 +133,66 @@ public class EmulatorConversation implements Conversation
 		if(desktopNode == null)
 			return null;
 		return (HttpSession)desktopNode.cast().getSession().getNativeSession();
+	}
+
+	public void doPost(ComponentNode target, String cmd, Map<String, Object> data)
+	{
+		// prepare au data
+		String dtid = UrlEncoded.encodeString(desktopNode.getId());
+		cmd = UrlEncoded.encodeString(cmd);
+		String uuid = UrlEncoded.encodeString(target.getUuid());
+		String jsonData = UrlEncoded.encodeString(JSONValue.toJSONString(data));
+		String param = MessageFormat.format("dtid={0}&cmd_0={1}&uuid_0={2}&data_0={3}", dtid, cmd, uuid, jsonData);
+
+		OutputStream os = null;
+		InputStream is = null;
+		try
+		{
+			// create http request and perform it
+			HttpURLConnection c = getConnection("/zkau", "POST");
+			c.setDoOutput(true);
+			c.setDoInput(true);
+			for(String cookie : cookies)
+				c.addRequestProperty("Cookie", cookie.split(";", 2)[0]);
+			c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+			c.connect();
+			os = c.getOutputStream();
+			os.write(param.getBytes("utf-8"));
+			close(os);
+			// read response
+			is = c.getInputStream();
+			if(logger.isLoggable(Level.INFO))
+				logger.info(getReplyString(is, c.getContentEncoding()));
+		}
+		catch(Exception e)
+		{
+			throw new ConversationException("", e);
+		}
+		finally
+		{
+			close(os);
+			close(is);
+		}
+	}
+
+	private HttpURLConnection getConnection(String path, String method)
+	{
+		try
+		{
+			URL url = new URL(emulator.getAddress() + path);
+			HttpURLConnection huc = (HttpURLConnection)url.openConnection();
+			huc.setRequestMethod(method);
+			huc.setUseCaches(false);
+			huc.addRequestProperty("Host", emulator.getHost() + ":" + emulator.getPort());
+			huc.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)");
+			huc.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+			huc.addRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
+			return huc;
+		}
+		catch(Exception e)
+		{
+			throw new ConversationException("", e);
+		}
 	}
 
 	private void copy(InputStream src, File dest)

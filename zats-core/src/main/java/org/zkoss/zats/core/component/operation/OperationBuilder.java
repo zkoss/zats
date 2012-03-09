@@ -1,8 +1,8 @@
 package org.zkoss.zats.core.component.operation;
 
-import org.zkoss.zk.ui.Component;
+import org.zkoss.zats.core.component.ComponentNode;
 
 public interface OperationBuilder<T extends Operation>
 {
-	T getOperation(Component target);
+	T getOperation(ComponentNode target);
 }

@@ -1,9 +1,9 @@
 package org.zkoss.zats.core.component.operation;
 
 import java.util.Map;
-import org.zkoss.zk.ui.Component;
+import org.zkoss.zats.core.component.ComponentNode;
 
 public interface OperationObserver
 {
-	void doPost(Component target, String cmd, Map<String, Object> param);
+	void doPost(ComponentNode target, String cmd, Map<String, Object> data);
 }

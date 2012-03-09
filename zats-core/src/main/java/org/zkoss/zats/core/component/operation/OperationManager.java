@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.zkoss.zats.core.component.ComponentNode;
 import org.zkoss.zats.core.component.operation.impl.GenericClickableBuilder;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
@@ -17,13 +18,13 @@ public class OperationManager
 {
 	private static Logger logger;
 	private static List<OperationObserver> observers;
-	private static Map<Key, OperationBuilder<?>> builders;
+	private static Map<Key, OperationBuilder<? extends Operation>> builders;
 
 	static
 	{
 		logger = Logger.getLogger(OperationObserver.class.getName());
 		observers = new CopyOnWriteArrayList<OperationObserver>();
-		builders = new HashMap<OperationManager.Key, OperationBuilder<?>>();
+		builders = new HashMap<OperationManager.Key, OperationBuilder<? extends Operation>>();
 		// TODO load default implement
 		registerBuilder(Button.class, Clickable.class, new GenericClickableBuilder());
 		registerBuilder(Label.class, Clickable.class, new GenericClickableBuilder());
@@ -45,13 +46,13 @@ public class OperationManager
 		return (OperationBuilder<T>)builders.get(new Key(component, operation));
 	}
 
-	public static void post(Component target, String cmd, Map<String, Object> param)
+	public static void post(ComponentNode target, String cmd, Map<String, Object> data)
 	{
 		for(OperationObserver o : observers)
 		{
 			try
 			{
-				o.doPost(target, cmd, param);
+				o.doPost(target, cmd, data);
 			}
 			catch(Exception e)
 			{

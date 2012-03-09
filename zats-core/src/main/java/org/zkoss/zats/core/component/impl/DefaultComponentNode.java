@@ -89,7 +89,7 @@ public class DefaultComponentNode implements ComponentNode
 		OperationBuilder<T> handler = OperationManager.getBuilder(comp.getClass(), operation);
 		if(handler == null)
 			throw new UnsupportedOperationException(getType() + " doesn't support " + operation.getName());
-		return handler.getOperation(comp);
+		return handler.getOperation(this);
 	}
 
 	@SuppressWarnings("unchecked")
