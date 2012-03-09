@@ -16,14 +16,18 @@ import javax.servlet.http.HttpSession;
 import org.zkoss.zats.core.Conversation;
 import org.zkoss.zats.core.ConversationException;
 import org.zkoss.zats.core.component.DesktopNode;
+import org.zkoss.zats.core.component.impl.DefaultDesktopNode;
 import org.zkoss.zats.internal.emulator.Emulator;
 import org.zkoss.zats.internal.emulator.EmulatorBuilder;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
 
 public class EmulatorConversation implements Conversation
 {
 	private Emulator emulator;
 	private Logger logger;
 	private File web;
+	private DesktopNode desktopNode;
 
 	public EmulatorConversation()
 	{
@@ -61,6 +65,7 @@ public class EmulatorConversation implements Conversation
 		HttpURLConnection huc = null;
 		try
 		{
+			// load zul page
 			URL url = new URL(emulator.getAddress() + zulPath);
 			huc = (HttpURLConnection)url.openConnection();
 			huc.setRequestMethod("GET");
@@ -73,6 +78,10 @@ public class EmulatorConversation implements Conversation
 			if(logger.isLoggable(Level.INFO))
 				logger.info(getReplyString(is, huc.getContentEncoding()));
 			close(is);
+
+			// get specified objects such as Desktop
+			Desktop desktop = (Desktop)emulator.getRequestAttributes().get("javax.zkoss.zk.ui.desktop");
+			desktopNode = new DefaultDesktopNode(desktop);
 		}
 		catch(Exception e)
 		{
@@ -87,7 +96,36 @@ public class EmulatorConversation implements Conversation
 
 	public void clean()
 	{
-		// TODO clean desktop
+		// clean desktop
+		try
+		{
+			if(desktopNode != null)
+			{
+				Desktop desktop = desktopNode.cast();
+				if(desktop instanceof DesktopCtrl)
+					((DesktopCtrl)desktop).destroy();
+			}
+		}
+		catch(Exception e)
+		{
+			logger.log(Level.WARNING, "", e);
+		}
+		finally
+		{
+			desktopNode = null;
+		}
+	}
+
+	public DesktopNode getDesktop()
+	{
+		return desktopNode;
+	}
+
+	public HttpSession getSession()
+	{
+		if(desktopNode == null)
+			return null;
+		return (HttpSession)desktopNode.cast().getSession().getNativeSession();
 	}
 
 	private void copy(InputStream src, File dest)
@@ -155,15 +193,4 @@ public class EmulatorConversation implements Conversation
 		}
 		return reply;
 	}
-
-	public DesktopNode getDesktop()
-	{
-		return null;
-	}
-
-	public HttpSession getSession()
-	{
-		return null;
-	}
-
 }

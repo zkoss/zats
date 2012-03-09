@@ -38,14 +38,16 @@ public class ConversationsTest
 		DesktopNode desktop = Conversations.getDesktop();
 		assertEquals("session", session.getAttribute("msg"));
 		assertEquals("desktop", desktop.getAttribute("msg"));
-		assertEquals("hello", Searcher.find(desktop, "$msg").cast(Label.class).getValue());
+		assertNotNull(Searcher.find(desktop, "#msg"));
+		assertNotNull(Searcher.find(desktop, "#msg").cast(Label.class));
+		assertEquals("hello", Searcher.find(desktop, "#msg").cast(Label.class).getValue());
 
 		for(int i = 0; i < 10; ++i)
 		{
-			Searcher.find(desktop, "$btn").as(Clickable.class).click();
+			Searcher.find(desktop, "#btn").as(Clickable.class).click();
 			assertEquals("s" + i, session.getAttribute("msg"));
 			assertEquals("d" + i, desktop.getAttribute("msg"));
-			assertEquals("" + i, Searcher.find(desktop, "$msg").cast(Label.class).getValue());
+			assertEquals("" + i, Searcher.find(desktop, "#msg").cast(Label.class).getValue());
 		}
 
 		Conversations.clean();

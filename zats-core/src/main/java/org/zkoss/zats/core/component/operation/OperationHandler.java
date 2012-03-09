@@ -1,8 +1,8 @@
 package org.zkoss.zats.core.component.operation;
 
-import org.zkoss.zats.core.Conversation;
-import org.zkoss.zats.core.component.ComponentNode;
+import org.zkoss.zk.ui.Component;
 
-public interface OperationHandler<T extends Operation> {
-	T getOperation(Conversation conversation, ComponentNode target);
+public interface OperationHandler<T extends Operation>
+{
+	T getOperation(Component target);
 }
