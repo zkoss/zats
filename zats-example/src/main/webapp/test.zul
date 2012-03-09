@@ -1,5 +1,5 @@
 <zk>
-	<window id="win" title="test" border="normal" width="300px"
+	<window id="win" title="my window" border="normal" width="300px"
 		apply="org.zkoss.zk.zats.example.TestComposer">
 		<vbox>
 			<label id="msg" />

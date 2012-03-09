@@ -29,9 +29,11 @@ public class Searcher
 		try
 		{
 			Class.forName("org.zkoss.zk.ui.select.Selectors");
+
 		}
 		catch(ClassNotFoundException e)
 		{
+			// TODO implemention for zk5
 			throw new UnsupportedOperationException(e);
 		}
 		// TODO implement through Selector in ZK 6
@@ -71,5 +73,10 @@ public class Searcher
 	{
 		List<ComponentNode> nodes = findAll(root, selector);
 		return nodes.size() > 0 ? nodes.get(0) : null;
+	}
+
+	public static ComponentNode find(String selector)
+	{
+		return Searcher.find(Conversations.getDesktop(), selector);
 	}
 }

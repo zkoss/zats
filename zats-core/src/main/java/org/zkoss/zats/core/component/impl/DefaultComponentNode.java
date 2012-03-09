@@ -7,7 +7,7 @@ import org.zkoss.zats.core.component.ComponentNode;
 import org.zkoss.zats.core.component.DesktopNode;
 import org.zkoss.zats.core.component.PageNode;
 import org.zkoss.zats.core.component.operation.Operation;
-import org.zkoss.zats.core.component.operation.OperationHandler;
+import org.zkoss.zats.core.component.operation.OperationBuilder;
 import org.zkoss.zats.core.component.operation.OperationManager;
 import org.zkoss.zk.ui.Component;
 
@@ -86,7 +86,8 @@ public class DefaultComponentNode implements ComponentNode
 
 	public <T extends Operation> T as(Class<T> c)
 	{
-		OperationHandler<T> handler = OperationManager.getHandler(comp.getClass(), c);
+		OperationBuilder<T> handler = OperationManager.getHandler(comp.getClass(), c);
+		// TODO if(handler == null)
 		return handler.getOperation(comp);
 	}
 
