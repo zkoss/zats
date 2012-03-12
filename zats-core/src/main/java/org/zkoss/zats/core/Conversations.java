@@ -1,10 +1,8 @@
 package org.zkoss.zats.core;
 
-import java.util.List;
 import javax.servlet.http.HttpSession;
-import org.zkoss.zats.core.component.ComponentNode;
+import org.zkoss.zats.core.component.ConversationBuilder;
 import org.zkoss.zats.core.component.DesktopNode;
-import org.zkoss.zats.core.impl.EmulatorConversation;
 
 public class Conversations
 {
@@ -15,7 +13,7 @@ public class Conversations
 		stop();
 		try
 		{
-			local.set(new EmulatorConversation());
+			local.set(ConversationBuilder.create());
 			local.get().start(resourceRoot);
 		}
 		catch(Throwable e)
@@ -75,17 +73,5 @@ public class Conversations
 		if(local.get() == null)
 			throw new ConversationException("conversation is close");
 		return local.get().getSession();
-	}
-
-	public List<ComponentNode> findAll(String selector)
-	{
-		// TODO
-		return null;
-	}
-
-	public ComponentNode find(String selector)
-	{
-		// TODO
-		return null;
 	}
 }
