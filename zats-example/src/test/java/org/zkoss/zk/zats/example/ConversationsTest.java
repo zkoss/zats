@@ -20,7 +20,7 @@ public class ConversationsTest
 	@BeforeClass
 	public static void init()
 	{
-//		Conversations.start();//from project folder
+//		Conversations.start("."); //from project folder
 		Conversations.start("./src/main/webapp"); // user can load by configuration file
 	}
 
@@ -57,7 +57,8 @@ public class ConversationsTest
 		ComponentNode msg = Searcher.find(win, "#msg"); 
 		assertNotNull(msg);
 		assertEquals("hello", msg.cast(Label.class).getValue());
-
+//		assertEquals("hello", ((Label)msg.nat()).getValue());
+		
 		for(int i = 0; i < 10; ++i)
 		{
 			Searcher.find(win, "#btn").as(Clickable.class).click();

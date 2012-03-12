@@ -4,11 +4,6 @@
 	<groupId>org.zkoss.zk</groupId>
 	<artifactId>zats-example</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<properties>
-		<zk.version>6.0.0</zk.version>
-		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
-		<packname>-0.0.1-SNAPSHOT-FL-${maven.build.timestamp}</packname>
-	</properties>
 	<packaging>war</packaging>
 	<name>The zats-example Project</name>
 	<description>The zats-example Project</description>
@@ -40,7 +35,7 @@
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zhtml</artifactId>
-			<version>${zk.version}</version>
+			<version>5.0.10</version>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
