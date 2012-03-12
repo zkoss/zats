@@ -7,8 +7,8 @@ import org.zkoss.zats.core.component.ComponentNode;
 import org.zkoss.zats.core.component.DesktopNode;
 import org.zkoss.zats.core.component.PageNode;
 import org.zkoss.zats.core.component.operation.Operation;
-import org.zkoss.zats.core.component.operation.OperationBuilder;
-import org.zkoss.zats.core.component.operation.OperationManager;
+import org.zkoss.zats.core.component.operation.impl.OperationBuilder;
+import org.zkoss.zats.core.component.operation.impl.OperationManager;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -86,10 +86,10 @@ public class DefaultComponentNode implements ComponentNode
 
 	public <T extends Operation> T as(Class<T> operation)
 	{
-		OperationBuilder<T> handler = OperationManager.getBuilder(comp.getClass(), operation);
-		if(handler == null)
+		OperationBuilder<T> builder = OperationManager.getBuilder(comp.getClass(), operation);
+		if(builder == null)
 			throw new UnsupportedOperationException(getType() + " doesn't support " + operation.getName());
-		return handler.getOperation(this);
+		return builder.getOperation(this);
 	}
 
 	@SuppressWarnings("unchecked")

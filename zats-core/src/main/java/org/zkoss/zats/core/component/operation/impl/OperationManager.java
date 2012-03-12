@@ -1,4 +1,4 @@
-package org.zkoss.zats.core.component.operation;
+package org.zkoss.zats.core.component.operation.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +8,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.zkoss.zats.core.component.ComponentNode;
-import org.zkoss.zats.core.component.operation.impl.GenericClickableBuilder;
+import org.zkoss.zats.core.component.operation.Clickable;
+import org.zkoss.zats.core.component.operation.Operation;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Button;
@@ -18,6 +19,7 @@ public class OperationManager
 {
 	private static Logger logger;
 	private static List<OperationObserver> observers;
+	// TODO deprecate, using hierarchy searching
 	private static Map<Key, OperationBuilder<? extends Operation>> builders;
 
 	static
@@ -28,6 +30,18 @@ public class OperationManager
 		// TODO load default implement
 		registerBuilder(Button.class, Clickable.class, new GenericClickableBuilder());
 		registerBuilder(Label.class, Clickable.class, new GenericClickableBuilder());
+		
+		//TODO
+//		registerBuilder(*, Label.class, Clickable.class, new GenericClickableBuilder());
+//		registerBuilder(6, Label.class, Clickable.class, new Generic6ClickableBuilder());
+		
+		//"6.0.1" , "6.0.11" (\d+).(\d+).(\d+)
+		//TODO Enhancement.
+//		registerBuilder(*,*, Label.class, Clickable.class, new GenericClickableBuilder());
+//		registerBuilder(*,"6.0.1", Label.class, Clickable.class, new GenericClickableBuilder());
+//		registerBuilder("5.0.2","*", Label.class, Clickable.class, new GenericClickableBuilder());
+//		registerBuilder("5.0.2","6.0.1", Label.class, Clickable.class, new GenericClickableBuilder());
+		
 		// TODO searching parent builder
 		registerBuilder(AbstractComponent.class, Clickable.class, new GenericClickableBuilder());
 		// TODO load custom implement from configuration
@@ -43,6 +57,7 @@ public class OperationManager
 	@SuppressWarnings("unchecked")
 	public static <T extends Operation, C extends Component> OperationBuilder<T> getBuilder(Class<C> component, Class<T> operation)
 	{
+		//
 		return (OperationBuilder<T>)builders.get(new Key(component, operation));
 	}
 

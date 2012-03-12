@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.zkoss.zats.core.component.ComponentNode;
 import org.zkoss.zats.core.component.operation.Clickable;
-import org.zkoss.zats.core.component.operation.OperationBuilder;
-import org.zkoss.zats.core.component.operation.OperationManager;
 import org.zkoss.zk.ui.event.Events;
 
 public class GenericClickableBuilder implements OperationBuilder<Clickable>
