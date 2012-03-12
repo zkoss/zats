@@ -43,7 +43,6 @@ public class DefaultComponentNode implements ComponentNode
 		return comp.getAttribute(name);
 	}
 
-	@SuppressWarnings("unchecked")
 	public Map<String, Object> getAttributes()
 	{
 		return comp.getAttributes();
@@ -54,7 +53,6 @@ public class DefaultComponentNode implements ComponentNode
 		return comp.getUuid();
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<ComponentNode> getChildren()
 	{
 		List<Component> children = comp.getChildren();

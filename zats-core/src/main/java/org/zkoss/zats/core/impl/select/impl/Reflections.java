@@ -138,7 +138,7 @@ public class Reflections {
 					item + " is not appendable to " + field);
 		try {
 			field.setAccessible(true);
-			Collection c = (Collection) field.get(owner);
+			Collection<Object> c = (Collection<Object>) field.get(owner);
 			if(c == null) throw new IllegalArgumentException(
 					field + " has not been initiated.");
 			c.add(item);
