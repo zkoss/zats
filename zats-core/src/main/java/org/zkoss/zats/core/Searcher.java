@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import org.zkoss.Version;
 import org.zkoss.zats.core.component.ComponentNode;
 import org.zkoss.zats.core.component.DesktopNode;
 import org.zkoss.zats.core.component.Node;
@@ -36,16 +37,16 @@ public class Searcher
 		{
 			// detect zk version to choose implementation
 			Class<?> selectors;
+
 			try
 			{
-
 				selectors = Class.forName("org.zkoss.zk.ui.select.Selectors");
-				logger.info("using zk6 selectors");
+				logger.info("using zk6 selectors: " + Version.class.getField("UID").get(null));
 			}
 			catch(ClassNotFoundException e)
 			{
 				selectors = Selectors.class;
-				logger.info("using zats selectors");
+				logger.info("using zats selectors: " + Version.class.getField("UID").get(null));
 			}
 			Method findByPage = selectors.getMethod("find", Page.class, String.class);
 
