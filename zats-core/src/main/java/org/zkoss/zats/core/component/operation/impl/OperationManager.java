@@ -63,8 +63,8 @@ public class OperationManager
 	 * If specify version range doesn't include current zk version at runtime, this register will be ignored.
 	 * @param startVersion start version (include)
 	 * @param endVersion end version (include)
-	 * @param component the component that builder maps to
-	 * @param operation the operation that builder maps to
+	 * @param component the component class that builder maps to ( *notice: it should not specify interface)
+	 * @param operation the operation class that builder maps to
 	 * @param builder operation builder
 	 */
 	public static <T extends Operation, C extends Component> void registerBuilder(String startVersion, String endVersion, Class<C> component, Class<T> operation, OperationBuilder<T> builder)
@@ -75,7 +75,7 @@ public class OperationManager
 		// check version
 		// If current isn't between start and end version, ignore this register.
 		BigInteger start = "*".equals(startVersion.trim()) ? BigInteger.ZERO : Util.parseVersion(startVersion);
-		BigInteger end = "*".equals(endVersion.trim()) ? BigInteger.valueOf(Long.MAX_VALUE) : Util.parseVersion(startVersion);
+		BigInteger end = "*".equals(endVersion.trim()) ? BigInteger.valueOf(Long.MAX_VALUE) : Util.parseVersion(endVersion);
 		if(start == null || end == null)
 			throw new IllegalArgumentException("wrong version format");
 		if(current.compareTo(start) < 0 || current.compareTo(end) > 0)
@@ -107,15 +107,33 @@ public class OperationManager
 	@SuppressWarnings("unchecked")
 	public static <T extends Operation> OperationBuilder<T> getBuilder(Component component, Class<T> operation)
 	{
+		// search from self class to parent class
 		Class<?> c = component.getClass();
 		while(c != null)
 		{
 			OperationBuilder<? extends Operation> builder = builders.get(new Key(c, operation));
 			if(builder != null)
 				return (OperationBuilder<T>)builder;
-			c = c.getSuperclass(); // search parent class
+			c = c.getSuperclass();
 		}
 		return null; // not found
+	}
+
+	public static void addObserver(OperationObserver observer)
+	{
+		if(observer != null)
+			observers.add(observer);
+	}
+
+	public List<OperationObserver> getObservers()
+	{
+		return new ArrayList<OperationObserver>(observers);
+	}
+
+	public static void removeObserver(OperationObserver observer)
+	{
+		if(observer != null)
+			observers.remove(observer);
 	}
 
 	/**
@@ -139,23 +157,10 @@ public class OperationManager
 		}
 	}
 
-	public static void addObserver(OperationObserver observer)
-	{
-		if(observer != null)
-			observers.add(observer);
-	}
-
-	public List<OperationObserver> getObservers()
-	{
-		return new ArrayList<OperationObserver>(observers);
-	}
-
-	public static void removeObserver(OperationObserver observer)
-	{
-		if(observer != null)
-			observers.remove(observer);
-	}
-
+	/**
+	 * for operation builder mapping
+	 * @author pao
+	 */
 	private static class Key
 	{
 		public Class<?> c;
