@@ -1,6 +1,5 @@
-/**
- * 
- */
+// ported from zcommon 6.0.0 
+// original package: org.zkoss.fsm
 package org.zkoss.zats.core.impl.fsm;
 
 import java.util.Collection;

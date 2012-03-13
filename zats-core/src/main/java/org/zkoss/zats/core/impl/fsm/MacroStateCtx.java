@@ -1,6 +1,5 @@
-/**
- * 
- */
+// ported from zcommon 6.0.0 
+// original package: org.zkoss.fsm
 package org.zkoss.zats.core.impl.fsm;
 
 /**
@@ -15,7 +14,7 @@ package org.zkoss.zats.core.impl.fsm;
  * is terminated.
  * 4. Upon {@link StateCtx#onStop} is called on the state, 
  * {@link StateMachine#onStop(boolean)} is triggered on the inner machine
- * @since 6.0.0
+// * @since 6.0.0
  * @author simonpai
  */
 public class MacroStateCtx<E, C, IN, E2, C2> extends StateCtx<E, C, IN> {

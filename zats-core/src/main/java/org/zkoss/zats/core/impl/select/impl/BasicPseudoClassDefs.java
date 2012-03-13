@@ -1,6 +1,5 @@
-/**
- * 
- */
+// ported from zk 6.0.0 
+// original package: org.zkoss.zk.ui.select
 package org.zkoss.zats.core.impl.select.impl;
 
 import java.util.HashMap;
