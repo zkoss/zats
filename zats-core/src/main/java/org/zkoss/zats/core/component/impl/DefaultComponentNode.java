@@ -86,7 +86,7 @@ public class DefaultComponentNode implements ComponentNode
 
 	public <T extends Operation> T as(Class<T> operation)
 	{
-		OperationBuilder<T> builder = OperationManager.getBuilder(comp.getClass(), operation);
+		OperationBuilder<T> builder = OperationManager.getBuilder(comp, operation);
 		if(builder == null)
 			throw new UnsupportedOperationException(getType() + " doesn't support " + operation.getName());
 		return builder.getOperation(this);
