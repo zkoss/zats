@@ -1,4 +1,4 @@
-// ported from zk 6.0.0 
+// ported from zk 6.0.0
 // original package: org.zkoss.zk.ui.select
 package org.zkoss.zats.core.impl.select.impl;
 
@@ -142,11 +142,11 @@ public class BasicPseudoClassDefs
 
 		private int value(String str, int defValue)
 		{
-			if(str.isEmpty())
+			if(str.length() <= 0)
 				return defValue;
 			char p = str.charAt(0);
 			String s = (p == '+' || p == '-') ? str.substring(1) : str;
-			return (p == '-' ? -1 : 1) * (s.isEmpty() ? defValue : Integer.valueOf(s));
+			return (p == '-' ? -1 : 1) * (s.length() <= 0 ? defValue : Integer.valueOf(s));
 		}
 
 	}
