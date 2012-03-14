@@ -1,0 +1,16 @@
+<zk>
+	<window id="win" title="Login" border="normal" width="300px" apply="org.zkoss.zk.zats.example.composer.LoginComposer">
+		<vlayout>
+			<hlayout>
+			Account: <textbox id="account"/>
+			</hlayout>
+			<hlayout>
+			Password: <textbox id="password"/>
+			</hlayout>
+			<div>
+			<label id="msg" style="color:red"/>
+			</div>
+			<button id="login" label="Login" />
+		</vlayout>
+	</window>
+</zk>

@@ -1,0 +1,7 @@
+<zk>
+	<window title="Main" apply="org.zkoss.zk.zats.example.composer.LoginComposer">
+		<hlayout>
+			<button id="logout" label="Logout" />
+		</hlayout>
+	</window>
+</zk>
