@@ -53,16 +53,9 @@ public class LoginLogoutTest {
 		password.as(Typeable.class).type("1234");
 		login.as(Clickable.class).click();
 		HttpSession session = Conversations.getSession();
-		assertEquals(account.cast(Textbox.class).getValue(), session.getAttribute("auth"));
+		assertEquals(account.cast(Textbox.class).getValue(), session.getAttribute("user"));
 		ComponentNode mainWin = Searcher.find("window");
 		assertEquals("Main",mainWin.cast(Window.class).getTitle());
-
-//		ComponentNode win = Searcher.find("#win");
-//		assertNotNull(win);
-//		assertNotNull(win.cast(Window.class));
-//		assertEquals("my window", win.cast(Window.class).getTitle());
-
-		// assertEquals("hello", ((Label)msg.nat()).getValue());
 
 	}
 }

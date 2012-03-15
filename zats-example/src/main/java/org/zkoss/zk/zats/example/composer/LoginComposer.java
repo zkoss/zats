@@ -1,5 +1,9 @@
 package org.zkoss.zk.zats.example.composer;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.zkoss.zats.core.impl.EmulatorConversation;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zk.zats.example.service.AuthenticationService;
@@ -15,13 +19,22 @@ public class LoginComposer extends GenericForwardComposer {
 	Textbox password;
 	Label msg;
 	
+	private Logger logger;
+	public LoginComposer() {
+		// TODO Auto-generated constructor stub
+		logger = Logger.getLogger(this.getClass().getName());
+//		logger.setLevel(Level.ALL);
+		
+	}
+	
 	public void onClick$login() {
 		boolean pass = false;
 		if (account.getValue() != null && password.getValue()!=null){
 			pass = authenticationService.authenticate(account.getValue(), password.getValue());
 		}
 		if (pass){
-			sessionScope.put("auth", account.getValue());
+			sessionScope.put("user", account.getValue());
+			logger.info(desktop.getId()+", "+desktop.getRequestPath());
 			Executions.getCurrent().sendRedirect("main.zul");
 		}else{
 			msg.setValue("Login Failed");
@@ -29,7 +42,8 @@ public class LoginComposer extends GenericForwardComposer {
 	}
 	
 	public void onClick$logout(){
-		sessionScope.remove("auth");
+		logger.info(desktop.getId()+", "+desktop.getRequestPath());
+		sessionScope.remove("user");
 		Executions.getCurrent().sendRedirect("login.zul");
 		
 	}
