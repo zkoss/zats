@@ -1,0 +1,44 @@
+<zk>
+
+<window id="searchWin" title="Search Storage Item" border="normal" width="600px"
+	apply="org.zkoss.zk.zats.example.composer.SearchComposer" >
+	<vbox hflex="true">
+		<hbox>
+			Filter : 
+			<textbox id="filterBox" value="*" /> 
+			<button id="searchButton" label="Search" />
+		</hbox>
+		<listbox id="itemListbox" hflex="true" height="300px" multiple="true">
+			<listhead>
+				<listheader label="Name"/>
+				<listheader label="Price" align="center" width="80px" />
+				<listheader label="Quantity" align="center" width="80px" />
+			</listhead>
+		</listbox>
+		<groupbox id="detailBox" visible="false" hflex="true" mold="3d">
+			<caption id="detailCaption" />
+			<grid hflex="true" >
+				<columns>
+					<column width="120px"/>
+					<column/>
+				</columns>
+				<rows>
+					<row>Description <label id="descriptionLabel"/></row>
+					<row>Price <label id="priceLabel" /></row>
+					<row>Quantity <label id="quantityLabel" /></row>
+					<row>Total Price <label id="totalPriceLabel" /></row>
+				</rows>
+			</grid>
+		</groupbox>
+	</vbox>
+	<combobox id="cbox">
+		<comboitem label="AA" value="AA"></comboitem>
+		<comboitem label="BB" value="BB"></comboitem>
+	</combobox> 
+</window>
+<style>
+.z-listcell.red .z-listcell-cnt, .z-label.red{
+	color:red;
+}
+</style>
+</zk>
