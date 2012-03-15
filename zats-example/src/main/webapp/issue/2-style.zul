@@ -1,0 +1,16 @@
+<zk>
+<style>
+.z-listcell.red .z-listcell-cnt, .z-label.red{
+	color:red;
+}
+</style>
+<window id="searchWin" title="Search Storage Item" border="normal" width="600px">
+	A zul that contains style tag causes selectors problems.
+	<vbox hflex="true">
+		<hbox>
+			Filter : 
+			<textbox id="filterBox" value="*" /> 
+			<button id="searchButton" label="Search" />
+		</hbox>
+</window>
+</zk>
