@@ -2,6 +2,8 @@ package org.zkoss.zk.zats.example;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -14,9 +16,10 @@ import org.zkoss.zats.core.component.operation.Selectable;
 import org.zkoss.zats.core.component.operation.Typeable;
 import org.zkoss.zk.zats.example.service.Item;
 import org.zkoss.zk.zats.example.view.ItemRenderer;
+import org.zkoss.zul.Caption;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.Window;
+import org.zkoss.zul.Listcell;
 import org.zkoss.zul.api.Listbox;
 
 public class SearchTest {
@@ -56,17 +59,20 @@ public class SearchTest {
 		
 		//verify detail data by model
 		Item item = (Item)listbox.cast(Listbox.class).getModel().getElementAt(0);
-		ComponentNode descriptionLabel = Searcher.find("#descriptionLabel"); 
-		assertEquals(descriptionLabel.cast(Label.class).getValue(), item.getDescription());
-		ComponentNode priceLabel = Searcher.find("#priceLabel");
-		assertEquals(priceLabel.cast(Label.class).getValue(),ItemRenderer.priceFormatter.format(item.getPrice()));
-		ComponentNode quantityLabel = Searcher.find("#quantityLabel");
-		assertEquals(true, quantityLabel.cast(Label.class).getValue().contains(Integer.toString(item.getQuantity())));
-		ComponentNode totalPriceLabel = Searcher.find("#totalPriceLabel");
-		assertEquals(totalPriceLabel.cast(Label.class).getValue(),ItemRenderer.priceFormatter.format(item.getTotalPrice()));
+		Label descriptionLabel = Searcher.find("#descriptionLabel").cast(Label.class); 
+		assertEquals(descriptionLabel.getValue(), item.getDescription());
+		Label priceLabel = Searcher.find("#priceLabel").cast(Label.class);
+		assertEquals(priceLabel.getValue(),ItemRenderer.priceFormatter.format(item.getPrice()));
+		Label quantityLabel = Searcher.find("#quantityLabel").cast(Label.class);
+		assertEquals(true, quantityLabel.getValue().contains(Integer.toString(item.getQuantity())));
+		Label totalPriceLabel = Searcher.find("#totalPriceLabel").cast(Label.class);
+		assertEquals(totalPriceLabel.getValue(),ItemRenderer.priceFormatter.format(item.getTotalPrice()));
 		
 		//verify detail data by label
-		String label = listbox.cast(Listbox.class).getSelectedItemApi().getLabel();
-		assertEquals(true, true);
+		Caption detailCaption = Searcher.find("#detailCaption").cast(Caption.class);
+		List<ComponentNode> cellNodes = listbox.getChild(1).getChildren();
+		assertEquals(detailCaption.getLabel(), cellNodes.get(0).cast(Listcell.class).getLabel());
+		assertEquals(priceLabel.getValue(),cellNodes.get(1).cast(Listcell.class).getLabel());
+		assertEquals(quantityLabel.getValue(),cellNodes.get(2).cast(Listcell.class).getLabel());
 	}
 }
