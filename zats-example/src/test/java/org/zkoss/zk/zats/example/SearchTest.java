@@ -41,22 +41,14 @@ public class SearchTest {
 
 	@Test
 	public void test() {
-		
 		Conversations.open("/search.zul");
 
-		ComponentNode filterBox = Searcher.find("#filterBox");
-		ComponentNode searchButton = Searcher.find("#searchButton");
-		
-		filterBox.as(Typeable.class).type("A");
-		searchButton.as(Clickable.class).click();
-
 		ComponentNode detailBox = Searcher.find("groupbox");
-		
 		ComponentNode listbox = Searcher.find("listbox");
 		listbox.as(Selectable.class).select(0);
 		//verify UI logic
 		assertEquals(true, detailBox.cast(Groupbox.class).isVisible());
-		
+		//select an item & verify its detail
 		//verify detail data by model
 		Item item = (Item)listbox.cast(Listbox.class).getModel().getElementAt(0);
 		Label descriptionLabel = Searcher.find("#descriptionLabel").cast(Label.class); 
@@ -74,5 +66,19 @@ public class SearchTest {
 		assertEquals(detailCaption.getLabel(), cellNodes.get(0).cast(Listcell.class).getLabel());
 		assertEquals(priceLabel.getValue(),cellNodes.get(1).cast(Listcell.class).getLabel());
 		assertEquals(quantityLabel.getValue(),cellNodes.get(2).cast(Listcell.class).getLabel());
+		
+		//search & verify result
+		ComponentNode filterBox = Searcher.find("#filterBox");
+		ComponentNode searchButton = Searcher.find("#searchButton");
+		final String KEYWORD = "A";
+		filterBox.as(Typeable.class).type(KEYWORD);
+		searchButton.as(Clickable.class).click();
+		List<ComponentNode> nodes = listbox.getChildren();
+		//skip listheader
+		//verify name column
+		for (int i=1 ; i <nodes.size() ; i++){
+			Listcell cell = nodes.get(i).getChild(0).cast(Listcell.class);
+			assertEquals(true, cell.getLabel().contains(KEYWORD));
+		}
 	}
 }

@@ -31,10 +31,6 @@
 			</grid>
 		</groupbox>
 	</vbox>
-	<combobox id="cbox">
-		<comboitem label="AA" value="AA"></comboitem>
-		<comboitem label="BB" value="BB"></comboitem>
-	</combobox> 
 </window>
 <style>
 .z-listcell.red .z-listcell-cnt, .z-label.red{
