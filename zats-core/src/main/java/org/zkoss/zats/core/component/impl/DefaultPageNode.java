@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.zkoss.zats.core.Conversation;
 import org.zkoss.zats.core.component.ComponentNode;
 import org.zkoss.zats.core.component.DesktopNode;
 import org.zkoss.zats.core.component.PageNode;
@@ -53,6 +54,11 @@ public class DefaultPageNode implements PageNode
 		while(iterator.hasNext())
 			nodes.add(new DefaultComponentNode(this, (Component)iterator.next()));
 		return nodes;
+	}
+
+	public Conversation getConversation()
+	{
+		return desktopNode.getConversation();
 	}
 
 	public DesktopNode getDesktop()

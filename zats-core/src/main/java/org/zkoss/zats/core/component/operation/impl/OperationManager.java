@@ -1,16 +1,9 @@
 package org.zkoss.zats.core.component.operation.impl;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.zkoss.Version;
-import org.zkoss.zats.core.component.ComponentNode;
 import org.zkoss.zats.core.component.operation.Clickable;
 import org.zkoss.zats.core.component.operation.Operation;
 import org.zkoss.zats.core.component.operation.Selectable;
@@ -23,17 +16,11 @@ import org.zkoss.zul.impl.InputElement;
 
 public class OperationManager
 {
-	private static Logger logger;
-	private static List<OperationObserver> observers;
-	// TODO deprecate, using hierarchy searching
 	private static Map<Key, OperationBuilder<? extends Operation>> builders;
-	/** current zk version */
-	private static BigInteger current;
+	private static BigInteger current; // current zk version
 
 	static
 	{
-		logger = Logger.getLogger(OperationObserver.class.getName());
-		observers = new CopyOnWriteArrayList<OperationObserver>();
 		builders = new HashMap<OperationManager.Key, OperationBuilder<? extends Operation>>();
 
 		// load current zk version
@@ -124,44 +111,6 @@ public class OperationManager
 			c = c.getSuperclass();
 		}
 		return null; // not found
-	}
-
-	public static void addObserver(OperationObserver observer)
-	{
-		if(observer != null)
-			observers.add(observer);
-	}
-
-	public List<OperationObserver> getObservers()
-	{
-		return new ArrayList<OperationObserver>(observers);
-	}
-
-	public static void removeObserver(OperationObserver observer)
-	{
-		if(observer != null)
-			observers.remove(observer);
-	}
-
-	/**
-	 * post an asynchronous update event.
-	 * @param target the component node which performed this event
-	 * @param command
-	 * @param data
-	 */
-	public static void post(ComponentNode target, String command, Map<String, Object> data)
-	{
-		for(OperationObserver o : observers)
-		{
-			try
-			{
-				o.doPost(target, command, data);
-			}
-			catch(Exception e)
-			{
-				logger.log(Level.WARNING, "", e);
-			}
-		}
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package org.zkoss.zats.core.component;
 
 import java.util.Map;
+import org.zkoss.zats.core.Conversation;
 
 /**
  * A interface represented a tree node from ZUML structure.
@@ -32,4 +33,10 @@ public interface Node
 	 * @return a map of attributes.
 	 */
 	Map<String, Object> getAttributes();
+
+	/**
+	 * get conversation this node belonged to.
+	 * @return conversation
+	 */
+	Conversation getConversation();
 }

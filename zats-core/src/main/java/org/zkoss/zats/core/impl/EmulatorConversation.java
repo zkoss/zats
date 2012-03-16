@@ -24,14 +24,12 @@ import org.zkoss.zats.core.ConversationException;
 import org.zkoss.zats.core.component.ComponentNode;
 import org.zkoss.zats.core.component.DesktopNode;
 import org.zkoss.zats.core.component.impl.DefaultDesktopNode;
-import org.zkoss.zats.core.component.operation.impl.OperationManager;
-import org.zkoss.zats.core.component.operation.impl.OperationObserver;
 import org.zkoss.zats.internal.emulator.Emulator;
 import org.zkoss.zats.internal.emulator.EmulatorBuilder;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 
-public class EmulatorConversation implements Conversation, OperationObserver
+public class EmulatorConversation implements Conversation
 {
 	private Emulator emulator;
 	private Logger logger;
@@ -56,8 +54,6 @@ public class EmulatorConversation implements Conversation, OperationObserver
 	{
 		// create emulator
 		emulator = new EmulatorBuilder(web).addResource(resourceRoot).descriptor(EmulatorConversation.class.getResource("WEB-INF/web.xml")).create();
-		// observer operation event
-		OperationManager.addObserver(this);
 	}
 
 	public synchronized void stop()
@@ -70,7 +66,6 @@ public class EmulatorConversation implements Conversation, OperationObserver
 		finally
 		{
 			emulator = null;
-			OperationManager.removeObserver(this);
 		}
 	}
 
@@ -88,7 +83,7 @@ public class EmulatorConversation implements Conversation, OperationObserver
 				logger.info(getReplyString(is, huc.getContentEncoding()));
 			// get specified objects such as Desktop
 			Desktop desktop = (Desktop)emulator.getRequestAttributes().get("javax.zkoss.zk.ui.desktop");
-			desktopNode = new DefaultDesktopNode(desktop);
+			desktopNode = new DefaultDesktopNode(this, desktop);
 		}
 		catch(Exception e)
 		{
@@ -135,7 +130,7 @@ public class EmulatorConversation implements Conversation, OperationObserver
 		return (HttpSession)desktopNode.cast().getSession().getNativeSession();
 	}
 
-	public void doPost(ComponentNode target, String cmd, Map<String, Object> data)
+	public void postUpdate(ComponentNode target, String cmd, Map<String, Object> data)
 	{
 		// prepare au data
 		String dtid = UrlEncoded.encodeString(desktopNode.getId());

@@ -3,6 +3,7 @@ package org.zkoss.zats.core.component.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.zkoss.zats.core.Conversation;
 import org.zkoss.zats.core.component.ComponentNode;
 import org.zkoss.zats.core.component.DesktopNode;
 import org.zkoss.zats.core.component.PageNode;
@@ -72,6 +73,11 @@ public class DefaultComponentNode implements ComponentNode
 	{
 		Component parent = comp.getParent();
 		return parent != null ? new DefaultComponentNode(pageNode, parent) : null;
+	}
+
+	public Conversation getConversation()
+	{
+		return getDesktop().getConversation();
 	}
 
 	public DesktopNode getDesktop()

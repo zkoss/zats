@@ -2,11 +2,10 @@ package org.zkoss.zats.core.component.operation.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.zkoss.zats.core.component.ComponentNode;
 import org.zkoss.zats.core.component.operation.Selectable;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.api.Listbox;
+import org.zkoss.zul.Listbox;
 
 public class ListboxSelectableBuilder implements OperationBuilder<Selectable>
 {
@@ -18,7 +17,7 @@ public class ListboxSelectableBuilder implements OperationBuilder<Selectable>
 			{
 				Map<String, Object> data = new HashMap<String, Object>();
 				
-				String uuid = target.cast(Listbox.class).getItemAtIndexApi(index).getUuid();
+				String uuid = target.cast(Listbox.class).getItemAtIndex(index).getUuid();
 				String[] selections = {uuid};
 				//items: array of UUID of selected items
 				//it contains more than 1 item in multiple selections

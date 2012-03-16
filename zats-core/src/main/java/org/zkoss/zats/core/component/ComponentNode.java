@@ -11,7 +11,6 @@ import org.zkoss.zk.ui.Component;
  */
 public interface ComponentNode extends Node
 {
-
 	/**
 	 * get UUID. of this node.
 	 * @return UUID.
