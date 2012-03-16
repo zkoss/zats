@@ -25,14 +25,13 @@ public class ListboxSelectableBuilder implements OperationBuilder<Selectable>
 				//reference: UUID of last selected item
 				data.put("reference",uuid);
 				
-				//do not know the following is needed or not
-//				data.put("which", 1); 
-//				data.put("pageX", 0);
-//				data.put("pageY", 0);
-//				data.put("x", 0);
-//				data.put("y", 0);
+				data.put("which", 1); 
+				data.put("pageX", 0);
+				data.put("pageY", 0);
+				data.put("x", 0);
+				data.put("y", 0);
 				
-				OperationManager.post(target, Events.ON_SELECT, data);
+				target.getConversation().postUpdate(target, Events.ON_SELECT, data);
 				return this;
 			}
 		};

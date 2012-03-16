@@ -20,7 +20,7 @@ public class GenericClickableBuilder implements OperationBuilder<Clickable>
 				data.put("pageY", 0);
 				data.put("x", 0);
 				data.put("y", 0);
-				OperationManager.post(target, Events.ON_CLICK, data);
+				target.getConversation().postUpdate(target, Events.ON_CLICK, data);
 				return this;
 			}
 		};

@@ -18,8 +18,8 @@ public class GenericTypeableBuilder implements OperationBuilder<Typeable>
 		        data.put("value", value);
 		        data.put("bySelectBack", false);
 		        data.put("start", 0);
-		        OperationManager.post(target, Events.ON_CHANGING, data);
-		        OperationManager.post(target, Events.ON_CHANGE, data);
+		        target.getConversation().postUpdate(target, Events.ON_CHANGING, data);
+		        target.getConversation().postUpdate(target, Events.ON_CHANGE, data);
 		        return this;
 			}
 		};
