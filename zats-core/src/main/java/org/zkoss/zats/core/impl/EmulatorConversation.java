@@ -136,8 +136,14 @@ public class EmulatorConversation implements Conversation
 		String dtid = UrlEncoded.encodeString(desktopNode.getId());
 		cmd = UrlEncoded.encodeString(cmd);
 		String uuid = UrlEncoded.encodeString(target.getUuid());
-		String jsonData = UrlEncoded.encodeString(JSONValue.toJSONString(data));
-		String param = MessageFormat.format("dtid={0}&cmd_0={1}&uuid_0={2}&data_0={3}", dtid, cmd, uuid, jsonData);
+		String param;
+		if(data != null && data.size() > 0)
+		{
+			String jsonData = UrlEncoded.encodeString(JSONValue.toJSONString(data));
+			param = MessageFormat.format("dtid={0}&cmd_0={1}&uuid_0={2}&data_0={3}", dtid, cmd, uuid, jsonData);
+		}
+		else
+			param = MessageFormat.format("dtid={0}&cmd_0={1}&uuid_0={2}", dtid, cmd, uuid);
 
 		OutputStream os = null;
 		InputStream is = null;

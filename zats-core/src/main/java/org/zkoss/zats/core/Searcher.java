@@ -99,4 +99,9 @@ public class Searcher
 	{
 		return Searcher.find(Conversations.getDesktop(), selector);
 	}
+
+	public static List<ComponentNode> findAll(String selector)
+	{
+		return Searcher.findAll(Conversations.getDesktop(), selector);
+	}
 }

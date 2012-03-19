@@ -4,14 +4,20 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import org.zkoss.Version;
+import org.zkoss.zats.core.component.operation.Checkable;
 import org.zkoss.zats.core.component.operation.Clickable;
+import org.zkoss.zats.core.component.operation.Focusable;
 import org.zkoss.zats.core.component.operation.Operation;
 import org.zkoss.zats.core.component.operation.Selectable;
 import org.zkoss.zats.core.component.operation.Typeable;
 import org.zkoss.zats.core.impl.Util;
+import org.zkoss.zhtml.Input;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Menuitem;
+import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.impl.InputElement;
 
 public class OperationManager
@@ -35,8 +41,16 @@ public class OperationManager
 
 		// TODO load default implement
 		registerBuilder(AbstractComponent.class, Clickable.class, new GenericClickableBuilder());
+		registerBuilder(AbstractComponent.class , Focusable.class , new GenericFocusableBuilder());
+		
 		registerBuilder(InputElement.class, Typeable.class, new GenericTypeableBuilder());
 		registerBuilder(Listbox.class, Selectable.class, new ListboxSelectableBuilder());
+
+		registerBuilder(Input.class, Checkable.class, new GenericCheckableBuilder());
+		registerBuilder(Checkbox.class, Checkable.class, new GenericCheckableBuilder()); // include Radio.class
+		registerBuilder(Menuitem.class, Checkable.class, new GenericCheckableBuilder());
+		registerBuilder(Toolbarbutton.class, Checkable.class, new GenericCheckableBuilder());
+		
 		// TODO load custom implement from configuration
 
 		// TODO
