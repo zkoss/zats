@@ -1,18 +1,18 @@
 // ported from zk 6.0.0 
 // original package: org.zkoss.zk.ui.select
-package org.zkoss.zats.select.impl;
+package org.zkoss.zats.common.select.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.zkoss.zats.select.impl.Attribute.Operator;
-import org.zkoss.zats.select.impl.InSeqMachine.SubState;
-import org.zkoss.zats.select.impl.Selector.Combinator;
-import org.zkoss.zats.select.impl.Token.Type;
-import org.zkoss.zats.select.impl.fsm.MacroStateCtx;
-import org.zkoss.zats.select.impl.fsm.StateCtx;
-import org.zkoss.zats.select.impl.fsm.StateMachine;
-import org.zkoss.zats.select.impl.fsm.StateCtx.TransitionListener;
-import org.zkoss.zats.select.impl.fsm.StateMachine.StateMachineException;
+import org.zkoss.zats.common.select.impl.Attribute.Operator;
+import org.zkoss.zats.common.select.impl.InSeqMachine.SubState;
+import org.zkoss.zats.common.select.impl.Selector.Combinator;
+import org.zkoss.zats.common.select.impl.Token.Type;
+import org.zkoss.zats.common.select.impl.fsm.MacroStateCtx;
+import org.zkoss.zats.common.select.impl.fsm.StateCtx;
+import org.zkoss.zats.common.select.impl.fsm.StateMachine;
+import org.zkoss.zats.common.select.impl.fsm.StateCtx.TransitionListener;
+import org.zkoss.zats.common.select.impl.fsm.StateMachine.StateMachineException;
 
 /**
  * A parser that parses selector string and generates selector objects.

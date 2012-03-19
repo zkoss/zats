@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import org.zkoss.Version;
+import org.zkoss.zats.common.select.Selectors;
 import org.zkoss.zats.mimic.impl.node.DefaultComponentNode;
 import org.zkoss.zats.mimic.impl.node.DefaultPageNode;
 import org.zkoss.zats.mimic.node.ComponentNode;
 import org.zkoss.zats.mimic.node.DesktopNode;
 import org.zkoss.zats.mimic.node.Node;
 import org.zkoss.zats.mimic.node.PageNode;
-import org.zkoss.zats.select.Selectors;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 

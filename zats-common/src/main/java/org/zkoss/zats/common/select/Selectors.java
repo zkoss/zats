@@ -1,11 +1,11 @@
 // ported from zk 6.0.0 
 // original package: org.zkoss.zk.ui.select
-package org.zkoss.zats.select;
+package org.zkoss.zats.common.select;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.zkoss.zats.select.impl.ComponentIterator;
+import org.zkoss.zats.common.select.impl.ComponentIterator;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 

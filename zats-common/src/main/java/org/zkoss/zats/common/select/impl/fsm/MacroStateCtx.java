@@ -1,6 +1,6 @@
 // ported from zcommon 6.0.0 
 // original package: org.zkoss.fsm
-package org.zkoss.zats.select.impl.fsm;
+package org.zkoss.zats.common.select.impl.fsm;
 
 /**
  * The real power of StateMachine. This extended state allows you to define a

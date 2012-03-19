@@ -1,6 +1,6 @@
 // ported from zk 6.0.0 
 // original package: org.zkoss.zk.ui.select
-package org.zkoss.zats.select.impl;
+package org.zkoss.zats.common.select.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import org.zkoss.lang.Strings;
-import org.zkoss.zats.select.impl.Selector.Combinator;
+import org.zkoss.zats.common.select.impl.Selector.Combinator;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.Page;

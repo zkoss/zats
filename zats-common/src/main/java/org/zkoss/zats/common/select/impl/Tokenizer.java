@@ -1,11 +1,11 @@
 // ported from zk 6.0.0 
 // original package: org.zkoss.zk.ui.select
-package org.zkoss.zats.select.impl;
+package org.zkoss.zats.common.select.impl;
 
 import java.util.ArrayList;
-import org.zkoss.zats.select.impl.Token.Type;
-import org.zkoss.zats.select.impl.fsm.StateCtx;
-import org.zkoss.zats.select.impl.fsm.StateMachine;
+import org.zkoss.zats.common.select.impl.Token.Type;
+import org.zkoss.zats.common.select.impl.fsm.StateCtx;
+import org.zkoss.zats.common.select.impl.fsm.StateMachine;
 
 /**
  * A tokenizer of selector string.

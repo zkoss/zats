@@ -1,14 +1,14 @@
 // ported from zk 6.0.0 
 // original package: org.zkoss.zk.ui.select
-package org.zkoss.zats.select.impl;
+package org.zkoss.zats.common.select.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.zkoss.zats.select.impl.Attribute.Operator;
-import org.zkoss.zats.select.impl.Selector.Combinator;
+import org.zkoss.zats.common.select.impl.Attribute.Operator;
+import org.zkoss.zats.common.select.impl.Selector.Combinator;
 
 /**
  * The model representing a sequence of simple selectors.

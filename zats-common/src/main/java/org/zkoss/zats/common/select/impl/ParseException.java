@@ -1,6 +1,6 @@
 // ported from zk 6.0.0 
 // original package: org.zkoss.zk.ui.select
-package org.zkoss.zats.select.impl;
+package org.zkoss.zats.common.select.impl;
 
 import org.zkoss.zk.ui.UiException;
 
