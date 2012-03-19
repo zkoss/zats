@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -15,15 +16,17 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.junit.After;
 import org.junit.Test;
-import org.zkoss.zats.mimic.internal.emulator.Emulator;
-import org.zkoss.zats.mimic.internal.emulator.EmulatorBuilder;
+import org.zkoss.zats.internal.emulator.Emulator;
+import org.zkoss.zats.internal.emulator.EmulatorBuilder;
 
 public class EmulatorTest extends HttpServlet
 {
