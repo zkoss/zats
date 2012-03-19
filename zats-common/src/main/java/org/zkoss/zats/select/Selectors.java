@@ -11,6 +11,8 @@ import org.zkoss.zk.ui.Page;
 
 /**
  * A collection of selector related utilities.
+ * This was porting from ZK 6 in order to provide selector on ZK 5.
+ * It don't recommend user to use this class directly.
  * @since 6.0.0
  * @author simonpai
  */
