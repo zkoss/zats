@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="sandbox-test">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/archive" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
+        <dependent-module archiveName="zats-mimic-0.9.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/zats-mimic/zats-mimic">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="zats-common-0.9.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/zats-common/zats-common">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="java-output-path" value="/sandbox-test/target/classes"/>
+        <property name="context-root" value="zksandbox-test"/>
+    </wb-module>
+</project-modules>
