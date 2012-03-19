@@ -8,11 +8,12 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.zkoss.zats.core.Conversations;
-import org.zkoss.zats.core.Searcher;
-import org.zkoss.zats.core.component.ComponentNode;
-import org.zkoss.zats.core.component.operation.Clickable;
-import org.zkoss.zats.core.component.operation.Typeable;
+import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.Searcher;
+import org.zkoss.zats.mimic.node.ComponentNode;
+import org.zkoss.zats.mimic.operation.Clickable;
+import org.zkoss.zats.mimic.operation.Typeable;
+import org.zkoss.zk.zats.example.util.LoginOperation;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
@@ -57,5 +58,13 @@ public class LoginLogoutTest {
 		ComponentNode mainWin = Searcher.find("window");
 		assertEquals("Main",mainWin.cast(Window.class).getTitle());
 
+	}
+	
+	@Test
+	public void testLoginOperation() {
+		Conversations.open("/login.zul");
+		assertEquals(false, LoginOperation.login("hawk","1111"));
+		assertEquals(true, LoginOperation.login("hawk","1234"));
+			
 	}
 }
