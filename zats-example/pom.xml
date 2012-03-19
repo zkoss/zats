@@ -39,7 +39,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zats-core</artifactId>
+			<artifactId>zats-mimic</artifactId>
 			<version>0.9.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
