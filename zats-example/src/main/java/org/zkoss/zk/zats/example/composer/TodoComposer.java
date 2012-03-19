@@ -15,8 +15,7 @@ import org.zkoss.zul.Listbox;
 public class TodoComposer extends GenericForwardComposer {
 	private TaskService taskdao = new TaskService(); 
 	private Task selected = new Task();
-	private Task sel;
-	List<Task> tasks;
+	private List<Task> tasks;
 	
 	private Listbox listbox;
 	
