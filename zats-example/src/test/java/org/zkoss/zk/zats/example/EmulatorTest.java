@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.After;
 import org.junit.Test;
-import org.zkoss.zats.internal.emulator.Emulator;
-import org.zkoss.zats.internal.emulator.EmulatorBuilder;
+import org.zkoss.zats.mimic.internal.emulator.Emulator;
+import org.zkoss.zats.mimic.internal.emulator.EmulatorBuilder;
 
 public class EmulatorTest extends HttpServlet
 {

@@ -3,7 +3,7 @@ package org.zkoss.zk.zats.example.composer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.zkoss.zats.core.impl.EmulatorConversation;
+import org.zkoss.zats.mimic.impl.EmulatorConversation;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zk.zats.example.service.AuthenticationService;
