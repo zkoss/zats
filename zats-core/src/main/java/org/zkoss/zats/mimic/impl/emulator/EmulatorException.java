@@ -1,4 +1,4 @@
-package org.zkoss.zats.mimic.internal.emulator;
+package org.zkoss.zats.mimic.impl.emulator;
 
 public class EmulatorException extends RuntimeException
 {

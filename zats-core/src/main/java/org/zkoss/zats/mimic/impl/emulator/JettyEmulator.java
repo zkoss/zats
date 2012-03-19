@@ -1,4 +1,4 @@
-package org.zkoss.zats.mimic.impl.internal.emulator;
+package org.zkoss.zats.mimic.impl.emulator;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
@@ -25,8 +25,6 @@ import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.util.component.LifeCycle.Listener;
 import org.eclipse.jetty.util.resource.ResourceCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.zkoss.zats.mimic.internal.emulator.Emulator;
-import org.zkoss.zats.mimic.internal.emulator.EmulatorException;
 
 public class JettyEmulator implements Emulator
 {

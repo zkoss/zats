@@ -1,4 +1,4 @@
-package org.zkoss.zats.mimic.internal.emulator;
+package org.zkoss.zats.mimic.impl.emulator;
 
 import java.io.Closeable;
 import java.util.Map;

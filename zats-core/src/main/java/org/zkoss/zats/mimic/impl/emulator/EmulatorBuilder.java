@@ -1,10 +1,9 @@
-package org.zkoss.zats.mimic.internal.emulator;
+package org.zkoss.zats.mimic.impl.emulator;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import org.zkoss.zats.mimic.impl.internal.emulator.JettyEmulator;
 
 /**
  * The builder for creating new emulator.
