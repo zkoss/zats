@@ -11,6 +11,8 @@ import org.zkoss.zats.mimic.node.ComponentNode;
 import org.zkoss.zats.mimic.operation.Clickable;
 import org.zkoss.zul.Textbox;
 
+import util.TestCaseBase;
+
 
 public class PopupTest extends TestCaseBase {
 
