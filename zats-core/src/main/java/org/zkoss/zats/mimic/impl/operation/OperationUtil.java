@@ -50,10 +50,54 @@ public class OperationUtil
 	{
 		doMouseEvent(target, Events.ON_MOUSE_OUT);
 	}
-	
-	public static void doChange(ComponentNode target , String value)
+
+	private static void doInputEvent(ComponentNode target, String value, String cmd)
 	{
-		
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("value", value);
+		data.put("bySelectBack", false);
+		data.put("start", 0);
+		target.getConversation().postUpdate(target, cmd, data);
 	}
-	
+
+	public static void doChange(ComponentNode target, String value)
+	{
+		doInputEvent(target, value, Events.ON_CHANGE);
+	}
+
+	public static void doChanging(ComponentNode target, String value)
+	{
+		doInputEvent(target, value, Events.ON_CHANGING);
+	}
+
+	public static void doFocus(ComponentNode target)
+	{
+		target.getConversation().postUpdate(target, Events.ON_FOCUS, null);
+	}
+
+	public static void doBlur(ComponentNode target)
+	{
+		target.getConversation().postUpdate(target, Events.ON_BLUR, null);
+	}
+
+	public static void doCheck(ComponentNode target, boolean checked)
+	{
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("", checked);
+		target.getConversation().postUpdate(target, Events.ON_CHECK, data);
+	}
+
+	public static void doSelect(ComponentNode target, String selection)
+	{
+		doSelect(target, selection, selection);
+	}
+
+	public static void doSelect(ComponentNode target, String reference, String... selection)
+	{
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("items", selection);
+		data.put("reference", reference);
+		data.put("which", 0);
+		target.getConversation().postUpdate(target, Events.ON_SELECT, data);
+	}
 }
