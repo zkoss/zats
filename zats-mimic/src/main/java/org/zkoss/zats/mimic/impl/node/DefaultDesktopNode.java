@@ -1,3 +1,14 @@
+/* DefaultDesktopNode.java
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mar 20, 2012 Created by Pao Wang
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+ */
 package org.zkoss.zats.mimic.impl.node;
 
 import java.util.ArrayList;
@@ -10,44 +21,36 @@ import org.zkoss.zats.mimic.node.PageNode;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 
-public class DefaultDesktopNode implements DesktopNode
-{
+public class DefaultDesktopNode implements DesktopNode {
 	private Conversation conversation;
 	private Desktop desktop;
 
-	public DefaultDesktopNode(Conversation conversation, Desktop desktop)
-	{
+	public DefaultDesktopNode(Conversation conversation, Desktop desktop) {
 		this.conversation = conversation;
 		this.desktop = desktop;
 	}
 
-	public String getId()
-	{
+	public String getId() {
 		return desktop.getId();
 	}
 
-	public String getType()
-	{
+	public String getType() {
 		return "desktop";
 	}
 
-	public Object getAttribute(String name)
-	{
+	public Object getAttribute(String name) {
 		return desktop.getAttribute(name);
 	}
 
-	public Map<String, Object> getAttributes()
-	{
+	public Map<String, Object> getAttributes() {
 		return desktop.getAttributes();
 	}
 
-	public Conversation getConversation()
-	{
+	public Conversation getConversation() {
 		return conversation;
 	}
 
-	public List<PageNode> getPages()
-	{
+	public List<PageNode> getPages() {
 		List<PageNode> nodes = new ArrayList<PageNode>();
 		Iterator<?> iter = desktop.getPages().iterator();
 		while(iter.hasNext())
@@ -55,8 +58,17 @@ public class DefaultDesktopNode implements DesktopNode
 		return nodes;
 	}
 
-	public Desktop cast()
-	{
+	public Desktop cast() {
 		return desktop;
+	}
+
+	@Override
+	public int hashCode() {
+		return desktop.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return desktop.equals(obj);
 	}
 }

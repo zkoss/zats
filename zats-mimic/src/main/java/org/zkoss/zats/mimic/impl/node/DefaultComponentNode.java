@@ -1,3 +1,14 @@
+/* DefaultComponentNode.java
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mar 20, 2012 Created by Pao Wang
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+ */
 package org.zkoss.zats.mimic.impl.node;
 
 import java.util.ArrayList;
@@ -17,45 +28,37 @@ import org.zkoss.zk.ui.Component;
  * This performs operations through {@link OperationManager}.
  * @author pao
  */
-public class DefaultComponentNode implements ComponentNode
-{
+public class DefaultComponentNode implements ComponentNode {
 
 	private PageNode pageNode;
 	private Component comp;
 
-	public DefaultComponentNode(PageNode pageNode, Component component)
-	{
+	public DefaultComponentNode(PageNode pageNode, Component component) {
 		this.pageNode = pageNode;
 		this.comp = component;
 	}
 
-	public String getId()
-	{
+	public String getId() {
 		return comp.getId();
 	}
 
-	public String getType()
-	{
+	public String getType() {
 		return comp.getDefinition().getName();
 	}
 
-	public Object getAttribute(String name)
-	{
+	public Object getAttribute(String name) {
 		return comp.getAttribute(name);
 	}
 
-	public Map<String, Object> getAttributes()
-	{
+	public Map<String, Object> getAttributes() {
 		return comp.getAttributes();
 	}
 
-	public String getUuid()
-	{
+	public String getUuid() {
 		return comp.getUuid();
 	}
 
-	public List<ComponentNode> getChildren()
-	{
+	public List<ComponentNode> getChildren() {
 		List<Component> children = comp.getChildren();
 		List<ComponentNode> nodes = new ArrayList<ComponentNode>(children.size());
 		for(Component child : children)
@@ -63,35 +66,29 @@ public class DefaultComponentNode implements ComponentNode
 		return nodes;
 	}
 
-	public ComponentNode getChild(int index)
-	{
+	public ComponentNode getChild(int index) {
 		Component child = (Component)comp.getChildren().get(index);
 		return child != null ? new DefaultComponentNode(pageNode, child) : null;
 	}
 
-	public ComponentNode getParent()
-	{
+	public ComponentNode getParent() {
 		Component parent = comp.getParent();
 		return parent != null ? new DefaultComponentNode(pageNode, parent) : null;
 	}
 
-	public Conversation getConversation()
-	{
+	public Conversation getConversation() {
 		return getDesktop().getConversation();
 	}
 
-	public DesktopNode getDesktop()
-	{
+	public DesktopNode getDesktop() {
 		return pageNode.getDesktop();
 	}
 
-	public PageNode getPage()
-	{
+	public PageNode getPage() {
 		return pageNode;
 	}
 
-	public <T extends Operation> T as(Class<T> operation)
-	{
+	public <T extends Operation> T as(Class<T> operation) {
 		OperationBuilder<T> builder = OperationManager.getBuilder(comp, operation);
 		if(builder == null)
 			throw new UnsupportedOperationException(getType() + " doesn't support " + operation.getName());
@@ -99,9 +96,17 @@ public class DefaultComponentNode implements ComponentNode
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends Component> T cast(Class<T> c)
-	{
+	public <T extends Component> T cast(Class<T> c) {
 		return (T)comp;
 	}
 
+	@Override
+	public int hashCode() {
+		return comp.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return comp.equals(obj);
+	}
 }
