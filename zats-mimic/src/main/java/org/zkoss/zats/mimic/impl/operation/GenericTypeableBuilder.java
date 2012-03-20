@@ -38,7 +38,7 @@ public class GenericTypeableBuilder implements OperationBuilder<Typeable> {
 	private SimpleDateFormat tf;
 
 	public GenericTypeableBuilder(int type) {
-		if (type < 0 || type > 2)
+		if (type < 0 || type > 4)
 			throw new IllegalArgumentException("unknown type: " + type);
 		this.type = type;
 		df = new SimpleDateFormat("yyyy/MM/dd");
