@@ -81,12 +81,15 @@ public class EmulatorConversation implements Conversation
 			// load zul page
 			HttpURLConnection huc = getConnection(zulPath, "GET");
 			huc.connect();
+			//TODO, read response, handle redirect. 
+			
 			cookies = huc.getHeaderFields().get("Set-Cookie");
 			is = huc.getInputStream();
 			if(logger.isLoggable(Level.INFO))
 				logger.info(getReplyString(is, huc.getContentEncoding()));
 			// get specified objects such as Desktop
 			Desktop desktop = (Desktop)emulator.getRequestAttributes().get("javax.zkoss.zk.ui.desktop");
+			//TODO, what if a non-zk(zul) page, throw exception?
 			desktopNode = new DefaultDesktopNode(this, desktop);
 		}
 		catch(Exception e)
@@ -106,6 +109,7 @@ public class EmulatorConversation implements Conversation
 		{
 			if(desktopNode != null)
 			{
+				//TODO , should use au to remove a desktop, don't call destroy directly.
 				Desktop desktop = desktopNode.cast();
 				if(desktop instanceof DesktopCtrl)
 					((DesktopCtrl)desktop).destroy();
@@ -164,6 +168,7 @@ public class EmulatorConversation implements Conversation
 			os = c.getOutputStream();
 			os.write(param.getBytes("utf-8"));
 			close(os);
+			//TODO, read response, handle redirect.
 			// read response
 			is = c.getInputStream();
 			if(logger.isLoggable(Level.INFO))
