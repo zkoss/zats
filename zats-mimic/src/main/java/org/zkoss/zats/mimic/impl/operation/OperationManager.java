@@ -16,6 +16,7 @@ import org.zkoss.zhtml.Input;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Decimalbox;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Doublespinner;
@@ -24,6 +25,7 @@ import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Longbox;
 import org.zkoss.zul.Menuitem;
 import org.zkoss.zul.Spinner;
+import org.zkoss.zul.Timebox;
 import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.impl.InputElement;
 
@@ -57,6 +59,8 @@ public class OperationManager
 		registerBuilder(Decimalbox.class, Typeable.class, new GenericTypeableBuilder(GenericTypeableBuilder.DECIMAL));
 		registerBuilder(Doublebox.class, Typeable.class, new GenericTypeableBuilder(GenericTypeableBuilder.DECIMAL));
 		registerBuilder(Doublespinner.class, Typeable.class, new GenericTypeableBuilder(GenericTypeableBuilder.DECIMAL));
+		registerBuilder(Datebox.class, Typeable.class, new GenericTypeableBuilder(GenericTypeableBuilder.DATE));
+		registerBuilder(Timebox.class, Typeable.class, new GenericTypeableBuilder(GenericTypeableBuilder.TIME));
 
 		registerBuilder(Listbox.class, Selectable.class, new ListboxSelectableBuilder());
 		registerBuilder(Listbox.class, MultipleSelectable.class, new ListboxMultipleSelectableBuilder());
