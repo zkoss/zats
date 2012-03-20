@@ -73,10 +73,10 @@ public class GenericTypeableBuilder implements OperationBuilder<Typeable> {
 									+ " can't parse to time", 0);
 					}
 
-					OperationUtil.doFocus(target);
-					OperationUtil.doChanging(target, value);
-					OperationUtil.doChange(target, parsed);
-					OperationUtil.doBlur(target);
+					PostAgent.doFocus(target);
+					PostAgent.doChanging(target, value);
+					PostAgent.doChange(target, parsed);
+					PostAgent.doBlur(target);
 
 				} catch (Exception e) {
 					throw new ConversationException("value \"" + value

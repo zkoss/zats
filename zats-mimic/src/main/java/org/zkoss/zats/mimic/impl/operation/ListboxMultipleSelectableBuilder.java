@@ -43,7 +43,7 @@ public class ListboxMultipleSelectableBuilder implements
 				}
 				String ref = listbox.getItemAtIndex(index).getUuid();
 				sels.add(ref);
-				OperationUtil.doSelect(target, ref,
+				PostAgent.doSelect(target, ref,
 						sels.toArray(new String[sels.size()]));
 
 				return this;
@@ -64,7 +64,7 @@ public class ListboxMultipleSelectableBuilder implements
 				if (!hit)
 					return this;// skip
 				String ref = listbox.getItemAtIndex(index).getUuid();
-				OperationUtil.doSelect(target, ref,
+				PostAgent.doSelect(target, ref,
 						sels.toArray(new String[sels.size()]));
 				return this;
 			}

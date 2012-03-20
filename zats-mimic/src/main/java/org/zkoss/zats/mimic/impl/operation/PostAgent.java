@@ -1,4 +1,4 @@
-/* OperationUtil.java
+/* PostAgent.java
 
 	Purpose:
 		
@@ -17,11 +17,11 @@ import org.zkoss.zats.mimic.node.ComponentNode;
 import org.zkoss.zk.ui.event.Events;
 
 /**
- * Utilities for any related to operation of component.
+ * An agent for delegating task of posting asynchronous update event.
  * 
  * @author pao
  */
-public class OperationUtil {
+public class PostAgent {
 
 	private static void doMouseEvent(ComponentNode target, String cmd) {
 		Map<String, Object> data = new HashMap<String, Object>();

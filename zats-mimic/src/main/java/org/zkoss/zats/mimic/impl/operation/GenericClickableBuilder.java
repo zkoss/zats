@@ -18,17 +18,17 @@ public class GenericClickableBuilder implements OperationBuilder<Clickable> {
 	public Clickable getOperation(final ComponentNode target) {
 		return new Clickable() {
 			public Clickable click() {
-				OperationUtil.doClick(target);
+				PostAgent.doClick(target);
 				return this;
 			}
 
 			public Clickable doubleClick() {
-				OperationUtil.doDoubleClick(target);
+				PostAgent.doDoubleClick(target);
 				return this;
 			}
 
 			public Clickable rightClick() {
-				OperationUtil.doRightClick(target);
+				PostAgent.doRightClick(target);
 				return this;
 			}
 		};

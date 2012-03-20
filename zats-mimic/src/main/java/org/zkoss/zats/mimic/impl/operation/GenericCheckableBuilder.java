@@ -19,7 +19,7 @@ public class GenericCheckableBuilder implements OperationBuilder<Checkable> {
 	public Checkable getOperation(final ComponentNode target) {
 		return new Checkable() {
 			public Checkable check(boolean checked) {
-				OperationUtil.doCheck(target, checked);
+				PostAgent.doCheck(target, checked);
 				return this;
 			}
 		};

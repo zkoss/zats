@@ -18,12 +18,12 @@ public class GenericFocusableBuilder implements OperationBuilder<Focusable> {
 	public Focusable getOperation(final ComponentNode target) {
 		return new Focusable() {
 			public Focusable focus() {
-				OperationUtil.doFocus(target);
+				PostAgent.doFocus(target);
 				return this;
 			}
 
 			public Focusable blur() {
-				OperationUtil.doBlur(target);
+				PostAgent.doBlur(target);
 				return this;
 			}
 		};
