@@ -11,24 +11,23 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl.operation;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.zkoss.zats.mimic.node.ComponentNode;
 import org.zkoss.zats.mimic.operation.MultipleSelectable;
-import org.zkoss.zats.mimic.operation.Selectable;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
+
 /**
  * 
  * @author dennis
- *
+ * 
  */
-public class ListboxMultipleSelectableBuilder implements OperationBuilder<MultipleSelectable> {
+public class ListboxMultipleSelectableBuilder implements
+		OperationBuilder<MultipleSelectable> {
 	public MultipleSelectable getOperation(final ComponentNode target) {
-		if(!target.is(Listbox.class)){
+		if (!target.is(Listbox.class)) {
 			throw new RuntimeException("target cannot cast to listbox");
 		}
 		return new MultipleSelectable() {
@@ -36,17 +35,17 @@ public class ListboxMultipleSelectableBuilder implements OperationBuilder<Multip
 				Listbox listbox = target.as(Listbox.class);
 				Set<Listitem> selitems = listbox.getSelectedItems();
 				Set<String> sels = new HashSet<String>();
-				for(Listitem item:selitems){
-					if(item.getIndex()==index){
-						return this;//skip
+				for (Listitem item : selitems) {
+					if (item.getIndex() == index) {
+						return this;// skip
 					}
 					sels.add(item.getUuid());
 				}
 				String ref = listbox.getItemAtIndex(index).getUuid();
 				sels.add(ref);
-				OperationUtil.doSelect(target, ref,sels.toArray(new String[sels.size()]));
-				
-				
+				OperationUtil.doSelect(target, ref,
+						sels.toArray(new String[sels.size()]));
+
 				return this;
 			}
 
@@ -55,16 +54,18 @@ public class ListboxMultipleSelectableBuilder implements OperationBuilder<Multip
 				Set<Listitem> selitems = listbox.getSelectedItems();
 				Set<String> sels = new HashSet<String>();
 				boolean hit = false;
-				for(Listitem item:selitems){
-					if(item.getIndex()==index){
+				for (Listitem item : selitems) {
+					if (item.getIndex() == index) {
 						hit = true;
 						continue;
 					}
 					sels.add(item.getUuid());
 				}
-				if(!hit) return this;//skip
+				if (!hit)
+					return this;// skip
 				String ref = listbox.getItemAtIndex(index).getUuid();
-				OperationUtil.doSelect(target, ref,sels.toArray(new String[sels.size()]));
+				OperationUtil.doSelect(target, ref,
+						sels.toArray(new String[sels.size()]));
 				return this;
 			}
 		};

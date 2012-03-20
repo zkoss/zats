@@ -5,7 +5,7 @@
 	Description:
 		
 	History:
-		Mar 20, 2012 Created by Pao Wang
+		Mar 20, 2012 Created by pao
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
@@ -54,8 +54,9 @@ public class DefaultPageNode implements PageNode {
 	public List<ComponentNode> getChildren() {
 		List<ComponentNode> nodes = new ArrayList<ComponentNode>();
 		Iterator<?> iterator = page.getRoots().iterator();
-		while(iterator.hasNext())
-			nodes.add(new DefaultComponentNode(this, (Component)iterator.next()));
+		while (iterator.hasNext())
+			nodes.add(new DefaultComponentNode(this, (Component) iterator
+					.next()));
 		return nodes;
 	}
 

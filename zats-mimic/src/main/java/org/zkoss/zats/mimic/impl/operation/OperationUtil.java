@@ -18,6 +18,7 @@ import org.zkoss.zk.ui.event.Events;
 
 /**
  * Utilities for any related to operation of component.
+ * 
  * @author pao
  */
 public class OperationUtil {
@@ -28,9 +29,9 @@ public class OperationUtil {
 		data.put("pageY", 0);
 		data.put("x", 0);
 		data.put("y", 0);
-		if(Events.ON_CLICK.equals(cmd) || Events.ON_DOUBLE_CLICK.equals(cmd))
+		if (Events.ON_CLICK.equals(cmd) || Events.ON_DOUBLE_CLICK.equals(cmd))
 			data.put("which", 1); // left button
-		else if(Events.ON_RIGHT_CLICK.equals(cmd))
+		else if (Events.ON_RIGHT_CLICK.equals(cmd))
 			data.put("which", 2); // right button
 		target.getConversation().postUpdate(target, cmd, data);
 	}
@@ -55,7 +56,8 @@ public class OperationUtil {
 		doMouseEvent(target, Events.ON_MOUSE_OUT);
 	}
 
-	private static void doInputEvent(ComponentNode target, Object value, String cmd) {
+	private static void doInputEvent(ComponentNode target, Object value,
+			String cmd) {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("value", value);
 		data.put("bySelectBack", false);
@@ -89,7 +91,8 @@ public class OperationUtil {
 		doSelect(target, selection, selection);
 	}
 
-	public static void doSelect(ComponentNode target, String reference, String... selection) {
+	public static void doSelect(ComponentNode target, String reference,
+			String... selection) {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("items", selection);
 		data.put("reference", reference);

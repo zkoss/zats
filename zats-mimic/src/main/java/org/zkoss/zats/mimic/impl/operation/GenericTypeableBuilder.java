@@ -5,7 +5,7 @@
 	Description:
 		
 	History:
-		Mar 20, 2012 Created by Pao Wang
+		Mar 20, 2012 Created by pao
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
@@ -23,6 +23,7 @@ import org.zkoss.zats.mimic.operation.Typeable;
 
 /**
  * The generic builder of typing operation.
+ * 
  * @author pao
  */
 public class GenericTypeableBuilder implements OperationBuilder<Typeable> {
@@ -37,7 +38,7 @@ public class GenericTypeableBuilder implements OperationBuilder<Typeable> {
 	private SimpleDateFormat tf;
 
 	public GenericTypeableBuilder(int type) {
-		if(type < 0 || type > 2)
+		if (type < 0 || type > 2)
 			throw new IllegalArgumentException("unknown type: " + type);
 		this.type = type;
 		df = new SimpleDateFormat("yyyy/MM/dd");
@@ -52,31 +53,33 @@ public class GenericTypeableBuilder implements OperationBuilder<Typeable> {
 					// parse value
 					value = value.trim();
 					Object parsed = null;
-					if(type == TEXT)
+					if (type == TEXT)
 						parsed = value;
-					else if(type == INTEGER)
+					else if (type == INTEGER)
 						parsed = new BigInteger(value);
-					else if(type == DECIMAL)
+					else if (type == DECIMAL)
 						parsed = new BigDecimal(value);
-					else if(type == DATE) {
+					else if (type == DATE) {
 						parsed = parse(df, value);
-						if(parsed == null)
+						if (parsed == null)
 							parsed = parse(dtf, value);
-						if(parsed == null)
-							throw new ParseException(value + " can't parse to date", 0);
-					}
-					else if(type == TIME) {
+						if (parsed == null)
+							throw new ParseException(value
+									+ " can't parse to date", 0);
+					} else if (type == TIME) {
 						parsed = parse(tf, value);
-						if(parsed == null)
-							throw new ParseException(value + " can't parse to time", 0);
+						if (parsed == null)
+							throw new ParseException(value
+									+ " can't parse to time", 0);
 					}
 
 					// TODO onBlur and onFocus
 					OperationUtil.doChanging(target, value);
 					OperationUtil.doChange(target, parsed);
-				}
-				catch(Exception e) {
-					throw new ConversationException("value \"" + value + "\"is invalid for the component: " + target.getType(), e);
+				} catch (Exception e) {
+					throw new ConversationException("value \"" + value
+							+ "\"is invalid for the component: "
+							+ target.getType(), e);
 				}
 				return this;
 			}
@@ -86,8 +89,7 @@ public class GenericTypeableBuilder implements OperationBuilder<Typeable> {
 	private Date parse(DateFormat f, String value) {
 		try {
 			return f.parse(value);
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 		}
 		return null;
 	}

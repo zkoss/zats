@@ -5,7 +5,7 @@
 	Description:
 		
 	History:
-		Mar 20, 2012 Created by Pao Wang
+		Mar 20, 2012 Created by pao
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
@@ -53,8 +53,8 @@ public class DefaultDesktopNode implements DesktopNode {
 	public List<PageNode> getPages() {
 		List<PageNode> nodes = new ArrayList<PageNode>();
 		Iterator<?> iter = desktop.getPages().iterator();
-		while(iter.hasNext())
-			nodes.add(new DefaultPageNode(this, (Page)iter.next()));
+		while (iter.hasNext())
+			nodes.add(new DefaultPageNode(this, (Page) iter.next()));
 		return nodes;
 	}
 

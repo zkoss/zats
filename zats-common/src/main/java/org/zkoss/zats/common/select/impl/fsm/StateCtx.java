@@ -1,4 +1,15 @@
-// ported from zcommon 6.0.0 
+/* StateCtx.java
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mar 20, 2012 Created by pao
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+*/
+	// ported from zcommon 6.0.0 
 // original package: org.zkoss.fsm
 package org.zkoss.zats.common.select.impl.fsm;
 
