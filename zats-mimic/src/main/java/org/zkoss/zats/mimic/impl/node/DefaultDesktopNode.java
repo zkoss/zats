@@ -7,7 +7,7 @@
 	History:
 		Mar 20, 2012 Created by Pao Wang
 
-Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl.node;
 
