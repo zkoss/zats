@@ -56,6 +56,7 @@ public class Searcher
 			if(root instanceof DesktopNode)
 			{
 				DesktopNode desktopNode = (DesktopNode)root;
+				//TODO should we check all the pages?
 				pageNode = new DefaultPageNode(desktopNode, desktopNode.cast().getFirstPage());
 				list = (List<Component>)findByPage.invoke(null, pageNode.cast(), selector);
 			}

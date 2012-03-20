@@ -42,11 +42,12 @@ public class GenericTypeableBuilder implements OperationBuilder<Typeable>
 					// validate parsed value with constraints
 					InputElement input = target.cast(InputElement.class);
 					Method method = InputElement.class.getDeclaredMethod("validate", Object.class);
+					method.setAccessible(true);//
 					method.invoke(input, parsed);
 
 					// TODO onBlur and onFocus
 					OperationUtil.doChanging(target, value);
-					OperationUtil.doChange(target, value);
+					OperationUtil.doChange(target, parsed);
 				}
 				catch(Exception e)
 				{

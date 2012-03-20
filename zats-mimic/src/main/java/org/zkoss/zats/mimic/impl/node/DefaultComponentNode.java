@@ -96,8 +96,12 @@ public class DefaultComponentNode implements ComponentNode {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends Component> T cast(Class<T> c) {
+	public <T> T cast(Class<T> c){
 		return (T)comp;
+	}
+
+	public <T> boolean isCastable(Class<T> c) {
+		return c.isInstance(comp);
 	}
 
 	@Override

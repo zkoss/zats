@@ -57,10 +57,17 @@ public interface ComponentNode extends Node
 	<T extends Operation> T as(Class<T> c);
 
 	/**
-	 * cast the component node to native ZK component.
+	 * cast the component node to another class, you usually cast it to a native ZK component for the validation.
 	 * if fail to cast, it will throw {@link ClassCastException}.
 	 * @param c the class cast to.
 	 * @return object of specify class.
 	 */
-	<T extends Component> T cast(Class<T> c);
+	<T> T cast(Class<T> c);
+	
+	/**
+	 * check the component node if it can cast to another class or not
+	 * @param c the class cast to.
+	 * @return true if the component can cast to another class
+	 */
+	<T> boolean isCastable(Class<T> c);
 }

@@ -8,6 +8,7 @@ import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zats.mimic.operation.Checkable;
 import org.zkoss.zats.mimic.operation.Clickable;
 import org.zkoss.zats.mimic.operation.Focusable;
+import org.zkoss.zats.mimic.operation.MultipleSelectable;
 import org.zkoss.zats.mimic.operation.Operation;
 import org.zkoss.zats.mimic.operation.Selectable;
 import org.zkoss.zats.mimic.operation.Typeable;
@@ -58,6 +59,7 @@ public class OperationManager
 		registerBuilder(Doublespinner.class, Typeable.class, new GenericTypeableBuilder(GenericTypeableBuilder.DECIMAL));
 
 		registerBuilder(Listbox.class, Selectable.class, new ListboxSelectableBuilder());
+		registerBuilder(Listbox.class, MultipleSelectable.class, new ListboxMultipleSelectableBuilder());
 
 		registerBuilder(Input.class, Checkable.class, new GenericCheckableBuilder());
 		registerBuilder(Checkbox.class, Checkable.class, new GenericCheckableBuilder()); // include Radio.class
