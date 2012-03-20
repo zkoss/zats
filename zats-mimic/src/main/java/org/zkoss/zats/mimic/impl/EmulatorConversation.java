@@ -1,3 +1,14 @@
+/* EmulatorConversation.java
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mar 20, 2012 Created by Pao Wang
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+ */
 package org.zkoss.zats.mimic.impl;
 
 import java.io.BufferedReader;
@@ -27,18 +38,19 @@ import org.zkoss.zats.mimic.impl.node.DefaultDesktopNode;
 import org.zkoss.zats.mimic.node.ComponentNode;
 import org.zkoss.zats.mimic.node.DesktopNode;
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.sys.DesktopCtrl;
 
-public class EmulatorConversation implements Conversation
-{
+/**
+ * The test conversation implemented by server emulator.
+ * @author pao
+ */
+public class EmulatorConversation implements Conversation {
+	private static Logger logger;
 	private Emulator emulator;
-	private Logger logger;
 	private File web;
 	private DesktopNode desktopNode;
 	private List<String> cookies;
 
-	public EmulatorConversation()
-	{
+	public EmulatorConversation() {
 		logger = Logger.getLogger(EmulatorConversation.class.getName());
 		cookies = new LinkedList<String>();
 		// prepare environment
@@ -54,99 +66,87 @@ public class EmulatorConversation implements Conversation
 		webinf.deleteOnExit();
 	}
 
-	public void start(String resourceRoot)
-	{
+	public void start(String resourceRoot) {
 		// create emulator
 		emulator = new EmulatorBuilder(web).addResource(resourceRoot).descriptor(EmulatorConversation.class.getResource("WEB-INF/web.xml")).create();
 	}
 
-	public synchronized void stop()
-	{
-		try
-		{
+	public synchronized void stop() {
+		try {
 			if(emulator == null)
 				emulator.close();
 		}
-		finally
-		{
+		finally {
 			emulator = null;
 		}
 	}
 
-	public void open(String zulPath)
-	{
+	public void open(String zulPath) {
 		InputStream is = null;
-		try
-		{
+		try {
 			// load zul page
 			HttpURLConnection huc = getConnection(zulPath, "GET");
 			huc.connect();
-			//TODO, read response, handle redirect. 
-			
+			// TODO, read response, handle redirect.
+
 			cookies = huc.getHeaderFields().get("Set-Cookie");
 			is = huc.getInputStream();
-			if(logger.isLoggable(Level.INFO))
-				logger.info(getReplyString(is, huc.getContentEncoding()));
+			if(logger.isLoggable(Level.FINEST))
+				logger.finest(getReplyString(is, huc.getContentEncoding()));
 			// get specified objects such as Desktop
 			Desktop desktop = (Desktop)emulator.getRequestAttributes().get("javax.zkoss.zk.ui.desktop");
-			//TODO, what if a non-zk(zul) page, throw exception?
+			// TODO, what if a non-zk(zul) page, throw exception?
 			desktopNode = new DefaultDesktopNode(this, desktop);
 		}
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			throw new ConversationException("", e);
 		}
-		finally
-		{
+		finally {
 			close(is);
 		}
 	}
 
-	public void clean()
-	{
+	public void clean() {
 		// clean desktop
-		try
-		{
-			if(desktopNode != null)
-			{
-				//TODO , should use au to remove a desktop, don't call destroy directly.
-				Desktop desktop = desktopNode.cast();
-				if(desktop instanceof DesktopCtrl)
-					((DesktopCtrl)desktop).destroy();
+		InputStream is = null;
+		try {
+			if(desktopNode != null) {
+				// use au to remove a desktop
+				String url = MessageFormat.format("/zkau?dtid={0}&cmd_0=rmDesktop&opt_0=i", desktopNode.getId());
+				HttpURLConnection huc = getConnection(url, "GET");
+				huc.connect();
+				is = huc.getInputStream();
+				if(logger.isLoggable(Level.FINEST))
+					logger.finest(getReplyString(is, "utf-8"));
 			}
 		}
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			logger.log(Level.WARNING, "", e);
 		}
-		finally
-		{
+		finally {
+			Util.close(is);
 			desktopNode = null;
 			cookies = new LinkedList<String>();
 		}
 	}
 
-	public DesktopNode getDesktop()
-	{
+	public DesktopNode getDesktop() {
 		return desktopNode;
 	}
 
-	public HttpSession getSession()
-	{
+	public HttpSession getSession() {
 		if(desktopNode == null)
 			return null;
 		return (HttpSession)desktopNode.cast().getSession().getNativeSession();
 	}
 
-	public void postUpdate(ComponentNode target, String cmd, Map<String, Object> data)
-	{
+	public void postUpdate(ComponentNode target, String cmd, Map<String, Object> data) {
 		// prepare au data
 		String dtid = UrlEncoded.encodeString(desktopNode.getId());
 		cmd = UrlEncoded.encodeString(cmd);
 		String uuid = UrlEncoded.encodeString(target.getUuid());
 		String param;
-		if(data != null && data.size() > 0)
-		{
+		if(data != null && data.size() > 0) {
 			String jsonData = UrlEncoded.encodeString(JSONValue.toJSONString(data));
 			param = MessageFormat.format("dtid={0}&cmd_0={1}&uuid_0={2}&data_0={3}", dtid, cmd, uuid, jsonData);
 		}
@@ -155,8 +155,7 @@ public class EmulatorConversation implements Conversation
 
 		OutputStream os = null;
 		InputStream is = null;
-		try
-		{
+		try {
 			// create http request and perform it
 			HttpURLConnection c = getConnection("/zkau", "POST");
 			c.setDoOutput(true);
@@ -168,27 +167,23 @@ public class EmulatorConversation implements Conversation
 			os = c.getOutputStream();
 			os.write(param.getBytes("utf-8"));
 			close(os);
-			//TODO, read response, handle redirect.
+			// TODO, read response, handle redirect.
 			// read response
 			is = c.getInputStream();
-			if(logger.isLoggable(Level.INFO))
-				logger.info(getReplyString(is, c.getContentEncoding()));
+			if(logger.isLoggable(Level.FINEST))
+				logger.finest(getReplyString(is, c.getContentEncoding()));
 		}
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			throw new ConversationException("", e);
 		}
-		finally
-		{
+		finally {
 			close(os);
 			close(is);
 		}
 	}
 
-	private HttpURLConnection getConnection(String path, String method)
-	{
-		try
-		{
+	private HttpURLConnection getConnection(String path, String method) {
+		try {
 			URL url = new URL(emulator.getAddress() + path);
 			HttpURLConnection huc = (HttpURLConnection)url.openConnection();
 			huc.setRequestMethod(method);
@@ -199,60 +194,48 @@ public class EmulatorConversation implements Conversation
 			huc.addRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
 			return huc;
 		}
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			throw new ConversationException("", e);
 		}
 	}
 
-	private void copy(InputStream src, File dest)
-	{
+	private void copy(InputStream src, File dest) {
 		OutputStream os = null;
-		try
-		{
+		try {
 			os = new FileOutputStream(dest);
 			byte[] buf = new byte[65536];
 			int len;
-			while(true)
-			{
+			while(true) {
 				len = src.read(buf);
 				if(len < 0)
 					break;
 				os.write(buf, 0, len);
 			}
 		}
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			throw new ConversationException("fail to copy file", e);
 		}
-		finally
-		{
+		finally {
 			close(src);
 			close(os);
 		}
 	}
 
-	private void close(Closeable c)
-	{
-		try
-		{
+	private void close(Closeable c) {
+		try {
 			c.close();
 		}
-		catch(Throwable e)
-		{
+		catch(Throwable e) {
 		}
 	}
 
-	private String getReplyString(InputStream is, String encoding)
-	{
+	private String getReplyString(InputStream is, String encoding) {
 		String reply = null;
 		Reader r = null;
-		try
-		{
+		try {
 			StringBuilder sb = new StringBuilder();
 			r = new BufferedReader(new InputStreamReader(is, encoding != null ? encoding : "ISO-8859-1"));
-			while(true)
-			{
+			while(true) {
 				int c = r.read();
 				if(c < 0)
 					break;
@@ -260,12 +243,10 @@ public class EmulatorConversation implements Conversation
 			}
 			reply = sb.toString();
 		}
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			logger.log(Level.WARNING, "", e);
 		}
-		finally
-		{
+		finally {
 			close(r);
 		}
 		return reply;
