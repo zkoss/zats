@@ -49,13 +49,13 @@ public class OperationManager
 		registerBuilder(AbstractComponent.class, Clickable.class, new GenericClickableBuilder());
 		registerBuilder(AbstractComponent.class, Focusable.class, new GenericFocusableBuilder());
 
-		registerBuilder(InputElement.class, Typeable.class, new TextTypeableBuilder());
-		registerBuilder(Intbox.class, Typeable.class, new IntegerTypeableBuilder());
-		registerBuilder(Longbox.class, Typeable.class, new IntegerTypeableBuilder());
-		registerBuilder(Spinner.class, Typeable.class, new IntegerTypeableBuilder());
-		registerBuilder(Decimalbox.class, Typeable.class, new DecimalTypeableBuilder());
-		registerBuilder(Doublebox.class, Typeable.class, new DecimalTypeableBuilder());
-		registerBuilder(Doublespinner.class, Typeable.class, new DecimalTypeableBuilder());
+		registerBuilder(InputElement.class, Typeable.class, new GenericTypeableBuilder(GenericTypeableBuilder.TEXT));
+		registerBuilder(Intbox.class, Typeable.class, new GenericTypeableBuilder(GenericTypeableBuilder.INTEGER));
+		registerBuilder(Longbox.class, Typeable.class, new GenericTypeableBuilder(GenericTypeableBuilder.INTEGER));
+		registerBuilder(Spinner.class, Typeable.class, new GenericTypeableBuilder(GenericTypeableBuilder.INTEGER));
+		registerBuilder(Decimalbox.class, Typeable.class, new GenericTypeableBuilder(GenericTypeableBuilder.DECIMAL));
+		registerBuilder(Doublebox.class, Typeable.class, new GenericTypeableBuilder(GenericTypeableBuilder.DECIMAL));
+		registerBuilder(Doublespinner.class, Typeable.class, new GenericTypeableBuilder(GenericTypeableBuilder.DECIMAL));
 
 		registerBuilder(Listbox.class, Selectable.class, new ListboxSelectableBuilder());
 
