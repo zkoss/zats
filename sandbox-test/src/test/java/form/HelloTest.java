@@ -12,29 +12,24 @@ import org.zkoss.zats.mimic.node.ComponentNode;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 
-public class HelloTest
-{
+public class HelloTest {
 	@BeforeClass
-	public static void init()
-	{
+	public static void init() {
 		Conversations.start("./src/main/webapp");
 	}
 
 	@AfterClass
-	public static void end()
-	{
+	public static void end() {
 		Conversations.stop();
 	}
 
 	@After
-	public void after()
-	{
+	public void after() {
 		Conversations.clean();
 	}
 
 	@Test
-	public void test()
-	{
+	public void test() {
 		Conversations.open("/form/hello.zul");
 		ComponentNode view = Searcher.find("#view");
 		assertEquals(1, view.getChildren().size());
