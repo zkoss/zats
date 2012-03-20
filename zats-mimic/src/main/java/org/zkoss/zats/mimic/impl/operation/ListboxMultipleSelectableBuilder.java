@@ -28,12 +28,12 @@ import org.zkoss.zul.Listitem;
  */
 public class ListboxMultipleSelectableBuilder implements OperationBuilder<MultipleSelectable> {
 	public MultipleSelectable getOperation(final ComponentNode target) {
-		if(!target.isCastable(Listbox.class)){
+		if(!target.is(Listbox.class)){
 			throw new RuntimeException("target cannot cast to listbox");
 		}
 		return new MultipleSelectable() {
 			public MultipleSelectable select(int index) {
-				Listbox listbox = target.cast(Listbox.class);
+				Listbox listbox = target.as(Listbox.class);
 				Set<Listitem> selitems = listbox.getSelectedItems();
 				Set<String> sels = new HashSet<String>();
 				for(Listitem item:selitems){
@@ -51,7 +51,7 @@ public class ListboxMultipleSelectableBuilder implements OperationBuilder<Multip
 			}
 
 			public MultipleSelectable deselect(int index) {
-				Listbox listbox = target.cast(Listbox.class);
+				Listbox listbox = target.as(Listbox.class);
 				Set<Listitem> selitems = listbox.getSelectedItems();
 				Set<String> sels = new HashSet<String>();
 				boolean hit = false;

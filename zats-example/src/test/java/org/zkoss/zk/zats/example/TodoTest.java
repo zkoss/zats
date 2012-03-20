@@ -32,13 +32,13 @@ public class TodoTest {
 
 		//add
 		find("textbox").as(Typeable.class).type("one-item");
-//		find("textbox").cast(Textbox.class).setValue("abc"); cause IllegalStateException: Components can be accessed only in event listeners
+//		find("textbox").as(Textbox.class).setValue("abc"); cause IllegalStateException: Components can be accessed only in event listeners
 		find("intbox").as(Typeable.class).type("3");
 		find("datebox").as(Typeable.class).type("2012/03/16");
 		find("button[label = 'Add'] ").as(Clickable.class).click();
 		
 		//verify each listcell's label
-		Listitem listitem = find("listbox").getChild(1).cast(Listitem.class);
+		Listitem listitem = find("listbox").getChild(1).as(Listitem.class);
 		
 		
 		

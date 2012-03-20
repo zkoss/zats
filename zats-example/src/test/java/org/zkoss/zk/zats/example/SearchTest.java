@@ -47,25 +47,25 @@ public class SearchTest {
 		ComponentNode listbox = Searcher.find("listbox");
 		listbox.as(Selectable.class).select(0);
 		//verify UI logic
-		assertEquals(true, detailBox.cast(Groupbox.class).isVisible());
+		assertEquals(true, detailBox.as(Groupbox.class).isVisible());
 		//select an item & verify its detail
 		//verify detail data by model
-		Item item = (Item)listbox.cast(Listbox.class).getModel().getElementAt(0);
-		Label descriptionLabel = Searcher.find("#descriptionLabel").cast(Label.class); 
+		Item item = (Item)listbox.as(Listbox.class).getModel().getElementAt(0);
+		Label descriptionLabel = Searcher.find("#descriptionLabel").as(Label.class); 
 		assertEquals(descriptionLabel.getValue(), item.getDescription());
-		Label priceLabel = Searcher.find("#priceLabel").cast(Label.class);
+		Label priceLabel = Searcher.find("#priceLabel").as(Label.class);
 		assertEquals(priceLabel.getValue(),ItemRenderer.priceFormatter.format(item.getPrice()));
-		Label quantityLabel = Searcher.find("#quantityLabel").cast(Label.class);
+		Label quantityLabel = Searcher.find("#quantityLabel").as(Label.class);
 		assertEquals(true, quantityLabel.getValue().contains(Integer.toString(item.getQuantity())));
-		Label totalPriceLabel = Searcher.find("#totalPriceLabel").cast(Label.class);
+		Label totalPriceLabel = Searcher.find("#totalPriceLabel").as(Label.class);
 		assertEquals(totalPriceLabel.getValue(),ItemRenderer.priceFormatter.format(item.getTotalPrice()));
 		
 		//verify detail data by label
-		Caption detailCaption = Searcher.find("#detailCaption").cast(Caption.class);
+		Caption detailCaption = Searcher.find("#detailCaption").as(Caption.class);
 		List<ComponentNode> cellNodes = listbox.getChild(1).getChildren();
-		assertEquals(detailCaption.getLabel(), cellNodes.get(0).cast(Listcell.class).getLabel());
-		assertEquals(priceLabel.getValue(),cellNodes.get(1).cast(Listcell.class).getLabel());
-		assertEquals(quantityLabel.getValue(),cellNodes.get(2).cast(Listcell.class).getLabel());
+		assertEquals(detailCaption.getLabel(), cellNodes.get(0).as(Listcell.class).getLabel());
+		assertEquals(priceLabel.getValue(),cellNodes.get(1).as(Listcell.class).getLabel());
+		assertEquals(quantityLabel.getValue(),cellNodes.get(2).as(Listcell.class).getLabel());
 		
 		//search & verify result
 		ComponentNode filterBox = Searcher.find("#filterBox");
@@ -77,7 +77,7 @@ public class SearchTest {
 		//skip listheader
 		//verify name column
 		for (int i=1 ; i <nodes.size() ; i++){
-			Listcell cell = nodes.get(i).getChild(0).cast(Listcell.class);
+			Listcell cell = nodes.get(i).getChild(0).as(Listcell.class);
 			assertEquals(true, cell.getLabel().contains(KEYWORD));
 		}
 	}

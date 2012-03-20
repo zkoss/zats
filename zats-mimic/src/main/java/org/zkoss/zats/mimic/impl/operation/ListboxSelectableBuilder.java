@@ -13,7 +13,7 @@ public class ListboxSelectableBuilder implements OperationBuilder<Selectable>
 			public Selectable select(int index)
 			{
 				// TODO check type of the target
-				OperationUtil.doSelect(target, target.cast(Listbox.class).getItemAtIndex(index).getUuid());
+				OperationUtil.doSelect(target, target.as(Listbox.class).getItemAtIndex(index).getUuid());
 				return this;
 			}
 		};

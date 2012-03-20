@@ -47,15 +47,15 @@ public class LoginLogoutTest {
 		account.as(Typeable.class).type("hawk");
 		password.as(Typeable.class).type("1111");
 		login.as(Clickable.class).click();
-		assertEquals("Login Failed", msg.cast(Label.class).getValue());
+		assertEquals("Login Failed", msg.as(Label.class).getValue());
 		
 		//login success
 		password.as(Typeable.class).type("1234");
 		login.as(Clickable.class).click();
 		HttpSession session = Conversations.getSession();
-		assertEquals(account.cast(Textbox.class).getValue(), session.getAttribute("user"));
+		assertEquals(account.as(Textbox.class).getValue(), session.getAttribute("user"));
 //		ComponentNode mainWin = Searcher.find("window"); no handle redirect for now
-//		assertEquals("Main",mainWin.cast(Window.class).getTitle());
+//		assertEquals("Main",mainWin.as(Window.class).getTitle());
 
 	}
 	

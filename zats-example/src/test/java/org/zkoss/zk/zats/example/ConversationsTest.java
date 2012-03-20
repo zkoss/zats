@@ -53,12 +53,12 @@ public class ConversationsTest
 		
 		ComponentNode win = Searcher.find("#win");
 		assertNotNull(win);
-		assertNotNull(win.cast(Window.class));
-		assertEquals("my window",win.cast(Window.class).getTitle());
+		assertNotNull(win.as(Window.class));
+		assertEquals("my window",win.as(Window.class).getTitle());
 		
 		ComponentNode msg = Searcher.find(win, "#msg"); 
 		assertNotNull(msg);
-		assertEquals("hello", msg.cast(Label.class).getValue());
+		assertEquals("hello", msg.as(Label.class).getValue());
 //		assertEquals("hello", ((Label)msg.nat()).getValue());
 		
 		for(int i = 0; i < 10; ++i)
@@ -66,7 +66,7 @@ public class ConversationsTest
 			Searcher.find(win, "#btn").as(Clickable.class).click();
 			assertEquals("s" + i, session.getAttribute("msg"));
 			assertEquals("d" + i, desktop.getAttribute("msg"));
-			assertEquals("" + i, msg.cast(Label.class).getValue());
+			assertEquals("" + i, msg.as(Label.class).getValue());
 		}
 	}
 }

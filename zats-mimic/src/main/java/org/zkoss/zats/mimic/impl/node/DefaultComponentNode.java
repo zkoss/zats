@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.zkoss.zats.mimic.Conversation;
+import org.zkoss.zats.mimic.ConversationException;
 import org.zkoss.zats.mimic.impl.operation.OperationBuilder;
 import org.zkoss.zats.mimic.impl.operation.OperationManager;
 import org.zkoss.zats.mimic.node.ComponentNode;
@@ -88,20 +89,29 @@ public class DefaultComponentNode implements ComponentNode {
 		return pageNode;
 	}
 
-	public <T extends Operation> T as(Class<T> operation) {
-		OperationBuilder<T> builder = OperationManager.getBuilder(comp, operation);
-		if(builder == null)
-			throw new UnsupportedOperationException(getType() + " doesn't support " + operation.getName());
-		return builder.getOperation(this);
+	@SuppressWarnings("unchecked")
+	public <T> T as(Class<T> clazz) {
+		if(Operation.class.isAssignableFrom(clazz)){
+			Class<Operation> opc = (Class<Operation>)clazz;
+			OperationBuilder<Operation> builder = OperationManager.getBuilder(comp, opc);
+			if(builder != null)
+				return (T)builder.getOperation(this);
+		}else if(clazz.isInstance(comp)){
+			return (T)comp;
+		}
+		throw new ConversationException(getType() + " doesn't support " + clazz.getName());
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T cast(Class<T> c){
-		return (T)comp;
-	}
-
-	public <T> boolean isCastable(Class<T> c) {
-		return c.isInstance(comp);
+	public <T> boolean is(Class<T> clazz) {
+		if(Operation.class.isAssignableFrom(clazz)){
+			Class<Operation> opc = (Class<Operation>)clazz;
+			OperationBuilder<Operation> builder = OperationManager.getBuilder(comp, opc);
+			return builder != null;
+		}else if(Component.class.isAssignableFrom(clazz)){
+			return clazz.isInstance(comp);
+		}
+		return false;
 	}
 
 	@Override

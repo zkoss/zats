@@ -41,12 +41,12 @@ public class Searcher
 			try
 			{
 				selectors = Class.forName("org.zkoss.zk.ui.select.Selectors");
-				logger.info("using zk6 selectors: " + Version.class.getField("UID").get(null));
+				logger.finest("using zk6 selectors: " + Version.class.getField("UID").get(null));
 			}
 			catch(ClassNotFoundException e)
 			{
 				selectors = Selectors.class;
-				logger.info("using zats selectors: " + Version.class.getField("UID").get(null));
+				logger.finest("using zats selectors: " + Version.class.getField("UID").get(null));
 			}
 			Method findByPage = selectors.getMethod("find", Page.class, String.class);
 
@@ -70,7 +70,7 @@ public class Searcher
 				ComponentNode compNode = (ComponentNode)root;
 				pageNode = compNode.getPage();
 				Method findByComp = selectors.getMethod("find", Component.class, String.class);
-				list = (List<Component>)findByComp.invoke(null, compNode.cast(Component.class), selector);
+				list = (List<Component>)findByComp.invoke(null, compNode.as(Component.class), selector);
 			}
 			List<ComponentNode> nodes = new ArrayList<ComponentNode>(list.size());
 			for(Component comp : list)

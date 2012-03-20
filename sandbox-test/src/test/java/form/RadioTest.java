@@ -18,7 +18,7 @@ public class RadioTest extends TestCaseBase {
 		Conversations.open("/form/radio.zul");
 		
 		find("radio[label='Performance'").as(Checkable.class).check(true);
-		Label label = find("label[id='choice']").cast(Label.class);
+		Label label = find("label[id='choice']").as(Label.class);
 		assertEquals("Performance", label.getValue());
 		
 		find("radio[label='Forum'").as(Checkable.class).check(true);
@@ -31,7 +31,7 @@ public class RadioTest extends TestCaseBase {
 		Conversations.open("/form/radio.zul");
 		
 		find("checkbox[label='Border']").as(Checkable.class).check(true);
-		Label label = find("label[id='layout']").cast(Label.class);
+		Label label = find("label[id='layout']").as(Label.class);
 		assertEquals("Border ", label.getValue());
 		
 		find("checkbox[label='Box']").as(Checkable.class).check(true);

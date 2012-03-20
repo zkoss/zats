@@ -38,8 +38,8 @@ public class HelloTest
 		Conversations.open("/form/hello.zul");
 		ComponentNode view = Searcher.find("#view");
 		assertEquals(1, view.getChildren().size());
-		assertEquals("My First Window", view.getChild(0).cast(Window.class).getTitle());
-		String value = view.getChild(0).getChild(0).cast(Label.class).getValue();
+		assertEquals("My First Window", view.getChild(0).as(Window.class).getTitle());
+		String value = view.getChild(0).getChild(0).as(Label.class).getValue();
 		assertTrue(value.indexOf("Hello, World!") >= 0);
 	}
 }

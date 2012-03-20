@@ -19,7 +19,7 @@ public class PopupTest extends TestCaseBase {
 	@Test
 	public void testClickMenu(){
 		Conversations.open("/form/popup.zul");
-		Textbox intro = Searcher.find("textbox[width='250px'").cast(Textbox.class);
+		Textbox intro = Searcher.find("textbox[width='250px'").as(Textbox.class);
 		assertNotNull(intro.getValue());
 		
 		ComponentNode menupopup = find("menupopup");

@@ -49,25 +49,20 @@ public interface ComponentNode extends Node
 	PageNode getPage();
 
 	/**
-	 * get specify operation for performing.
-	 * if this component doesn't support the operation, it will throw {@link ConversationException}.
-	 * @param c class of specify operation.
+	 * try to transfer the component node to the target class, the target class is usually 
+	 * a {@link Operation} or a native {@link Component}
+	 * <br/> 
+	 * 
+	 * if it cannot transfer to target class it will throw {@link ConversationException}.
+	 * @param clazz class of specify operation.
 	 * @return operation object.
 	 */
-	<T extends Operation> T as(Class<T> c);
-
-	/**
-	 * cast the component node to another class, you usually cast it to a native ZK component for the validation.
-	 * if fail to cast, it will throw {@link ClassCastException}.
-	 * @param c the class cast to.
-	 * @return object of specify class.
-	 */
-	<T> T cast(Class<T> c);
+	<T> T as(Class<T> clazz);
 	
 	/**
-	 * check the component node if it can cast to another class or not
-	 * @param c the class cast to.
+	 * check the component node can transfer to the target class or not
+	 * @param clazz the class cast to.
 	 * @return true if the component can cast to another class
 	 */
-	<T> boolean isCastable(Class<T> c);
+	<T> boolean is(Class<T> clazz);
 }
