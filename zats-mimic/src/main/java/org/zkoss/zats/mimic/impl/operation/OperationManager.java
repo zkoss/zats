@@ -15,8 +15,14 @@ import org.zkoss.zhtml.Input;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Decimalbox;
+import org.zkoss.zul.Doublebox;
+import org.zkoss.zul.Doublespinner;
+import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Longbox;
 import org.zkoss.zul.Menuitem;
+import org.zkoss.zul.Spinner;
 import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.impl.InputElement;
 
@@ -41,16 +47,23 @@ public class OperationManager
 
 		// TODO load default implement
 		registerBuilder(AbstractComponent.class, Clickable.class, new GenericClickableBuilder());
-		registerBuilder(AbstractComponent.class , Focusable.class , new GenericFocusableBuilder());
-		
-		registerBuilder(InputElement.class, Typeable.class, new GenericTypeableBuilder());
+		registerBuilder(AbstractComponent.class, Focusable.class, new GenericFocusableBuilder());
+
+		registerBuilder(InputElement.class, Typeable.class, new TextTypeableBuilder());
+		registerBuilder(Intbox.class, Typeable.class, new IntegerTypeableBuilder());
+		registerBuilder(Longbox.class, Typeable.class, new IntegerTypeableBuilder());
+		registerBuilder(Spinner.class, Typeable.class, new IntegerTypeableBuilder());
+		registerBuilder(Decimalbox.class, Typeable.class, new DecimalTypeableBuilder());
+		registerBuilder(Doublebox.class, Typeable.class, new DecimalTypeableBuilder());
+		registerBuilder(Doublespinner.class, Typeable.class, new DecimalTypeableBuilder());
+
 		registerBuilder(Listbox.class, Selectable.class, new ListboxSelectableBuilder());
 
 		registerBuilder(Input.class, Checkable.class, new GenericCheckableBuilder());
 		registerBuilder(Checkbox.class, Checkable.class, new GenericCheckableBuilder()); // include Radio.class
 		registerBuilder(Menuitem.class, Checkable.class, new GenericCheckableBuilder());
 		registerBuilder(Toolbarbutton.class, Checkable.class, new GenericCheckableBuilder());
-		
+
 		// TODO load custom implement from configuration
 
 		// TODO

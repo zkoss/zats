@@ -3,7 +3,7 @@ package org.zkoss.zats.mimic.impl.operation;
 import org.zkoss.zats.mimic.node.ComponentNode;
 import org.zkoss.zats.mimic.operation.Typeable;
 
-public class GenericTypeableBuilder implements OperationBuilder<Typeable>
+public class TextTypeableBuilder implements OperationBuilder<Typeable>
 {
 	public Typeable getOperation(final ComponentNode target)
 	{

@@ -51,7 +51,7 @@ public class OperationUtil
 		doMouseEvent(target, Events.ON_MOUSE_OUT);
 	}
 
-	private static void doInputEvent(ComponentNode target, String value, String cmd)
+	private static void doInputEvent(ComponentNode target, Object value, String cmd)
 	{
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("value", value);
@@ -60,9 +60,19 @@ public class OperationUtil
 		target.getConversation().postUpdate(target, cmd, data);
 	}
 
+	public static void doChange(ComponentNode target, Number value)
+	{
+		doInputEvent(target, value, Events.ON_CHANGE);
+	}
+
 	public static void doChange(ComponentNode target, String value)
 	{
 		doInputEvent(target, value, Events.ON_CHANGE);
+	}
+
+	public static void doChanging(ComponentNode target, Number value)
+	{
+		doInputEvent(target, value, Events.ON_CHANGING);
 	}
 
 	public static void doChanging(ComponentNode target, String value)
