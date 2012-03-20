@@ -14,6 +14,7 @@ package org.zkoss.zats.mimic.impl.operation;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.zkoss.Version;
 import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zats.mimic.operation.Checkable;
@@ -75,8 +76,10 @@ public class OperationManager {
 				new GenericTypeableBuilder(GenericTypeableBuilder.DECIMAL));
 		registerBuilder(Doublespinner.class, Typeable.class,
 				new GenericTypeableBuilder(GenericTypeableBuilder.DECIMAL));
-		registerBuilder(Datebox.class, Typeable.class, new GenericTypeableBuilder(GenericTypeableBuilder.DATE));
-		registerBuilder(Timebox.class, Typeable.class, new GenericTypeableBuilder(GenericTypeableBuilder.TIME));
+		registerBuilder(Datebox.class, Typeable.class,
+				new GenericTypeableBuilder(GenericTypeableBuilder.DATE));
+		registerBuilder(Timebox.class, Typeable.class,
+				new GenericTypeableBuilder(GenericTypeableBuilder.TIME));
 
 		registerBuilder(Listbox.class, Selectable.class,
 				new ListboxSelectableBuilder());
@@ -187,6 +190,10 @@ public class OperationManager {
 			c = c.getSuperclass();
 		}
 		return null; // not found
+	}
+
+	public static BigInteger getZKCurrentVersion() {
+		return current;
 	}
 
 	/**

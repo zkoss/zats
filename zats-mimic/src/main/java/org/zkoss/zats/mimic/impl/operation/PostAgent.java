@@ -11,8 +11,13 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl.operation;
 
+import java.math.BigInteger;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.zkoss.json.JSONs;
+import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zats.mimic.node.ComponentNode;
 import org.zkoss.zk.ui.event.Events;
 
@@ -59,6 +64,16 @@ public class PostAgent {
 	private static void doInputEvent(ComponentNode target, Object value,
 			String cmd) {
 		Map<String, Object> data = new HashMap<String, Object>();
+		// date format is different between ZK5 and ZK6
+		if (value instanceof Date) {
+			BigInteger current = OperationManager.getZKCurrentVersion();
+			if (current.compareTo(Util.parseVersion("6.0.0")) < 0) {
+				// zk5
+				value = JSONs.d2j((Date) value);
+				data.put("z_type_value", "Date");
+			} else
+				value = "$z!t#d:" + JSONs.d2j((Date) value); // zk6
+		}
 		data.put("value", value);
 		data.put("bySelectBack", false);
 		data.put("start", 0);
