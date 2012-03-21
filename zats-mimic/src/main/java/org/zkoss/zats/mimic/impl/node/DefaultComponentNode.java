@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import org.zkoss.zats.mimic.Conversation;
 import org.zkoss.zats.mimic.ConversationException;
+import org.zkoss.zats.mimic.Searcher;
 import org.zkoss.zats.mimic.impl.operation.OperationBuilder;
 import org.zkoss.zats.mimic.impl.operation.OperationManager;
 import org.zkoss.zats.mimic.node.ComponentNode;
@@ -128,5 +129,66 @@ public class DefaultComponentNode implements ComponentNode {
 	@Override
 	public boolean equals(Object obj) {
 		return comp.equals(obj);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.zkoss.zats.mimic.node.ComponentNode#find(java.lang.String)
+	 */
+	public ComponentNode find(String selector) {
+		return Searcher.find(this,selector);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.zkoss.zats.mimic.node.ComponentNode#findAll(java.lang.String)
+	 */
+	public List<ComponentNode> findAll(String selector) {
+		return Searcher.findAll(this,selector);
+	}
+	
+	public String toString(){
+		return new StringBuilder().append(getClass().getSimpleName())
+			.append("@").append(Integer.toHexString(System.identityHashCode(this)))	
+			.append("[").append(comp.toString()).append("]")
+			.toString();
+	}
+	
+	//for internal test only utility class
+	public void dump() {
+		StringBuilder sb = new StringBuilder();
+		dump(sb,this,0);
+		System.out.println(sb.toString());
+	}
+	private void dump(StringBuilder sb, ComponentNode node,int indent) {
+		List<ComponentNode> children = node.getChildren();
+		StringBuffer idt = new StringBuffer();
+		for(int i=0;i<indent;i++){
+			idt.append("  ");
+		}
+		sb.append(idt);
+		Component zkc = node.as(Component.class);
+		String nm = zkc.getClass().getSimpleName(); 
+		sb.append("<");
+		sb.append(nm);
+		sb.append(" uuid=\"").append(zkc.getUuid()).append("\"");
+		
+		String id = zkc.getId();
+		if(id != null ){
+			sb.append(" id=\"").append(id).append("\"");
+		}
+		
+		if(children.size()>0){
+			sb.append(">\n");
+		}else{
+			sb.append(" />\n");
+		}
+		
+		for(ComponentNode w:children){
+			dump(sb,w,indent+1);
+		}
+		
+		if(children.size()>0){
+			sb.append(idt);
+			sb.append("</").append(nm).append(">\n");
+		}
 	}
 }

@@ -71,4 +71,11 @@ public class DefaultDesktopNode implements DesktopNode {
 	public boolean equals(Object obj) {
 		return desktop.equals(obj);
 	}
+	
+	public String toString(){
+		return new StringBuilder().append(getClass().getSimpleName())
+			.append("@").append(Integer.toHexString(System.identityHashCode(this)))
+			.append("[").append(desktop.toString()).append("]")
+			.toString();
+	}
 }

@@ -81,4 +81,11 @@ public class DefaultPageNode implements PageNode {
 	public boolean equals(Object obj) {
 		return page.equals(obj);
 	}
+	
+	public String toString(){
+		return new StringBuilder().append(getClass().getSimpleName())
+			.append("@").append(Integer.toHexString(System.identityHashCode(this)))
+			.append("[").append(page.toString()).append("]")
+			.toString();
+	}
 }

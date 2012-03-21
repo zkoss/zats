@@ -19,6 +19,7 @@ import org.zkoss.Version;
 import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zats.mimic.operation.Checkable;
 import org.zkoss.zats.mimic.operation.Clickable;
+import org.zkoss.zats.mimic.operation.RendererAgent;
 import org.zkoss.zats.mimic.operation.Focusable;
 import org.zkoss.zats.mimic.operation.MultipleSelectable;
 import org.zkoss.zats.mimic.operation.Operation;
@@ -34,6 +35,7 @@ import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Doublespinner;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Longbox;
 import org.zkoss.zul.Menuitem;
 import org.zkoss.zul.Spinner;
@@ -85,6 +87,8 @@ public class OperationManager {
 				new ListboxSelectableBuilder());
 		registerBuilder(Listbox.class, MultipleSelectable.class,
 				new ListboxMultipleSelectableBuilder());
+		
+		registerBuilder(Listitem.class, RendererAgent.class, new ListitemRendererAgentBuilder());
 
 		registerBuilder(Input.class, Checkable.class,
 				new GenericCheckableBuilder());

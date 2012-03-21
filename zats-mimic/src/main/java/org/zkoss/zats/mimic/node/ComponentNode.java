@@ -86,4 +86,16 @@ public interface ComponentNode extends Node {
 	 * @return true if the component can cast to another class
 	 */
 	<T> boolean is(Class<T> clazz);
+	
+	/**
+	 * find components matched specify selector base on this component node.
+	 * @param selector
+	 */
+	ComponentNode find(String selector);
+	
+	/**
+	 * find components matched specify selector base on this component node.
+	 * @param selector
+	 */
+	List<ComponentNode> findAll(String selector);
 }
