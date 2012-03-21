@@ -1,8 +1,7 @@
 package org.zkoss.zk.zats.example;
 
+import static org.junit.Assert.assertEquals;
 import static org.zkoss.zats.mimic.Searcher.find;
-import static org.junit.Assert.*;
-
 
 import java.util.List;
 
@@ -10,11 +9,16 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.api.Intbox;
+import org.zkoss.zul.api.Textbox;
 
 public class TodoTest {
 	@BeforeClass
@@ -37,24 +41,45 @@ public class TodoTest {
 		Conversations.open("/todo.zul");
 
 		//add
-		find("textbox").as(TypeAgent.class).type("one-item");
-//		find("textbox").as(Textbox.class).setValue("abc"); cause IllegalStateException: Components can be accessed only in event listeners
-		find("intbox").as(TypeAgent.class).type("3");
-		find("datebox").as(TypeAgent.class).type("2012/03/16");
+		ComponentAgent itemName = find("textbox");
+		ComponentAgent priority = find("intbox");
+		ComponentAgent date = find("datebox");
+
+		itemName.as(TypeAgent.class).type("one-item");
+		priority.as(TypeAgent.class).type("3");
+		date.as(TypeAgent.class).type("2012/03/16");
 		find("button[label='Add'] ").as(ClickAgent.class).click();
 		
 		//verify each listcell's label
-//		Listitem listitem = find("listbox").getChild(1).as(Listitem.class);
-		List cells = find("listbox").getChild(1).as(Listitem.class).getChildren();
+		ComponentAgent listbox = find("listbox");
+		List cells = listbox.getChild(1).as(Listitem.class).getChildren();
 		assertEquals("one-item",((Listcell)cells.get(0)).getLabel());
 		assertEquals("3",((Listcell)cells.get(1)).getLabel());
 		assertEquals("2012/03/16",((Listcell)cells.get(2)).getLabel());
 		
 		
 		//update
+		listbox.as(SelectAgent.class).select(0);
+		itemName.as(TypeAgent.class).type("one-item modified");
+		priority.as(TypeAgent.class).type("5");
+		find("button[label='Update'] ").as(ClickAgent.class).click();
+		assertEquals("one-item modified",((Listcell)cells.get(0)).getLabel());
+		assertEquals("5",((Listcell)cells.get(1)).getLabel());
 		
 		//reset
-		
+		listbox.as(SelectAgent.class).select(0);
+		assertEquals("one-item modified",((Listcell)cells.get(0)).getLabel());
+		find("button[label='Reset'] ").as(ClickAgent.class).click();
+		assertEquals("",itemName.as(Textbox.class).getValue());
+		assertEquals((Integer)0,priority.as(Intbox.class).getValue());
+		assertEquals(true, date.as(Datebox.class).getValue()==null);
+
 		//delete
+		assertEquals(2,listbox.getChildren().size());
+		listbox.as(SelectAgent.class).select(0);
+		find("button[label='Delete'] ").as(ClickAgent.class).click();
+		assertEquals(1,listbox.getChildren().size());
+		
+//		find("textbox").as(Textbox.class).setValue("abc"); cause IllegalStateException: Components can be accessed only in event listeners
 	}
 }

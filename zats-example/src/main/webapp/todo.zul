@@ -27,7 +27,7 @@
 			value="@{win$composer.selected.priority, load-after='add.onClick, update.onClick, delete.onClick, reset.onClick'}" cols="1" />
 			Date:
 			<datebox id="dateBox" 
-			value="@{win$composer.selected.date, load-after='add.onClick, update.onClick, delete.onClick, reset.onClick'}" cols="8" format="yyyy/MM/dd"/>
+			value="@{win$composer.selected.date, load-after='add.onClick, update.onClick, delete.onClick, reset.onClick'}" cols="8" format="yyyy-MM-dd"/>
 			<button id="add" label="Add" height="24px" />
 			<button id="update" label="Update" height="24px" />
 			<button id="delete" label="Delete" height="24px" />
