@@ -50,7 +50,7 @@ public class ListboxMultipleSelectAgentBuilder implements
 			}
 			String ref = listbox.getItemAtIndex(index).getUuid();
 			sels.add(ref);
-			AuUtility.postSelect(target, ref,
+			AuUtility.postOnSelect(target, ref,
 					sels.toArray(new String[sels.size()]));
 		}
 
@@ -69,7 +69,7 @@ public class ListboxMultipleSelectAgentBuilder implements
 			if (!hit)
 				return;// skip
 			String ref = listbox.getItemAtIndex(index).getUuid();
-			AuUtility.postSelect(target, ref,
+			AuUtility.postOnSelect(target, ref,
 					sels.toArray(new String[sels.size()]));
 		}
 	}

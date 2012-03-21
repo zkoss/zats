@@ -25,15 +25,15 @@ public class GenericClickAgentBuilder implements OperationAgentBuilder<ClickAgen
 		}
 
 		public void click() {
-			AuUtility.postClick(target);
+			AuUtility.postOnClick(target);
 		}
 
 		public void doubleClick() {
-			AuUtility.postDoubleClick(target);
+			AuUtility.postOnDoubleClick(target);
 		}
 
 		public void rightClick() {
-			AuUtility.postRightClick(target);
+			AuUtility.postOnRightClick(target);
 		}
 	}
 }

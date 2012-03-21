@@ -26,7 +26,7 @@ public class GenericCheckAgentBuilder implements OperationAgentBuilder<CheckAgen
 		}
 
 		public void check(boolean checked) {
-			AuUtility.postCheck(target, checked);
+			AuUtility.postOnCheck(target, checked);
 		}
 	}
 }

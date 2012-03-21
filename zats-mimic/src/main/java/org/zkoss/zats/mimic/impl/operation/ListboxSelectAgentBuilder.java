@@ -26,7 +26,7 @@ public class ListboxSelectAgentBuilder implements OperationAgentBuilder<SelectAg
 
 		public void select(int index) {
 			// TODO check type of the target
-			AuUtility.postSelect(target, target.as(Listbox.class)
+			AuUtility.postOnSelect(target, target.as(Listbox.class)
 					.getItemAtIndex(index).getUuid());
 		}
 	}

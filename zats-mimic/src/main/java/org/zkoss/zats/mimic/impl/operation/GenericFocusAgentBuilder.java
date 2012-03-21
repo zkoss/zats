@@ -24,11 +24,11 @@ public class GenericFocusAgentBuilder implements OperationAgentBuilder<FocusAgen
 		}
 
 		public void focus() {
-			AuUtility.postFocus(target);
+			AuUtility.postOnFocus(target);
 		}
 
 		public void blur() {
-			AuUtility.postBlur(target);
+			AuUtility.postOnBlur(target);
 		}
 	}
 }

@@ -33,6 +33,7 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Decimalbox;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Doublespinner;
+import org.zkoss.zul.Grid;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
@@ -59,44 +60,45 @@ public class OperationAgentManager {
 		}
 
 		// TODO load default implement
-		registerBuilder(AbstractComponent.class, ClickAgent.class,
+		registerBuilder("*","*", AbstractComponent.class, ClickAgent.class,
 				new GenericClickAgentBuilder());
-		registerBuilder(AbstractComponent.class, FocusAgent.class,
+		registerBuilder("*","*", AbstractComponent.class, FocusAgent.class,
 				new GenericFocusAgentBuilder());
 
-		registerBuilder(InputElement.class, TypeAgent.class,
+		registerBuilder("*","*", InputElement.class, TypeAgent.class,
 				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.TEXT));
-		registerBuilder(Intbox.class, TypeAgent.class,
+		registerBuilder("*","*", Intbox.class, TypeAgent.class,
 				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.INTEGER));
-		registerBuilder(Longbox.class, TypeAgent.class,
+		registerBuilder("*","*", Longbox.class, TypeAgent.class,
 				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.INTEGER));
-		registerBuilder(Spinner.class, TypeAgent.class,
+		registerBuilder("*","*", Spinner.class, TypeAgent.class,
 				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.INTEGER));
-		registerBuilder(Decimalbox.class, TypeAgent.class,
+		registerBuilder("*","*", Decimalbox.class, TypeAgent.class,
 				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.DECIMAL));
-		registerBuilder(Doublebox.class, TypeAgent.class,
+		registerBuilder("*","*", Doublebox.class, TypeAgent.class,
 				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.DECIMAL));
-		registerBuilder(Doublespinner.class, TypeAgent.class,
+		registerBuilder("*","*", Doublespinner.class, TypeAgent.class,
 				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.DECIMAL));
-		registerBuilder(Datebox.class, TypeAgent.class,
+		registerBuilder("*","*", Datebox.class, TypeAgent.class,
 				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.DATE));
-		registerBuilder(Timebox.class, TypeAgent.class,
+		registerBuilder("*","*", Timebox.class, TypeAgent.class,
 				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.TIME));
 
-		registerBuilder(Listbox.class, SelectAgent.class,
+		registerBuilder("*","*", Listbox.class, SelectAgent.class,
 				new ListboxSelectAgentBuilder());
-		registerBuilder(Listbox.class, MultipleSelectAgent.class,
+		registerBuilder("*","*", Listbox.class, MultipleSelectAgent.class,
 				new ListboxMultipleSelectAgentBuilder());
+		registerBuilder("*","*", Listbox.class, RendererAgent.class, new ListboxRendererAgentBuilder());
 		
-		registerBuilder(Listbox.class, RendererAgent.class, new ListboxRendererAgentBuilder());
+		registerBuilder("*","*", Grid.class, RendererAgent.class, new GridRendererAgentBuilder());
 
-		registerBuilder(Input.class, CheckAgent.class,
+		registerBuilder("*","*", Input.class, CheckAgent.class,
 				new GenericCheckAgentBuilder());
-		registerBuilder(Checkbox.class, CheckAgent.class,
+		registerBuilder("*","*", Checkbox.class, CheckAgent.class,
 				new GenericCheckAgentBuilder()); // include Radio.class
-		registerBuilder(Menuitem.class, CheckAgent.class,
+		registerBuilder("*","*", Menuitem.class, CheckAgent.class,
 				new GenericCheckAgentBuilder());
-		registerBuilder(Toolbarbutton.class, CheckAgent.class,
+		registerBuilder("*","*", Toolbarbutton.class, CheckAgent.class,
 				new GenericCheckAgentBuilder());
 
 		// TODO load custom implement from configuration
@@ -119,6 +121,63 @@ public class OperationAgentManager {
 	}
 
 	/**
+	 * Register a operation builder mapping to component and operation. We can
+	 * specify zk version worked on. The version text could be normal version
+	 * format (e.g 6.0.0 or 5.0.7.1) or "*" sign means no specify. If specify
+	 * version range doesn't include current zk version at runtime, this
+	 * register will be ignored. <p/>
+	 * 
+	 * Use this API if the component is only in a particular zk version only to avoid initial exception. <p/>
+	 * 
+	 * @param startVersion
+	 *            start version (include)
+	 * @param endVersion
+	 *            end version (include)
+	 * @param compClazz
+	 *            the component class that builder maps to ( *notice: it should
+	 *            not specify interface)
+	 * @param opClass
+	 *            the operation class that builder maps to
+	 * @param builder
+	 *            operation builder
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static <T extends OperationAgent> 
+	void registerBuilder(String startVersion, String endVersion, String compClazz,Class<T> opClass, OperationAgentBuilder<T> builder) {
+		if (startVersion == null || endVersion == null || compClazz == null
+				|| opClass == null || builder == null)
+			throw new IllegalArgumentException();
+		
+		if(!checkVersion(startVersion,endVersion)) return;
+		
+		Class clz = null;
+		try {
+			clz = Class.forName(compClazz);
+		} catch (ClassNotFoundException e) {
+			throw new IllegalArgumentException("compClazz "+compClazz+" not found ", e);
+		}
+		if(Component.class.isAssignableFrom(clz)){
+			registerBuilder(startVersion,endVersion,clz,opClass,builder);
+		}else{
+			throw new IllegalArgumentException("compClazz "+compClazz+" is not a component");
+		}
+	}
+	
+	private static boolean checkVersion(String startVersion, String endVersion){
+		// check version
+		// If current isn't between start and end version, ignore this register.
+		BigInteger start = "*".equals(startVersion.trim()) ? BigInteger.ZERO
+				: Util.parseVersion(startVersion);
+		BigInteger end = "*".equals(endVersion.trim()) ? BigInteger
+				.valueOf(Long.MAX_VALUE) : Util.parseVersion(endVersion);
+		if (start == null || end == null)
+			throw new IllegalArgumentException("wrong version format");
+		if (current.compareTo(start) < 0 || current.compareTo(end) > 0)
+			return false;
+		return true;
+	}
+	
+	/**
 	 * register a operation builder mapping to component and operation. We can
 	 * specify zk version worked on. The version text could be normal version
 	 * format (e.g 6.0.0 or 5.0.7.1) or "*" sign means no specify. If specify
@@ -129,56 +188,26 @@ public class OperationAgentManager {
 	 *            start version (include)
 	 * @param endVersion
 	 *            end version (include)
-	 * @param component
+	 * @param compClazz
 	 *            the component class that builder maps to ( *notice: it should
 	 *            not specify interface)
-	 * @param operation
+	 * @param opClass
 	 *            the operation class that builder maps to
 	 * @param builder
 	 *            operation builder
 	 */
-	public static <T extends OperationAgent, C extends Component> void registerBuilder(
-			String startVersion, String endVersion, Class<C> component,
-			Class<T> operation, OperationAgentBuilder<T> builder) {
-		if (startVersion == null || endVersion == null || component == null
-				|| operation == null || builder == null)
+	public static <T extends OperationAgent,C extends Component> 
+		void registerBuilder(String startVersion, String endVersion, Class<C> compClazz,Class<T> opClass, OperationAgentBuilder<T> builder) {
+		
+		if (startVersion == null || endVersion == null || compClazz == null
+				|| opClass == null || builder == null)
 			throw new IllegalArgumentException();
 
-		// check version
-		// If current isn't between start and end version, ignore this register.
-		BigInteger start = "*".equals(startVersion.trim()) ? BigInteger.ZERO
-				: Util.parseVersion(startVersion);
-		BigInteger end = "*".equals(endVersion.trim()) ? BigInteger
-				.valueOf(Long.MAX_VALUE) : Util.parseVersion(endVersion);
-		if (start == null || end == null)
-			throw new IllegalArgumentException("wrong version format");
-		if (current.compareTo(start) < 0 || current.compareTo(end) > 0)
-			return;
+		if(!checkVersion(startVersion,endVersion)) return;
 
 		// component and operation classes mapping to builder
 		// builder would be replace by later register
-		builders.put(new Key(component, operation), builder);
-	}
-
-	/**
-	 * register a operation builder mapping to component and operation at
-	 * specify zk version. This method will directly invoke
-	 * registerBuilder(version, version, component, operation, builder).
-	 */
-	public static <T extends OperationAgent, C extends Component> void registerBuilder(
-			String version, Class<C> component, Class<T> operation,
-			OperationAgentBuilder<T> builder) {
-		registerBuilder(version, version, component, operation, builder);
-	}
-
-	/**
-	 * register a operation builder mapping to component and operation at any zk
-	 * version. This method will directly invoke registerBuilder("*", "*",
-	 * component, operation, builder).
-	 */
-	public static <T extends OperationAgent, C extends Component> void registerBuilder(
-			Class<C> component, Class<T> operation, OperationAgentBuilder<T> builder) {
-		registerBuilder("*", "*", component, operation, builder);
+		builders.put(new Key(compClazz, opClass), builder);
 	}
 
 	@SuppressWarnings("unchecked")

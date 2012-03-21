@@ -81,10 +81,10 @@ public class GenericTypeAgentBuilder implements OperationAgentBuilder<TypeAgent>
 								+ " can't parse to time", 0);
 				}
 
-				AuUtility.postFocus(target);
-				AuUtility.postChanging(target, value);
-				AuUtility.postChange(target, parsed);
-				AuUtility.postBlur(target);
+				AuUtility.postOnFocus(target);
+				AuUtility.postOnChanging(target, value);
+				AuUtility.postOnChange(target, parsed);
+				AuUtility.postOnBlur(target);
 
 			} catch (Exception e) {
 				throw new ConversationException("value \"" + value

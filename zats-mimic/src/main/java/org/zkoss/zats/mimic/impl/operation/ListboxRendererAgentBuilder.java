@@ -1,4 +1,4 @@
-/* ListitemRendererAgentBuilder.java
+/* ListboxRendererAgentBuilder.java
 
 	Purpose:
 		
@@ -12,9 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.impl.operation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.operation.RendererAgent;
@@ -39,11 +36,9 @@ public class ListboxRendererAgentBuilder implements OperationAgentBuilder<Render
 		}
 
 		public void render(int x, int y) {
-			Map<String, Object> data = new HashMap<String, Object>();
 			Listbox listbox = target.as(Listbox.class);
 			if(x==-1) x = 0;
 			if(y==-1) y = listbox.getItemCount()-1;
-			
 			ArrayList<String> ids = new ArrayList<String>();
 			while(true){
 				if(x > y) break;
@@ -54,8 +49,7 @@ public class ListboxRendererAgentBuilder implements OperationAgentBuilder<Render
 				
 			}
 			if(ids.size()==0) return;
-			data.put("items", ids.toArray(new String[ids.size()]));
-			target.getConversation().postUpdate(target, "onRender", data);
+			AuUtility.postOnRender(target, ids.toArray(new String[ids.size()]));
 		};
 	}
 }
