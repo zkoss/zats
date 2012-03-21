@@ -21,8 +21,8 @@ public class GenericCheckAgentBuilder implements OperationAgentBuilder<CheckAgen
 	}
 	
 	class CheckAgentImpl extends AgentDelegator implements CheckAgent{
-		public CheckAgentImpl(ComponentAgent delegatee) {
-			super(delegatee);
+		public CheckAgentImpl(ComponentAgent target) {
+			super(target);
 		}
 
 		public void check(boolean checked) {

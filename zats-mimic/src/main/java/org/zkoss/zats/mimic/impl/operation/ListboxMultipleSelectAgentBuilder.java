@@ -34,8 +34,8 @@ public class ListboxMultipleSelectAgentBuilder implements
 	}
 	
 	class MultipleSelectAgentImpl extends AgentDelegator implements MultipleSelectAgent{
-		public MultipleSelectAgentImpl(ComponentAgent delegatee) {
-			super(delegatee);
+		public MultipleSelectAgentImpl(ComponentAgent target) {
+			super(target);
 		}
 
 		public void select(int index) {

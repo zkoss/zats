@@ -88,7 +88,7 @@ public class OperationAgentManager {
 		registerBuilder(Listbox.class, MultipleSelectAgent.class,
 				new ListboxMultipleSelectAgentBuilder());
 		
-		registerBuilder(Listitem.class, RendererAgent.class, new ListitemRendererAgentBuilder());
+		registerBuilder(Listbox.class, RendererAgent.class, new ListboxRendererAgentBuilder());
 
 		registerBuilder(Input.class, CheckAgent.class,
 				new GenericCheckAgentBuilder());

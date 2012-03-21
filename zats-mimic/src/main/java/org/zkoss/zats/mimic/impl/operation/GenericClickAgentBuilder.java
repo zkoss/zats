@@ -20,8 +20,8 @@ public class GenericClickAgentBuilder implements OperationAgentBuilder<ClickAgen
 	}
 	
 	class ClickAgentImpl extends AgentDelegator implements ClickAgent{
-		public ClickAgentImpl(ComponentAgent delegatee) {
-			super(delegatee);
+		public ClickAgentImpl(ComponentAgent target) {
+			super(target);
 		}
 
 		public void click() {

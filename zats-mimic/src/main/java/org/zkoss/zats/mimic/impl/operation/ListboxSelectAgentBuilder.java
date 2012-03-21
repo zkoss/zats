@@ -20,8 +20,8 @@ public class ListboxSelectAgentBuilder implements OperationAgentBuilder<SelectAg
 		return new SelectAgentImpl(target);
 	}
 	class SelectAgentImpl extends AgentDelegator implements SelectAgent{
-		public SelectAgentImpl(ComponentAgent delegatee) {
-			super(delegatee);
+		public SelectAgentImpl(ComponentAgent target) {
+			super(target);
 		}
 
 		public void select(int index) {

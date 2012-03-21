@@ -52,8 +52,8 @@ public class GenericTypeAgentBuilder implements OperationAgentBuilder<TypeAgent>
 	}
 	
 	class TypeAgentImpl extends AgentDelegator implements TypeAgent{
-		public TypeAgentImpl(ComponentAgent delegatee) {
-			super(delegatee);
+		public TypeAgentImpl(ComponentAgent target) {
+			super(target);
 		}
 
 		public void type(String value) {

@@ -19,8 +19,8 @@ public class GenericFocusAgentBuilder implements OperationAgentBuilder<FocusAgen
 		return new FocusAgentImpl(target);
 	}
 	class FocusAgentImpl extends AgentDelegator implements FocusAgent{
-		public FocusAgentImpl(ComponentAgent delegatee) {
-			super(delegatee);
+		public FocusAgentImpl(ComponentAgent target) {
+			super(target);
 		}
 
 		public void focus() {
