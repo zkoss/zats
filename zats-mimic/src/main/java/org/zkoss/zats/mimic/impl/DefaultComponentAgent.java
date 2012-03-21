@@ -15,15 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversation;
-import org.zkoss.zats.mimic.ConversationException;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.PageAgent;
 import org.zkoss.zats.mimic.Searcher;
 import org.zkoss.zats.mimic.impl.operation.OperationAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.OperationAgentManager;
+import org.zkoss.zats.mimic.operation.CheckAgent;
+import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
+import org.zkoss.zats.mimic.operation.SelectAgent;
+import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -105,8 +110,7 @@ public class DefaultComponentAgent implements ComponentAgent {
 		} else if (clazz.isInstance(comp)) {
 			return (T) comp;
 		}
-		throw new ConversationException(getType() + " doesn't support "
-				+ clazz.getName());
+		throw new AgentException(getType() + " doesn't support "+ clazz.getName());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -186,11 +190,41 @@ public class DefaultComponentAgent implements ComponentAgent {
 			sb.append("</").append(nm).append(">\n");
 		}
 	}
-
-	/* (non-Javadoc)
-	 * @see org.zkoss.zats.mimic.Agent#getDelegatee()
-	 */
+	
 	public Object getDelegatee() {
 		return comp;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//================= the impl. of short-cut method
+
+	public void click() {
+		as(ClickAgent.class).click();
+	}
+
+	public void type(String value) {
+		as(TypeAgent.class).type(value);
+	}
+
+	public void focus() {
+		as(FocusAgent.class).focus();
+	}
+	public void blur() {
+		as(FocusAgent.class).blur();
+	}
+
+	public void select(int index) {
+		as(SelectAgent.class).select(index);
+	}
+
+	public void check(boolean checked) {
+		as(CheckAgent.class).check(checked);
 	}
 }

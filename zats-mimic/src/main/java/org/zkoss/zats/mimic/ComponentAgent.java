@@ -14,7 +14,12 @@ package org.zkoss.zats.mimic;
 import java.util.List;
 import java.util.Map;
 
+import org.zkoss.zats.mimic.operation.CheckAgent;
+import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
+import org.zkoss.zats.mimic.operation.SelectAgent;
+import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -22,7 +27,7 @@ import org.zkoss.zk.ui.Component;
  * 
  * @author pao
  */
-public interface ComponentAgent extends Agent {
+public interface ComponentAgent extends Agent{
 	
 	/**
 	 * get ID. of the component.
@@ -123,4 +128,47 @@ public interface ComponentAgent extends Agent {
 	 * @param selector
 	 */
 	List<ComponentAgent> findAll(String selector);
+	
+	
+	/**
+	 * Click on this component, A short cut of {@link ClickAgent#click()} <p/>
+	 * If this component doesn't has {@link ClickAgent}, it will throw exception.
+	 * @see #as(Class)
+	 */
+	void click();
+	
+	/**
+	 * type on this component, it is a short cut of {@link TypeAgent#type(String)} <p/>
+	 * If this component doesn't has {@link TypeAgent}, it will throw exception.
+	 * @see #as(Class)
+	 */
+	void type(String value);
+	
+	/**
+	 * Focus on this component, it is a short cut of {@link FocusAgent#focus()} <p/>
+	 * If this component doesn't has {@link FocusAgent}, it will throw exception.
+	 * @see #as(Class)
+	 */
+	void focus();
+	
+	/**
+	 * Blur on this component, it is a short cut of {@link FocusAgent#blur()} <p/>
+	 * If this component doesn't has {@link FocusAgent}, it will throw exception.
+	 * @see #as(Class)
+	 */
+	void blur();
+	
+	/**
+	 * Select a sub-item of this component, it is a short cut of {@link SelectAgent#select(int)} <p/>
+	 * If this component doesn't has {@link SelectAgent}, it will throw exception.
+	 * @see #as(Class)
+	 */
+	void select(int index);
+	
+	/**
+	 * Check on this component, it is a short cut of {@link CheckAgent#check(boolean)}<p/>
+	 * If this component doesn't has {@link CheckAgent}, it will throw exception.
+	 * @see #as(Class)
+	 */
+	void check(boolean checked);
 }

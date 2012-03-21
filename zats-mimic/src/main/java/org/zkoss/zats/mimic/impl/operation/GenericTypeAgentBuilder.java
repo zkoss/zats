@@ -18,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.ConversationException;
 import org.zkoss.zats.mimic.operation.TypeAgent;
@@ -87,7 +88,7 @@ public class GenericTypeAgentBuilder implements OperationAgentBuilder<TypeAgent>
 				AuUtility.postOnBlur(target);
 
 			} catch (Exception e) {
-				throw new ConversationException("value \"" + value
+				throw new AgentException("value \"" + value
 						+ "\"is invalid for the component: "
 						+ target, e);
 			}
