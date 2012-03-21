@@ -13,8 +13,8 @@ package org.zkoss.zats.mimic;
 
 import java.util.Map;
 import javax.servlet.http.HttpSession;
-import org.zkoss.zats.mimic.node.ComponentNode;
-import org.zkoss.zats.mimic.node.DesktopNode;
+import org.zkoss.zats.mimic.node.ComponentAgent;
+import org.zkoss.zats.mimic.node.DesktopAgent;
 
 public interface Conversation {
 	/**
@@ -43,7 +43,7 @@ public interface Conversation {
 	 */
 	void clean();
 
-	DesktopNode getDesktop();
+	DesktopAgent getDesktop();
 
 	HttpSession getSession();
 
@@ -57,5 +57,5 @@ public interface Conversation {
 	 * @param data
 	 *            data for update
 	 */
-	void postUpdate(ComponentNode target, String cmd, Map<String, Object> data);
+	void postUpdate(ComponentAgent target, String cmd, Map<String, Object> data);
 }

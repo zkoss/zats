@@ -11,9 +11,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.Searcher;
-import org.zkoss.zats.mimic.node.ComponentNode;
-import org.zkoss.zats.mimic.node.DesktopNode;
-import org.zkoss.zats.mimic.operation.Clickable;
+import org.zkoss.zats.mimic.node.ComponentAgent;
+import org.zkoss.zats.mimic.node.DesktopAgent;
+import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 
@@ -47,23 +47,23 @@ public class ConversationsTest
 		assertNotNull(Conversations.getDesktop());
 
 		HttpSession session = Conversations.getSession();
-		DesktopNode desktop = Conversations.getDesktop();
+		DesktopAgent desktop = Conversations.getDesktop();
 		assertEquals("session", session.getAttribute("msg"));
 		assertEquals("desktop", desktop.getAttribute("msg"));
 		
-		ComponentNode win = Searcher.find("#win");
+		ComponentAgent win = Searcher.find("#win");
 		assertNotNull(win);
 		assertNotNull(win.as(Window.class));
 		assertEquals("my window",win.as(Window.class).getTitle());
 		
-		ComponentNode msg = Searcher.find(win, "#msg"); 
+		ComponentAgent msg = Searcher.find(win, "#msg"); 
 		assertNotNull(msg);
 		assertEquals("hello", msg.as(Label.class).getValue());
 //		assertEquals("hello", ((Label)msg.nat()).getValue());
 		
 		for(int i = 0; i < 10; ++i)
 		{
-			Searcher.find(win, "#btn").as(Clickable.class).click();
+			Searcher.find(win, "#btn").as(ClickAgent.class).click();
 			assertEquals("s" + i, session.getAttribute("msg"));
 			assertEquals("d" + i, desktop.getAttribute("msg"));
 			assertEquals("" + i, msg.as(Label.class).getValue());

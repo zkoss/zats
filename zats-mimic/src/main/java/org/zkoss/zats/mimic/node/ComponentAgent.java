@@ -13,7 +13,7 @@ package org.zkoss.zats.mimic.node;
 
 import java.util.List;
 import org.zkoss.zats.mimic.ConversationException;
-import org.zkoss.zats.mimic.operation.Operation;
+import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -21,7 +21,7 @@ import org.zkoss.zk.ui.Component;
  * 
  * @author pao
  */
-public interface ComponentNode extends Node {
+public interface ComponentAgent extends Agent {
 	/**
 	 * get UUID. of this node.
 	 * 
@@ -34,7 +34,7 @@ public interface ComponentNode extends Node {
 	 * 
 	 * @return always return a list of children (may be empty).
 	 */
-	List<ComponentNode> getChildren();
+	List<ComponentAgent> getChildren();
 
 	/**
 	 * get child by specify index.
@@ -42,32 +42,32 @@ public interface ComponentNode extends Node {
 	 * @param index
 	 * @return return child node or null if index is out of boundary.
 	 */
-	ComponentNode getChild(int index);
+	ComponentAgent getChild(int index);
 
 	/**
 	 * get parent node.
 	 * 
 	 * @return parent node or null if this is root node.
 	 */
-	ComponentNode getParent();
+	ComponentAgent getParent();
 
 	/**
 	 * get desktop node this component belonged to.
 	 * 
 	 * @return desktop node.
 	 */
-	DesktopNode getDesktop();
+	DesktopAgent getDesktop();
 
 	/**
 	 * get page node this component belonged to.
 	 * 
 	 * @return page node.
 	 */
-	PageNode getPage();
+	PageAgent getPage();
 
 	/**
 	 * try to transfer the component node to the target class, the target class
-	 * is usually a {@link Operation} or a native {@link Component} <br/>
+	 * is usually a {@link OperationAgent} or a native {@link Component} <br/>
 	 * 
 	 * if it cannot transfer to target class it will throw
 	 * {@link ConversationException}.
@@ -91,11 +91,11 @@ public interface ComponentNode extends Node {
 	 * find components matched specify selector base on this component node.
 	 * @param selector
 	 */
-	ComponentNode find(String selector);
+	ComponentAgent find(String selector);
 	
 	/**
 	 * find components matched specify selector base on this component node.
 	 * @param selector
 	 */
-	List<ComponentNode> findAll(String selector);
+	List<ComponentAgent> findAll(String selector);
 }

@@ -34,9 +34,9 @@ import org.zkoss.zats.mimic.Conversation;
 import org.zkoss.zats.mimic.ConversationException;
 import org.zkoss.zats.mimic.impl.emulator.Emulator;
 import org.zkoss.zats.mimic.impl.emulator.EmulatorBuilder;
-import org.zkoss.zats.mimic.impl.node.DefaultDesktopNode;
-import org.zkoss.zats.mimic.node.ComponentNode;
-import org.zkoss.zats.mimic.node.DesktopNode;
+import org.zkoss.zats.mimic.impl.node.DefaultDesktopAgent;
+import org.zkoss.zats.mimic.node.ComponentAgent;
+import org.zkoss.zats.mimic.node.DesktopAgent;
 import org.zkoss.zk.ui.Desktop;
 
 /**
@@ -48,7 +48,7 @@ public class EmulatorConversation implements Conversation {
 	private static Logger logger;
 	private Emulator emulator;
 	private File web;
-	private DesktopNode desktopNode;
+	private DesktopAgent desktopNode;
 	private List<String> cookies;
 
 	public EmulatorConversation() {
@@ -103,7 +103,7 @@ public class EmulatorConversation implements Conversation {
 			Desktop desktop = (Desktop) emulator.getRequestAttributes().get(
 					"javax.zkoss.zk.ui.desktop");
 			// TODO, what if a non-zk(zul) page, throw exception?
-			desktopNode = new DefaultDesktopNode(this, desktop);
+			desktopNode = new DefaultDesktopAgent(this, desktop);
 		} catch (Exception e) {
 			throw new ConversationException("", e);
 		} finally {
@@ -135,7 +135,7 @@ public class EmulatorConversation implements Conversation {
 		}
 	}
 
-	public DesktopNode getDesktop() {
+	public DesktopAgent getDesktop() {
 		return desktopNode;
 	}
 
@@ -145,7 +145,7 @@ public class EmulatorConversation implements Conversation {
 		return (HttpSession) desktopNode.cast().getSession().getNativeSession();
 	}
 
-	public void postUpdate(ComponentNode target, String cmd,
+	public void postUpdate(ComponentAgent target, String cmd,
 			Map<String, Object> data) {
 		// prepare au data
 		String dtid = UrlEncoded.encodeString(desktopNode.getId());

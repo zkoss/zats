@@ -12,7 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic;
 
 import javax.servlet.http.HttpSession;
-import org.zkoss.zats.mimic.node.DesktopNode;
+import org.zkoss.zats.mimic.node.DesktopAgent;
 
 public class Conversations {
 	private static ThreadLocal<Conversation> local = new ThreadLocal<Conversation>();
@@ -63,7 +63,7 @@ public class Conversations {
 	 * 
 	 * @return desktop.
 	 */
-	public static DesktopNode getDesktop() {
+	public static DesktopAgent getDesktop() {
 		if (local.get() == null)
 			throw new ConversationException("conversation is close");
 		return local.get().getDesktop();

@@ -16,7 +16,7 @@ package org.zkoss.zats.mimic.operation;
  * 
  * @author pao
  */
-public interface Typeable extends Operation {
+public interface TypeAgent extends OperationAgent {
 
 	/**
 	 * To type data into component. The value should be valid for target
@@ -28,5 +28,5 @@ public interface Typeable extends Operation {
 	 *            the input value
 	 * @return self
 	 */
-	public Typeable type(String value);
+	public TypeAgent type(String value);
 }

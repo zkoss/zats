@@ -16,16 +16,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.zkoss.zats.mimic.Conversation;
-import org.zkoss.zats.mimic.node.DesktopNode;
-import org.zkoss.zats.mimic.node.PageNode;
+import org.zkoss.zats.mimic.node.DesktopAgent;
+import org.zkoss.zats.mimic.node.PageAgent;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 
-public class DefaultDesktopNode implements DesktopNode {
+public class DefaultDesktopAgent implements DesktopAgent {
 	private Conversation conversation;
 	private Desktop desktop;
 
-	public DefaultDesktopNode(Conversation conversation, Desktop desktop) {
+	public DefaultDesktopAgent(Conversation conversation, Desktop desktop) {
 		this.conversation = conversation;
 		this.desktop = desktop;
 	}
@@ -50,11 +50,11 @@ public class DefaultDesktopNode implements DesktopNode {
 		return conversation;
 	}
 
-	public List<PageNode> getPages() {
-		List<PageNode> nodes = new ArrayList<PageNode>();
+	public List<PageAgent> getPages() {
+		List<PageAgent> nodes = new ArrayList<PageAgent>();
 		Iterator<?> iter = desktop.getPages().iterator();
 		while (iter.hasNext())
-			nodes.add(new DefaultPageNode(this, (Page) iter.next()));
+			nodes.add(new DefaultPageAgent(this, (Page) iter.next()));
 		return nodes;
 	}
 

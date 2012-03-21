@@ -10,9 +10,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.Searcher;
-import org.zkoss.zats.mimic.node.ComponentNode;
-import org.zkoss.zats.mimic.operation.Clickable;
-import org.zkoss.zats.mimic.operation.Typeable;
+import org.zkoss.zats.mimic.node.ComponentAgent;
+import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.zats.example.util.LoginOperation;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
@@ -38,20 +38,20 @@ public class LoginLogoutTest {
 	public void test() {
 		Conversations.open("/login.zul");
 
-		ComponentNode account = Searcher.find("#account");
-		ComponentNode password = Searcher.find("#password");
-		ComponentNode login = Searcher.find("button");
-		ComponentNode msg = Searcher.find("div > label");
+		ComponentAgent account = Searcher.find("#account");
+		ComponentAgent password = Searcher.find("#password");
+		ComponentAgent login = Searcher.find("button");
+		ComponentAgent msg = Searcher.find("div > label");
 		
 		//login failed
-		account.as(Typeable.class).type("hawk");
-		password.as(Typeable.class).type("1111");
-		login.as(Clickable.class).click();
+		account.as(TypeAgent.class).type("hawk");
+		password.as(TypeAgent.class).type("1111");
+		login.as(ClickAgent.class).click();
 		assertEquals("Login Failed", msg.as(Label.class).getValue());
 		
 		//login success
-		password.as(Typeable.class).type("1234");
-		login.as(Clickable.class).click();
+		password.as(TypeAgent.class).type("1234");
+		login.as(ClickAgent.class).click();
 		HttpSession session = Conversations.getSession();
 		assertEquals(account.as(Textbox.class).getValue(), session.getAttribute("user"));
 //		ComponentNode mainWin = Searcher.find("window"); no handle redirect for now

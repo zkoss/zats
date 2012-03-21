@@ -8,7 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.Searcher;
-import org.zkoss.zats.mimic.node.ComponentNode;
+import org.zkoss.zats.mimic.node.ComponentAgent;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 
@@ -31,7 +31,7 @@ public class HelloTest {
 	@Test
 	public void test() {
 		Conversations.open("/form/hello.zul");
-		ComponentNode view = Searcher.find("#view");
+		ComponentAgent view = Searcher.find("#view");
 		assertEquals(1, view.getChildren().size());
 		assertEquals("My First Window", view.getChild(0).as(Window.class).getTitle());
 		String value = view.getChild(0).getChild(0).as(Label.class).getValue();

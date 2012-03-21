@@ -17,7 +17,7 @@ package org.zkoss.zats.mimic.operation;
  * @author dennis
  * 
  */
-public interface MultipleSelectable extends Operation {
+public interface MultipleSelectAgent extends OperationAgent {
 
 	/**
 	 * to select a item, it will not clean another selection. if you select a
@@ -26,7 +26,7 @@ public interface MultipleSelectable extends Operation {
 	 * @param index
 	 *            the index array of items to select.
 	 */
-	public MultipleSelectable select(int index);
+	public MultipleSelectAgent select(int index);
 
 	/**
 	 * to deselect a item, it will not clean another selection. if you deselect
@@ -35,5 +35,5 @@ public interface MultipleSelectable extends Operation {
 	 * @param index
 	 * @return
 	 */
-	public MultipleSelectable deselect(int index);
+	public MultipleSelectAgent deselect(int index);
 }

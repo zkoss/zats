@@ -18,15 +18,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.zkoss.zats.mimic.ConversationException;
-import org.zkoss.zats.mimic.node.ComponentNode;
-import org.zkoss.zats.mimic.operation.Typeable;
+import org.zkoss.zats.mimic.node.ComponentAgent;
+import org.zkoss.zats.mimic.operation.TypeAgent;
 
 /**
  * The generic builder of typing operation.
  * 
  * @author pao
  */
-public class GenericTypeableBuilder implements OperationBuilder<Typeable> {
+public class GenericTypeAgentBuilder implements OperationAgentBuilder<TypeAgent> {
 	public final static int TEXT = 0;
 	public final static int INTEGER = 1;
 	public final static int DECIMAL = 2;
@@ -37,7 +37,7 @@ public class GenericTypeableBuilder implements OperationBuilder<Typeable> {
 	private SimpleDateFormat dtf;
 	private SimpleDateFormat tf;
 
-	public GenericTypeableBuilder(int type) {
+	public GenericTypeAgentBuilder(int type) {
 		if (type < 0 || type > 4)
 			throw new IllegalArgumentException("unknown type: " + type);
 		this.type = type;
@@ -46,9 +46,9 @@ public class GenericTypeableBuilder implements OperationBuilder<Typeable> {
 		tf = new SimpleDateFormat("HH:mm:ss");
 	}
 
-	public Typeable getOperation(final ComponentNode target) {
-		return new Typeable() {
-			public Typeable type(String value) {
+	public TypeAgent getOperation(final ComponentAgent target) {
+		return new TypeAgent() {
+			public TypeAgent type(String value) {
 				try {
 					// parse value
 					value = value.trim();
@@ -73,10 +73,10 @@ public class GenericTypeableBuilder implements OperationBuilder<Typeable> {
 									+ " can't parse to time", 0);
 					}
 
-					PostAgent.doFocus(target);
-					PostAgent.doChanging(target, value);
-					PostAgent.doChange(target, parsed);
-					PostAgent.doBlur(target);
+					AuUtility.postFocus(target);
+					AuUtility.postChanging(target, value);
+					AuUtility.postChange(target, parsed);
+					AuUtility.postBlur(target);
 
 				} catch (Exception e) {
 					throw new ConversationException("value \"" + value

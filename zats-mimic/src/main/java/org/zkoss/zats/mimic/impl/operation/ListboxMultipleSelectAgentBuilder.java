@@ -14,8 +14,8 @@ package org.zkoss.zats.mimic.impl.operation;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.zkoss.zats.mimic.node.ComponentNode;
-import org.zkoss.zats.mimic.operation.MultipleSelectable;
+import org.zkoss.zats.mimic.node.ComponentAgent;
+import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 
@@ -24,14 +24,14 @@ import org.zkoss.zul.Listitem;
  * @author dennis
  * 
  */
-public class ListboxMultipleSelectableBuilder implements
-		OperationBuilder<MultipleSelectable> {
-	public MultipleSelectable getOperation(final ComponentNode target) {
+public class ListboxMultipleSelectAgentBuilder implements
+		OperationAgentBuilder<MultipleSelectAgent> {
+	public MultipleSelectAgent getOperation(final ComponentAgent target) {
 		if (!target.is(Listbox.class)) {
 			throw new RuntimeException("target cannot cast to listbox");
 		}
-		return new MultipleSelectable() {
-			public MultipleSelectable select(int index) {
+		return new MultipleSelectAgent() {
+			public MultipleSelectAgent select(int index) {
 				Listbox listbox = target.as(Listbox.class);
 				Set<Listitem> selitems = listbox.getSelectedItems();
 				Set<String> sels = new HashSet<String>();
@@ -43,13 +43,13 @@ public class ListboxMultipleSelectableBuilder implements
 				}
 				String ref = listbox.getItemAtIndex(index).getUuid();
 				sels.add(ref);
-				PostAgent.doSelect(target, ref,
+				AuUtility.postSelect(target, ref,
 						sels.toArray(new String[sels.size()]));
 
 				return this;
 			}
 
-			public MultipleSelectable deselect(int index) {
+			public MultipleSelectAgent deselect(int index) {
 				Listbox listbox = target.as(Listbox.class);
 				Set<Listitem> selitems = listbox.getSelectedItems();
 				Set<String> sels = new HashSet<String>();
@@ -64,7 +64,7 @@ public class ListboxMultipleSelectableBuilder implements
 				if (!hit)
 					return this;// skip
 				String ref = listbox.getItemAtIndex(index).getUuid();
-				PostAgent.doSelect(target, ref,
+				AuUtility.postSelect(target, ref,
 						sels.toArray(new String[sels.size()]));
 				return this;
 			}

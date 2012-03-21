@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.logging.Logger;
 import org.zkoss.Version;
 import org.zkoss.zats.common.select.Selectors;
-import org.zkoss.zats.mimic.impl.node.DefaultComponentNode;
-import org.zkoss.zats.mimic.impl.node.DefaultPageNode;
-import org.zkoss.zats.mimic.node.ComponentNode;
-import org.zkoss.zats.mimic.node.DesktopNode;
-import org.zkoss.zats.mimic.node.Node;
-import org.zkoss.zats.mimic.node.PageNode;
+import org.zkoss.zats.mimic.impl.node.DefaultComponentAgent;
+import org.zkoss.zats.mimic.impl.node.DefaultPageAgent;
+import org.zkoss.zats.mimic.node.ComponentAgent;
+import org.zkoss.zats.mimic.node.DesktopAgent;
+import org.zkoss.zats.mimic.node.Agent;
+import org.zkoss.zats.mimic.node.PageAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 
@@ -45,7 +45,7 @@ public class Searcher {
 	 * @return a list contained matched components.
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<ComponentNode> findAll(Node root, String selector) {
+	public static List<ComponentAgent> findAll(Agent root, String selector) {
 		try {
 			// detect zk version to choose implementation
 			Class<?> selectors;
@@ -63,31 +63,31 @@ public class Searcher {
 					String.class);
 
 			// find components
-			PageNode pageNode;
+			PageAgent pageNode;
 			List<Component> list;
-			if (root instanceof DesktopNode) {
-				DesktopNode desktopNode = (DesktopNode) root;
+			if (root instanceof DesktopAgent) {
+				DesktopAgent desktopNode = (DesktopAgent) root;
 				// TODO should we check all the pages?
-				pageNode = new DefaultPageNode(desktopNode, desktopNode.cast()
+				pageNode = new DefaultPageAgent(desktopNode, desktopNode.cast()
 						.getFirstPage());
 				list = (List<Component>) findByPage.invoke(null,
 						pageNode.cast(), selector);
-			} else if (root instanceof PageNode) {
-				pageNode = (PageNode) root;
+			} else if (root instanceof PageAgent) {
+				pageNode = (PageAgent) root;
 				list = (List<Component>) findByPage.invoke(null,
 						pageNode.cast(), selector);
 			} else {
-				ComponentNode compNode = (ComponentNode) root;
+				ComponentAgent compNode = (ComponentAgent) root;
 				pageNode = compNode.getPage();
 				Method findByComp = selectors.getMethod("find",
 						Component.class, String.class);
 				list = (List<Component>) findByComp.invoke(null,
 						compNode.as(Component.class), selector);
 			}
-			List<ComponentNode> nodes = new ArrayList<ComponentNode>(
+			List<ComponentAgent> nodes = new ArrayList<ComponentAgent>(
 					list.size());
 			for (Component comp : list)
-				nodes.add(new DefaultComponentNode(pageNode, comp));
+				nodes.add(new DefaultComponentAgent(pageNode, comp));
 			return nodes;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -104,16 +104,16 @@ public class Searcher {
 	 *            the selector string.
 	 * @return matched component or null if not found.
 	 */
-	public static ComponentNode find(Node root, String selector) {
-		List<ComponentNode> nodes = findAll(root, selector);
+	public static ComponentAgent find(Agent root, String selector) {
+		List<ComponentAgent> nodes = findAll(root, selector);
 		return nodes.size() > 0 ? nodes.get(0) : null;
 	}
 
-	public static ComponentNode find(String selector) {
+	public static ComponentAgent find(String selector) {
 		return Searcher.find(Conversations.getDesktop(), selector);
 	}
 
-	public static List<ComponentNode> findAll(String selector) {
+	public static List<ComponentAgent> findAll(String selector) {
 		return Searcher.findAll(Conversations.getDesktop(), selector);
 	}
 }

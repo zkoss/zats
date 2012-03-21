@@ -1,4 +1,4 @@
-/* Selectable.java
+/* Checkable.java
 
 	Purpose:
 		
@@ -11,7 +11,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.operation;
 
-public interface Selectable extends Operation {
-
-	public Selectable select(int index);
+public interface CheckAgent extends OperationAgent {
+	CheckAgent check(boolean checked);
 }

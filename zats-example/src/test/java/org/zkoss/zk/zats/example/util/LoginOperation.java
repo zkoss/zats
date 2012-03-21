@@ -5,9 +5,9 @@ import static org.zkoss.zats.mimic.Searcher.find;
 import javax.servlet.http.HttpSession;
 
 import org.zkoss.zats.mimic.Conversations;
-import org.zkoss.zats.mimic.node.ComponentNode;
-import org.zkoss.zats.mimic.operation.Clickable;
-import org.zkoss.zats.mimic.operation.Typeable;
+import org.zkoss.zats.mimic.node.ComponentAgent;
+import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zats.mimic.operation.TypeAgent;
 
 /**
  * This class contains isolated test logic of login which can be reused in different test cases.
@@ -17,14 +17,14 @@ import org.zkoss.zats.mimic.operation.Typeable;
 public class LoginOperation {
 
 	public static boolean login(String account, String password){
-		ComponentNode accountBox = find("#account");
-		ComponentNode passwordBox = find("#password");
-		ComponentNode login = find("button");
+		ComponentAgent accountBox = find("#account");
+		ComponentAgent passwordBox = find("#password");
+		ComponentAgent login = find("button");
 		
 		//login failed
-		accountBox.as(Typeable.class).type(account);
-		passwordBox.as(Typeable.class).type(password);
-		login.as(Clickable.class).click();
+		accountBox.as(TypeAgent.class).type(account);
+		passwordBox.as(TypeAgent.class).type(password);
+		login.as(ClickAgent.class).click();
 		
 		HttpSession session = Conversations.getSession();
 		if (session.getAttribute("user")==null){

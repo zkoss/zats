@@ -17,14 +17,14 @@ import java.util.Map;
 
 import org.zkoss.Version;
 import org.zkoss.zats.mimic.impl.Util;
-import org.zkoss.zats.mimic.operation.Checkable;
-import org.zkoss.zats.mimic.operation.Clickable;
+import org.zkoss.zats.mimic.operation.CheckAgent;
+import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.RendererAgent;
-import org.zkoss.zats.mimic.operation.Focusable;
-import org.zkoss.zats.mimic.operation.MultipleSelectable;
-import org.zkoss.zats.mimic.operation.Operation;
-import org.zkoss.zats.mimic.operation.Selectable;
-import org.zkoss.zats.mimic.operation.Typeable;
+import org.zkoss.zats.mimic.operation.FocusAgent;
+import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
+import org.zkoss.zats.mimic.operation.OperationAgent;
+import org.zkoss.zats.mimic.operation.SelectAgent;
+import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zhtml.Input;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
@@ -43,12 +43,12 @@ import org.zkoss.zul.Timebox;
 import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.impl.InputElement;
 
-public class OperationManager {
-	private static Map<Key, OperationBuilder<? extends Operation>> builders;
+public class OperationAgentManager {
+	private static Map<Key, OperationAgentBuilder<? extends OperationAgent>> builders;
 	private static BigInteger current; // current zk version
 
 	static {
-		builders = new HashMap<OperationManager.Key, OperationBuilder<? extends Operation>>();
+		builders = new HashMap<OperationAgentManager.Key, OperationAgentBuilder<? extends OperationAgent>>();
 
 		// load current zk version
 		try {
@@ -59,45 +59,45 @@ public class OperationManager {
 		}
 
 		// TODO load default implement
-		registerBuilder(AbstractComponent.class, Clickable.class,
-				new GenericClickableBuilder());
-		registerBuilder(AbstractComponent.class, Focusable.class,
-				new GenericFocusableBuilder());
+		registerBuilder(AbstractComponent.class, ClickAgent.class,
+				new GenericClickAgentBuilder());
+		registerBuilder(AbstractComponent.class, FocusAgent.class,
+				new GenericFocusAgentBuilder());
 
-		registerBuilder(InputElement.class, Typeable.class,
-				new GenericTypeableBuilder(GenericTypeableBuilder.TEXT));
-		registerBuilder(Intbox.class, Typeable.class,
-				new GenericTypeableBuilder(GenericTypeableBuilder.INTEGER));
-		registerBuilder(Longbox.class, Typeable.class,
-				new GenericTypeableBuilder(GenericTypeableBuilder.INTEGER));
-		registerBuilder(Spinner.class, Typeable.class,
-				new GenericTypeableBuilder(GenericTypeableBuilder.INTEGER));
-		registerBuilder(Decimalbox.class, Typeable.class,
-				new GenericTypeableBuilder(GenericTypeableBuilder.DECIMAL));
-		registerBuilder(Doublebox.class, Typeable.class,
-				new GenericTypeableBuilder(GenericTypeableBuilder.DECIMAL));
-		registerBuilder(Doublespinner.class, Typeable.class,
-				new GenericTypeableBuilder(GenericTypeableBuilder.DECIMAL));
-		registerBuilder(Datebox.class, Typeable.class,
-				new GenericTypeableBuilder(GenericTypeableBuilder.DATE));
-		registerBuilder(Timebox.class, Typeable.class,
-				new GenericTypeableBuilder(GenericTypeableBuilder.TIME));
+		registerBuilder(InputElement.class, TypeAgent.class,
+				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.TEXT));
+		registerBuilder(Intbox.class, TypeAgent.class,
+				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.INTEGER));
+		registerBuilder(Longbox.class, TypeAgent.class,
+				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.INTEGER));
+		registerBuilder(Spinner.class, TypeAgent.class,
+				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.INTEGER));
+		registerBuilder(Decimalbox.class, TypeAgent.class,
+				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.DECIMAL));
+		registerBuilder(Doublebox.class, TypeAgent.class,
+				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.DECIMAL));
+		registerBuilder(Doublespinner.class, TypeAgent.class,
+				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.DECIMAL));
+		registerBuilder(Datebox.class, TypeAgent.class,
+				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.DATE));
+		registerBuilder(Timebox.class, TypeAgent.class,
+				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.TIME));
 
-		registerBuilder(Listbox.class, Selectable.class,
-				new ListboxSelectableBuilder());
-		registerBuilder(Listbox.class, MultipleSelectable.class,
-				new ListboxMultipleSelectableBuilder());
+		registerBuilder(Listbox.class, SelectAgent.class,
+				new ListboxSelectAgentBuilder());
+		registerBuilder(Listbox.class, MultipleSelectAgent.class,
+				new ListboxMultipleSelectAgentBuilder());
 		
 		registerBuilder(Listitem.class, RendererAgent.class, new ListitemRendererAgentBuilder());
 
-		registerBuilder(Input.class, Checkable.class,
-				new GenericCheckableBuilder());
-		registerBuilder(Checkbox.class, Checkable.class,
-				new GenericCheckableBuilder()); // include Radio.class
-		registerBuilder(Menuitem.class, Checkable.class,
-				new GenericCheckableBuilder());
-		registerBuilder(Toolbarbutton.class, Checkable.class,
-				new GenericCheckableBuilder());
+		registerBuilder(Input.class, CheckAgent.class,
+				new GenericCheckAgentBuilder());
+		registerBuilder(Checkbox.class, CheckAgent.class,
+				new GenericCheckAgentBuilder()); // include Radio.class
+		registerBuilder(Menuitem.class, CheckAgent.class,
+				new GenericCheckAgentBuilder());
+		registerBuilder(Toolbarbutton.class, CheckAgent.class,
+				new GenericCheckAgentBuilder());
 
 		// TODO load custom implement from configuration
 
@@ -137,9 +137,9 @@ public class OperationManager {
 	 * @param builder
 	 *            operation builder
 	 */
-	public static <T extends Operation, C extends Component> void registerBuilder(
+	public static <T extends OperationAgent, C extends Component> void registerBuilder(
 			String startVersion, String endVersion, Class<C> component,
-			Class<T> operation, OperationBuilder<T> builder) {
+			Class<T> operation, OperationAgentBuilder<T> builder) {
 		if (startVersion == null || endVersion == null || component == null
 				|| operation == null || builder == null)
 			throw new IllegalArgumentException();
@@ -165,9 +165,9 @@ public class OperationManager {
 	 * specify zk version. This method will directly invoke
 	 * registerBuilder(version, version, component, operation, builder).
 	 */
-	public static <T extends Operation, C extends Component> void registerBuilder(
+	public static <T extends OperationAgent, C extends Component> void registerBuilder(
 			String version, Class<C> component, Class<T> operation,
-			OperationBuilder<T> builder) {
+			OperationAgentBuilder<T> builder) {
 		registerBuilder(version, version, component, operation, builder);
 	}
 
@@ -176,21 +176,21 @@ public class OperationManager {
 	 * version. This method will directly invoke registerBuilder("*", "*",
 	 * component, operation, builder).
 	 */
-	public static <T extends Operation, C extends Component> void registerBuilder(
-			Class<C> component, Class<T> operation, OperationBuilder<T> builder) {
+	public static <T extends OperationAgent, C extends Component> void registerBuilder(
+			Class<C> component, Class<T> operation, OperationAgentBuilder<T> builder) {
 		registerBuilder("*", "*", component, operation, builder);
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends Operation> OperationBuilder<T> getBuilder(
+	public static <T extends OperationAgent> OperationAgentBuilder<T> getBuilder(
 			Component component, Class<T> operation) {
 		// search from self class to parent class
 		Class<?> c = component.getClass();
 		while (c != null) {
-			OperationBuilder<? extends Operation> builder = builders
+			OperationAgentBuilder<? extends OperationAgent> builder = builders
 					.get(new Key(c, operation));
 			if (builder != null)
-				return (OperationBuilder<T>) builder;
+				return (OperationAgentBuilder<T>) builder;
 			c = c.getSuperclass();
 		}
 		return null; // not found
@@ -209,7 +209,7 @@ public class OperationManager {
 		public Class<?> c;
 		public Class<?> t;
 
-		public <T extends Operation, C extends Component> Key(Class<?> c,
+		public <T extends OperationAgent, C extends Component> Key(Class<?> c,
 				Class<?> t) {
 			this.c = c;
 			this.t = t;

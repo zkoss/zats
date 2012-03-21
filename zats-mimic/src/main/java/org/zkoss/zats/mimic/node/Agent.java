@@ -19,7 +19,7 @@ import org.zkoss.zats.mimic.Conversation;
  * 
  * @author pao
  */
-public interface Node {
+public interface Agent {
 	/**
 	 * get ID. of this node.
 	 * 

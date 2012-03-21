@@ -16,17 +16,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.zkoss.zats.mimic.Conversation;
-import org.zkoss.zats.mimic.node.ComponentNode;
-import org.zkoss.zats.mimic.node.DesktopNode;
-import org.zkoss.zats.mimic.node.PageNode;
+import org.zkoss.zats.mimic.node.ComponentAgent;
+import org.zkoss.zats.mimic.node.DesktopAgent;
+import org.zkoss.zats.mimic.node.PageAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 
-public class DefaultPageNode implements PageNode {
-	private DesktopNode desktopNode;
+public class DefaultPageAgent implements PageAgent {
+	private DesktopAgent desktopNode;
 	private Page page;
 
-	public DefaultPageNode(DesktopNode desktopNode, Page page) {
+	public DefaultPageAgent(DesktopAgent desktopNode, Page page) {
 		this.desktopNode = desktopNode;
 		this.page = page;
 	}
@@ -51,11 +51,11 @@ public class DefaultPageNode implements PageNode {
 		return page.getUuid();
 	}
 
-	public List<ComponentNode> getChildren() {
-		List<ComponentNode> nodes = new ArrayList<ComponentNode>();
+	public List<ComponentAgent> getChildren() {
+		List<ComponentAgent> nodes = new ArrayList<ComponentAgent>();
 		Iterator<?> iterator = page.getRoots().iterator();
 		while (iterator.hasNext())
-			nodes.add(new DefaultComponentNode(this, (Component) iterator
+			nodes.add(new DefaultComponentAgent(this, (Component) iterator
 					.next()));
 		return nodes;
 	}
@@ -64,7 +64,7 @@ public class DefaultPageNode implements PageNode {
 		return desktopNode.getConversation();
 	}
 
-	public DesktopNode getDesktop() {
+	public DesktopAgent getDesktop() {
 		return desktopNode;
 	}
 

@@ -18,7 +18,7 @@ import java.util.Map;
 
 import org.zkoss.json.JSONs;
 import org.zkoss.zats.mimic.impl.Util;
-import org.zkoss.zats.mimic.node.ComponentNode;
+import org.zkoss.zats.mimic.node.ComponentAgent;
 import org.zkoss.zk.ui.event.Events;
 
 /**
@@ -26,9 +26,9 @@ import org.zkoss.zk.ui.event.Events;
  * 
  * @author pao
  */
-public class PostAgent {
+public class AuUtility {
 
-	private static void doMouseEvent(ComponentNode target, String cmd) {
+	private static void postMouseEvent(ComponentAgent target, String cmd) {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("pageX", 0);
 		data.put("pageY", 0);
@@ -41,32 +41,32 @@ public class PostAgent {
 		target.getConversation().postUpdate(target, cmd, data);
 	}
 
-	public static void doClick(ComponentNode target) {
-		doMouseEvent(target, Events.ON_CLICK);
+	public static void postClick(ComponentAgent target) {
+		postMouseEvent(target, Events.ON_CLICK);
 	}
 
-	public static void doRightClick(ComponentNode target) {
-		doMouseEvent(target, Events.ON_RIGHT_CLICK);
+	public static void postRightClick(ComponentAgent target) {
+		postMouseEvent(target, Events.ON_RIGHT_CLICK);
 	}
 
-	public static void doDoubleClick(ComponentNode target) {
-		doMouseEvent(target, Events.ON_DOUBLE_CLICK);
+	public static void postDoubleClick(ComponentAgent target) {
+		postMouseEvent(target, Events.ON_DOUBLE_CLICK);
 	}
 
-	public static void doMouseOver(ComponentNode target) {
-		doMouseEvent(target, Events.ON_MOUSE_OVER);
+	public static void postMouseOver(ComponentAgent target) {
+		postMouseEvent(target, Events.ON_MOUSE_OVER);
 	}
 
-	public static void doMouseOut(ComponentNode target) {
-		doMouseEvent(target, Events.ON_MOUSE_OUT);
+	public static void postMouseOut(ComponentAgent target) {
+		postMouseEvent(target, Events.ON_MOUSE_OUT);
 	}
 
-	private static void doInputEvent(ComponentNode target, Object value,
+	private static void postInputEvent(ComponentAgent target, Object value,
 			String cmd) {
 		Map<String, Object> data = new HashMap<String, Object>();
 		// date format is different between ZK5 and ZK6
 		if (value instanceof Date) {
-			BigInteger current = OperationManager.getZKCurrentVersion();
+			BigInteger current = OperationAgentManager.getZKCurrentVersion();
 			if (current.compareTo(Util.parseVersion("6.0.0")) < 0) {
 				// zk5
 				value = JSONs.d2j((Date) value);
@@ -80,33 +80,33 @@ public class PostAgent {
 		target.getConversation().postUpdate(target, cmd, data);
 	}
 
-	public static void doChange(ComponentNode target, Object value) {
-		doInputEvent(target, value, Events.ON_CHANGE);
+	public static void postChange(ComponentAgent target, Object value) {
+		postInputEvent(target, value, Events.ON_CHANGE);
 	}
 
-	public static void doChanging(ComponentNode target, String value) {
-		doInputEvent(target, value, Events.ON_CHANGING);
+	public static void postChanging(ComponentAgent target, String value) {
+		postInputEvent(target, value, Events.ON_CHANGING);
 	}
 
-	public static void doFocus(ComponentNode target) {
+	public static void postFocus(ComponentAgent target) {
 		target.getConversation().postUpdate(target, Events.ON_FOCUS, null);
 	}
 
-	public static void doBlur(ComponentNode target) {
+	public static void postBlur(ComponentAgent target) {
 		target.getConversation().postUpdate(target, Events.ON_BLUR, null);
 	}
 
-	public static void doCheck(ComponentNode target, boolean checked) {
+	public static void postCheck(ComponentAgent target, boolean checked) {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("", checked);
 		target.getConversation().postUpdate(target, Events.ON_CHECK, data);
 	}
 
-	public static void doSelect(ComponentNode target, String selection) {
-		doSelect(target, selection, selection);
+	public static void postSelect(ComponentAgent target, String selection) {
+		postSelect(target, selection, selection);
 	}
 
-	public static void doSelect(ComponentNode target, String reference,
+	public static void postSelect(ComponentAgent target, String reference,
 			String... selection) {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("items", selection);

@@ -10,10 +10,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.Searcher;
-import org.zkoss.zats.mimic.node.ComponentNode;
-import org.zkoss.zats.mimic.operation.Clickable;
-import org.zkoss.zats.mimic.operation.Selectable;
-import org.zkoss.zats.mimic.operation.Typeable;
+import org.zkoss.zats.mimic.node.ComponentAgent;
+import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zats.mimic.operation.SelectAgent;
+import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.zats.example.service.Item;
 import org.zkoss.zk.zats.example.view.ItemRenderer;
 import org.zkoss.zul.Caption;
@@ -43,9 +43,9 @@ public class SearchTest {
 	public void test() {
 		Conversations.open("/search.zul");
 
-		ComponentNode detailBox = Searcher.find("groupbox");
-		ComponentNode listbox = Searcher.find("listbox");
-		listbox.as(Selectable.class).select(0);
+		ComponentAgent detailBox = Searcher.find("groupbox");
+		ComponentAgent listbox = Searcher.find("listbox");
+		listbox.as(SelectAgent.class).select(0);
 		//verify UI logic
 		assertEquals(true, detailBox.as(Groupbox.class).isVisible());
 		//select an item & verify its detail
@@ -62,18 +62,18 @@ public class SearchTest {
 		
 		//verify detail data by label
 		Caption detailCaption = Searcher.find("#detailCaption").as(Caption.class);
-		List<ComponentNode> cellNodes = listbox.getChild(1).getChildren();
+		List<ComponentAgent> cellNodes = listbox.getChild(1).getChildren();
 		assertEquals(detailCaption.getLabel(), cellNodes.get(0).as(Listcell.class).getLabel());
 		assertEquals(priceLabel.getValue(),cellNodes.get(1).as(Listcell.class).getLabel());
 		assertEquals(quantityLabel.getValue(),cellNodes.get(2).as(Listcell.class).getLabel());
 		
 		//search & verify result
-		ComponentNode filterBox = Searcher.find("#filterBox");
-		ComponentNode searchButton = Searcher.find("#searchButton");
+		ComponentAgent filterBox = Searcher.find("#filterBox");
+		ComponentAgent searchButton = Searcher.find("#searchButton");
 		final String KEYWORD = "A";
-		filterBox.as(Typeable.class).type(KEYWORD);
-		searchButton.as(Clickable.class).click();
-		List<ComponentNode> nodes = listbox.getChildren();
+		filterBox.as(TypeAgent.class).type(KEYWORD);
+		searchButton.as(ClickAgent.class).click();
+		List<ComponentAgent> nodes = listbox.getChildren();
 		//skip listheader
 		//verify name column
 		for (int i=1 ; i <nodes.size() ; i++){

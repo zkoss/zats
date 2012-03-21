@@ -8,7 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.Searcher;
-import org.zkoss.zats.mimic.node.ComponentNode;
+import org.zkoss.zats.mimic.node.ComponentAgent;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 

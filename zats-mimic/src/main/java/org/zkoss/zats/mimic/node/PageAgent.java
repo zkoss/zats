@@ -14,7 +14,7 @@ package org.zkoss.zats.mimic.node;
 import java.util.List;
 import org.zkoss.zk.ui.Page;
 
-public interface PageNode extends Node {
+public interface PageAgent extends Agent {
 	/**
 	 * get UUID. of this node.
 	 * 
@@ -22,9 +22,9 @@ public interface PageNode extends Node {
 	 */
 	String getUuid();
 
-	List<ComponentNode> getChildren();
+	List<ComponentAgent> getChildren();
 
-	DesktopNode getDesktop();
+	DesktopAgent getDesktop();
 
 	/**
 	 * get the native Page.

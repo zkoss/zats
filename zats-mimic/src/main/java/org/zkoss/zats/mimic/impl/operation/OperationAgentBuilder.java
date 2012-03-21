@@ -11,9 +11,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl.operation;
 
-import org.zkoss.zats.mimic.node.ComponentNode;
-import org.zkoss.zats.mimic.operation.Operation;
+import org.zkoss.zats.mimic.node.ComponentAgent;
+import org.zkoss.zats.mimic.operation.OperationAgent;
 
-public interface OperationBuilder<T extends Operation> {
-	T getOperation(ComponentNode target);
+public interface OperationAgentBuilder<T extends OperationAgent> {
+	T getOperation(ComponentAgent target);
 }

@@ -1,4 +1,4 @@
-/* Clickable.java
+/* Focusable.java
 
 	Purpose:
 		
@@ -11,10 +11,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.operation;
 
-public interface Clickable extends Operation {
-	Clickable click();
+public interface FocusAgent extends OperationAgent {
+	FocusAgent focus();
 
-	Clickable doubleClick();
-
-	Clickable rightClick();
+	FocusAgent blur();
 }
