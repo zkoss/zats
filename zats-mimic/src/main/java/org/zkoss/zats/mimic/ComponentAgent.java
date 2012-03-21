@@ -1,4 +1,4 @@
-/* ComponentNode.java
+/* ComponentAgent.java
 
 	Purpose:
 		
@@ -9,28 +9,53 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
-package org.zkoss.zats.mimic.node;
+package org.zkoss.zats.mimic;
 
 import java.util.List;
-import org.zkoss.zats.mimic.ConversationException;
+import java.util.Map;
+
 import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zk.ui.Component;
 
 /**
- * The basic component.
+ * The component agent
  * 
  * @author pao
  */
 public interface ComponentAgent extends Agent {
+	
 	/**
-	 * get UUID. of this node.
+	 * get ID. of the component.
+	 * 
+	 * @return ID or null if it hasn't.
+	 */
+	String getId();
+	
+	/**
+	 * get UUID. of the component.
 	 * 
 	 * @return UUID.
 	 */
 	String getUuid();
+	
+	/**
+	 * get attribute by specify name.
+	 * 
+	 * @param name
+	 *            attribute name.
+	 * @return attribute value or null if not found or otherwise.
+	 */
+	Object getAttribute(String name);
 
 	/**
-	 * get children nodes.
+	 * get all attributes of the component.
+	 * 
+	 * @return a map of attributes.
+	 */
+	Map<String, Object> getAttributes();
+
+	/**
+	 * get children agents.
 	 * 
 	 * @return always return a list of children (may be empty).
 	 */
@@ -40,36 +65,36 @@ public interface ComponentAgent extends Agent {
 	 * get child by specify index.
 	 * 
 	 * @param index
-	 * @return return child node or null if index is out of boundary.
+	 * @return return child agent or null if index is out of boundary.
 	 */
 	ComponentAgent getChild(int index);
 
 	/**
-	 * get parent node.
+	 * get parent agent.
 	 * 
-	 * @return parent node or null if this is root node.
+	 * @return parent agent or null if this is root agent.
 	 */
 	ComponentAgent getParent();
 
 	/**
-	 * get desktop node this component belonged to.
+	 * get desktop agent this component belonged to.
 	 * 
-	 * @return desktop node.
+	 * @return desktop agent.
 	 */
 	DesktopAgent getDesktop();
 
 	/**
-	 * get page node this component belonged to.
+	 * get page agent this component belonged to.
 	 * 
-	 * @return page node.
+	 * @return page agent.
 	 */
 	PageAgent getPage();
 
 	/**
-	 * try to transfer the component node to the target class, the target class
+	 * try to transfer the component agent to the target class, the target class
 	 * is usually a {@link OperationAgent} or a native {@link Component} <br/>
 	 * 
-	 * if it cannot transfer to target class it will throw
+	 * if it cannot transfer to target class, it will throw
 	 * {@link ConversationException}.
 	 * 
 	 * @param clazz
@@ -79,7 +104,7 @@ public interface ComponentAgent extends Agent {
 	<T> T as(Class<T> clazz);
 
 	/**
-	 * check the component node can transfer to the target class or not
+	 * check the component agent can transfer to the target class or not
 	 * 
 	 * @param clazz
 	 *            the class cast to.
@@ -88,13 +113,13 @@ public interface ComponentAgent extends Agent {
 	<T> boolean is(Class<T> clazz);
 	
 	/**
-	 * find components matched specify selector base on this component node.
+	 * find components matched specify selector base on this component agent.
 	 * @param selector
 	 */
 	ComponentAgent find(String selector);
 	
 	/**
-	 * find components matched specify selector base on this component node.
+	 * find components matched specify selector base on this component agent.
 	 * @param selector
 	 */
 	List<ComponentAgent> findAll(String selector);

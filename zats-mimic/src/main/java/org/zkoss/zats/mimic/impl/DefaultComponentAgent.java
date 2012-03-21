@@ -1,4 +1,4 @@
-/* DefaultComponentNode.java
+/* DefaultComponentAgent.java
 
 	Purpose:
 		
@@ -9,35 +9,36 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
-package org.zkoss.zats.mimic.impl.node;
+package org.zkoss.zats.mimic.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversation;
 import org.zkoss.zats.mimic.ConversationException;
+import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zats.mimic.PageAgent;
 import org.zkoss.zats.mimic.Searcher;
 import org.zkoss.zats.mimic.impl.operation.OperationAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.OperationAgentManager;
-import org.zkoss.zats.mimic.node.ComponentAgent;
-import org.zkoss.zats.mimic.node.DesktopAgent;
-import org.zkoss.zats.mimic.node.PageAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zk.ui.Component;
 
 /**
- * The default implement of component node. This performs operations through
+ * The default implement of component agent. This performs operations through
  * {@link OperationAgentManager}.
  * 
  * @author pao
  */
 public class DefaultComponentAgent implements ComponentAgent {
 
-	private PageAgent pageNode;
+	private PageAgent pageAgent;
 	private Component comp;
 
-	public DefaultComponentAgent(PageAgent pageNode, Component component) {
-		this.pageNode = pageNode;
+	public DefaultComponentAgent(PageAgent pageAgent, Component component) {
+		this.pageAgent = pageAgent;
 		this.comp = component;
 	}
 
@@ -63,21 +64,21 @@ public class DefaultComponentAgent implements ComponentAgent {
 
 	public List<ComponentAgent> getChildren() {
 		List<Component> children = comp.getChildren();
-		List<ComponentAgent> nodes = new ArrayList<ComponentAgent>(
+		List<ComponentAgent> agents = new ArrayList<ComponentAgent>(
 				children.size());
 		for (Component child : children)
-			nodes.add(new DefaultComponentAgent(pageNode, child));
-		return nodes;
+			agents.add(new DefaultComponentAgent(pageAgent, child));
+		return agents;
 	}
 
 	public ComponentAgent getChild(int index) {
 		Component child = (Component) comp.getChildren().get(index);
-		return child != null ? new DefaultComponentAgent(pageNode, child) : null;
+		return child != null ? new DefaultComponentAgent(pageAgent, child) : null;
 	}
 
 	public ComponentAgent getParent() {
 		Component parent = comp.getParent();
-		return parent != null ? new DefaultComponentAgent(pageNode, parent)
+		return parent != null ? new DefaultComponentAgent(pageAgent, parent)
 				: null;
 	}
 
@@ -86,11 +87,11 @@ public class DefaultComponentAgent implements ComponentAgent {
 	}
 
 	public DesktopAgent getDesktop() {
-		return pageNode.getDesktop();
+		return pageAgent.getDesktop();
 	}
 
 	public PageAgent getPage() {
-		return pageNode;
+		return pageAgent;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -131,16 +132,10 @@ public class DefaultComponentAgent implements ComponentAgent {
 		return comp.equals(obj);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.zkoss.zats.mimic.node.ComponentNode#find(java.lang.String)
-	 */
 	public ComponentAgent find(String selector) {
 		return Searcher.find(this,selector);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.zkoss.zats.mimic.node.ComponentNode#findAll(java.lang.String)
-	 */
 	public List<ComponentAgent> findAll(String selector) {
 		return Searcher.findAll(this,selector);
 	}
@@ -158,14 +153,14 @@ public class DefaultComponentAgent implements ComponentAgent {
 		dump(sb,this,0);
 		System.out.println(sb.toString());
 	}
-	private void dump(StringBuilder sb, ComponentAgent node,int indent) {
-		List<ComponentAgent> children = node.getChildren();
+	private void dump(StringBuilder sb, ComponentAgent agent,int indent) {
+		List<ComponentAgent> children = agent.getChildren();
 		StringBuffer idt = new StringBuffer();
 		for(int i=0;i<indent;i++){
 			idt.append("  ");
 		}
 		sb.append(idt);
-		Component zkc = node.as(Component.class);
+		Component zkc = agent.as(Component.class);
 		String nm = zkc.getClass().getSimpleName(); 
 		sb.append("<");
 		sb.append(nm);
@@ -190,5 +185,12 @@ public class DefaultComponentAgent implements ComponentAgent {
 			sb.append(idt);
 			sb.append("</").append(nm).append(">\n");
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.zkoss.zats.mimic.Agent#getDelegatee()
+	 */
+	public Object getDelegatee() {
+		return comp;
 	}
 }

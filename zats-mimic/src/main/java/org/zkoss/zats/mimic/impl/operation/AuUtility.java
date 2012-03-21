@@ -1,4 +1,4 @@
-/* PostAgent.java
+/* AuUtility.java
 
 	Purpose:
 		
@@ -17,8 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.zkoss.json.JSONs;
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.Util;
-import org.zkoss.zats.mimic.node.ComponentAgent;
 import org.zkoss.zk.ui.event.Events;
 
 /**

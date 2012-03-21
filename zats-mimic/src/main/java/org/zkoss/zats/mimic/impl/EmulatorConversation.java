@@ -30,13 +30,12 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
 import org.eclipse.jetty.util.UrlEncoded;
 import org.zkoss.json.JSONValue;
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversation;
 import org.zkoss.zats.mimic.ConversationException;
+import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.impl.emulator.Emulator;
 import org.zkoss.zats.mimic.impl.emulator.EmulatorBuilder;
-import org.zkoss.zats.mimic.impl.node.DefaultDesktopAgent;
-import org.zkoss.zats.mimic.node.ComponentAgent;
-import org.zkoss.zats.mimic.node.DesktopAgent;
 import org.zkoss.zk.ui.Desktop;
 
 /**
@@ -48,7 +47,7 @@ public class EmulatorConversation implements Conversation {
 	private static Logger logger;
 	private Emulator emulator;
 	private File web;
-	private DesktopAgent desktopNode;
+	private DesktopAgent desktopAgent;
 	private List<String> cookies;
 
 	public EmulatorConversation() {
@@ -103,7 +102,7 @@ public class EmulatorConversation implements Conversation {
 			Desktop desktop = (Desktop) emulator.getRequestAttributes().get(
 					"javax.zkoss.zk.ui.desktop");
 			// TODO, what if a non-zk(zul) page, throw exception?
-			desktopNode = new DefaultDesktopAgent(this, desktop);
+			desktopAgent = new DefaultDesktopAgent(this, desktop);
 		} catch (Exception e) {
 			throw new ConversationException("", e);
 		} finally {
@@ -115,11 +114,11 @@ public class EmulatorConversation implements Conversation {
 		// clean desktop
 		InputStream is = null;
 		try {
-			if (desktopNode != null) {
+			if (desktopAgent != null) {
 				// use au to remove a desktop
 				String url = MessageFormat.format(
 						"/zkau?dtid={0}&cmd_0=rmDesktop&opt_0=i",
-						desktopNode.getId());
+						desktopAgent.getId());
 				HttpURLConnection huc = getConnection(url, "GET");
 				huc.connect();
 				is = huc.getInputStream();
@@ -130,25 +129,25 @@ public class EmulatorConversation implements Conversation {
 			logger.log(Level.WARNING, "", e);
 		} finally {
 			Util.close(is);
-			desktopNode = null;
+			desktopAgent = null;
 			cookies = new LinkedList<String>();
 		}
 	}
 
 	public DesktopAgent getDesktop() {
-		return desktopNode;
+		return desktopAgent;
 	}
 
 	public HttpSession getSession() {
-		if (desktopNode == null)
+		if (desktopAgent == null)
 			return null;
-		return (HttpSession) desktopNode.cast().getSession().getNativeSession();
+		return (HttpSession) desktopAgent.getDesktop().getSession().getNativeSession();
 	}
 
 	public void postUpdate(ComponentAgent target, String cmd,
 			Map<String, Object> data) {
 		// prepare au data
-		String dtid = UrlEncoded.encodeString(desktopNode.getId());
+		String dtid = UrlEncoded.encodeString(desktopAgent.getId());
 		cmd = UrlEncoded.encodeString(cmd);
 		String uuid = UrlEncoded.encodeString(target.getUuid());
 		String param;

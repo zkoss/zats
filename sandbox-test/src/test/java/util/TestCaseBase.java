@@ -6,9 +6,9 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.Searcher;
-import org.zkoss.zats.mimic.node.ComponentAgent;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 

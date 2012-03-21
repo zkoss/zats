@@ -1,4 +1,4 @@
-/* DefaultDesktopNode.java
+/* DefaultDesktopAgent.java
 
 	Purpose:
 		
@@ -9,15 +9,15 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
-package org.zkoss.zats.mimic.impl.node;
+package org.zkoss.zats.mimic.impl;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.zkoss.zats.mimic.Conversation;
-import org.zkoss.zats.mimic.node.DesktopAgent;
-import org.zkoss.zats.mimic.node.PageAgent;
+import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zats.mimic.PageAgent;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 
@@ -51,14 +51,14 @@ public class DefaultDesktopAgent implements DesktopAgent {
 	}
 
 	public List<PageAgent> getPages() {
-		List<PageAgent> nodes = new ArrayList<PageAgent>();
+		List<PageAgent> agents = new ArrayList<PageAgent>();
 		Iterator<?> iter = desktop.getPages().iterator();
 		while (iter.hasNext())
-			nodes.add(new DefaultPageAgent(this, (Page) iter.next()));
-		return nodes;
+			agents.add(new DefaultPageAgent(this, (Page) iter.next()));
+		return agents;
 	}
 
-	public Desktop cast() {
+	public Desktop getDesktop() {
 		return desktop;
 	}
 
@@ -70,6 +70,9 @@ public class DefaultDesktopAgent implements DesktopAgent {
 	@Override
 	public boolean equals(Object obj) {
 		return desktop.equals(obj);
+	}
+	public Object getDelegatee() {
+		return desktop;
 	}
 	
 	public String toString(){

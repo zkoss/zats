@@ -1,4 +1,4 @@
-/* Clickable.java
+/* ClickAgent.java
 
 	Purpose:
 		
@@ -12,9 +12,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.operation;
 
 public interface ClickAgent extends OperationAgent {
-	ClickAgent click();
+	void click();
 
-	ClickAgent doubleClick();
+	void doubleClick();
 
-	ClickAgent rightClick();
+	void rightClick();
 }

@@ -1,4 +1,4 @@
-/* Operation.java
+/* OperationAgent.java
 
 	Purpose:
 		
@@ -11,13 +11,13 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.operation;
 
-import org.zkoss.zats.mimic.node.ComponentAgent;
+import org.zkoss.zats.mimic.Agent;
 
 /**
- * operation of component markup interface
+ * operation of client side behavior
  * 
  * @author pao
  */
-public interface OperationAgent /*extends ComponentAgent*/{
+public interface OperationAgent extends Agent{
 
 }

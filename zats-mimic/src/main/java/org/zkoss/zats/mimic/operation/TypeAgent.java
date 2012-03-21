@@ -1,4 +1,4 @@
-/* Typeable.java
+/* TypeAgent.java
 
 	Purpose:
 		
@@ -28,5 +28,5 @@ public interface TypeAgent extends OperationAgent {
 	 *            the input value
 	 * @return self
 	 */
-	public TypeAgent type(String value);
+	public void type(String value);
 }

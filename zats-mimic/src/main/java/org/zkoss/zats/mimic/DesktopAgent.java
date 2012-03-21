@@ -1,4 +1,4 @@
-/* Node.java
+/* DesktopAgent.java
 
 	Purpose:
 		
@@ -9,31 +9,24 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
-package org.zkoss.zats.mimic.node;
+package org.zkoss.zats.mimic;
 
+import java.util.List;
 import java.util.Map;
-import org.zkoss.zats.mimic.Conversation;
 
-/**
- * A interface represented a tree node from ZUML structure.
- * 
- * @author pao
- */
-public interface Agent {
+import org.zkoss.zk.ui.Desktop;
+
+public interface DesktopAgent extends Agent {
 	/**
-	 * get ID. of this node.
+	 * get ID. of this the desktop.
 	 * 
 	 * @return ID or null if it hasn't.
 	 */
 	String getId();
-
-	/**
-	 * get type name of this node.
-	 * 
-	 * @return type name
-	 */
-	String getType();
-
+	
+	List<PageAgent> getPages();
+	
+	
 	/**
 	 * get attribute by specify name.
 	 * 
@@ -44,16 +37,16 @@ public interface Agent {
 	Object getAttribute(String name);
 
 	/**
-	 * get all attributes of this node.
+	 * get all attributes of the desktop.
 	 * 
 	 * @return a map of attributes.
 	 */
 	Map<String, Object> getAttributes();
 
 	/**
-	 * get conversation this node belonged to.
+	 * get the native Desktop.
 	 * 
-	 * @return conversation
+	 * @return desktop
 	 */
-	Conversation getConversation();
+	Desktop getDesktop();
 }

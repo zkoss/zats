@@ -1,4 +1,4 @@
-/* GenericCheckableBuilder.java
+/* GenericCheckAgentBuilder.java
 
 	Purpose:
 		
@@ -11,18 +11,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl.operation;
 
-import org.zkoss.zats.mimic.node.ComponentAgent;
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 
 public class GenericCheckAgentBuilder implements OperationAgentBuilder<CheckAgent> {
 
 	public CheckAgent getOperation(final ComponentAgent target) {
-		return new CheckAgent() {
-			public CheckAgent check(boolean checked) {
-				AuUtility.postCheck(target, checked);
-				return this;
-			}
-		};
+		return new CheckAgentImpl(target);
 	}
+	
+	class CheckAgentImpl extends AgentDelegator implements CheckAgent{
+		public CheckAgentImpl(ComponentAgent delegatee) {
+			super(delegatee);
+		}
 
+		public void check(boolean checked) {
+			AuUtility.postCheck(target, checked);
+		}
+	}
 }

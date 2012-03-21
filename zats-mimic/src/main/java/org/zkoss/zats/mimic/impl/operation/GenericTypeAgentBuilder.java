@@ -1,4 +1,4 @@
-/* GenericTypeableBuilder.java
+/* GenericTypeAgentBuilder.java
 
 	Purpose:
 		
@@ -17,8 +17,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.ConversationException;
-import org.zkoss.zats.mimic.node.ComponentAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 
 /**
@@ -33,7 +34,7 @@ public class GenericTypeAgentBuilder implements OperationAgentBuilder<TypeAgent>
 	public final static int DATE = 3;
 	public final static int TIME = 4;
 	private int type;
-	private SimpleDateFormat df;
+	private static SimpleDateFormat df;
 	private SimpleDateFormat dtf;
 	private SimpleDateFormat tf;
 
@@ -47,48 +48,53 @@ public class GenericTypeAgentBuilder implements OperationAgentBuilder<TypeAgent>
 	}
 
 	public TypeAgent getOperation(final ComponentAgent target) {
-		return new TypeAgent() {
-			public TypeAgent type(String value) {
-				try {
-					// parse value
-					value = value.trim();
-					Object parsed = null;
-					if (type == TEXT)
-						parsed = value;
-					else if (type == INTEGER)
-						parsed = new BigInteger(value);
-					else if (type == DECIMAL)
-						parsed = new BigDecimal(value);
-					else if (type == DATE) {
-						parsed = parse(df, value);
-						if (parsed == null)
-							parsed = parse(dtf, value);
-						if (parsed == null)
-							throw new ParseException(value
-									+ " can't parse to date", 0);
-					} else if (type == TIME) {
-						parsed = parse(tf, value);
-						if (parsed == null)
-							throw new ParseException(value
-									+ " can't parse to time", 0);
-					}
+		return new TypeAgentImpl(target);
+	}
+	
+	class TypeAgentImpl extends AgentDelegator implements TypeAgent{
+		public TypeAgentImpl(ComponentAgent delegatee) {
+			super(delegatee);
+		}
 
-					AuUtility.postFocus(target);
-					AuUtility.postChanging(target, value);
-					AuUtility.postChange(target, parsed);
-					AuUtility.postBlur(target);
-
-				} catch (Exception e) {
-					throw new ConversationException("value \"" + value
-							+ "\"is invalid for the component: "
-							+ target.getType(), e);
+		public void type(String value) {
+			try {
+				// parse value
+				value = value.trim();
+				Object parsed = null;
+				if (type == TEXT)
+					parsed = value;
+				else if (type == INTEGER)
+					parsed = new BigInteger(value);
+				else if (type == DECIMAL)
+					parsed = new BigDecimal(value);
+				else if (type == DATE) {
+					parsed = parse(df, value);
+					if (parsed == null)
+						parsed = parse(dtf, value);
+					if (parsed == null)
+						throw new ParseException(value
+								+ " can't parse to date", 0);
+				} else if (type == TIME) {
+					parsed = parse(tf, value);
+					if (parsed == null)
+						throw new ParseException(value
+								+ " can't parse to time", 0);
 				}
-				return this;
+
+				AuUtility.postFocus(target);
+				AuUtility.postChanging(target, value);
+				AuUtility.postChange(target, parsed);
+				AuUtility.postBlur(target);
+
+			} catch (Exception e) {
+				throw new ConversationException("value \"" + value
+						+ "\"is invalid for the component: "
+						+ target, e);
 			}
-		};
+		}
 	}
 
-	private Date parse(DateFormat f, String value) {
+	private static Date parse(DateFormat f, String value) {
 		try {
 			return f.parse(value);
 		} catch (Exception e) {

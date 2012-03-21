@@ -12,7 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic;
 
 import javax.servlet.http.HttpSession;
-import org.zkoss.zats.mimic.node.DesktopAgent;
 
 public class Conversations {
 	private static ThreadLocal<Conversation> local = new ThreadLocal<Conversation>();
@@ -24,7 +23,7 @@ public class Conversations {
 			local.get().start(resourceRoot);
 		} catch (Throwable e) {
 			local.remove();
-			throw new ConversationException("", e);
+			throw new ConversationException(e.getMessage(), e);
 		}
 	}
 
@@ -48,7 +47,7 @@ public class Conversations {
 	 */
 	public static void open(String zulPath) {
 		if (local.get() == null)
-			throw new ConversationException("conversation is close");
+			throw new ConversationException("not in a running converation");
 		local.get().open(zulPath);
 	}
 
@@ -65,7 +64,7 @@ public class Conversations {
 	 */
 	public static DesktopAgent getDesktop() {
 		if (local.get() == null)
-			throw new ConversationException("conversation is close");
+			throw new ConversationException("not in a running converation");
 		return local.get().getDesktop();
 	}
 
@@ -76,7 +75,7 @@ public class Conversations {
 	 */
 	public static HttpSession getSession() {
 		if (local.get() == null)
-			throw new ConversationException("conversation is close");
+			throw new ConversationException("not in a running converation");
 		return local.get().getSession();
 	}
 }

@@ -5,9 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.zkoss.zats.mimic.Searcher.find;
 
 import org.junit.Test;
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.Searcher;
-import org.zkoss.zats.mimic.node.ComponentAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zul.Textbox;
 

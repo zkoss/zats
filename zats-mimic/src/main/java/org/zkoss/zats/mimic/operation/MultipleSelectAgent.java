@@ -1,4 +1,4 @@
-/* MultipleSelectable.java
+/* MultipleSelectAgent.java
 
 	Purpose:
 		
@@ -26,7 +26,7 @@ public interface MultipleSelectAgent extends OperationAgent {
 	 * @param index
 	 *            the index array of items to select.
 	 */
-	public MultipleSelectAgent select(int index);
+	public void select(int index);
 
 	/**
 	 * to deselect a item, it will not clean another selection. if you deselect
@@ -35,5 +35,5 @@ public interface MultipleSelectAgent extends OperationAgent {
 	 * @param index
 	 * @return
 	 */
-	public MultipleSelectAgent deselect(int index);
+	public void deselect(int index);
 }

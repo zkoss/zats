@@ -4,8 +4,8 @@ import static org.zkoss.zats.mimic.Searcher.find;
 
 import javax.servlet.http.HttpSession;
 
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
-import org.zkoss.zats.mimic.node.ComponentAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 

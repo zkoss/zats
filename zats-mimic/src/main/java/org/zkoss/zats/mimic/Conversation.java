@@ -13,8 +13,6 @@ package org.zkoss.zats.mimic;
 
 import java.util.Map;
 import javax.servlet.http.HttpSession;
-import org.zkoss.zats.mimic.node.ComponentAgent;
-import org.zkoss.zats.mimic.node.DesktopAgent;
 
 public interface Conversation {
 	/**
@@ -51,7 +49,7 @@ public interface Conversation {
 	 * post an asynchronous update event.
 	 * 
 	 * @param target
-	 *            the component node which performed this event
+	 *            the component agent which performed this event
 	 * @param command
 	 *            command
 	 * @param data
