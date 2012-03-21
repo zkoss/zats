@@ -66,23 +66,25 @@ public class OperationAgentManager {
 				new GenericFocusAgentBuilder());
 
 		registerBuilder("*","*", InputElement.class, TypeAgent.class,
-				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.TEXT));
+				new AbstractTypeAgentBuilder.TextTypeAgentBuilder());
 		registerBuilder("*","*", Intbox.class, TypeAgent.class,
-				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.INTEGER));
+				new AbstractTypeAgentBuilder.IntegerTypeAgentBuilder());
 		registerBuilder("*","*", Longbox.class, TypeAgent.class,
-				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.INTEGER));
+				new AbstractTypeAgentBuilder.IntegerStringTypeAgentBuilder());
 		registerBuilder("*","*", Spinner.class, TypeAgent.class,
-				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.INTEGER));
+				new AbstractTypeAgentBuilder.IntegerTypeAgentBuilder());
+		
 		registerBuilder("*","*", Decimalbox.class, TypeAgent.class,
-				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.DECIMAL));
+				new AbstractTypeAgentBuilder.DecimalStringTypeAgentBuilder());
 		registerBuilder("*","*", Doublebox.class, TypeAgent.class,
-				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.DECIMAL));
+				new AbstractTypeAgentBuilder.DecimalTypeAgentBuilder());
 		registerBuilder("*","*", Doublespinner.class, TypeAgent.class,
-				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.DECIMAL));
+				new AbstractTypeAgentBuilder.DecimalTypeAgentBuilder());
+		
 		registerBuilder("*","*", Datebox.class, TypeAgent.class,
-				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.DATE));
+				new AbstractTypeAgentBuilder.DateTypeAgentBuilder());
 		registerBuilder("*","*", Timebox.class, TypeAgent.class,
-				new GenericTypeAgentBuilder(GenericTypeAgentBuilder.TIME));
+				new AbstractTypeAgentBuilder.TimeTypeAgentBuilder());
 
 		registerBuilder("*","*", Listbox.class, SelectAgent.class,
 				new ListboxSelectAgentBuilder());
