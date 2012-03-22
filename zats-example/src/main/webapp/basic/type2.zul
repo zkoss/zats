@@ -1,0 +1,56 @@
+<zk>
+	<window >
+		<hbox>
+		<zscript><![CDATA[//@DECLARATION 
+			class TimeConstraint implements Constraint{
+
+				public void validate(Component comp, Object value) throws WrongValueException {
+					Date date = (Date)value;
+					int h = -1;
+					if(date!=null){
+						java.util.Calendar c = java.util.Calendar.getInstance();
+						c.setTime(date);
+						h = c.get(java.util.Calendar.HOUR_OF_DAY);
+					}
+					if(h < 12){
+						throw new WrongValueException(comp,"Hours must large than 12, but is "+h);
+					}
+				}
+			}
+			TimeConstraint c = new TimeConstraint();
+			java.text.SimpleDateFormat f1 = new java.text.SimpleDateFormat("yyyyMMdd");
+			java.text.SimpleDateFormat f2 = new java.text.SimpleDateFormat("HH:mm");
+		]]></zscript>
+		
+		<vbox>
+			<hbox>bandbox <bandbox id="inp1" width="100px" constraint="no empty" onChange='l1.setValue(self.getValue())'/>(no empty)</hbox>
+			<hbox>combobox <combobox id="inp2" width="100px" constraint="no empty" onChange='l2.setValue(self.getValue())'/>(no empty)</hbox>
+			<hbox>datebox <datebox id="inp3" width="100px" constraint="after 20120101" onChange='l3.setValue(f1.format(self.getValue()))' format="ddMMyyyy"/>(after 20120101)</hbox>
+			<hbox>decimalbox <decimalbox id="inp4" width="100px" constraint="no negative" onChange='l4.setValue(""+self.getValue().doubleValue())' format="#,###.00"/>(no negative)</hbox>
+			<hbox>doublebox <doublebox id="inp5" width="100px" constraint="no negative" onChange='l5.setValue(""+self.getValue())' format="#,###.00"/>(no negative)</hbox>
+			<hbox>doublespinner <doublespinner id="inp6" width="100px" constraint="no negative" onChange='l6.setValue(""+self.getValue())' format="#,###.00"/>(no negative)</hbox>
+			<hbox>intbox <intbox id="inp7" width="100px" constraint="no negative" onChange='l7.setValue(""+self.getValue())' format="#,###"/>(no negative)</hbox>
+			<hbox>longbox <longbox id="inp8" width="100px" constraint="no negative" onChange='l8.setValue(""+self.getValue())' format="#,###"/>(no negative)</hbox>
+			<hbox>spinner <spinner id="inp9" width="100px" constraint="no negative" onChange='l9.setValue(""+self.getValue())' format="#,###"/>(no negative)</hbox>
+			<hbox>textbox <textbox id="inp10" width="100px" constraint="no empty" onChange='l10.setValue(self.getValue())'/>(no empty)</hbox>
+			<hbox>timebox <timebox id="inp11" width="100px" constraint="${c}" onChange='l11.setValue(f2.format(self.getValue()))' format="mm:HH"/>()</hbox>
+		</vbox>
+				
+		<vbox>
+			<hbox><label id="l1" /></hbox>
+			<hbox><label id="l2" /></hbox>
+			<hbox><label id="l3" /></hbox> <!-- value="@bind(vm.dateboxVal) @converter('formatedDate',format='yyyyMMdd')"/> -->
+			<hbox><label id="l4" /></hbox>
+			<hbox><label id="l5" /></hbox>
+			<hbox><label id="l6" /></hbox>
+			<hbox><label id="l7" /></hbox>
+			<hbox><label id="l8" /></hbox>
+			<hbox><label id="l9" /></hbox>
+			<hbox><label id="l10"/></hbox>
+			<hbox><label id="l11" /></hbox> <!-- value="@bind(vm.timeboxVal) @converter('formatedDate',format='HH:mm')" --> 
+		</vbox>		
+
+		</hbox>
+		<button label="focus"></button>
+	</window>
+</zk>
