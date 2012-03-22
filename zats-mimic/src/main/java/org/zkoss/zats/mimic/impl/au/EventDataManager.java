@@ -106,8 +106,8 @@ public class EventDataManager {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static  
-		void registerBuilder(String startVersion, String endVersion, String eventClazz, EventDataBuilder builder) {
-		if (startVersion == null || endVersion == null || eventClazz == null || builder == null)
+		void registerBuilder(String startVersion, String endVersion, String eventClazz, String builderClass) {
+		if (startVersion == null || endVersion == null || eventClazz == null || builderClass == null)
 			throw new IllegalArgumentException();
 		
 		if(!Util.checkVersion(startVersion,endVersion)) return;
@@ -118,6 +118,16 @@ public class EventDataManager {
 		} catch (ClassNotFoundException e) {
 			throw new IllegalArgumentException("compClazz "+eventClazz+" not found ", e);
 		}
+		EventDataBuilder builder = null;
+		
+		try{
+			Class buildClz = Class.forName(builderClass);
+			builder = (EventDataBuilder)buildClz.newInstance();
+		}catch(Exception x){
+			throw new IllegalArgumentException(x.getMessage(),x);
+		}
+		
+		
 		if(Event.class.isAssignableFrom(clz)){
 			registerBuilder(startVersion,endVersion,clz,builder);
 		}else{

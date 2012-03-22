@@ -143,9 +143,9 @@ public class OperationAgentManager {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static <T extends OperationAgent> 
-	void registerBuilder(String startVersion, String endVersion, String compClazz,Class<T> opClass, OperationAgentBuilder<T> builder) {
+	void registerBuilder(String startVersion, String endVersion, String compClazz,Class<T> opClass, String builderClazz) {
 		if (startVersion == null || endVersion == null || compClazz == null
-				|| opClass == null || builder == null)
+				|| opClass == null || builderClazz == null)
 			throw new IllegalArgumentException();
 		
 		if(!Util.checkVersion(startVersion,endVersion)) return;
@@ -156,6 +156,14 @@ public class OperationAgentManager {
 		} catch (ClassNotFoundException e) {
 			throw new IllegalArgumentException("compClazz "+compClazz+" not found ", e);
 		}
+		OperationAgentBuilder<T> builder = null;
+		try{
+			Class buildClz = Class.forName(builderClazz);
+			builder = (OperationAgentBuilder)buildClz.newInstance();
+		}catch(Exception x){
+			throw new IllegalArgumentException(x.getMessage(), x);
+		}
+		
 		if(Component.class.isAssignableFrom(clz)){
 			registerBuilder(startVersion,endVersion,clz,opClass,builder);
 		}else{
