@@ -12,18 +12,17 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.impl.operation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.operation.RendererAgent;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Grid;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Rows;
+import org.zkoss.zul.event.RenderEvent;
 import org.zkoss.zul.impl.LoadStatus;
 /**
  * 
@@ -60,7 +59,8 @@ public class GridRendererAgentBuilder implements OperationAgentBuilder<RendererA
 				}
 			}
 			if(ids.size()==0) return;
-			AuUtility.postOnRender(target, ids.toArray(new String[ids.size()]));
+//			AuUtility.postOnRender(target, ids.toArray(new String[ids.size()]));
+			AuUtility2.postUpdate(target, new RenderEvent(Events.ON_RENDER, new HashSet(ids)));
 		};
 	}
 	

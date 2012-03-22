@@ -16,12 +16,45 @@ import java.math.BigInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.zkoss.Version;
+
 /**
  * Utilities for implementation.
  * 
  * @author pao
  */
 public class Util {
+	
+	private static BigInteger zkVersion; // current zk version
+	
+	static {
+		// load current zk version
+		try {
+			zkVersion = Util.parseVersion(Version.class.getField("UID").get(null).toString());
+		} catch (Throwable e) {
+			throw new RuntimeException("cannot load zk", e);
+		}
+	}
+	
+	public static BigInteger getZKVersion() {
+		return zkVersion;
+	}
+	
+	
+	public static boolean checkVersion(String startVersion, String endVersion){
+		// check version
+		// If current isn't between start and end version, ignore this register.
+		BigInteger start = "*".equals(startVersion.trim()) ? BigInteger.ZERO
+				: Util.parseVersion(startVersion);
+		BigInteger end = "*".equals(endVersion.trim()) ? BigInteger
+				.valueOf(Long.MAX_VALUE) : Util.parseVersion(endVersion);
+		if (start == null || end == null)
+			throw new IllegalArgumentException("wrong version format");
+		if (zkVersion.compareTo(start) < 0 || zkVersion.compareTo(end) > 0)
+			return false;
+		return true;
+	}
+	
 	/**
 	 * close resource without any exception.
 	 * 

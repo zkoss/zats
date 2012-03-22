@@ -13,6 +13,8 @@ package org.zkoss.zats.mimic.impl.operation;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.OpenEvent;
 
 /**
  * @author dennis
@@ -28,7 +30,8 @@ public class GenericOpenAgentBuilder implements OperationAgentBuilder<OpenAgent>
 		}
 
 		public void open(boolean open) {
-			AuUtility.postOnOpen(target,open,null,null);
+			OpenEvent evt = new OpenEvent(Events.ON_OPEN,target.getComponent(),open,null,null);
+			AuUtility2.postUpdate(target, evt);
 		}
 	}
 

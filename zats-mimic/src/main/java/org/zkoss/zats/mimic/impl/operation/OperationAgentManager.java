@@ -11,20 +11,18 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl.operation;
 
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.zkoss.Version;
 import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
-import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
-import org.zkoss.zats.mimic.operation.OpenAgent;
-import org.zkoss.zats.mimic.operation.RendererAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
+import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
+import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
+import org.zkoss.zats.mimic.operation.RendererAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zhtml.Input;
@@ -47,18 +45,9 @@ import org.zkoss.zul.impl.InputElement;
 
 public class OperationAgentManager {
 	private static Map<Key, OperationAgentBuilder<? extends OperationAgent>> builders;
-	private static BigInteger current; // current zk version
 
 	static {
 		builders = new HashMap<OperationAgentManager.Key, OperationAgentBuilder<? extends OperationAgent>>();
-
-		// load current zk version
-		try {
-			current = Util.parseVersion(Version.class.getField("UID").get(null)
-					.toString());
-		} catch (Throwable e) {
-			throw new RuntimeException("cannot load zk", e);
-		}
 
 		// TODO load default implement
 		registerBuilder("*","*", AbstractComponent.class, ClickAgent.class,
@@ -159,7 +148,7 @@ public class OperationAgentManager {
 				|| opClass == null || builder == null)
 			throw new IllegalArgumentException();
 		
-		if(!checkVersion(startVersion,endVersion)) return;
+		if(!Util.checkVersion(startVersion,endVersion)) return;
 		
 		Class clz = null;
 		try {
@@ -173,20 +162,7 @@ public class OperationAgentManager {
 			throw new IllegalArgumentException("compClazz "+compClazz+" is not a component");
 		}
 	}
-	
-	private static boolean checkVersion(String startVersion, String endVersion){
-		// check version
-		// If current isn't between start and end version, ignore this register.
-		BigInteger start = "*".equals(startVersion.trim()) ? BigInteger.ZERO
-				: Util.parseVersion(startVersion);
-		BigInteger end = "*".equals(endVersion.trim()) ? BigInteger
-				.valueOf(Long.MAX_VALUE) : Util.parseVersion(endVersion);
-		if (start == null || end == null)
-			throw new IllegalArgumentException("wrong version format");
-		if (current.compareTo(start) < 0 || current.compareTo(end) > 0)
-			return false;
-		return true;
-	}
+
 	
 	/**
 	 * register a operation builder mapping to component and operation. We can
@@ -214,7 +190,7 @@ public class OperationAgentManager {
 				|| opClass == null || builder == null)
 			throw new IllegalArgumentException();
 
-		if(!checkVersion(startVersion,endVersion)) return;
+		if(!Util.checkVersion(startVersion,endVersion)) return;
 
 		// component and operation classes mapping to builder
 		// builder would be replace by later register
@@ -234,10 +210,6 @@ public class OperationAgentManager {
 			c = c.getSuperclass();
 		}
 		return null; // not found
-	}
-
-	public static BigInteger getZKCurrentVersion() {
-		return current;
 	}
 
 	/**

@@ -14,7 +14,9 @@ package org.zkoss.zats.mimic.impl.operation;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.KeyEvent;
 
 /**
  * @author dennis
@@ -22,8 +24,8 @@ import org.zkoss.zk.ui.event.Events;
  */
 public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<KeyStrokeAgent> {
 	
-	private static final int ENTER = 13;
-	private static final int ESC = 27;
+//	private static final int ENTER = 13;
+//	private static final int ESC = 27;
 	
 	public KeyStrokeAgent getOperation(final ComponentAgent target) {
 		return new KeyStrokeAgentImpl(target);
@@ -49,7 +51,7 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<KeySt
 		}
 
 		private void doOnCtrlKey(final String key) {
-			ComponentAgent et = AuUtility.lookupEventTarget(target,Events.ON_CTRL_KEY);
+			ComponentAgent et = AuUtility2.lookupEventTarget(target,Events.ON_CTRL_KEY);
 			if(et==null) return;
 			
 			//code refer to Widget.js#setCtrlKeys()
@@ -126,20 +128,22 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<KeySt
 			if(keyCode<0){
 				throw new AgentException("Code code not found: "+key);
 			}
-			
-			AuUtility.postKeyEvent(et, Events.ON_CTRL_KEY, keyCode, ctrlKey, shiftKey, altKey,target.getUuid());
+			AuUtility2.postUpdate(et, new KeyEvent(Events.ON_CTRL_KEY,et.getComponent(),keyCode, ctrlKey, shiftKey, altKey,target.getComponent()));
+//			AuUtility.postKeyEvent(et, Events.ON_CTRL_KEY, keyCode, ctrlKey, shiftKey, altKey,target.getUuid());
 		}
 
 		private void doOnCancel() {
-			ComponentAgent et = AuUtility.lookupEventTarget(target,Events.ON_CANCEL);
+			ComponentAgent et = AuUtility2.lookupEventTarget(target,Events.ON_CANCEL);
 			if(et==null) return;
-			AuUtility.postKeyEvent(et, Events.ON_CANCEL, ESC,false,false,false,target.getUuid());
+			AuUtility2.postUpdate(et, new Event(Events.ON_CANCEL,et.getComponent()));
+//			AuUtility.postKeyEvent(et, Events.ON_CANCEL, ESC,false,false,false,target.getUuid());
 		}
 
 		private void doOnOK() {
-			ComponentAgent et = AuUtility.lookupEventTarget(target,Events.ON_OK);
+			ComponentAgent et = AuUtility2.lookupEventTarget(target,Events.ON_OK);
 			if(et==null) return;
-			AuUtility.postKeyEvent(et, Events.ON_OK, ENTER,false,false,false,target.getUuid());
+			AuUtility2.postUpdate(et, new Event(Events.ON_OK,et.getComponent()));
+//			AuUtility.postKeyEvent(et, Events.ON_OK, ENTER,false,false,false,target.getUuid());
 		}
 	}
 }

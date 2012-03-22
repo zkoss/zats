@@ -16,6 +16,8 @@ import java.util.Set;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 
@@ -50,8 +52,7 @@ public class ListboxMultipleSelectAgentBuilder implements
 			}
 			String ref = listbox.getItemAtIndex(index).getUuid();
 			sels.add(ref);
-			AuUtility.postOnSelect(target, ref,
-					sels.toArray(new String[sels.size()]));
+			AuUtility2.postUpdate(target, new SelectEvent(Events.ON_SELECT,target.getComponent(),sels,listbox.getItemAtIndex(index)));
 		}
 
 		public void deselect(int index) {
@@ -68,9 +69,8 @@ public class ListboxMultipleSelectAgentBuilder implements
 			}
 			if (!hit)
 				return;// skip
-			String ref = listbox.getItemAtIndex(index).getUuid();
-			AuUtility.postOnSelect(target, ref,
-					sels.toArray(new String[sels.size()]));
+			
+			AuUtility2.postUpdate(target, new SelectEvent(Events.ON_SELECT,target.getComponent(),sels,listbox.getItemAtIndex(index)));
 		}
 	}
 }

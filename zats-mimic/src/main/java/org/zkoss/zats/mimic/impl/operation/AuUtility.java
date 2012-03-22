@@ -12,7 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.impl.operation;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,10 +19,7 @@ import java.util.Map;
 import org.zkoss.json.JSONs;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.Util;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
 
 /**
  * An agent for delegating task of posting asynchronous update event.
@@ -70,7 +66,7 @@ public class AuUtility {
 		Map<String, Object> data = new HashMap<String, Object>();
 		// date format is different between ZK5 and ZK6
 		if (value instanceof Date) {
-			BigInteger current = OperationAgentManager.getZKCurrentVersion();
+			BigInteger current = Util.getZKVersion();
 			if (current.compareTo(Util.parseVersion("6.0.0")) < 0) {
 				// zk5
 				value = JSONs.d2j((Date) value);
@@ -105,79 +101,14 @@ public class AuUtility {
 		data.put("", checked);
 		target.getConversation().postUpdate(target, Events.ON_CHECK, data);
 	}
-
-	public static void postOnSelect(ComponentAgent target, String selection) {
-		postOnSelect(target, selection, selection);
-	}
-
-	public static void postOnSelect(ComponentAgent target, String reference,
-			String... selection) {
-		Map<String, Object> data = new HashMap<String, Object>();
-		data.put("items", selection);
-		data.put("reference", reference);
-		data.put("which", 0);
-		target.getConversation().postUpdate(target, Events.ON_SELECT, data);
-	}
 	
-	/**
-	 * @param open open or not
-	 * @param reference uuid of the component that refers to this au, nullable
-	 * @param value the data, nullable
-	 */
-	public static void postOnOpen(ComponentAgent target, boolean open,String reference,String value) {
-		Map<String, Object> data = new HashMap<String, Object>();
-		data.put("open", open);
-		data.put("reference", reference);
-		data.put("value", value);
-		target.getConversation().postUpdate(target, Events.ON_OPEN, data);
-	}
-	
-	/**
-	 * @param item uuid of sub-items to render
-	 */
-	public static void postOnRender(ComponentAgent target, String... item) {
-		Map<String, Object> data = new HashMap<String, Object>();
-		if(item.length==0) return;
-		data.put("items", item);
-		target.getConversation().postUpdate(target, Events.ON_RENDER, data);
-	}
-	/**
-	 * @param target the component that listen the event
-	 * @param command {@link Events#ON_OK}, {@link Events#ON_CANCE} or {@link Events#ON_CTRL_KEY}
-	 * @param referene uuid of the component that trigger the key
-	 */
-	public static void postKeyEvent(ComponentAgent target, String command, String reference) {
-		postKeyEvent(target,command,0,false,false,false,reference);
-	}
-	/**
-	 * @param command {@link Events#ON_OK}, {@link Events#ON_CANCE} or {@link Events#ON_CTRL_KEY}
-	 * @param referene the component that trigger the key
-	 */
-	public static void postKeyEvent(ComponentAgent target, String command,int keyCode,
-			boolean ctrlKey, boolean shiftKey, boolean altKey, String reference) {
-		Map<String, Object> data = new HashMap<String, Object>();
-
-		data.put("keyCode", keyCode);
-		data.put("ctrlKey", ctrlKey);
-		data.put("shiftKey", shiftKey);
-		data.put("altKey", altKey);
-		data.put("reference", reference);
-		
-		target.getConversation().postUpdate(target, command, data);
-	}
-	
-	/**
-	 * lookup the event target of a component, it look up the component and its ancient. 
-	 * use this for search the actual target what will receive a event for a action on a component-agent
-	 * <p/>Currently, i get it by server side directly
-	 */
-	public static ComponentAgent lookupEventTarget(ComponentAgent c,String evtname){
-		if(c==null) return null;
-		Component comp = c.getComponent();
-		if(Events.isListened(comp, evtname, true)){
-			return c;
-		}
-		return lookupEventTarget(c.getParent(),evtname);
-		
-	}
+//	/**
+//	 * @param item uuid of sub-items to render
+//	 */
+//	public static void postOnRender(ComponentAgent target, String... item) {
+//		Map<String, Object> data = new HashMap<String, Object>();
+//		if(item.length==0) return;
+//		data.put("items", item);
+//		target.getConversation().postUpdate(target, Events.ON_RENDER, data);
+//	}
 }
