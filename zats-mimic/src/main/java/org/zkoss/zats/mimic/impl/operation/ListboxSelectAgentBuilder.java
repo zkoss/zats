@@ -34,9 +34,9 @@ public class ListboxSelectAgentBuilder implements OperationAgentBuilder<SelectAg
 			if (target.is(Listbox.class)){
 				Listitem selected = target.as(Listbox.class).getItemAtIndex(index);
 				if (selected==null){
-					AuUtility.postOnSelect(target, selected.getUuid());
-				}else{
 					logger.warning("select index:"+index+" is null.");
+				}else{
+					AuUtility.postOnSelect(target, selected.getUuid());
 				}
 			}else{
 				throw new ConversationException(target+" can't select");
