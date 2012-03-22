@@ -14,11 +14,7 @@ import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
-import org.zkoss.zul.Datebox;
-import org.zkoss.zul.Listcell;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.api.Intbox;
-import org.zkoss.zul.api.Textbox;
+import org.zkoss.zul.*;
 
 public class TodoTest {
 	@BeforeClass
@@ -38,16 +34,18 @@ public class TodoTest {
 
 	@Test
 	public void test() {
+		//visit the target page
 		Conversations.open("/todo.zul");
 
-		//add
+		//find components
 		ComponentAgent itemName = find("textbox");
 		ComponentAgent priority = find("intbox");
 		ComponentAgent date = find("datebox");
 
+		//add
 		itemName.as(TypeAgent.class).type("one-item");
 		priority.as(TypeAgent.class).type("3");
-		date.as(TypeAgent.class).type("2012/03/16");
+		date.as(TypeAgent.class).type("2012-03-16");
 		find("button[label='Add'] ").as(ClickAgent.class).click();
 		
 		//verify each listcell's label
@@ -57,9 +55,13 @@ public class TodoTest {
 		assertEquals("3",((Listcell)cells.get(1)).getLabel());
 		assertEquals("2012/03/16",((Listcell)cells.get(2)).getLabel());
 		
-		
 		//update
 		listbox.as(SelectAgent.class).select(0);
+		//verify select
+		assertEquals("one-item",itemName.as(Textbox.class).getValue());
+		assertEquals((Integer)3,priority.as(Intbox.class).getValue());
+		assertEquals("2012-03-16",date.as(Datebox.class).getRawText());
+		//modify the todo item
 		itemName.as(TypeAgent.class).type("one-item modified");
 		priority.as(TypeAgent.class).type("5");
 		find("button[label='Update'] ").as(ClickAgent.class).click();
