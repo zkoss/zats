@@ -19,6 +19,7 @@ import org.zkoss.Version;
 import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.RendererAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
@@ -36,7 +37,6 @@ import org.zkoss.zul.Doublespinner;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Longbox;
 import org.zkoss.zul.Menuitem;
 import org.zkoss.zul.Spinner;
@@ -64,6 +64,8 @@ public class OperationAgentManager {
 				new GenericClickAgentBuilder());
 		registerBuilder("*","*", AbstractComponent.class, FocusAgent.class,
 				new GenericFocusAgentBuilder());
+		registerBuilder("*","*", AbstractComponent.class, KeyStrokeAgent.class,
+				new GenericKeyStrokeAgentBuilder());
 
 		registerBuilder("*","*", InputElement.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.TextTypeAgentBuilder());

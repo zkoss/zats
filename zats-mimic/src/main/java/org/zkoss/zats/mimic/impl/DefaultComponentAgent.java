@@ -26,6 +26,7 @@ import org.zkoss.zats.mimic.impl.operation.OperationAgentManager;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
+import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
@@ -195,7 +196,9 @@ public class DefaultComponentAgent implements ComponentAgent {
 		return comp;
 	}
 	
-	
+	public Component getComponent(){
+		return comp;
+	}
 	
 	
 	
@@ -226,5 +229,9 @@ public class DefaultComponentAgent implements ComponentAgent {
 
 	public void check(boolean checked) {
 		as(CheckAgent.class).check(checked);
+	}
+
+	public void stroke(String key) {
+		as(KeyStrokeAgent.class).stroke(key);		
 	}
 }

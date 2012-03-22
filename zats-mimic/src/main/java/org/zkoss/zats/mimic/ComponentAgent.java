@@ -17,6 +17,7 @@ import java.util.Map;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
+import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
@@ -94,6 +95,11 @@ public interface ComponentAgent extends Agent{
 	 * @return page agent.
 	 */
 	PageAgent getPage();
+	
+	/**
+	 * get the wrapped component
+	 */
+	Component getComponent();
 
 	/**
 	 * try to transfer the component agent to the target class, the target class
@@ -171,4 +177,11 @@ public interface ComponentAgent extends Agent{
 	 * @see #as(Class)
 	 */
 	void check(boolean checked);
+	
+	/**
+	 * stroke a key on this component, it is a short cut of {@link KeyStrokeAgent#stroke(String)}<p/>
+	 * If this component doesn't has {@link KeyStrokeAgent}, it will throw exception.
+	 * @see #as(Class)
+	 */
+	void stroke(String key);
 }

@@ -20,6 +20,7 @@ import java.util.Map;
 import org.zkoss.json.JSONs;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.Util;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
@@ -123,5 +124,44 @@ public class AuUtility {
 		if(item.length==0) return;
 		data.put("items", item);
 		target.getConversation().postUpdate(target, Events.ON_RENDER, data);
+	}
+	/**
+	 * @param target the component that listen the event
+	 * @param command {@link Events#ON_OK}, {@link Events#ON_CANCE} or {@link Events#ON_CTRL_KEY}
+	 * @param referene the component that trigger the key 
+	 */
+	public static void postKeyEvent(ComponentAgent target, String command, ComponentAgent referene) {
+		postKeyEvent(target,command,0,false,false,false,null);
+	}
+	/**
+	 * @param command {@link Events#ON_OK}, {@link Events#ON_CANCE} or {@link Events#ON_CTRL_KEY}
+	 * @param referene the component that trigger the key
+	 */
+	public static void postKeyEvent(ComponentAgent target, String command,int keyCode,
+			boolean ctrlKey, boolean shiftKey, boolean altKey, ComponentAgent reference) {
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		data.put("keyCode", keyCode);
+		data.put("ctrlKey", ctrlKey);
+		data.put("shiftKey", shiftKey);
+		data.put("altKey", altKey);
+		data.put("reference", target.getUuid());
+		
+		target.getConversation().postUpdate(target, command, data);
+	}
+	
+	/**
+	 * lookup the event target of a component, it look up the component and its ancient. 
+	 * use this for search the actual target what will receive a event for a action on a component-agent
+	 * <p/>Currently, i get it by server side directly
+	 */
+	public static ComponentAgent lookupEventTarget(ComponentAgent c,String evtname){
+		if(c==null) return null;
+		Component comp = c.getComponent();
+		if(Events.isListened(comp, evtname, true)){
+			return c;
+		}
+		return lookupEventTarget(c.getParent(),evtname);
+		
 	}
 }
