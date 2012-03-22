@@ -127,19 +127,19 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<KeySt
 				throw new AgentException("Code code not found: "+key);
 			}
 			
-			AuUtility.postKeyEvent(et, Events.ON_CTRL_KEY, keyCode, ctrlKey, shiftKey, altKey,target);
+			AuUtility.postKeyEvent(et, Events.ON_CTRL_KEY, keyCode, ctrlKey, shiftKey, altKey,target.getUuid());
 		}
 
 		private void doOnCancel() {
 			ComponentAgent et = AuUtility.lookupEventTarget(target,Events.ON_CANCEL);
 			if(et==null) return;
-			AuUtility.postKeyEvent(et, Events.ON_CANCEL, ESC,false,false,false,target);
+			AuUtility.postKeyEvent(et, Events.ON_CANCEL, ESC,false,false,false,target.getUuid());
 		}
 
 		private void doOnOK() {
 			ComponentAgent et = AuUtility.lookupEventTarget(target,Events.ON_OK);
 			if(et==null) return;
-			AuUtility.postKeyEvent(et, Events.ON_OK, ENTER,false,false,false,target);
+			AuUtility.postKeyEvent(et, Events.ON_OK, ENTER,false,false,false,target.getUuid());
 		}
 	}
 }

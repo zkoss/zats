@@ -20,6 +20,7 @@ import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
+import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.RendererAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
@@ -67,6 +68,8 @@ public class OperationAgentManager {
 		registerBuilder("*","*", AbstractComponent.class, KeyStrokeAgent.class,
 				new GenericKeyStrokeAgentBuilder());
 
+		
+		//the inputs
 		registerBuilder("*","*", InputElement.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.TextTypeAgentBuilder());
 		registerBuilder("*","*", Intbox.class, TypeAgent.class,
@@ -88,6 +91,7 @@ public class OperationAgentManager {
 		registerBuilder("*","*", Timebox.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.TimeTypeAgentBuilder());
 
+		//the listbox
 		registerBuilder("*","*", Listbox.class, SelectAgent.class,
 				new ListboxSelectAgentBuilder());
 		registerBuilder("*","*", Listbox.class, MultipleSelectAgent.class,
@@ -105,6 +109,9 @@ public class OperationAgentManager {
 		registerBuilder("*","*", Toolbarbutton.class, CheckAgent.class,
 				new GenericCheckAgentBuilder());
 
+		registerBuilder("*","*", AbstractComponent.class, OpenAgent.class,
+				new GenericOpenAgentBuilder());
+		
 		// TODO load custom implement from configuration
 
 		// TODO

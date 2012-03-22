@@ -11,6 +11,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.zats.testcase;
 
+import java.util.List;
+import java.util.Stack;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -21,7 +24,9 @@ import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.Searcher;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
+import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Treeitem;
 
 /**
  * @author dennis
@@ -371,5 +376,39 @@ public class BasicTestCase {
 		Assert.assertEquals("13:00",l.as(Label.class).getValue());
 		inp.type("02:14");
 		Assert.assertEquals("14:02",l.as(Label.class).getValue());
+	}
+	
+	@Test
+	public void testOpenAgentTree(){
+		Conversations.open("/basic/open-tree.zul");
+		
+		ComponentAgent tree = Searcher.find("#tree");
+		List<ComponentAgent> items = tree.findAll("treeitem");
+		Assert.assertEquals(2, items.size());
+		
+		Stack<ComponentAgent> stack = new Stack<ComponentAgent>();
+		stack.addAll(items);
+		
+		while(!stack.empty()){
+			ComponentAgent item = stack.pop();
+			
+			if(item.find("treechildren")!=null){
+				Assert.assertFalse(item.as(Treeitem.class).isOpen());
+				items = item.find("treechildren").findAll("treeitem");//the sub-treeitem.
+				Assert.assertEquals(0, items.size());
+				
+				item.as(OpenAgent.class).open(true);//trigger open to load the tree item.
+				
+				Assert.assertTrue(item.as(Treeitem.class).isOpen());
+				items = item.find("treechildren").findAll("treeitem");//the sub-treeitem.
+				Assert.assertEquals(2, items.size());
+				for(ComponentAgent si:items){
+					stack.push(si);
+				}
+			}
+		}
+		
+		items = tree.findAll("treeitem");
+		Assert.assertEquals(14, items.size());
 	}
 }

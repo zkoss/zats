@@ -119,6 +119,22 @@ public class AuUtility {
 		target.getConversation().postUpdate(target, Events.ON_SELECT, data);
 	}
 	
+	/**
+	 * @param open open or not
+	 * @param reference uuid of the component that refers to this au, nullable
+	 * @param value the data, nullable
+	 */
+	public static void postOnOpen(ComponentAgent target, boolean open,String reference,String value) {
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("open", open);
+		data.put("reference", reference);
+		data.put("value", value);
+		target.getConversation().postUpdate(target, Events.ON_OPEN, data);
+	}
+	
+	/**
+	 * @param item uuid of sub-items to render
+	 */
 	public static void postOnRender(ComponentAgent target, String... item) {
 		Map<String, Object> data = new HashMap<String, Object>();
 		if(item.length==0) return;
@@ -128,24 +144,24 @@ public class AuUtility {
 	/**
 	 * @param target the component that listen the event
 	 * @param command {@link Events#ON_OK}, {@link Events#ON_CANCE} or {@link Events#ON_CTRL_KEY}
-	 * @param referene the component that trigger the key 
+	 * @param referene uuid of the component that trigger the key
 	 */
-	public static void postKeyEvent(ComponentAgent target, String command, ComponentAgent referene) {
-		postKeyEvent(target,command,0,false,false,false,null);
+	public static void postKeyEvent(ComponentAgent target, String command, String reference) {
+		postKeyEvent(target,command,0,false,false,false,reference);
 	}
 	/**
 	 * @param command {@link Events#ON_OK}, {@link Events#ON_CANCE} or {@link Events#ON_CTRL_KEY}
 	 * @param referene the component that trigger the key
 	 */
 	public static void postKeyEvent(ComponentAgent target, String command,int keyCode,
-			boolean ctrlKey, boolean shiftKey, boolean altKey, ComponentAgent reference) {
+			boolean ctrlKey, boolean shiftKey, boolean altKey, String reference) {
 		Map<String, Object> data = new HashMap<String, Object>();
 
 		data.put("keyCode", keyCode);
 		data.put("ctrlKey", ctrlKey);
 		data.put("shiftKey", shiftKey);
 		data.put("altKey", altKey);
-		data.put("reference", target.getUuid());
+		data.put("reference", reference);
 		
 		target.getConversation().postUpdate(target, command, data);
 	}
