@@ -17,10 +17,7 @@ import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zul.Caption;
-import org.zkoss.zul.Groupbox;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Listcell;
-import org.zkoss.zul.api.Listbox;
+import org.zkoss.zul.*;
 
 public class SearchTest {
 	@BeforeClass

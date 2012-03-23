@@ -10,7 +10,7 @@ public class ItemRenderer implements ListitemRenderer{
 
 	public static DecimalFormat priceFormatter = new DecimalFormat("$ ###,###,###,##0.00");
 
-	public void render(Listitem listitem, Object data){
+	public void render(Listitem listitem, Object data,int index ){
 		Item i = (Item)data;
 		Listcell nameCell = new Listcell();
 		nameCell.setLabel(i.getName());
