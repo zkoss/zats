@@ -50,74 +50,51 @@ public class OperationAgentManager {
 		builders = new HashMap<OperationAgentManager.Key, OperationAgentBuilder<? extends OperationAgent>>();
 
 		// TODO load default implement
-		registerBuilder("5.0.0","*", AbstractComponent.class, ClickAgent.class,
-				new GenericClickAgentBuilder());
-		registerBuilder("5.0.0","*", AbstractComponent.class, KeyStrokeAgent.class,
-				new GenericKeyStrokeAgentBuilder());
+		registerBuilder("5.0.0", "*", AbstractComponent.class, ClickAgent.class, new GenericClickAgentBuilder());
+		registerBuilder("5.0.0", "*", AbstractComponent.class, KeyStrokeAgent.class, new GenericKeyStrokeAgentBuilder());
 
-		
-		//the inputs
-		registerBuilder("5.0.0","*", InputElement.class, FocusAgent.class,
-				new GenericFocusAgentBuilder());
-		registerBuilder("5.0.0","*", InputElement.class, TypeAgent.class,
+		// the inputs
+		registerBuilder("5.0.0", "*", InputElement.class, FocusAgent.class, new GenericFocusAgentBuilder());
+		registerBuilder("5.0.0", "*", InputElement.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.TextTypeAgentBuilder());
-		registerBuilder("5.0.0","*", Intbox.class, TypeAgent.class,
+		registerBuilder("5.0.0", "*", Intbox.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.IntegerTypeAgentBuilder());
-		registerBuilder("5.0.0","*", Longbox.class, TypeAgent.class,
+		registerBuilder("5.0.0", "*", Longbox.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.IntegerStringTypeAgentBuilder());
-		registerBuilder("5.0.0","*", Spinner.class, TypeAgent.class,
+		registerBuilder("5.0.0", "*", Spinner.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.IntegerTypeAgentBuilder());
-		
-		registerBuilder("5.0.0","*", Decimalbox.class, TypeAgent.class,
+
+		registerBuilder("5.0.0", "*", Decimalbox.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.DecimalStringTypeAgentBuilder());
-		registerBuilder("5.0.0","*", Doublebox.class, TypeAgent.class,
+		registerBuilder("5.0.0", "*", Doublebox.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.DecimalTypeAgentBuilder());
-		registerBuilder("5.0.0","*", Doublespinner.class, TypeAgent.class,
+		registerBuilder("5.0.0", "*", Doublespinner.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.DecimalTypeAgentBuilder());
-		
-		registerBuilder("5.0.0","*", Datebox.class, TypeAgent.class,
+
+		registerBuilder("5.0.0", "*", Datebox.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.DateTypeAgentBuilder());
-		registerBuilder("5.0.0","*", Timebox.class, TypeAgent.class,
+		registerBuilder("5.0.0", "*", Timebox.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.TimeTypeAgentBuilder());
 
-		//the listbox
-		registerBuilder("5.0.0","*", Listbox.class, SelectAgent.class,
-				new ListboxSelectAgentBuilder());
-		registerBuilder("5.0.0","*", Listbox.class, MultipleSelectAgent.class,
-				new ListboxMultipleSelectAgentBuilder());
-		registerBuilder("5.0.0","*", Listbox.class, RendererAgent.class, new ListboxRendererAgentBuilder());
-		
-		registerBuilder("5.0.0","*", Grid.class, RendererAgent.class, new GridRendererAgentBuilder());
+		// the listbox
+		registerBuilder("5.0.0", "*", Listbox.class, SelectAgent.class, new ListboxSelectAgentBuilder());
+		registerBuilder("5.0.0", "*", Listbox.class, MultipleSelectAgent.class, new ListboxMultipleSelectAgentBuilder());
+		registerBuilder("5.0.0", "*", Listbox.class, RendererAgent.class, new ListboxRendererAgentBuilder());
 
-		registerBuilder("5.0.0","*", Input.class, CheckAgent.class,
-				new GenericCheckAgentBuilder());
-		registerBuilder("5.0.0","*", Checkbox.class, CheckAgent.class,
-				new GenericCheckAgentBuilder()); // include Radio.class
-		registerBuilder("5.0.0","*", Menuitem.class, CheckAgent.class,
-				new GenericCheckAgentBuilder());
-		registerBuilder("5.0.0","*", Toolbarbutton.class, CheckAgent.class,
-				new GenericCheckAgentBuilder());
+		registerBuilder("5.0.0", "*", Grid.class, RendererAgent.class, new GridRendererAgentBuilder());
 
-		registerBuilder("5.0.0","*", AbstractComponent.class, OpenAgent.class,
-				new GenericOpenAgentBuilder());
-		
+		// the clicks
+		registerBuilder("5.0.0", "*", Menuitem.class, CheckAgent.class, new GenericCheckAgentBuilder());
+		registerBuilder("6.0.0", "*", Toolbarbutton.class, CheckAgent.class, new GenericCheckAgentBuilder());
+		// check box and radio button
+		registerBuilder("5.0.0", "*", Checkbox.class, CheckAgent.class, new GenericCheckAgentBuilder());
+		// zhtml
+		registerBuilder("5.0.0", "*", Input.class, CheckAgent.class, new GenericCheckAgentBuilder());
+
+		registerBuilder("5.0.0", "*", AbstractComponent.class, OpenAgent.class, new GenericOpenAgentBuilder());
+
 		// TODO load custom implement from configuration
 
-		// TODO
-		// registerBuilder(*, Label.class, Clickable.class, new
-		// GenericClickableBuilder());
-		// registerBuilder(6, Label.class, Clickable.class, new
-		// Generic6ClickableBuilder());
-
-		// TODO Enhancement.
-		// registerBuilder(*,*, Label.class, Clickable.class, new
-		// GenericClickableBuilder());
-		// registerBuilder(*,"6.0.1", Label.class, Clickable.class, new
-		// GenericClickableBuilder());
-		// registerBuilder("5.0.2","*", Label.class, Clickable.class, new
-		// GenericClickableBuilder());
-		// registerBuilder("5.0.2","6.0.1", Label.class, Clickable.class, new
-		// GenericClickableBuilder());
 	}
 
 	/**
@@ -125,9 +102,12 @@ public class OperationAgentManager {
 	 * specify zk version worked on. The version text could be normal version
 	 * format (e.g 6.0.0 or 5.0.7.1) or "*" sign means no specify. If specify
 	 * version range doesn't include current zk version at runtime, this
-	 * register will be ignored. <p/>
+	 * register will be ignored.
+	 * <p/>
 	 * 
-	 * Use this API if the component is only in a particular zk version only to avoid initial exception. <p/>
+	 * Use this API if the component is only in a particular zk version only to
+	 * avoid initial exception.
+	 * <p/>
 	 * 
 	 * @param startVersion
 	 *            start version (include)
@@ -142,36 +122,35 @@ public class OperationAgentManager {
 	 *            operation builder
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static <T extends OperationAgent> 
-	void registerBuilder(String startVersion, String endVersion, String compClazz,Class<T> opClass, String builderClazz) {
-		if (startVersion == null || endVersion == null || compClazz == null
-				|| opClass == null || builderClazz == null)
+	public static <T extends OperationAgent> void registerBuilder(String startVersion, String endVersion,
+			String compClazz, Class<T> opClass, String builderClazz) {
+		if (startVersion == null || endVersion == null || compClazz == null || opClass == null || builderClazz == null)
 			throw new IllegalArgumentException();
-		
-		if(!Util.checkVersion(startVersion,endVersion)) return;
-		
+
+		if (!Util.checkVersion(startVersion, endVersion))
+			return;
+
 		Class clz = null;
 		try {
 			clz = Class.forName(compClazz);
 		} catch (ClassNotFoundException e) {
-			throw new IllegalArgumentException("compClazz "+compClazz+" not found ", e);
+			throw new IllegalArgumentException("compClazz " + compClazz + " not found ", e);
 		}
 		OperationAgentBuilder<T> builder = null;
-		try{
+		try {
 			Class buildClz = Class.forName(builderClazz);
-			builder = (OperationAgentBuilder)buildClz.newInstance();
-		}catch(Exception x){
+			builder = (OperationAgentBuilder) buildClz.newInstance();
+		} catch (Exception x) {
 			throw new IllegalArgumentException(x.getMessage(), x);
 		}
-		
-		if(Component.class.isAssignableFrom(clz)){
-			registerBuilder(startVersion,endVersion,clz,opClass,builder);
-		}else{
-			throw new IllegalArgumentException("compClazz "+compClazz+" is not a Component");
+
+		if (Component.class.isAssignableFrom(clz)) {
+			registerBuilder(startVersion, endVersion, clz, opClass, builder);
+		} else {
+			throw new IllegalArgumentException("compClazz " + compClazz + " is not a Component");
 		}
 	}
 
-	
 	/**
 	 * register a operation builder mapping to component and operation. We can
 	 * specify zk version worked on. The version text could be normal version
@@ -191,14 +170,14 @@ public class OperationAgentManager {
 	 * @param builder
 	 *            operation builder
 	 */
-	public static <T extends OperationAgent,C extends Component> 
-		void registerBuilder(String startVersion, String endVersion, Class<C> compClazz,Class<T> opClass, OperationAgentBuilder<T> builder) {
-		
-		if (startVersion == null || endVersion == null || compClazz == null
-				|| opClass == null || builder == null)
+	public static <T extends OperationAgent, C extends Component> void registerBuilder(String startVersion,
+			String endVersion, Class<C> compClazz, Class<T> opClass, OperationAgentBuilder<T> builder) {
+
+		if (startVersion == null || endVersion == null || compClazz == null || opClass == null || builder == null)
 			throw new IllegalArgumentException();
 
-		if(!Util.checkVersion(startVersion,endVersion)) return;
+		if (!Util.checkVersion(startVersion, endVersion))
+			return;
 
 		// component and operation classes mapping to builder
 		// builder would be replace by later register
@@ -206,13 +185,11 @@ public class OperationAgentManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends OperationAgent> OperationAgentBuilder<T> getBuilder(
-			Component component, Class<T> operation) {
+	public static <T extends OperationAgent> OperationAgentBuilder<T> getBuilder(Component component, Class<T> operation) {
 		// search from self class to parent class
 		Class<?> c = component.getClass();
 		while (c != null) {
-			OperationAgentBuilder<? extends OperationAgent> builder = builders
-					.get(new Key(c, operation));
+			OperationAgentBuilder<? extends OperationAgent> builder = builders.get(new Key(c, operation));
 			if (builder != null)
 				return (OperationAgentBuilder<T>) builder;
 			c = c.getSuperclass();
@@ -229,8 +206,7 @@ public class OperationAgentManager {
 		public Class<?> c;
 		public Class<?> t;
 
-		public <T extends OperationAgent, C extends Component> Key(Class<?> c,
-				Class<?> t) {
+		public <T extends OperationAgent, C extends Component> Key(Class<?> c, Class<?> t) {
 			this.c = c;
 			this.t = t;
 		}
