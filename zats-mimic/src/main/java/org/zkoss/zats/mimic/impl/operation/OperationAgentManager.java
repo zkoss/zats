@@ -76,24 +76,26 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", Timebox.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.TimeTypeAgentBuilder());
 
+		// the check
+		registerBuilder("5.0.0", "*", Menuitem.class, CheckAgent.class, new GenericCheckAgentBuilder());
+		// the check of check box and radio button
+		registerBuilder("5.0.0", "*", Checkbox.class, CheckAgent.class, new GenericCheckAgentBuilder());
+		// the check of zhtml
+		registerBuilder("5.0.0", "*", Input.class, CheckAgent.class, new GenericCheckAgentBuilder());
+		
+		
+		// the open
+		registerBuilder("5.0.0", "*", AbstractComponent.class, OpenAgent.class, new GenericOpenAgentBuilder());
+
+		//----------special case ---
+		
 		// the listbox
 		registerBuilder("5.0.0", "*", Listbox.class, SelectAgent.class, new ListboxSelectAgentBuilder());
 		registerBuilder("5.0.0", "*", Listbox.class, MultipleSelectAgent.class, new ListboxMultipleSelectAgentBuilder());
 		registerBuilder("5.0.0", "*", Listbox.class, RendererAgent.class, new ListboxRendererAgentBuilder());
 
+		// the grid
 		registerBuilder("5.0.0", "*", Grid.class, RendererAgent.class, new GridRendererAgentBuilder());
-
-		// the clicks
-		registerBuilder("5.0.0", "*", Menuitem.class, CheckAgent.class, new GenericCheckAgentBuilder());
-		registerBuilder("6.0.0", "*", Toolbarbutton.class, CheckAgent.class, new GenericCheckAgentBuilder());
-		// check box and radio button
-		registerBuilder("5.0.0", "*", Checkbox.class, CheckAgent.class, new GenericCheckAgentBuilder());
-		// zhtml
-		registerBuilder("5.0.0", "*", Input.class, CheckAgent.class, new GenericCheckAgentBuilder());
-
-		registerBuilder("5.0.0", "*", AbstractComponent.class, OpenAgent.class, new GenericOpenAgentBuilder());
-
-		// TODO load custom implement from configuration
 
 	}
 

@@ -18,10 +18,14 @@ import java.util.Set;
 import org.zkoss.zats.mimic.ConversationException;
 import org.zkoss.zats.mimic.impl.au.EventDataBuilder;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
+import org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.OperationAgentManager;
+import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.util.WebAppInit;
+import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.event.RenderEvent;
 
 /**
@@ -34,12 +38,16 @@ public class Ext6Initiator implements WebAppInit{
 		
 		//testcases and mimic server is in the same vm. 
 		//so it is ok to register builder by webapp init
+		
 //		EventDataManager.registerBuilder("6.0.0","*", RenderEvent.class, new EventDataBuilder(){
 //			public Map<String, Object> build(Event event,Map<String,Object> data) {
 //				RenderEvent evt = (RenderEvent)event;
 //				setEssential(data,"items",evt.getItems());//id set of items
 //				return data;
 //			}});
+		
+		OperationAgentManager.registerBuilder("6.0.0", "*", Toolbarbutton.class, CheckAgent.class, 
+				new GenericCheckAgentBuilder());
 	}
 //	
 //	@SuppressWarnings("unchecked")
