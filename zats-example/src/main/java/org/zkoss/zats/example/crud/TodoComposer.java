@@ -1,11 +1,9 @@
 
-package org.zkoss.zk.zats.example.composer;
+package org.zkoss.zats.example.crud;
 
 import java.util.List;
 
 import org.zkoss.zk.ui.util.GenericForwardComposer;
-import org.zkoss.zk.zats.example.service.Task;
-import org.zkoss.zk.zats.example.service.TaskService;
 import org.zkoss.zul.Listbox;
 
 /**

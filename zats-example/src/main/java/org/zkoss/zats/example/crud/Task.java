@@ -1,4 +1,4 @@
-package org.zkoss.zk.zats.example.service;
+package org.zkoss.zats.example.crud;
 
 import java.util.Date;
 

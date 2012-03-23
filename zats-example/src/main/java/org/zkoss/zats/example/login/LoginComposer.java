@@ -1,10 +1,9 @@
-package org.zkoss.zk.zats.example.composer;
+package org.zkoss.zats.example.login;
 
 import java.util.logging.Logger;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
-import org.zkoss.zk.zats.example.service.AuthenticationService;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
 

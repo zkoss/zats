@@ -1,4 +1,4 @@
-package org.zkoss.zk.zats.example;
+package org.zkoss.zats.example.testcase;
 
 import static org.junit.Assert.assertEquals;
 import static org.zkoss.zats.mimic.Searcher.find;

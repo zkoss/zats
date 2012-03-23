@@ -1,4 +1,4 @@
-package org.zkoss.zk.zats.example;
+package org.zkoss.zats.example.testcase;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,14 +8,14 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.zkoss.zats.example.search.Item;
+import org.zkoss.zats.example.search.ItemRenderer;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.Searcher;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
-import org.zkoss.zk.zats.example.service.Item;
-import org.zkoss.zk.zats.example.view.ItemRenderer;
 import org.zkoss.zul.Caption;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Label;

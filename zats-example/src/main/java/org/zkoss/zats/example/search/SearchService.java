@@ -9,11 +9,12 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
-package org.zkoss.zk.zats.example.service;
+package org.zkoss.zats.example.search;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 
 /**
  * 

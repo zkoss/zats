@@ -1,4 +1,4 @@
-package org.zkoss.zk.zats.example.composer;
+package org.zkoss.zats.example.session;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.GenericForwardComposer;

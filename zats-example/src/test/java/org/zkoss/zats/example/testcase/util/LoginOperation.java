@@ -1,4 +1,4 @@
-package org.zkoss.zk.zats.example.util;
+package org.zkoss.zats.example.testcase.util;
 
 import static org.zkoss.zats.mimic.Searcher.find;
 

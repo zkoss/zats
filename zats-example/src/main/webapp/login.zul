@@ -1,5 +1,5 @@
 <zk>
-	<window id="win" title="Login" border="normal" width="300px" apply="org.zkoss.zk.zats.example.composer.LoginComposer">
+	<window id="win" title="Login" border="normal" width="300px" apply="org.zkoss.zats.example.login.LoginComposer">
 		<vlayout>
 			<hlayout>
 			Account: <textbox id="account"/>

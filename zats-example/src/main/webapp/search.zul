@@ -1,7 +1,7 @@
 <zk>
 
 <window id="searchWin" title="Search Storage Item" border="normal" width="600px"
-	apply="org.zkoss.zk.zats.example.composer.SearchComposer" >
+	apply="org.zkoss.zats.example.search.SearchComposer" >
 	<vbox hflex="true">
 		<hbox>
 			Filter : 

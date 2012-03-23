@@ -1,6 +1,6 @@
 <zk>
 	<window id="win" title="my window" border="normal" width="300px"
-		apply="org.zkoss.zk.zats.example.composer.TestComposer">
+		apply="org.zkoss.zats.example.session.TestComposer">
 		<vbox>
 			<label id="msg" />
 			<button id="btn" label="go" />

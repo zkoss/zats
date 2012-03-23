@@ -1,7 +1,7 @@
 <?page contentType="text/html;charset=UTF-8"?>
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
 <window id="win" title="To do list" width="740px" border="normal"
-	apply="org.zkoss.zk.zats.example.composer.TodoComposer">
+	apply="org.zkoss.zats.example.crud.TodoComposer">
 	<listbox id="listbox" rows="4"  model="@{win$composer.allTasks, load-after='add.onClick, update.onClick, delete.onClick'}" >
 		<listhead>
 			<listheader label="Item" />

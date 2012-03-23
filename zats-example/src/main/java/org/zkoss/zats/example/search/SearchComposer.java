@@ -9,13 +9,10 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
-package org.zkoss.zk.zats.example.composer;
+package org.zkoss.zats.example.search;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
-import org.zkoss.zk.zats.example.service.SearchService;
-import org.zkoss.zk.zats.example.service.Item;
-import org.zkoss.zk.zats.example.view.ItemRenderer;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Caption;
 import org.zkoss.zul.Groupbox;

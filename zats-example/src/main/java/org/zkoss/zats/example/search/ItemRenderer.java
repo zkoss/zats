@@ -1,8 +1,7 @@
-package org.zkoss.zk.zats.example.view;
+package org.zkoss.zats.example.search;
 
 import java.text.DecimalFormat;
 
-import org.zkoss.zk.zats.example.service.Item;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListitemRenderer;
