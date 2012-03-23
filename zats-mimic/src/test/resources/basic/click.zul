@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="Hello"?>
+<window title="My First window" border="normal" width="200px">
+	<button id="btn" label="welcome" onClick='msg.value = "Welcome"' />
+	<label id="msg" value="Hello World!" />
+</window>

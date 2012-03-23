@@ -1,0 +1,53 @@
+<zk>
+	<window id="win">
+		<hbox>
+			<vbox>
+				<hbox>
+					<label value="current focus: " />
+					<label id="current" />
+				</hbox>
+				<hbox>
+					<label value="lost focus: " />
+					<label id="lost" />
+				</hbox>
+				<bandbox id="c1" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name" />
+				<timebox id="c2" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name" />
+				<combobox id="c3" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name" />
+				<datebox id="c4" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name" />
+				<decimalbox id="c5" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name" />
+				<doublebox id="c6" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name" />
+				<doublespinner id="c7" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name" />
+				<intbox id="c8" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name" />
+				<longbox id="c9" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name" />
+				<spinner id="c10" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name" />
+				<textbox id="c11" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name" />
+			</vbox>
+			<vbox>
+				<label value="for manual test: " />
+				<button label="clean" />
+				<button label="c1" onClick="win.getFellow(self.getLabel()).focus();" />
+				<button label="c2" onClick="win.getFellow(self.getLabel()).focus();" />
+				<button label="c3" onClick="win.getFellow(self.getLabel()).focus();" />
+				<button label="c4" onClick="win.getFellow(self.getLabel()).focus();" />
+				<button label="c5" onClick="win.getFellow(self.getLabel()).focus();" />
+				<button label="c6" onClick="win.getFellow(self.getLabel()).focus();" />
+				<button label="c7" onClick="win.getFellow(self.getLabel()).focus();" />
+				<button label="c8" onClick="win.getFellow(self.getLabel()).focus();" />
+				<button label="c9" onClick="win.getFellow(self.getLabel()).focus();" />
+				<button label="c10" onClick="win.getFellow(self.getLabel()).focus();" />
+				<button label="c11" onClick="win.getFellow(self.getLabel()).focus();" />
+			</vbox>
+		</hbox>
+	</window>
+</zk>

@@ -1,0 +1,37 @@
+<zk>
+	<window id="win">
+		<vbox>
+			<checkbox id="c1" label="c1" onCheck="doChecked()" />
+			<checkbox id="c2" label="c2" onCheck="doChecked()" />
+			<checkbox id="c3" label="c3" onCheck="doChecked()" />
+			<checkbox id="c4" label="c4" onCheck="doChecked()" />
+			<checkbox id="c5" label="c5" onCheck="doChecked()" />
+			<menubar width="100px">
+				<menu label="c6">
+					<menupopup>
+						<menuitem id="c6" autocheck="true" checkmark="true" label="c6"
+							onCheck="doChecked()" />
+					</menupopup>
+				</menu>
+			</menubar>
+			<radiogroup>
+				<radio id="c7" label="c7" onCheck="doChecked()" />
+				<radio id="c8" label="c8" onCheck="doChecked()" />
+				<radio id="c9" label="c9" onCheck="doChecked()" />
+			</radiogroup>
+			<separator />
+			<separator />
+			<hbox>
+				<label value="checked: " />
+				<label id="msg" />
+			</hbox>
+			<zscript><![CDATA[
+	void doChecked() {
+		msg.value = "";
+		for(int i = 1; i <= 9; ++i)
+			msg.value += win.getFellow("c" + i).isChecked() ? "c" + i + " " : "";
+	}
+]]></zscript>
+		</vbox>
+	</window>
+</zk>
