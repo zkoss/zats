@@ -41,7 +41,7 @@ public class ConversationsTest
 	@Test
 	public void test()
 	{
-		Conversations.open("/test.zul");
+		Conversations.open("/session.zul");
 
 		assertNotNull(Conversations.getSession());
 		assertNotNull(Conversations.getDesktop());
