@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
+import org.zkoss.bind.Binder;
+import org.zkoss.bind.impl.BinderImpl;
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.ConversationException;
 import org.zkoss.zats.mimic.impl.au.EventDataBuilder;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
@@ -39,6 +42,11 @@ public class Ext6Initiator implements WebAppInit{
 		//testcases and mimic server is in the same vm. 
 		//so it is ok to register builder by webapp init
 		
+		//operation
+		OperationAgentManager.registerBuilder("6.0.0", "*", Toolbarbutton.class, CheckAgent.class, 
+				new GenericCheckAgentBuilder());
+		
+		//event data
 //		EventDataManager.registerBuilder("6.0.0","*", RenderEvent.class, new EventDataBuilder(){
 //			public Map<String, Object> build(Event event,Map<String,Object> data) {
 //				RenderEvent evt = (RenderEvent)event;
@@ -46,8 +54,22 @@ public class Ext6Initiator implements WebAppInit{
 //				return data;
 //			}});
 		
-		OperationAgentManager.registerBuilder("6.0.0", "*", Toolbarbutton.class, CheckAgent.class, 
-				new GenericCheckAgentBuilder());
+		
+		// resolvers
+		//resolve view model
+		ValueResolverManager.registerResolver("6.0.0","*",new ValueResolver(){
+			@SuppressWarnings("unchecked")
+			public <T> T resolve(ComponentAgent agent, Class<T> clazz) {
+				Object binder = agent.getAttribute(BinderImpl.BINDER);
+				if(binder != null && binder instanceof Binder){
+					Object vm = ((Binder)binder).getViewModel();
+					if (vm!=null && clazz.isInstance(vm)) {
+						return (T)vm;
+					}
+				}
+				return null;
+			}
+		});
 	}
 //	
 //	@SuppressWarnings("unchecked")

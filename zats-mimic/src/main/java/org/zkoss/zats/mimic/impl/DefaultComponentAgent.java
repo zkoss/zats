@@ -100,31 +100,15 @@ public class DefaultComponentAgent implements ComponentAgent {
 		return pageAgent;
 	}
 
-	@SuppressWarnings("unchecked")
 	public <T> T as(Class<T> clazz) {
-		if (OperationAgent.class.isAssignableFrom(clazz)) {
-			Class<OperationAgent> opc = (Class<OperationAgent>) clazz;
-			OperationAgentBuilder<OperationAgent> builder = OperationAgentManager.getBuilder(
-					comp, opc);
-			if (builder != null)
-				return (T) builder.getOperation(this);
-		} else if (clazz.isInstance(comp)) {
-			return (T) comp;
-		}
-		throw new AgentException(getType() + " doesn't support "+ clazz.getName());
+		T obj = ValueResolverManager.resolve(this, clazz);
+		if(obj!=null) return obj;
+		throw new AgentException("cannot resolve" + getType() + " to "+ clazz.getName());
 	}
 
-	@SuppressWarnings("unchecked")
 	public <T> boolean is(Class<T> clazz) {
-		if (OperationAgent.class.isAssignableFrom(clazz)) {
-			Class<OperationAgent> opc = (Class<OperationAgent>) clazz;
-			OperationAgentBuilder<OperationAgent> builder = OperationAgentManager.getBuilder(
-					comp, opc);
-			return builder != null;
-		} else if (Component.class.isAssignableFrom(clazz)) {
-			return clazz.isInstance(comp);
-		}
-		return false;
+		T obj = ValueResolverManager.resolve(this, clazz);
+		return obj!=null;
 	}
 
 	@Override

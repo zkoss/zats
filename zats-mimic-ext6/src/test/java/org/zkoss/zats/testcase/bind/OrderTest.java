@@ -11,6 +11,9 @@ import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.Searcher;
 import org.zkoss.zats.mimic.operation.RendererAgent;
+import org.zkoss.zats.mimic.operation.SelectAgent;
+import org.zkoss.zats.testapp.bind.order.Order;
+import org.zkoss.zats.testapp.bind.order.OrderVM;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Column;
 import org.zkoss.zul.Groupbox;
@@ -75,6 +78,41 @@ public class OrderTest{
 		
 		ComponentAgent editor = window.find("#editor");
 		Assert.assertFalse(editor.as(Groupbox.class).isVisible());
+	}
+	
+	@Test
+	public void testVM(){
+		Conversations.open("/bind/order.zul");
+		ComponentAgent window = Searcher.find("#main");
+		ComponentAgent orderList = Searcher.find("#main #orderList");
+		Assert.assertNotNull(orderList);
+		
+		Order selected = null;
+		OrderVM vm = orderList.as(OrderVM.class);
+		
+		Assert.assertNull(vm.getSelected());
+		
+		orderList.as(SelectAgent.class).select(0);
+		selected = vm.getSelected();
+		Assert.assertNotNull(selected);
+		
+		Assert.assertEquals("00001", selected.getId());
+		Assert.assertEquals(selected.getPrice()*selected.getQuantity(), selected.getTotalPrice(),0.1);
+		
+		
+		orderList.as(SelectAgent.class).select(1);
+		selected = vm.getSelected();
+		Assert.assertNotNull(selected);
+		
+		Assert.assertEquals("00002", selected.getId());
+		Assert.assertEquals(selected.getPrice()*selected.getQuantity(), selected.getTotalPrice(),0.1);
+		
+		orderList.as(SelectAgent.class).select(3);
+		selected = vm.getSelected();
+		Assert.assertNotNull(selected);
+		
+		Assert.assertEquals("00004", selected.getId());
+		Assert.assertEquals(selected.getPrice()*selected.getQuantity(), selected.getTotalPrice(),0.1);
 	}
 	
 	
