@@ -1,0 +1,216 @@
+package org.zkoss.zats.testcase.bind;
+
+import java.util.List;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.zkoss.zats.mimic.ComponentAgent;
+import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.Searcher;
+import org.zkoss.zats.mimic.operation.RendererAgent;
+import org.zkoss.zul.Button;
+import org.zkoss.zul.Column;
+import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Label;
+import org.zkoss.zul.Listcell;
+import org.zkoss.zul.Listheader;
+
+/**
+ * test case for bugs from number 500-999
+ * @author dennis
+ *
+ */
+public class OrderTest{
+
+	
+	@BeforeClass
+	public static void init()
+	{
+		Conversations.start("./src/test/resources");
+	}
+
+	@AfterClass
+	public static void end()
+	{
+		Conversations.stop();
+	}
+
+	@After
+	public void after()
+	{
+		Conversations.clean();
+	}
+	
+	
+	@Test
+	public void testLoad(){
+		Conversations.open("/bind/order.zul");
+		ComponentAgent window = Searcher.find("#main");
+		ComponentAgent orderList = Searcher.find("#main #orderList");
+		Assert.assertNotNull(orderList);
+		
+		//check header
+		List<ComponentAgent> headers = orderList.findAll("listheader");
+		Assert.assertEquals(5, headers.size());
+		
+		//assert header label 
+		Assert.assertEquals("Id", headers.get(0).as(Listheader.class).getLabel());
+		Assert.assertEquals("Quantity", headers.get(1).as(Listheader.class).getLabel());
+		Assert.assertEquals("Price", headers.get(2).as(Listheader.class).getLabel());
+		Assert.assertEquals("Creation Date", headers.get(3).as(Listheader.class).getLabel());
+		Assert.assertEquals("Shipping Date", headers.get(4).as(Listheader.class).getLabel());
+		
+		
+		ComponentAgent newBtn = window.find("#newBtn");
+		ComponentAgent saveBtn = window.find("#saveBtn");
+		ComponentAgent deleteBtn1 = window.find("#deleteBtn1");
+		
+		Assert.assertFalse(newBtn.as(Button.class).isDisabled());
+		Assert.assertTrue(saveBtn.as(Button.class).isDisabled());
+		Assert.assertTrue(deleteBtn1.as(Button.class).isDisabled());
+		
+		
+		ComponentAgent editor = window.find("#editor");
+		Assert.assertFalse(editor.as(Groupbox.class).isVisible());
+	}
+	
+	
+	@Test
+	public void testNew(){
+		Conversations.open("/bind/order.zul");
+		ComponentAgent window = Searcher.find("#main");
+		ComponentAgent orderList = window.find("#orderList");
+		
+		ComponentAgent newBtn = window.find("#newBtn");
+		ComponentAgent saveBtn = window.find("#saveBtn");
+		ComponentAgent deleteBtn1 = window.find("#deleteBtn1");
+		
+		ComponentAgent editor = window.find("#editor");
+		Assert.assertFalse(editor.as(Groupbox.class).isVisible());
+		Assert.assertTrue(saveBtn.as(Button.class).isDisabled());
+		Assert.assertTrue(deleteBtn1.as(Button.class).isDisabled());
+		
+		
+		List<ComponentAgent> items = orderList.findAll("listitem");
+		int size = items.size();
+		//click new 
+		newBtn.click();
+		
+		Assert.assertTrue(editor.as(Groupbox.class).isVisible());
+		Assert.assertFalse(saveBtn.as(Button.class).isDisabled());
+		Assert.assertFalse(deleteBtn1.as(Button.class).isDisabled());
+		
+		//fill data
+		editor.find("#desc").type("a test object");
+		editor.find("#quantity").type("300");
+		editor.find("#price").type("33.33");
+		editor.find("#creationDate").type("2012/03/20");
+		editor.find("#shippingDate").type("2012/04/20");
+		
+		//click save
+		saveBtn.click();
+		
+		//render the new item 
+		orderList.as(RendererAgent.class).render(size,size);//render last
+		
+		//check the last item has the new data
+		items = orderList.findAll("listitem");
+		
+		Assert.assertEquals(size+1, items.size());
+		
+		ComponentAgent lastItem = items.get(items.size()-1);
+		List<ComponentAgent> fields = lastItem.findAll("listcell");
+		Assert.assertEquals(5, lastItem.getChildren().size());
+		Assert.assertEquals(5, fields.size());
+		Assert.assertEquals("300", fields.get(1).as(Listcell.class).getLabel());
+		Assert.assertEquals("33.33", fields.get(2).as(Listcell.class).getLabel());
+		Assert.assertEquals("2012/03/20", fields.get(3).as(Listcell.class).getLabel());
+		Assert.assertEquals("2012/04/20", fields.get(4).as(Listcell.class).getLabel());
+	}
+	
+	
+	@Test
+	public void testLoad2(){
+		Conversations.open("/bind/order2.zul");//the grid
+		ComponentAgent window = Searcher.find("#main");
+		ComponentAgent orderList = Searcher.find("#main #orderList");
+		Assert.assertNotNull(orderList);
+		
+		//check header
+		List<ComponentAgent> headers = orderList.findAll("column");
+		Assert.assertEquals(5, headers.size());
+		
+		//assert header label 
+		Assert.assertEquals("Id", headers.get(0).as(Column.class).getLabel());
+		Assert.assertEquals("Quantity", headers.get(1).as(Column.class).getLabel());
+		Assert.assertEquals("Price", headers.get(2).as(Column.class).getLabel());
+		Assert.assertEquals("Creation Date", headers.get(3).as(Column.class).getLabel());
+		Assert.assertEquals("Shipping Date", headers.get(4).as(Column.class).getLabel());
+		
+		
+		ComponentAgent newBtn = window.find("#newBtn");
+		ComponentAgent saveBtn = window.find("#saveBtn");
+		
+		Assert.assertFalse(newBtn.as(Button.class).isDisabled());
+		Assert.assertTrue(saveBtn.as(Button.class).isDisabled());
+		
+		
+		ComponentAgent editor = window.find("#editor");
+		Assert.assertFalse(editor.as(Groupbox.class).isVisible());
+	}
+	
+	
+	@Test
+	public void testNew2(){
+		Conversations.open("/bind/order2.zul");
+		ComponentAgent window = Searcher.find("#main");
+		ComponentAgent orderList = window.find("#orderList");
+		
+		ComponentAgent newBtn = window.find("#newBtn");
+		ComponentAgent saveBtn = window.find("#saveBtn");
+		
+		ComponentAgent editor = window.find("#editor");
+		Assert.assertFalse(editor.as(Groupbox.class).isVisible());
+		Assert.assertTrue(saveBtn.as(Button.class).isDisabled());
+		
+		
+		List<ComponentAgent> items = orderList.findAll("row");
+		int size = items.size();
+		//click new 
+		newBtn.click();
+		
+		Assert.assertTrue(editor.as(Groupbox.class).isVisible());
+		Assert.assertFalse(saveBtn.as(Button.class).isDisabled());
+		
+		//fill data
+		editor.find("#desc").type("a test object");
+		editor.find("#quantity").type("300");
+		editor.find("#price").type("33.33");
+		editor.find("#creationDate").type("2012/03/20");
+		editor.find("#shippingDate").type("2012/04/20");
+		
+		//click save
+		saveBtn.click();
+		
+		//render the new item 
+		orderList.as(RendererAgent.class).render(size,size);//render last
+		
+		//check the last item has the new data
+		items = orderList.findAll("row");
+		
+		Assert.assertEquals(size+1, items.size());
+		
+		ComponentAgent lastItem = items.get(items.size()-1);
+		List<ComponentAgent> fields = lastItem.findAll("label");
+		Assert.assertEquals(5, lastItem.getChildren().size());
+		Assert.assertEquals(5, fields.size());
+		Assert.assertEquals("300", fields.get(1).as(Label.class).getValue());
+		Assert.assertEquals("33.33", fields.get(2).as(Label.class).getValue());
+		Assert.assertEquals("2012/03/20", fields.get(3).as(Label.class).getValue());
+		Assert.assertEquals("2012/04/20", fields.get(4).as(Label.class).getValue());
+	}
+	
+}
