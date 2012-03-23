@@ -50,55 +50,55 @@ public class OperationAgentManager {
 		builders = new HashMap<OperationAgentManager.Key, OperationAgentBuilder<? extends OperationAgent>>();
 
 		// TODO load default implement
-		registerBuilder("*","*", AbstractComponent.class, ClickAgent.class,
+		registerBuilder("5.0.0","*", AbstractComponent.class, ClickAgent.class,
 				new GenericClickAgentBuilder());
-		registerBuilder("*","*", AbstractComponent.class, FocusAgent.class,
+		registerBuilder("5.0.0","*", AbstractComponent.class, FocusAgent.class,
 				new GenericFocusAgentBuilder());
-		registerBuilder("*","*", AbstractComponent.class, KeyStrokeAgent.class,
+		registerBuilder("5.0.0","*", AbstractComponent.class, KeyStrokeAgent.class,
 				new GenericKeyStrokeAgentBuilder());
 
 		
 		//the inputs
-		registerBuilder("*","*", InputElement.class, TypeAgent.class,
+		registerBuilder("5.0.0","*", InputElement.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.TextTypeAgentBuilder());
-		registerBuilder("*","*", Intbox.class, TypeAgent.class,
+		registerBuilder("5.0.0","*", Intbox.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.IntegerTypeAgentBuilder());
-		registerBuilder("*","*", Longbox.class, TypeAgent.class,
+		registerBuilder("5.0.0","*", Longbox.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.IntegerStringTypeAgentBuilder());
-		registerBuilder("*","*", Spinner.class, TypeAgent.class,
+		registerBuilder("5.0.0","*", Spinner.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.IntegerTypeAgentBuilder());
 		
-		registerBuilder("*","*", Decimalbox.class, TypeAgent.class,
+		registerBuilder("5.0.0","*", Decimalbox.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.DecimalStringTypeAgentBuilder());
-		registerBuilder("*","*", Doublebox.class, TypeAgent.class,
+		registerBuilder("5.0.0","*", Doublebox.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.DecimalTypeAgentBuilder());
-		registerBuilder("*","*", Doublespinner.class, TypeAgent.class,
+		registerBuilder("5.0.0","*", Doublespinner.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.DecimalTypeAgentBuilder());
 		
-		registerBuilder("*","*", Datebox.class, TypeAgent.class,
+		registerBuilder("5.0.0","*", Datebox.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.DateTypeAgentBuilder());
-		registerBuilder("*","*", Timebox.class, TypeAgent.class,
+		registerBuilder("5.0.0","*", Timebox.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.TimeTypeAgentBuilder());
 
 		//the listbox
-		registerBuilder("*","*", Listbox.class, SelectAgent.class,
+		registerBuilder("5.0.0","*", Listbox.class, SelectAgent.class,
 				new ListboxSelectAgentBuilder());
-		registerBuilder("*","*", Listbox.class, MultipleSelectAgent.class,
+		registerBuilder("5.0.0","*", Listbox.class, MultipleSelectAgent.class,
 				new ListboxMultipleSelectAgentBuilder());
-		registerBuilder("*","*", Listbox.class, RendererAgent.class, new ListboxRendererAgentBuilder());
+		registerBuilder("5.0.0","*", Listbox.class, RendererAgent.class, new ListboxRendererAgentBuilder());
 		
-		registerBuilder("*","*", Grid.class, RendererAgent.class, new GridRendererAgentBuilder());
+		registerBuilder("5.0.0","*", Grid.class, RendererAgent.class, new GridRendererAgentBuilder());
 
-		registerBuilder("*","*", Input.class, CheckAgent.class,
+		registerBuilder("5.0.0","*", Input.class, CheckAgent.class,
 				new GenericCheckAgentBuilder());
-		registerBuilder("*","*", Checkbox.class, CheckAgent.class,
+		registerBuilder("5.0.0","*", Checkbox.class, CheckAgent.class,
 				new GenericCheckAgentBuilder()); // include Radio.class
-		registerBuilder("*","*", Menuitem.class, CheckAgent.class,
+		registerBuilder("5.0.0","*", Menuitem.class, CheckAgent.class,
 				new GenericCheckAgentBuilder());
-		registerBuilder("*","*", Toolbarbutton.class, CheckAgent.class,
+		registerBuilder("5.0.0","*", Toolbarbutton.class, CheckAgent.class,
 				new GenericCheckAgentBuilder());
 
-		registerBuilder("*","*", AbstractComponent.class, OpenAgent.class,
+		registerBuilder("5.0.0","*", AbstractComponent.class, OpenAgent.class,
 				new GenericOpenAgentBuilder());
 		
 		// TODO load custom implement from configuration
@@ -167,7 +167,7 @@ public class OperationAgentManager {
 		if(Component.class.isAssignableFrom(clz)){
 			registerBuilder(startVersion,endVersion,clz,opClass,builder);
 		}else{
-			throw new IllegalArgumentException("compClazz "+compClazz+" is not a component");
+			throw new IllegalArgumentException("compClazz "+compClazz+" is not a Component");
 		}
 	}
 

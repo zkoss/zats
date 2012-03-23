@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.ConversationException;
 import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zk.ui.Component;
@@ -36,11 +35,13 @@ public class EventDataManager {
 
 	static {
 		builders = new HashMap<Class<? extends Event>, EventDataBuilder>();
-		registerBuilder("*","*", Event.class, new EventDataBuilder(){
+		
+		registerBuilder("5.0.0","*", Event.class, new EventDataBuilder(){
 			public Map<String, Object> build(Event event,Map<String,Object> data) {
 				return data;
 			}});
-		registerBuilder("*","*", OpenEvent.class, new EventDataBuilder(){
+		
+		registerBuilder("5.0.0","*", OpenEvent.class, new EventDataBuilder(){
 			public Map<String, Object> build(Event event,Map<String,Object> data) {
 				OpenEvent evt = (OpenEvent)event;
 				setEssential(data,"open",evt.isOpen());
@@ -48,14 +49,16 @@ public class EventDataManager {
 				setReference(data,evt.getReference());
 				return data;
 			}});
-		registerBuilder("*","*", SelectEvent.class, new EventDataBuilder(){
+		
+		registerBuilder("5.0.0","*", SelectEvent.class, new EventDataBuilder(){
 			public Map<String, Object> build(Event event,Map<String,Object> data) {
 				SelectEvent evt = (SelectEvent)event;
 				setEssential(data,"items",evt.getSelectedItems());//id set of items
 				setReference(data,evt.getReference());
 				return data;
 			}});
-		registerBuilder("*","*", KeyEvent.class, new EventDataBuilder(){
+		
+		registerBuilder("5.0.0","*", KeyEvent.class, new EventDataBuilder(){
 			public Map<String, Object> build(Event event,Map<String,Object> data) {
 				KeyEvent evt = (KeyEvent)event;
 				
@@ -66,7 +69,8 @@ public class EventDataManager {
 				setReference(data,evt.getReference());
 				return data;
 			}});
-		registerBuilder("*","*", RenderEvent.class, new EventDataBuilder(){
+		
+		registerBuilder("5.0.0","*", RenderEvent.class, new EventDataBuilder(){
 			public Map<String, Object> build(Event event,Map<String,Object> data) {
 				RenderEvent evt = (RenderEvent)event;
 				
@@ -131,7 +135,7 @@ public class EventDataManager {
 		if(Event.class.isAssignableFrom(clz)){
 			registerBuilder(startVersion,endVersion,clz,builder);
 		}else{
-			throw new IllegalArgumentException("compClazz "+eventClazz+" is not a component");
+			throw new IllegalArgumentException("eventClazz "+eventClazz+" is not a Event");
 		}
 	}
 
