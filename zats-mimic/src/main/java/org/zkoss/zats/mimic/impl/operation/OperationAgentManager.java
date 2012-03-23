@@ -52,13 +52,13 @@ public class OperationAgentManager {
 		// TODO load default implement
 		registerBuilder("5.0.0","*", AbstractComponent.class, ClickAgent.class,
 				new GenericClickAgentBuilder());
-		registerBuilder("5.0.0","*", AbstractComponent.class, FocusAgent.class,
-				new GenericFocusAgentBuilder());
 		registerBuilder("5.0.0","*", AbstractComponent.class, KeyStrokeAgent.class,
 				new GenericKeyStrokeAgentBuilder());
 
 		
 		//the inputs
+		registerBuilder("5.0.0","*", InputElement.class, FocusAgent.class,
+				new GenericFocusAgentBuilder());
 		registerBuilder("5.0.0","*", InputElement.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.TextTypeAgentBuilder());
 		registerBuilder("5.0.0","*", Intbox.class, TypeAgent.class,
