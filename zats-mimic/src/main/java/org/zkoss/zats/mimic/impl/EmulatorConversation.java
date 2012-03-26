@@ -161,6 +161,11 @@ public class EmulatorConversation implements Conversation {
 			param = MessageFormat.format("dtid={0}&cmd_0={1}&uuid_0={2}", dtid,
 					cmd, uuid);
 
+		if (logger.isLoggable(Level.FINEST)) {
+			String id = target.getId() != null ? "id " + target.getId() : "uuid " + target.getUuid();
+			logger.finest(id + " perform AU: " + UrlEncoded.decodeString(param, 0, param.length(), "utf-8"));
+		}
+		
 		OutputStream os = null;
 		InputStream is = null;
 		try {
