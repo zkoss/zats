@@ -24,9 +24,9 @@ import org.zkoss.zk.ui.event.OpenEvent;
 public class OpenEventDataBuilder implements EventDataBuilder {
 	public Map<String, Object> build(Event event, Map<String, Object> data) {
 		OpenEvent evt = (OpenEvent) event;
-		EventDataManager.setEssential(data, "open", evt.isOpen());
-		EventDataManager.setOptional(data, "value", evt.getValue());
-		EventDataManager.setReference(data, evt.getReference());
+		AuUtility.setEssential(data, "open", evt.isOpen());
+		AuUtility.setOptional(data, "value", evt.getValue());
+		AuUtility.setReference(data, evt.getReference());
 		return data;
 	}
 }

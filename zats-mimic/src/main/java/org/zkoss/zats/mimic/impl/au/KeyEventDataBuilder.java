@@ -26,11 +26,11 @@ public class KeyEventDataBuilder implements EventDataBuilder {
 	public Map<String, Object> build(Event event, Map<String, Object> data) {
 		KeyEvent evt = (KeyEvent) event;
 
-		EventDataManager.setEssential(data, "keyCode", evt.getKeyCode());
-		EventDataManager.setEssential(data, "ctrlKey", evt.isCtrlKey());
-		EventDataManager.setEssential(data, "shiftKey", evt.isShiftKey());
-		EventDataManager.setEssential(data, "altKey", evt.isAltKey());
-		EventDataManager.setReference(data, evt.getReference());
+		AuUtility.setEssential(data, "keyCode", evt.getKeyCode());
+		AuUtility.setEssential(data, "ctrlKey", evt.isCtrlKey());
+		AuUtility.setEssential(data, "shiftKey", evt.isShiftKey());
+		AuUtility.setEssential(data, "altKey", evt.isAltKey());
+		AuUtility.setReference(data, evt.getReference());
 		return data;
 	}
 }

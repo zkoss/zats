@@ -11,7 +11,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl.au;
 
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
+
 import org.zkoss.zats.mimic.ComponentAgent;
+import org.zkoss.zats.mimic.ConversationException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 
@@ -38,5 +43,32 @@ public class AuUtility {
 		}
 		return lookupEventTarget(c.getParent(), evtname);
 
+	}
+
+	static void setEssential(Map<String,Object> data,String key, Object obj){
+		if(obj==null) throw new ConversationException("data of "+key+" is null");
+		data.put(key, toSafeJsonObject(obj));
+	}
+
+	static void setOptional(Map<String,Object> data,String key, Object obj){
+		if(obj==null) return;
+		data.put(key, toSafeJsonObject(obj));
+	}
+
+	static void setReference(Map<String,Object> data,Component comp){
+		if(comp==null) return;
+		data.put("reference", comp.getUuid());
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	static private Object toSafeJsonObject(Object obj){
+		if(obj instanceof Set){
+			//exception if data is Set
+			//>>Unexpected character (n) at position 10.
+			//>>	at org.zkoss.json.parser.Yylex.yylex(Yylex.java:610)
+			//>>	at org.zkoss.json.parser.JSONParser.nextToken(JSONParser.java:270)
+			return new ArrayList((Set)obj);
+		}
+		return obj;
 	}
 }

@@ -75,6 +75,9 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 		}
 	}
 
+	/**
+	 * extender should put parsed value(s) into data map 
+	 */
 	protected abstract void putValue(ComponentAgent target, String raw, Map<String, Object> data);	
 
 	static Date parseDate(String format, String value) {

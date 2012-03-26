@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.event.Event;
 public class CheckEventDataBuilder implements EventDataBuilder {
 	public Map<String, Object> build(Event event, Map<String, Object> data) {
 		CheckEvent evt = (CheckEvent) event;
-		EventDataManager.setEssential(data, "", evt.isChecked());
+		AuUtility.setEssential(data, "", evt.isChecked());
 		return data;
 	}
 }

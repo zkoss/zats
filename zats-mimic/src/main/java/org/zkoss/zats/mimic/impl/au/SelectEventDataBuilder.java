@@ -24,8 +24,8 @@ import org.zkoss.zk.ui.event.SelectEvent;
 public class SelectEventDataBuilder implements EventDataBuilder {
 	public Map<String, Object> build(Event event,Map<String,Object> data) {
 		SelectEvent evt = (SelectEvent)event;
-		EventDataManager.setEssential(data,"items",evt.getSelectedItems());//id set of items
-		EventDataManager.setReference(data,evt.getReference());
+		AuUtility.setEssential(data,"items",evt.getSelectedItems());//id set of items
+		AuUtility.setReference(data,evt.getReference());
 		return data;
 	}
 }

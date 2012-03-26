@@ -24,9 +24,9 @@ import org.zkoss.zk.ui.event.InputEvent;
 public class InputEventDataBuilder implements EventDataBuilder {
 	public Map<String, Object> build(Event event, Map<String, Object> data) {
 		InputEvent evt = (InputEvent) event;
-		EventDataManager.setEssential(data, "value", evt.getValue());
-		EventDataManager.setEssential(data, "start", evt.getStart());
-		EventDataManager.setEssential(data, "bySelectBack", evt.isChangingBySelectBack());
+		AuUtility.setEssential(data, "value", evt.getValue());
+		AuUtility.setEssential(data, "start", evt.getStart());
+		AuUtility.setEssential(data, "bySelectBack", evt.isChangingBySelectBack());
 		return data;
 	}
 }

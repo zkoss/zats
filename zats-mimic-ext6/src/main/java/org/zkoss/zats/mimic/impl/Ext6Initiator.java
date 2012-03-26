@@ -39,11 +39,11 @@ public class Ext6Initiator implements WebAppInit{
 		
 		// operation
 		OperationAgentManager.registerBuilder("6.0.0", "*", Toolbarbutton.class, CheckAgent.class,
-				new GenericCheckAgentBuilder());
+				new GenericCheckAgentBuilder()); // toolbarbutton on check in zk6 only 
 		OperationAgentManager.registerBuilder("6.0.0", "*", Datebox.class, TypeAgent.class,
-				new DateTypeAgentBuilderZK6());
+				new DateTypeAgentBuilderZK6()); // date format changed in zk6
 		OperationAgentManager.registerBuilder("6.0.0", "*", Timebox.class, TypeAgent.class,
-				new TimeTypeAgentBuilderZK6());
+				new TimeTypeAgentBuilderZK6());// date format changed in zk6
 		
 		//event data
 //		EventDataManager.registerBuilder("6.0.0","*", RenderEvent.class, new EventDataBuilder(){

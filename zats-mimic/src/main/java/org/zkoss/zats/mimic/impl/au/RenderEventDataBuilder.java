@@ -25,7 +25,7 @@ public class RenderEventDataBuilder implements EventDataBuilder {
 	public Map<String, Object> build(Event event,Map<String,Object> data) {
 		RenderEvent evt = (RenderEvent)event;
 		
-		EventDataManager.setEssential(data,"items",evt.getItems());//id set of items
+		AuUtility.setEssential(data,"items",evt.getItems());//id set of items
 		return data;
 	}
 }
