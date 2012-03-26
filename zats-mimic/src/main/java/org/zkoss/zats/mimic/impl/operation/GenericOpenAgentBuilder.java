@@ -11,7 +11,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zats.mimic.impl.operation;
 
+import java.util.Map;
+
 import org.zkoss.zats.mimic.ComponentAgent;
+import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.OpenEvent;
@@ -30,8 +33,10 @@ public class GenericOpenAgentBuilder implements OperationAgentBuilder<OpenAgent>
 		}
 
 		public void open(boolean open) {
-			OpenEvent evt = new OpenEvent(Events.ON_OPEN,target.getComponent(),open,null,null);
-			AuUtility2.postUpdate(target, evt);
+			String cmd = Events.ON_OPEN;
+			Map<String, Object> data = EventDataManager.build(new OpenEvent(cmd, target.getComponent(), open, null,
+					null));
+			target.getConversation().postUpdate(target, cmd, data);
 		}
 	}
 

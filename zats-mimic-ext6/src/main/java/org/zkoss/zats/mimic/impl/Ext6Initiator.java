@@ -11,25 +11,20 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zats.mimic.impl;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
-
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.ConversationException;
-import org.zkoss.zats.mimic.impl.au.EventDataBuilder;
-import org.zkoss.zats.mimic.impl.au.EventDataManager;
+import org.zkoss.zats.mimic.impl.operation.DateTypeAgentBuilderZK6;
 import org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.OperationAgentManager;
+import org.zkoss.zats.mimic.impl.operation.TimeTypeAgentBuilderZK6;
 import org.zkoss.zats.mimic.operation.CheckAgent;
-import org.zkoss.zk.ui.Component;
+import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.util.WebAppInit;
+import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Timebox;
 import org.zkoss.zul.Toolbarbutton;
-import org.zkoss.zul.event.RenderEvent;
 
 /**
  * @author dennis
@@ -42,9 +37,13 @@ public class Ext6Initiator implements WebAppInit{
 		//testcases and mimic server is in the same vm. 
 		//so it is ok to register builder by webapp init
 		
-		//operation
-		OperationAgentManager.registerBuilder("6.0.0", "*", Toolbarbutton.class, CheckAgent.class, 
+		// operation
+		OperationAgentManager.registerBuilder("6.0.0", "*", Toolbarbutton.class, CheckAgent.class,
 				new GenericCheckAgentBuilder());
+		OperationAgentManager.registerBuilder("6.0.0", "*", Datebox.class, TypeAgent.class,
+				new DateTypeAgentBuilderZK6());
+		OperationAgentManager.registerBuilder("6.0.0", "*", Timebox.class, TypeAgent.class,
+				new TimeTypeAgentBuilderZK6());
 		
 		//event data
 //		EventDataManager.registerBuilder("6.0.0","*", RenderEvent.class, new EventDataBuilder(){

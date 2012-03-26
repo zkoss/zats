@@ -13,10 +13,11 @@ package org.zkoss.zats.mimic.impl.operation;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.zkoss.zats.mimic.ComponentAgent;
+import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.RendererAgent;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
@@ -53,8 +54,10 @@ public class ListboxRendererAgentBuilder implements OperationAgentBuilder<Render
 				
 			}
 			if(ids.size()==0) return;
-//			AuUtility.postOnRender(target, ids.toArray(new String[ids.size()]));
-			AuUtility2.postUpdate(target, new RenderEvent(Events.ON_RENDER, new HashSet(ids)));
+			
+			String cmd = Events.ON_RENDER;
+			Map<String, Object> data = EventDataManager.build(new RenderEvent(cmd, new HashSet(ids)));
+			target.getConversation().postUpdate(target, cmd, data);
 		};
 	}
 }

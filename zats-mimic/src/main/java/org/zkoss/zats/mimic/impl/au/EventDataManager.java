@@ -19,15 +19,19 @@ import java.util.Set;
 import org.zkoss.zats.mimic.ConversationException;
 import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.CheckEvent;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.event.KeyEvent;
+import org.zkoss.zk.ui.event.MouseEvent;
 import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zul.event.RenderEvent;
 
 /**
+ * The manager of event data builder.
+ * 
  * @author dennis
- *
  */
 public class EventDataManager {
 
@@ -36,51 +40,18 @@ public class EventDataManager {
 	static {
 		builders = new HashMap<Class<? extends Event>, EventDataBuilder>();
 		
-		registerBuilder("5.0.0","*", Event.class, new EventDataBuilder(){
-			public Map<String, Object> build(Event event,Map<String,Object> data) {
-				return data;
-			}});
-		
-		registerBuilder("5.0.0","*", OpenEvent.class, new EventDataBuilder(){
-			public Map<String, Object> build(Event event,Map<String,Object> data) {
-				OpenEvent evt = (OpenEvent)event;
-				setEssential(data,"open",evt.isOpen());
-				setOptional(data,"value",evt.getValue());
-				setReference(data,evt.getReference());
-				return data;
-			}});
-		
-		registerBuilder("5.0.0","*", SelectEvent.class, new EventDataBuilder(){
-			public Map<String, Object> build(Event event,Map<String,Object> data) {
-				SelectEvent evt = (SelectEvent)event;
-				setEssential(data,"items",evt.getSelectedItems());//id set of items
-				setReference(data,evt.getReference());
-				return data;
-			}});
-		
-		registerBuilder("5.0.0","*", KeyEvent.class, new EventDataBuilder(){
-			public Map<String, Object> build(Event event,Map<String,Object> data) {
-				KeyEvent evt = (KeyEvent)event;
-				
-				setEssential(data,"keyCode",evt.getKeyCode());
-				setEssential(data,"ctrlKey",evt.isCtrlKey());
-				setEssential(data,"shiftKey",evt.isShiftKey());
-				setEssential(data,"altKey",evt.isAltKey());
-				setReference(data,evt.getReference());
-				return data;
-			}});
-		
-		registerBuilder("5.0.0","*", RenderEvent.class, new EventDataBuilder(){
-			public Map<String, Object> build(Event event,Map<String,Object> data) {
-				RenderEvent evt = (RenderEvent)event;
-				
-				setEssential(data,"items",evt.getItems());//id set of items
-				return data;
-			}});
-		//more
+		registerBuilder("5.0.0", "*", MouseEvent.class, new MouseEventDataBuilder());
+		registerBuilder("5.0.0", "*", InputEvent.class, new InputEventDataBuilder());
+		registerBuilder("5.0.0", "*", CheckEvent.class, new CheckEventDataBuilder());
+		registerBuilder("5.0.0", "*", Event.class, new DefaultEventDataBuilder());
+		registerBuilder("5.0.0", "*", OpenEvent.class, new OpenEventDataBuilder());
+		registerBuilder("5.0.0", "*", SelectEvent.class, new SelectEventDataBuilder());
+		registerBuilder("5.0.0", "*", KeyEvent.class, new KeyEventDataBuilder());
+		registerBuilder("5.0.0", "*", RenderEvent.class, new RenderEventDataBuilder());
+		//TODO more
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	static private Object toSafeJsonObject(Object obj){
 		if(obj instanceof Set){
 			//exception if data is Set
@@ -92,17 +63,17 @@ public class EventDataManager {
 		return obj;
 	}
 	
-	static private void setEssential(Map<String,Object> data,String key, Object obj){
+	static void setEssential(Map<String,Object> data,String key, Object obj){
 		if(obj==null) throw new ConversationException("data of "+key+" is null");
 		data.put(key, toSafeJsonObject(obj));
 	}
 	
-	static private void setOptional(Map<String,Object> data,String key, Object obj){
+	static void setOptional(Map<String,Object> data,String key, Object obj){
 		if(obj==null) return;
 		data.put(key, toSafeJsonObject(obj));
 	}
 
-	static private void setReference(Map<String,Object> data,Component comp){
+	static void setReference(Map<String,Object> data,Component comp){
 		if(comp==null) return;
 		data.put("reference", comp.getUuid());
 	}
