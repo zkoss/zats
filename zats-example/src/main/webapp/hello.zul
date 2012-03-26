@@ -1,0 +1,6 @@
+<zk>
+	<window title="hello" border="normal" width="300px" apply="org.zkoss.zats.example.hello.HelloComposer">
+		<label />
+		<button label="Hello" />
+	</window>
+</zk>
