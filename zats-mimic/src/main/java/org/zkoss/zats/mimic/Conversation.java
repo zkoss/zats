@@ -45,6 +45,7 @@ public interface Conversation {
 
 	HttpSession getSession();
 
+	// FIXME move this method to Conversation Controller 
 	/**
 	 * post an asynchronous update event.
 	 * 
