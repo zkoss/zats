@@ -4,8 +4,6 @@ import java.util.Date;
 
 /**
  * 
- * @author robbiecheng
- *
  */
 
 public class Task {
