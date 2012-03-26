@@ -1,31 +1,21 @@
 <?page contentType="text/html;charset=UTF-8"?>
-<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
-<window id="win" title="To do list" width="740px" border="normal"
-	apply="org.zkoss.zats.example.crud.TodoComposer">
-	<listbox id="listbox" rows="4"  model="@{win$composer.allTasks, load-after='add.onClick, update.onClick, delete.onClick'}" >
+<window id="win" title="To do list" width="740px" border="normal" apply="org.zkoss.zats.example.crud.TodoComposer">
+	<listbox id="listbox" rows="4"  >
 		<listhead>
-			<listheader label="Item" />
+			<listheader label="Name" />
 			<listheader label="Priority" width="50px" />
 			<listheader label="Date" width="90px" />
 		</listhead>
-		<listitem self="@{each=task}">
-			<listcell label="@{task.name}" />
-			<listcell label="@{task.priority}" />
-			<listcell label="@{task.date, converter='org.zkoss.zkplus.databind.DateFormatConverter'}" self="@{format(yyyy/MM/dd)}"/>
-		</listitem>
 	</listbox>
 	<groupbox>
 		<caption label="Task " />
 		<hlayout spacing="5px">
-			Item:
-			<textbox id="itemBox" 
-			value="@{win$composer.selected.name, load-after='listbox.onSelect, add.onClick, update.onClick, delete.onClick, reset.onClick'}" cols="25" />
+			Name:
+			<textbox id="itemBox"  cols="25" />
 			Priority:
-			<intbox id="priorityBox" 
-			value="@{win$composer.selected.priority, load-after='listbox.onSelect,add.onClick, update.onClick, delete.onClick, reset.onClick'}" cols="1" />
+			<intbox id="priorityBox" cols="1" />
 			Date:
-			<datebox id="dateBox" 
-			value="@{win$composer.selected.date, load-after='listbox.onSelect,add.onClick, update.onClick, delete.onClick, reset.onClick'}" cols="8" format="yyyy-MM-dd"/>
+			<datebox id="dateBox" cols="8" format="yyyy-MM-dd"/>
 			<button id="add" label="Add" height="24px" />
 			<button id="update" label="Update" height="24px" />
 			<button id="delete" label="Delete" height="24px" />
