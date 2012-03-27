@@ -11,7 +11,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zats.testcase;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -21,7 +20,7 @@ import org.junit.runners.Suite.SuiteClasses;
  *
  */
 @RunWith(Suite.class)
-@SuiteClasses({ClickAgentTest.class,BasicAgentTest.class,CheckAgentTest.class,FocusAgentTest.class})
+@SuiteClasses({BasicAgentTest.class})
 public class ZK5AgentTest {
 
 }
