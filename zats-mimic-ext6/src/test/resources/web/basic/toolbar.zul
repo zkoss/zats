@@ -1,0 +1,36 @@
+<zk>
+	<window id="win">
+		<vbox>
+			<hbox>
+				<label value="clicked: " />
+				<label id="clicked" />
+			</hbox>
+			<hbox>
+				<label value="checked: " />
+				<label id="checked" />
+			</hbox>
+			<toolbar id="tb" width="300px" height="20px">
+				<toolbarbutton id="tbb1" label="tbb1" onClick="clicked.value=self.label" />
+				<toolbarbutton id="tbb2" label="tbb2" onClick="clicked.value=self.label" />
+				<toolbarbutton id="tbb3" label="tbb3" onClick="clicked.value=self.label" />
+				<toolbarbutton id="tbb4" label="tbb4" mode="toggle" onCheck="doChecks()"
+					onClick="clicked.value=self.label" />
+				<toolbarbutton id="tbb5" label="tbb5" mode="toggle" onCheck="doChecks()"
+					onClick="clicked.value=self.label" />
+				<toolbarbutton id="tbb6" label="tbb6" mode="toggle" onCheck="doChecks()"
+					onClick="clicked.value=self.label" />
+			</toolbar>
+			<zscript><![CDATA[
+					void doChecks() {
+						String tmp = "";
+						for(int i = 4; i <= 6; ++i) {
+							Toolbarbutton tb = (Toolbarbutton)win.getFellow("tbb" + i);
+							tmp += tb.isChecked() ? tb.getLabel() + " " : "";
+						}
+						checked.setValue(tmp);
+					}
+				]]>
+			</zscript>
+		</vbox>
+	</window>
+</zk>
