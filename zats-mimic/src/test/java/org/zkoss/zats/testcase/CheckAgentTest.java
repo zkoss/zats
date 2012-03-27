@@ -15,7 +15,7 @@ import org.zkoss.zul.Label;
 public class CheckAgentTest {
 	@BeforeClass
 	public static void init() {
-		Conversations.start("./src/test/resources");
+		Conversations.start(".");
 	}
 
 	@AfterClass
@@ -30,7 +30,7 @@ public class CheckAgentTest {
 
 	@Test
 	public void test() {
-		Conversations.open("/basic/check.zul");
+		Conversations.open("/~./basic/check.zul");
 
 		// validate msg
 		Label msg = Searcher.find("#msg").as(Label.class);

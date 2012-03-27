@@ -32,11 +32,12 @@ import org.zkoss.zul.Treeitem;
  * @author dennis
  *
  */
-public class BasicTest {
+public class BasicAgentTest {
 	@BeforeClass
 	public static void init()
 	{
-		Conversations.start("./src/test/resources");
+//		Conversations.start("./src/test/resources");
+		Conversations.start(".");
 	}
 
 	@AfterClass
@@ -54,7 +55,7 @@ public class BasicTest {
 	
 	@Test
 	public void testKeyStrokeAgent(){
-		Conversations.open("/basic/keystroke.zul");
+		Conversations.open("/~./basic/keystroke.zul");
 		
 		ComponentAgent inp1 = Searcher.find("#inp1");
 		ComponentAgent inp2 = Searcher.find("#inp2");
@@ -98,7 +99,7 @@ public class BasicTest {
 	
 	@Test
 	public void testTypeAgent1(){
-		Conversations.open("/basic/type1.zul");
+		Conversations.open("/~./basic/type1.zul");
 		
 		ComponentAgent l = Searcher.find("#l1");
 		ComponentAgent inp = Searcher.find("#inp1");
@@ -239,7 +240,7 @@ public class BasicTest {
 	
 	@Test
 	public void testTypeAgent2(){
-		Conversations.open("/basic/type2.zul");
+		Conversations.open("/~./basic/type2.zul");
 		
 		ComponentAgent l = Searcher.find("#l1");
 		ComponentAgent inp = Searcher.find("#inp1");
@@ -380,7 +381,7 @@ public class BasicTest {
 	
 	@Test
 	public void testOpenAgentTree(){
-		Conversations.open("/basic/open-tree.zul");
+		Conversations.open("/~./basic/open-tree.zul");
 		
 		ComponentAgent tree = Searcher.find("#tree");
 		List<ComponentAgent> items = tree.findAll("treeitem");

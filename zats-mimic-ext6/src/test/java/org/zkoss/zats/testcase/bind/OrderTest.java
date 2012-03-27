@@ -50,7 +50,7 @@ public class OrderTest{
 	
 	@Test
 	public void testLoad(){
-		Conversations.open("/bind/order.zul");
+		Conversations.open("/~./bind/order.zul");
 		ComponentAgent window = Searcher.find("#main");
 		ComponentAgent orderList = Searcher.find("#main #orderList");
 		Assert.assertNotNull(orderList);
@@ -82,7 +82,7 @@ public class OrderTest{
 	
 	@Test
 	public void testVM(){
-		Conversations.open("/bind/order.zul");
+		Conversations.open("/~./bind/order.zul");
 		ComponentAgent window = Searcher.find("#main");
 		ComponentAgent orderList = Searcher.find("#main #orderList");
 		Assert.assertNotNull(orderList);
@@ -118,7 +118,7 @@ public class OrderTest{
 	
 	@Test
 	public void testNew(){
-		Conversations.open("/bind/order.zul");
+		Conversations.open("/~./bind/order.zul");
 		ComponentAgent window = Searcher.find("#main");
 		ComponentAgent orderList = window.find("#orderList");
 		
@@ -172,7 +172,7 @@ public class OrderTest{
 	
 	@Test
 	public void testLoad2(){
-		Conversations.open("/bind/order2.zul");//the grid
+		Conversations.open("/~./bind/order2.zul");//the grid
 		ComponentAgent window = Searcher.find("#main");
 		ComponentAgent orderList = Searcher.find("#main #orderList");
 		Assert.assertNotNull(orderList);
@@ -203,7 +203,7 @@ public class OrderTest{
 	
 	@Test
 	public void testNew2(){
-		Conversations.open("/bind/order2.zul");
+		Conversations.open("/~./bind/order2.zul");
 		ComponentAgent window = Searcher.find("#main");
 		ComponentAgent orderList = window.find("#orderList");
 		

@@ -15,7 +15,7 @@ public class ClickAgentTest {
 
 	@BeforeClass
 	public static void init() {
-		Conversations.start("./src/test/resources"); // user can load by
+		Conversations.start("."); // user can load by
 														// configuration file
 	}
 
@@ -31,7 +31,7 @@ public class ClickAgentTest {
 
 	@Test
 	public void test() {
-		Conversations.open("/basic/click.zul");
+		Conversations.open("/~./basic/click.zul");
 		assertEquals("Hello World!", Searcher.find("#msg").as(Label.class).getValue());
 		Searcher.find("#btn").as(ClickAgent.class).click();
 		assertEquals("Welcome", Searcher.find("#msg").as(Label.class).getValue());

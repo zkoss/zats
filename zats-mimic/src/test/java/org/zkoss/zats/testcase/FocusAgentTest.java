@@ -17,7 +17,7 @@ import org.zkoss.zul.Label;
 public class FocusAgentTest {
 	@BeforeClass
 	public static void init() {
-		Conversations.start("./src/test/resources"); // user can load by
+		Conversations.start("."); // user can load by
 														// configuration file
 	}
 
@@ -33,7 +33,7 @@ public class FocusAgentTest {
 
 	@Test
 	public void test() {
-		Conversations.open("/basic/focus.zul");
+		Conversations.open("/~./basic/focus.zul");
 		Label curr = Searcher.find("#current").as(Label.class);
 		Label lost = Searcher.find("#lost").as(Label.class);
 		assertTrue(curr.getValue().length() <= 0);

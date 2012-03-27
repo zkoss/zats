@@ -31,7 +31,8 @@ public class BindTest{
 	@BeforeClass
 	public static void init()
 	{
-		Conversations.start("./src/test/resources");
+//		Conversations.start("./src/test/resources/web");
+		Conversations.start(".");
 	}
 
 	@AfterClass
@@ -49,7 +50,7 @@ public class BindTest{
 	
 	@Test
 	public void b00810ListboxMultiple(){
-		Conversations.open("/bind/B00810ListboxMultiple.zul");
+		Conversations.open("/~./bind/B00810ListboxMultiple.zul");
 		
 		ComponentAgent listbox1 = Searcher.find("#listbox1");
 		ComponentAgent listbox2 = Searcher.find("#listbox2");
@@ -95,7 +96,7 @@ public class BindTest{
 	
 	@Test
 	public void b00821SelectedIndex(){
-		Conversations.open("/bind/B00821SelectedIndex.zul");
+		Conversations.open("/~./bind/B00821SelectedIndex.zul");
 		
 		ComponentAgent selectbox = Searcher.find("#selectbox");
 		ComponentAgent listbox = Searcher.find("#listbox");
@@ -118,7 +119,7 @@ public class BindTest{
 	
 	@Test
 	public void b00878WrongValueException2(){
-		Conversations.open("/bind/B00878WrongValueException2.zul");
+		Conversations.open("/~./bind/B00878WrongValueException2.zul");
 		
 		ComponentAgent l = Searcher.find("#l1");
 		ComponentAgent inp = Searcher.find("#inp1");
@@ -259,7 +260,7 @@ public class BindTest{
 	
 	@Test
 	public void b00878WrongValueException3(){
-		Conversations.open("/bind/B00878WrongValueException3.zul");
+		Conversations.open("/~./bind/B00878WrongValueException3.zul");
 		
 		ComponentAgent l = Searcher.find("#l1");
 		ComponentAgent inp = Searcher.find("#inp1");
