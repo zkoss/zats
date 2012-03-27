@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.Searcher;
-import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zul.Label;
 
 public class HelloTest {
@@ -36,7 +35,8 @@ public class HelloTest {
 		ComponentAgent button = Searcher.find("button");
 		ComponentAgent label = Searcher.find("label");
 		
-		button.as(ClickAgent.class).click();
+		//button.as(ClickAgent.class).click();
+		button.click();
 		assertEquals("Hello Mimic", label.as(Label.class).getValue());
 	}
 }
