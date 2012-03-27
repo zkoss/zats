@@ -9,8 +9,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="lib/bsh-2.0b4.jar"/>
-	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/hamcrest-core-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/javax.servlet-2.5.0.v201103041518.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-continuation-7.6.2.v20120308.jar"/>
@@ -26,11 +24,5 @@
 	<classpathentry kind="lib" path="lib/zats-common-0.9.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/zats-mimic-0.9.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/zats-mimic-ext6-0.9.0-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/zcommon-6.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/zel-2.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/zhtml-6.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/zk-6.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/zul-6.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/zweb-6.0.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
