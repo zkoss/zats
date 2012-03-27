@@ -1,0 +1,53 @@
+<zk>
+	<window id="win">
+		<vbox>
+			<hbox>
+				<label value="selected: " />
+				<label id="msg" />
+			</hbox>
+			<listbox id="lb" width="250px" multiple="true" onSelect="doSelect()">
+				<listhead>
+					<listheader>col1</listheader>
+					<listheader>col2</listheader>
+				</listhead>
+				<listitem id="i0">
+					<listcell>
+						<label value="i0" />
+					</listcell>
+					<listcell>
+						<label value="i0" />
+					</listcell>
+				</listitem>
+				<listitem id="i1">
+					<listcell>
+						<label value="i1" />
+					</listcell>
+					<listcell>
+						<label value="i1" />
+					</listcell>
+				</listitem>
+				<listitem id="i2">
+					<listcell>
+						<label value="i2" />
+					</listcell>
+					<listcell>
+						<label value="i2" />
+					</listcell>
+				</listitem>
+			</listbox>
+		</vbox>
+	</window>
+	<zscript>
+		<![CDATA[
+	void doSelect() {
+		Label msg = (Label)win.getFellow("msg");
+		Listbox lb = (Listbox)win.getFellow("lb");
+		ArrayList list = new ArrayList();				
+		for(Object o : lb.getSelectedItems())
+			list.add(((Listitem)o).getId());
+		Collections.sort(list);
+		msg.setValue(list.toString());
+	}
+]]>
+	</zscript>
+</zk>
