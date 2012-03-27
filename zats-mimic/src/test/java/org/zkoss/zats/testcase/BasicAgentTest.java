@@ -1,4 +1,4 @@
-/* KeyStroke.java
+/* BasicAgentTest.java
 
 	Purpose:
 		
@@ -10,6 +10,9 @@
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zats.testcase;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Stack;
@@ -23,8 +26,12 @@ import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.Searcher;
+import org.zkoss.zats.mimic.operation.CheckAgent;
+import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
+import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Treeitem;
 
@@ -411,5 +418,53 @@ public class BasicAgentTest {
 		
 		items = tree.findAll("treeitem");
 		Assert.assertEquals(14, items.size());
+	}
+	
+	@Test
+	public void testFocusAgent() {
+		Conversations.open("/~./basic/focus.zul");
+		Label curr = Searcher.find("#current").as(Label.class);
+		Label lost = Searcher.find("#lost").as(Label.class);
+		assertTrue(curr.getValue().length() <= 0);
+		assertTrue(curr.getValue().length() <= 0);
+
+		for (int i = 1; i <= 11; ++i) {
+			ComponentAgent comp = Searcher.find("#c" + i);
+			comp.as(FocusAgent.class).focus();
+			String name = comp.as(AbstractComponent.class).getDefinition().getName();
+			assertEquals(name, curr.getValue());
+			comp.as(FocusAgent.class).blur();
+			assertEquals(name, lost.getValue());
+		}
+	}
+
+	@Test
+	public void testCheckAgent() {
+		Conversations.open("/~./basic/check.zul");
+
+		// validate msg
+		Label msg = Searcher.find("#msg").as(Label.class);
+		assertTrue(msg.getValue().length() <= 0);
+
+		// test checkbox and menuitem
+		String label = "";
+		for (int i = 1; i <= 6; ++i) {
+			Searcher.find("#c" + i).as(CheckAgent.class).check(true);
+			label += "c" + i + " ";
+			assertEquals(label, msg.getValue());
+		}
+		// test radiogroup
+		for (int i = 7; i <= 9; ++i) {
+			Searcher.find("#c" + i).as(CheckAgent.class).check(true);
+			assertEquals(label + "c" + i + " ", msg.getValue());
+		}
+	}
+
+	@Test
+	public void testClickAgent() {
+		Conversations.open("/~./basic/click.zul");
+		assertEquals("Hello World!", Searcher.find("#msg").as(Label.class).getValue());
+		Searcher.find("#btn").as(ClickAgent.class).click();
+		assertEquals("Welcome", Searcher.find("#msg").as(Label.class).getValue());
 	}
 }
