@@ -25,7 +25,6 @@ import org.junit.Test;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
-import org.zkoss.zats.mimic.Searcher;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
@@ -66,9 +65,9 @@ public class BasicAgentTest {
 	public void testKeyStrokeAgent(){
 		Conversations.open("/~./basic/keystroke.zul");
 		
-		ComponentAgent inp1 = Searcher.find("#inp1");
-		ComponentAgent inp2 = Searcher.find("#inp2");
-		ComponentAgent l1 = Searcher.find("#l1");
+		ComponentAgent inp1 = Conversations.query("#inp1");
+		ComponentAgent inp2 = Conversations.query("#inp2");
+		ComponentAgent l1 = Conversations.query("#l1");
 		
 		Assert.assertEquals("", l1.as(Label.class).getValue());
 		
@@ -110,8 +109,8 @@ public class BasicAgentTest {
 	public void testTypeAgent1(){
 		Conversations.open("/~./basic/type1.zul");
 		
-		ComponentAgent l = Searcher.find("#l1");
-		ComponentAgent inp = Searcher.find("#inp1");
+		ComponentAgent l = Conversations.query("#l1");
+		ComponentAgent inp = Conversations.query("#inp1");
 		//bandbox
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
@@ -125,8 +124,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("B",l.as(Label.class).getValue());
 		
 		//combobox
-		l = Searcher.find("#l2");
-		inp = Searcher.find("#inp2");
+		l = Conversations.query("#l2");
+		inp = Conversations.query("#inp2");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("C");
 		Assert.assertEquals("C",l.as(Label.class).getValue());
@@ -137,8 +136,8 @@ public class BasicAgentTest {
 		
 		
 		//textbox
-		l = Searcher.find("#l10");
-		inp = Searcher.find("#inp10");
+		l = Conversations.query("#l10");
+		inp = Conversations.query("#inp10");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("E");
 		Assert.assertEquals("E",l.as(Label.class).getValue());
@@ -148,8 +147,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("F",l.as(Label.class).getValue());
 		
 		//decimalbox
-		l = Searcher.find("#l4");
-		inp = Searcher.find("#inp4");
+		l = Conversations.query("#l4");
+		inp = Conversations.query("#inp4");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("1");
 		Assert.assertEquals("1.0",l.as(Label.class).getValue());
@@ -160,8 +159,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("2.33",l.as(Label.class).getValue());
 		
 		//doublebox
-		l = Searcher.find("#l5");
-		inp = Searcher.find("#inp5");
+		l = Conversations.query("#l5");
+		inp = Conversations.query("#inp5");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("3");
@@ -172,8 +171,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("4.33",l.as(Label.class).getValue());
 		
 		//doublespinner
-		l = Searcher.find("#l6");
-		inp = Searcher.find("#inp6");
+		l = Conversations.query("#l6");
+		inp = Conversations.query("#inp6");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("5");
@@ -186,8 +185,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("6.33",l.as(Label.class).getValue());
 		
 		//intbox
-		l = Searcher.find("#l7");
-		inp = Searcher.find("#inp7");
+		l = Conversations.query("#l7");
+		inp = Conversations.query("#inp7");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("7");
 		Assert.assertEquals("7",l.as(Label.class).getValue());
@@ -200,8 +199,8 @@ public class BasicAgentTest {
 		
 		
 		//longbox
-		l = Searcher.find("#l8");
-		inp = Searcher.find("#inp8");
+		l = Conversations.query("#l8");
+		inp = Conversations.query("#inp8");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("9");
@@ -214,8 +213,8 @@ public class BasicAgentTest {
 		
 		
 		//spinner
-		l = Searcher.find("#l9");
-		inp = Searcher.find("#inp9");
+		l = Conversations.query("#l9");
+		inp = Conversations.query("#inp9");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("11");
 		Assert.assertEquals("11",l.as(Label.class).getValue());
@@ -225,8 +224,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("12",l.as(Label.class).getValue());
 		
 		//datebox
-		l = Searcher.find("#l3");
-		inp = Searcher.find("#inp3");
+		l = Conversations.query("#l3");
+		inp = Conversations.query("#inp3");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("20120223");
 		Assert.assertEquals("20120223",l.as(Label.class).getValue());
@@ -236,8 +235,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("20120320",l.as(Label.class).getValue());
 		
 		//timebox
-		l = Searcher.find("#l11");
-		inp = Searcher.find("#inp11");
+		l = Conversations.query("#l11");
+		inp = Conversations.query("#inp11");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("13:00");
 		Assert.assertEquals("13:00",l.as(Label.class).getValue());
@@ -251,8 +250,8 @@ public class BasicAgentTest {
 	public void testTypeAgent2(){
 		Conversations.open("/~./basic/type2.zul");
 		
-		ComponentAgent l = Searcher.find("#l1");
-		ComponentAgent inp = Searcher.find("#inp1");
+		ComponentAgent l = Conversations.query("#l1");
+		ComponentAgent inp = Conversations.query("#inp1");
 		//bandbox
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
@@ -266,8 +265,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("B",l.as(Label.class).getValue());
 		
 		//combobox
-		l = Searcher.find("#l2");
-		inp = Searcher.find("#inp2");
+		l = Conversations.query("#l2");
+		inp = Conversations.query("#inp2");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("C");
 		Assert.assertEquals("C",l.as(Label.class).getValue());
@@ -278,8 +277,8 @@ public class BasicAgentTest {
 		
 		
 		//textbox
-		l = Searcher.find("#l10");
-		inp = Searcher.find("#inp10");
+		l = Conversations.query("#l10");
+		inp = Conversations.query("#inp10");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("E");
 		Assert.assertEquals("E",l.as(Label.class).getValue());
@@ -289,8 +288,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("F",l.as(Label.class).getValue());
 		
 		//decimalbox
-		l = Searcher.find("#l4");
-		inp = Searcher.find("#inp4");
+		l = Conversations.query("#l4");
+		inp = Conversations.query("#inp4");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("1");
 		Assert.assertEquals("1.0",l.as(Label.class).getValue());
@@ -301,8 +300,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("2222.33",l.as(Label.class).getValue());
 		
 		//doublebox
-		l = Searcher.find("#l5");
-		inp = Searcher.find("#inp5");
+		l = Conversations.query("#l5");
+		inp = Conversations.query("#inp5");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("3");
@@ -313,8 +312,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("4444.33",l.as(Label.class).getValue());
 		
 		//doublespinner
-		l = Searcher.find("#l6");
-		inp = Searcher.find("#inp6");
+		l = Conversations.query("#l6");
+		inp = Conversations.query("#inp6");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("5");
@@ -327,8 +326,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("6666.33",l.as(Label.class).getValue());
 		
 		//intbox
-		l = Searcher.find("#l7");
-		inp = Searcher.find("#inp7");
+		l = Conversations.query("#l7");
+		inp = Conversations.query("#inp7");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("7");
 		Assert.assertEquals("7",l.as(Label.class).getValue());
@@ -341,8 +340,8 @@ public class BasicAgentTest {
 		
 		
 		//longbox
-		l = Searcher.find("#l8");
-		inp = Searcher.find("#inp8");
+		l = Conversations.query("#l8");
+		inp = Conversations.query("#inp8");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("9");
@@ -355,8 +354,8 @@ public class BasicAgentTest {
 		
 		
 		//spinner
-		l = Searcher.find("#l9");
-		inp = Searcher.find("#inp9");
+		l = Conversations.query("#l9");
+		inp = Conversations.query("#inp9");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("11");
 		Assert.assertEquals("11",l.as(Label.class).getValue());
@@ -366,8 +365,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("1112",l.as(Label.class).getValue());
 		
 		//datebox
-		l = Searcher.find("#l3");
-		inp = Searcher.find("#inp3");
+		l = Conversations.query("#l3");
+		inp = Conversations.query("#inp3");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("23022012");
 		Assert.assertEquals("20120223",l.as(Label.class).getValue());
@@ -377,8 +376,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("20120320",l.as(Label.class).getValue());
 		
 		//timebox
-		l = Searcher.find("#l11");
-		inp = Searcher.find("#inp11");
+		l = Conversations.query("#l11");
+		inp = Conversations.query("#inp11");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("00:13");
 		Assert.assertEquals("13:00",l.as(Label.class).getValue());
@@ -392,8 +391,8 @@ public class BasicAgentTest {
 	public void testOpenAgentTree(){
 		Conversations.open("/~./basic/open-tree.zul");
 		
-		ComponentAgent tree = Searcher.find("#tree");
-		List<ComponentAgent> items = tree.findAll("treeitem");
+		ComponentAgent tree = Conversations.query("#tree");
+		List<ComponentAgent> items = tree.queryAll("treeitem");
 		Assert.assertEquals(2, items.size());
 		
 		Stack<ComponentAgent> stack = new Stack<ComponentAgent>();
@@ -402,15 +401,15 @@ public class BasicAgentTest {
 		while(!stack.empty()){
 			ComponentAgent item = stack.pop();
 			
-			if(item.find("treechildren")!=null){
+			if(item.query("treechildren")!=null){
 				Assert.assertFalse(item.as(Treeitem.class).isOpen());
-				items = item.find("treechildren").findAll("treeitem");//the sub-treeitem.
+				items = item.query("treechildren").queryAll("treeitem");//the sub-treeitem.
 				Assert.assertEquals(0, items.size());
 				
 				item.as(OpenAgent.class).open(true);//trigger open to load the tree item.
 				
 				Assert.assertTrue(item.as(Treeitem.class).isOpen());
-				items = item.find("treechildren").findAll("treeitem");//the sub-treeitem.
+				items = item.query("treechildren").queryAll("treeitem");//the sub-treeitem.
 				Assert.assertEquals(2, items.size());
 				for(ComponentAgent si:items){
 					stack.push(si);
@@ -418,20 +417,20 @@ public class BasicAgentTest {
 			}
 		}
 		
-		items = tree.findAll("treeitem");
+		items = tree.queryAll("treeitem");
 		Assert.assertEquals(14, items.size());
 	}
 	
 	@Test
 	public void testFocusAgent() {
 		Conversations.open("/~./basic/focus.zul");
-		Label curr = Searcher.find("#current").as(Label.class);
-		Label lost = Searcher.find("#lost").as(Label.class);
+		Label curr = Conversations.query("#current").as(Label.class);
+		Label lost = Conversations.query("#lost").as(Label.class);
 		assertTrue(curr.getValue().length() <= 0);
 		assertTrue(curr.getValue().length() <= 0);
 
 		for (int i = 1; i <= 11; ++i) {
-			ComponentAgent comp = Searcher.find("#c" + i);
+			ComponentAgent comp = Conversations.query("#c" + i);
 			comp.as(FocusAgent.class).focus();
 			String name = comp.as(AbstractComponent.class).getDefinition().getName();
 			assertEquals(name, curr.getValue());
@@ -445,19 +444,19 @@ public class BasicAgentTest {
 		Conversations.open("/~./basic/check.zul");
 
 		// validate msg
-		Label msg = Searcher.find("#msg").as(Label.class);
+		Label msg = Conversations.query("#msg").as(Label.class);
 		assertTrue(msg.getValue().length() <= 0);
 
 		// test checkbox and menuitem
 		String label = "";
 		for (int i = 1; i <= 6; ++i) {
-			Searcher.find("#c" + i).as(CheckAgent.class).check(true);
+			Conversations.query("#c" + i).as(CheckAgent.class).check(true);
 			label += "c" + i + " ";
 			assertEquals(label, msg.getValue());
 		}
 		// test radiogroup
 		for (int i = 7; i <= 9; ++i) {
-			Searcher.find("#c" + i).as(CheckAgent.class).check(true);
+			Conversations.query("#c" + i).as(CheckAgent.class).check(true);
 			assertEquals(label + "c" + i + " ", msg.getValue());
 		}
 	}
@@ -465,19 +464,19 @@ public class BasicAgentTest {
 	@Test
 	public void testClickAgent() {
 		Conversations.open("/~./basic/click.zul");
-		assertEquals("Hello World!", Searcher.find("#msg").as(Label.class).getValue());
-		Searcher.find("#btn").as(ClickAgent.class).click();
-		assertEquals("Welcome", Searcher.find("#msg").as(Label.class).getValue());
+		assertEquals("Hello World!", Conversations.query("#msg").as(Label.class).getValue());
+		Conversations.query("#btn").as(ClickAgent.class).click();
+		assertEquals("Welcome", Conversations.query("#msg").as(Label.class).getValue());
 	}
 	
 	@Test
 	public void testMultipleSelect() {
 		Conversations.open("/~./basic/multiple-select.zul");
 
-		Label msg = Searcher.find("#msg").as(Label.class);
+		Label msg = Conversations.query("#msg").as(Label.class);
 		assertEquals("", msg.getValue());
 
-		ComponentAgent listbox = Searcher.find("#lb");
+		ComponentAgent listbox = Conversations.query("#lb");
 		assertEquals(4, listbox.as(Listbox.class).getChildren().size()); // include header
 
 		// single selection

@@ -12,7 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic;
 
 import java.util.List;
-import java.util.Map;
 
 import org.zkoss.zk.ui.Page;
 
@@ -31,7 +30,11 @@ public interface PageAgent extends Agent {
 	 */
 	String getUuid();
 
-	List<ComponentAgent> getChildren();
+	/**
+	 * 
+	 * @return
+	 */
+	List<ComponentAgent> getRoots();
 	
 	/**
 	 * get attribute by specify name.
@@ -43,12 +46,8 @@ public interface PageAgent extends Agent {
 	Object getAttribute(String name);
 
 	/**
-	 * get all attributes of the page.
-	 * 
-	 * @return a map of attributes.
+	 * get desktop of this page
 	 */
-	Map<String, Object> getAttributes();
-
 	DesktopAgent getDesktop();
 
 	/**
@@ -57,4 +56,18 @@ public interface PageAgent extends Agent {
 	 * @return page
 	 */
 	Page getPage();
+	
+	/**
+	 * to find the first component agent with the selector in this page
+	 * @param selector the selector
+	 * @return the first component agent, null if not found
+	 */
+	ComponentAgent query(String selector);
+	
+	/**
+	 * to find the component agents with the selector in this page
+	 * @param selector the selector
+	 * @return the component agents
+	 */
+	List<ComponentAgent> queryAll(String selector);
 }

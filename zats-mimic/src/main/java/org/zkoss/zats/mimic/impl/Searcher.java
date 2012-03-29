@@ -9,7 +9,7 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
-package org.zkoss.zats.mimic;
+package org.zkoss.zats.mimic.impl;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -18,8 +18,11 @@ import java.util.List;
 import java.util.logging.Logger;
 import org.zkoss.Version;
 import org.zkoss.zats.common.select.Selectors;
-import org.zkoss.zats.mimic.impl.DefaultComponentAgent;
-import org.zkoss.zats.mimic.impl.DefaultPageAgent;
+import org.zkoss.zats.mimic.Agent;
+import org.zkoss.zats.mimic.ComponentAgent;
+import org.zkoss.zats.mimic.Conversation;
+import org.zkoss.zats.mimic.ConversationException;
+import org.zkoss.zats.mimic.PageAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -29,9 +32,10 @@ import org.zkoss.zk.ui.Page;
  * 
  * @author pao
  */
-public class Searcher {
+/*public*/ class Searcher {
 	private static Logger logger = Logger.getLogger(Searcher.class.getName());
 
+	
 	/**
 	 * find components matched specify selector.
 	 * 
@@ -109,11 +113,11 @@ public class Searcher {
 		return agents.size() > 0 ? agents.get(0) : null;
 	}
 
-	public static ComponentAgent find(String selector) {
-		return Searcher.find(Conversations.getDesktop(), selector);
+	public static ComponentAgent find(Conversation conv,String selector) {
+		return Searcher.find(conv.getDesktop(), selector);
 	}
 
-	public static List<ComponentAgent> findAll(String selector) {
-		return Searcher.findAll(Conversations.getDesktop(), selector);
+	public static List<ComponentAgent> findAll(Conversation conv,String selector) {
+		return Searcher.findAll(conv.getDesktop(), selector);
 	}
 }

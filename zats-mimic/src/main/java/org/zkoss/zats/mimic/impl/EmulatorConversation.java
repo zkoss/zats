@@ -86,7 +86,7 @@ public class EmulatorConversation implements Conversation {
 		}
 	}
 
-	public void open(String zulPath) {
+	public DesktopAgent open(String zulPath) {
 		InputStream is = null;
 		try {
 			// load zul page
@@ -102,12 +102,20 @@ public class EmulatorConversation implements Conversation {
 			Desktop desktop = (Desktop) emulator.getRequestAttributes().get(
 					"javax.zkoss.zk.ui.desktop");
 			// TODO, what if a non-zk(zul) page, throw exception?
-			desktopAgent = new DefaultDesktopAgent(this, desktop);
+			return desktopAgent = new DefaultDesktopAgent(this, desktop);
 		} catch (Exception e) {
 			throw new ConversationException("", e);
 		} finally {
 			close(is);
 		}
+	}
+	
+	public ComponentAgent query(String selector){
+		return Searcher.find(this,selector);
+	}
+	
+	public List<ComponentAgent> queryAll(String selector){
+		return Searcher.findAll(this,selector);
 	}
 
 	public void clean() {

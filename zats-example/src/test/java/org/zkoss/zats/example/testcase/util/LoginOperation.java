@@ -1,6 +1,6 @@
 package org.zkoss.zats.example.testcase.util;
 
-import static org.zkoss.zats.mimic.Searcher.find;
+import static org.zkoss.zats.mimic.Conversations.query;
 
 import javax.servlet.http.HttpSession;
 
@@ -17,9 +17,9 @@ import org.zkoss.zats.mimic.operation.TypeAgent;
 public class LoginOperation {
 
 	public static boolean login(String account, String password){
-		ComponentAgent accountBox = find("#account");
-		ComponentAgent passwordBox = find("#password");
-		ComponentAgent login = find("button");
+		ComponentAgent accountBox = query("#account");
+		ComponentAgent passwordBox = query("#password");
+		ComponentAgent login = query("button");
 		
 		//login failed
 		accountBox.as(TypeAgent.class).type(account);

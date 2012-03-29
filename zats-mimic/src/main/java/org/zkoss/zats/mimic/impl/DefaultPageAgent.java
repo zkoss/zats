@@ -14,7 +14,6 @@ package org.zkoss.zats.mimic.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversation;
@@ -44,15 +43,11 @@ public class DefaultPageAgent implements PageAgent {
 		return page.getAttribute(name);
 	}
 
-	public Map<String, Object> getAttributes() {
-		return page.getAttributes();
-	}
-
 	public String getUuid() {
 		return page.getUuid();
 	}
 
-	public List<ComponentAgent> getChildren() {
+	public List<ComponentAgent> getRoots() {
 		List<ComponentAgent> agents = new ArrayList<ComponentAgent>();
 		Iterator<?> iterator = page.getRoots().iterator();
 		while (iterator.hasNext())
@@ -85,6 +80,14 @@ public class DefaultPageAgent implements PageAgent {
 	
 	public Object getDelegatee() {
 		return page;
+	}
+	
+	public ComponentAgent query(String selector) {
+		return Searcher.find(this, selector);
+	}
+
+	public List<ComponentAgent> queryAll(String selector) {
+		return Searcher.findAll(this, selector);
 	}
 	
 	public String toString(){

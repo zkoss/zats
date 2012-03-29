@@ -18,7 +18,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.Conversations;
-import org.zkoss.zats.mimic.Searcher;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Toolbarbutton;
 
@@ -47,27 +46,27 @@ public class BasicAgentTest {
 		Conversations.open("/~./basic/toolbar.zul");
 
 		for (int i = 1; i <= 6; ++i)
-			assertEquals("tbb" + i, Searcher.find("#tbb" + i).as(Toolbarbutton.class).getLabel());
+			assertEquals("tbb" + i, Conversations.query("#tbb" + i).as(Toolbarbutton.class).getLabel());
 
-		Label clicked = Searcher.find("#clicked").as(Label.class);
+		Label clicked = Conversations.query("#clicked").as(Label.class);
 		assertEquals("", clicked.getValue());
 
 		for (int i = 1; i <= 6; ++i) {
-			Searcher.find("#tbb" + i).click();
+			Conversations.query("#tbb" + i).click();
 			assertEquals("tbb" + i, clicked.getValue());
 		}
 
-		Label checked = Searcher.find("#checked").as(Label.class);
+		Label checked = Conversations.query("#checked").as(Label.class);
 		assertEquals("", checked.getValue());
 
 		String[] values = { "tbb4 ", "tbb4 tbb5 ", "tbb4 tbb5 tbb6 ", "tbb4 tbb6 " };
 		for (int i = 4; i <= 6; ++i) {
-			Searcher.find("#tbb" + i).check(true);
+			Conversations.query("#tbb" + i).check(true);
 			assertEquals(values[i - 4], checked.getValue());
 			assertEquals("tbb6", clicked.getValue()); // "check" should not perform "click"
 		}
 
-		Searcher.find("#tbb5").check(false);
+		Conversations.query("#tbb5").check(false);
 		assertEquals(values[3], checked.getValue());
 	}
 }

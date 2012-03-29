@@ -9,7 +9,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
-import org.zkoss.zats.mimic.Searcher;
 import org.zkoss.zats.mimic.operation.RendererAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.testapp.bind.order.Order;
@@ -51,12 +50,12 @@ public class OrderTest{
 	@Test
 	public void testLoad(){
 		Conversations.open("/~./bind/order.zul");
-		ComponentAgent window = Searcher.find("#main");
-		ComponentAgent orderList = Searcher.find("#main #orderList");
+		ComponentAgent window = Conversations.query("#main");
+		ComponentAgent orderList = Conversations.query("#main #orderList");
 		Assert.assertNotNull(orderList);
 		
 		//check header
-		List<ComponentAgent> headers = orderList.findAll("listheader");
+		List<ComponentAgent> headers = orderList.queryAll("listheader");
 		Assert.assertEquals(5, headers.size());
 		
 		//assert header label 
@@ -67,24 +66,24 @@ public class OrderTest{
 		Assert.assertEquals("Shipping Date", headers.get(4).as(Listheader.class).getLabel());
 		
 		
-		ComponentAgent newBtn = window.find("#newBtn");
-		ComponentAgent saveBtn = window.find("#saveBtn");
-		ComponentAgent deleteBtn1 = window.find("#deleteBtn1");
+		ComponentAgent newBtn = window.query("#newBtn");
+		ComponentAgent saveBtn = window.query("#saveBtn");
+		ComponentAgent deleteBtn1 = window.query("#deleteBtn1");
 		
 		Assert.assertFalse(newBtn.as(Button.class).isDisabled());
 		Assert.assertTrue(saveBtn.as(Button.class).isDisabled());
 		Assert.assertTrue(deleteBtn1.as(Button.class).isDisabled());
 		
 		
-		ComponentAgent editor = window.find("#editor");
+		ComponentAgent editor = window.query("#editor");
 		Assert.assertFalse(editor.as(Groupbox.class).isVisible());
 	}
 	
 	@Test
 	public void testVM(){
 		Conversations.open("/~./bind/order.zul");
-		ComponentAgent window = Searcher.find("#main");
-		ComponentAgent orderList = Searcher.find("#main #orderList");
+		ComponentAgent window = Conversations.query("#main");
+		ComponentAgent orderList = Conversations.query("#main #orderList");
 		Assert.assertNotNull(orderList);
 		
 		Order selected = null;
@@ -119,20 +118,20 @@ public class OrderTest{
 	@Test
 	public void testNew(){
 		Conversations.open("/~./bind/order.zul");
-		ComponentAgent window = Searcher.find("#main");
-		ComponentAgent orderList = window.find("#orderList");
+		ComponentAgent window = Conversations.query("#main");
+		ComponentAgent orderList = window.query("#orderList");
 		
-		ComponentAgent newBtn = window.find("#newBtn");
-		ComponentAgent saveBtn = window.find("#saveBtn");
-		ComponentAgent deleteBtn1 = window.find("#deleteBtn1");
+		ComponentAgent newBtn = window.query("#newBtn");
+		ComponentAgent saveBtn = window.query("#saveBtn");
+		ComponentAgent deleteBtn1 = window.query("#deleteBtn1");
 		
-		ComponentAgent editor = window.find("#editor");
+		ComponentAgent editor = window.query("#editor");
 		Assert.assertFalse(editor.as(Groupbox.class).isVisible());
 		Assert.assertTrue(saveBtn.as(Button.class).isDisabled());
 		Assert.assertTrue(deleteBtn1.as(Button.class).isDisabled());
 		
 		
-		List<ComponentAgent> items = orderList.findAll("listitem");
+		List<ComponentAgent> items = orderList.queryAll("listitem");
 		int size = items.size();
 		//click new 
 		newBtn.click();
@@ -142,11 +141,11 @@ public class OrderTest{
 		Assert.assertFalse(deleteBtn1.as(Button.class).isDisabled());
 		
 		//fill data
-		editor.find("#desc").type("a test object");
-		editor.find("#quantity").type("300");
-		editor.find("#price").type("33.33");
-		editor.find("#creationDate").type("2012/03/20");
-		editor.find("#shippingDate").type("2012/04/20");
+		editor.query("#desc").type("a test object");
+		editor.query("#quantity").type("300");
+		editor.query("#price").type("33.33");
+		editor.query("#creationDate").type("2012/03/20");
+		editor.query("#shippingDate").type("2012/04/20");
 		
 		//click save
 		saveBtn.click();
@@ -155,12 +154,12 @@ public class OrderTest{
 		orderList.as(RendererAgent.class).render(size,size);//render last
 		
 		//check the last item has the new data
-		items = orderList.findAll("listitem");
+		items = orderList.queryAll("listitem");
 		
 		Assert.assertEquals(size+1, items.size());
 		
 		ComponentAgent lastItem = items.get(items.size()-1);
-		List<ComponentAgent> fields = lastItem.findAll("listcell");
+		List<ComponentAgent> fields = lastItem.queryAll("listcell");
 		Assert.assertEquals(5, lastItem.getChildren().size());
 		Assert.assertEquals(5, fields.size());
 		Assert.assertEquals("300", fields.get(1).as(Listcell.class).getLabel());
@@ -173,12 +172,12 @@ public class OrderTest{
 	@Test
 	public void testLoad2(){
 		Conversations.open("/~./bind/order2.zul");//the grid
-		ComponentAgent window = Searcher.find("#main");
-		ComponentAgent orderList = Searcher.find("#main #orderList");
+		ComponentAgent window = Conversations.query("#main");
+		ComponentAgent orderList = Conversations.query("#main #orderList");
 		Assert.assertNotNull(orderList);
 		
 		//check header
-		List<ComponentAgent> headers = orderList.findAll("column");
+		List<ComponentAgent> headers = orderList.queryAll("column");
 		Assert.assertEquals(5, headers.size());
 		
 		//assert header label 
@@ -189,14 +188,14 @@ public class OrderTest{
 		Assert.assertEquals("Shipping Date", headers.get(4).as(Column.class).getLabel());
 		
 		
-		ComponentAgent newBtn = window.find("#newBtn");
-		ComponentAgent saveBtn = window.find("#saveBtn");
+		ComponentAgent newBtn = window.query("#newBtn");
+		ComponentAgent saveBtn = window.query("#saveBtn");
 		
 		Assert.assertFalse(newBtn.as(Button.class).isDisabled());
 		Assert.assertTrue(saveBtn.as(Button.class).isDisabled());
 		
 		
-		ComponentAgent editor = window.find("#editor");
+		ComponentAgent editor = window.query("#editor");
 		Assert.assertFalse(editor.as(Groupbox.class).isVisible());
 	}
 	
@@ -204,18 +203,18 @@ public class OrderTest{
 	@Test
 	public void testNew2(){
 		Conversations.open("/~./bind/order2.zul");
-		ComponentAgent window = Searcher.find("#main");
-		ComponentAgent orderList = window.find("#orderList");
+		ComponentAgent window = Conversations.query("#main");
+		ComponentAgent orderList = window.query("#orderList");
 		
-		ComponentAgent newBtn = window.find("#newBtn");
-		ComponentAgent saveBtn = window.find("#saveBtn");
+		ComponentAgent newBtn = window.query("#newBtn");
+		ComponentAgent saveBtn = window.query("#saveBtn");
 		
-		ComponentAgent editor = window.find("#editor");
+		ComponentAgent editor = window.query("#editor");
 		Assert.assertFalse(editor.as(Groupbox.class).isVisible());
 		Assert.assertTrue(saveBtn.as(Button.class).isDisabled());
 		
 		
-		List<ComponentAgent> items = orderList.findAll("row");
+		List<ComponentAgent> items = orderList.queryAll("row");
 		int size = items.size();
 		//click new 
 		newBtn.click();
@@ -224,11 +223,11 @@ public class OrderTest{
 		Assert.assertFalse(saveBtn.as(Button.class).isDisabled());
 		
 		//fill data
-		editor.find("#desc").type("a test object");
-		editor.find("#quantity").type("300");
-		editor.find("#price").type("33.33");
-		editor.find("#creationDate").type("2012/03/20");
-		editor.find("#shippingDate").type("2012/04/20");
+		editor.query("#desc").type("a test object");
+		editor.query("#quantity").type("300");
+		editor.query("#price").type("33.33");
+		editor.query("#creationDate").type("2012/03/20");
+		editor.query("#shippingDate").type("2012/04/20");
 		
 		//click save
 		saveBtn.click();
@@ -237,12 +236,12 @@ public class OrderTest{
 		orderList.as(RendererAgent.class).render(size,size);//render last
 		
 		//check the last item has the new data
-		items = orderList.findAll("row");
+		items = orderList.queryAll("row");
 		
 		Assert.assertEquals(size+1, items.size());
 		
 		ComponentAgent lastItem = items.get(items.size()-1);
-		List<ComponentAgent> fields = lastItem.findAll("label");
+		List<ComponentAgent> fields = lastItem.queryAll("label");
 		Assert.assertEquals(5, lastItem.getChildren().size());
 		Assert.assertEquals(5, fields.size());
 		Assert.assertEquals("300", fields.get(1).as(Label.class).getValue());

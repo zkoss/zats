@@ -13,21 +13,17 @@ package org.zkoss.zats.mimic.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversation;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.PageAgent;
-import org.zkoss.zats.mimic.Searcher;
-import org.zkoss.zats.mimic.impl.operation.OperationAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.OperationAgentManager;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
-import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.Component;
@@ -58,10 +54,6 @@ public class DefaultComponentAgent implements ComponentAgent {
 
 	public Object getAttribute(String name) {
 		return comp.getAttribute(name);
-	}
-
-	public Map<String, Object> getAttributes() {
-		return comp.getAttributes();
 	}
 
 	public String getUuid() {
@@ -121,11 +113,11 @@ public class DefaultComponentAgent implements ComponentAgent {
 		return comp.equals(obj);
 	}
 
-	public ComponentAgent find(String selector) {
+	public ComponentAgent query(String selector) {
 		return Searcher.find(this,selector);
 	}
 
-	public List<ComponentAgent> findAll(String selector) {
+	public List<ComponentAgent> queryAll(String selector) {
 		return Searcher.findAll(this,selector);
 	}
 	

@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.zkoss.zats.example.testcase.util.LoginOperation;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
-import org.zkoss.zats.mimic.Searcher;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zul.Label;
@@ -38,10 +37,10 @@ public class LoginLogoutTest {
 	public void test() {
 		Conversations.open("/login.zul");
 
-		ComponentAgent account = Searcher.find("#account");
-		ComponentAgent password = Searcher.find("#password");
-		ComponentAgent login = Searcher.find("button");
-		ComponentAgent msg = Searcher.find("div > label");
+		ComponentAgent account = Conversations.query("#account");
+		ComponentAgent password = Conversations.query("#password");
+		ComponentAgent login = Conversations.query("button");
+		ComponentAgent msg = Conversations.query("div > label");
 		
 		//login failed
 		account.as(TypeAgent.class).type("hawk");
@@ -54,7 +53,7 @@ public class LoginLogoutTest {
 		login.as(ClickAgent.class).click();
 		HttpSession session = Conversations.getSession();
 		assertEquals(account.as(Textbox.class).getValue(), session.getAttribute("user"));
-//		ComponentNode mainWin = Searcher.find("window"); no handle redirect for now
+//		ComponentNode mainWin = Conversations.query("window"); no handle redirect for now
 //		assertEquals("Main",mainWin.as(Window.class).getTitle());
 
 	}

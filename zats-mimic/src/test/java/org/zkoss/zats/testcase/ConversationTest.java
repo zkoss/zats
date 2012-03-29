@@ -18,7 +18,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.Conversations;
-import org.zkoss.zats.mimic.Searcher;
+import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zul.Label;
 
@@ -49,9 +49,9 @@ public class ConversationTest {
 	@Test
 	public void testLoadLocal() {
 		//to test open a local zul
-		Conversations.open("/basic/click.zul");
-		assertEquals("Hello World!", Searcher.find("#msg").as(Label.class).getValue());
-		Searcher.find("#btn").as(ClickAgent.class).click();
-		assertEquals("Welcome", Searcher.find("#msg").as(Label.class).getValue());
+		DesktopAgent desktop = Conversations.open("/basic/click.zul");
+		assertEquals("Hello World!", desktop.query("#msg").as(Label.class).getValue());
+		desktop.query("#btn").as(ClickAgent.class).click();
+		assertEquals("Welcome", desktop.query("#msg").as(Label.class).getValue());
 	}
 }

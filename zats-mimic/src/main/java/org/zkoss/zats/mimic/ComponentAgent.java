@@ -12,7 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic;
 
 import java.util.List;
-import java.util.Map;
 
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
@@ -52,13 +51,6 @@ public interface ComponentAgent extends Agent{
 	 * @return attribute value or null if not found or otherwise.
 	 */
 	Object getAttribute(String name);
-
-	/**
-	 * get all attributes of the component.
-	 * 
-	 * @return a map of attributes.
-	 */
-	Map<String, Object> getAttributes();
 
 	/**
 	 * get children agents.
@@ -127,13 +119,13 @@ public interface ComponentAgent extends Agent{
 	 * find components matched specify selector base on this component agent.
 	 * @param selector
 	 */
-	ComponentAgent find(String selector);
+	ComponentAgent query(String selector);
 	
 	/**
 	 * find components matched specify selector base on this component agent.
 	 * @param selector
 	 */
-	List<ComponentAgent> findAll(String selector);
+	List<ComponentAgent> queryAll(String selector);
 	
 	
 	/**

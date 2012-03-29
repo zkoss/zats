@@ -12,7 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic;
 
 import java.util.List;
-import java.util.Map;
 
 import org.zkoss.zk.ui.Desktop;
 
@@ -24,6 +23,10 @@ public interface DesktopAgent extends Agent {
 	 */
 	String getId();
 	
+	
+	/**
+	 * get pages in this desktop
+	 */
 	List<PageAgent> getPages();
 	
 	
@@ -36,12 +39,6 @@ public interface DesktopAgent extends Agent {
 	 */
 	Object getAttribute(String name);
 
-	/**
-	 * get all attributes of the desktop.
-	 * 
-	 * @return a map of attributes.
-	 */
-	Map<String, Object> getAttributes();
 
 	/**
 	 * get the native Desktop.
@@ -49,4 +46,18 @@ public interface DesktopAgent extends Agent {
 	 * @return desktop
 	 */
 	Desktop getDesktop();
+	
+	/**
+	 * to find the first component agent with the selector
+	 * @param selector the selector
+	 * @return the first component agent, null if not found
+	 */
+	ComponentAgent query(String selector);
+	
+	/**
+	 * to find the component agents with the selector
+	 * @param selector the selector
+	 * @return the component agents
+	 */
+	List<ComponentAgent> queryAll(String selector);
 }

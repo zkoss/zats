@@ -14,7 +14,8 @@ package org.zkoss.zats.mimic.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversation;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.PageAgent;
@@ -40,10 +41,6 @@ public class DefaultDesktopAgent implements DesktopAgent {
 
 	public Object getAttribute(String name) {
 		return desktop.getAttribute(name);
-	}
-
-	public Map<String, Object> getAttributes() {
-		return desktop.getAttributes();
 	}
 
 	public Conversation getConversation() {
@@ -80,5 +77,19 @@ public class DefaultDesktopAgent implements DesktopAgent {
 			.append("@").append(Integer.toHexString(System.identityHashCode(this)))
 			.append("[").append(desktop.toString()).append("]")
 			.toString();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.zkoss.zats.mimic.DesktopAgent#query(java.lang.String)
+	 */
+	public ComponentAgent query(String selector) {
+		return Searcher.find(this, selector);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.zkoss.zats.mimic.DesktopAgent#queryAll(java.lang.String)
+	 */
+	public List<ComponentAgent> queryAll(String selector) {
+		return Searcher.findAll(this, selector);
 	}
 }

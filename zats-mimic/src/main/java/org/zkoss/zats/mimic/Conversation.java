@@ -11,6 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic;
 
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
@@ -34,7 +35,7 @@ public interface Conversation {
 	 * @param zul
 	 *            the path related to the resource root path
 	 */
-	void open(String zul);
+	DesktopAgent open(String zul);
 
 	/**
 	 * clean current Desktop and release resources.
@@ -57,4 +58,18 @@ public interface Conversation {
 	 *            data for update
 	 */
 	void postUpdate(ComponentAgent target, String cmd, Map<String, Object> data);
+	
+	/**
+	 * to find the first component agent with the selector in last desktop
+	 * @param selector the selector
+	 * @return the first component agent, null if not found
+	 */
+	ComponentAgent query(String selector);
+	
+	/**
+	 * to find the component agents with the selector in last desktop
+	 * @param selector the selector
+	 * @return the component agents
+	 */
+	List<ComponentAgent> queryAll(String selector);
 }

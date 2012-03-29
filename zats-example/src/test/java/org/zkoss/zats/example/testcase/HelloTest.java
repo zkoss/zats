@@ -8,7 +8,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
-import org.zkoss.zats.mimic.Searcher;
 import org.zkoss.zul.Label;
 
 public class HelloTest {
@@ -32,8 +31,8 @@ public class HelloTest {
 	public void test() {
 		Conversations.open("/hello.zul");
 
-		ComponentAgent button = Searcher.find("button");
-		ComponentAgent label = Searcher.find("label");
+		ComponentAgent button = Conversations.query("button");
+		ComponentAgent label = Conversations.query("label");
 		
 		//button.as(ClickAgent.class).click();
 		button.click();
