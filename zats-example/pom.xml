@@ -3,17 +3,43 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.zk</groupId>
 	<artifactId>zats-example</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<version>0.9.0</version>
 	<name>ZK Application Test Suite - Example</name>
-	<description>The zats-example Project</description>
+	<description>ZK Application Test Suite - Example</description>
+	<url>http://www.zkoss.org/zats</url>
 	<licenses>
 		<license>
-			<name>GNU LESSER GENERAL PUBLIC LICENSE, Version 3</name>
-			<url>http://www.gnu.org/licenses/lgpl.html</url>
+			<name>GNU GENERAL PUBLIC LICENSE, Version 3</name>
+			<url>http://www.gnu.org/licenses/gpl.html</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	<scm>
+		<url>http://zkats.googlecode.com/svn/trunk/</url>
+		<connection>scm:svn:http://zkats.googlecode.com/svn/trunk/</connection>
+	</scm>
+	<developers>
+		<developer>
+			<id>zkteam</id>
+			<name>ZK Team</name>
+			<email>info@zkoss.org</email>
+			<url>http://www.zkoss.org</url>
+			<organization>Potix</organization>
+			<organizationUrl>http://www.zkoss.org</organizationUrl>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+			<timezone>8</timezone>
+			<properties>
+				<picUrl>http://www.zkoss.org</picUrl>
+			</properties>
+		</developer>
+	</developers>
+	<packaging>war</packaging>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<repositories>
 		<repository>
 			<id>zk repository</id>
@@ -40,7 +66,7 @@
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zats-mimic</artifactId>
-			<version>0.9.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -52,7 +78,7 @@
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zats-mimic-ext6</artifactId>
-			<version>0.9.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

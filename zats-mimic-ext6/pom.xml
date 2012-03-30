@@ -3,12 +3,43 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.zk</groupId>
 	<artifactId>zats-mimic-ext6</artifactId>
-	<version>0.9.0-SNAPSHOT</version>
-	<name>ZK Application Test Suite - Extension for ZK6</name>
-	<description>A framework to test ZK-based application - Extension for ZK6</description>
+	<version>0.9.0</version>
+	<name>ZK Application Test Suite - Mimic Library Extension for ZK6</name>
+	<description>ZK Application Test Suite - Mimic Library Extension for ZK6</description>
+	<url>http://www.zkoss.org/zats</url>
+	<licenses>
+		<license>
+			<name>GNU GENERAL PUBLIC LICENSE, Version 3</name>
+			<url>http://www.gnu.org/licenses/gpl.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<url>http://zkats.googlecode.com/svn/trunk/</url>
+		<connection>scm:svn:http://zkats.googlecode.com/svn/trunk/</connection>
+	</scm>
+	<developers>
+		<developer>
+			<id>zkteam</id>
+			<name>ZK Team</name>
+			<email>info@zkoss.org</email>
+			<url>http://www.zkoss.org</url>
+			<organization>Potix</organization>
+			<organizationUrl>http://www.zkoss.org</organizationUrl>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+			<timezone>8</timezone>
+			<properties>
+				<picUrl>http://www.zkoss.org</picUrl>
+			</properties>
+		</developer>
+	</developers>
+	<packaging>jar</packaging>
 	<properties>
-    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  	</properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -55,8 +86,8 @@
 			<!-- to package -tests.jar -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-jar-plugin</artifactId>
-		        <version>2.4</version>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
 				<executions>
 					<execution>
 						<id>test-jar</id>

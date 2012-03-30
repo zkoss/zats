@@ -4,10 +4,40 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.zk</groupId>
 	<artifactId>zats</artifactId>
-	<packaging>pom</packaging>
-	<version>0.9.0-SNAPSHOT</version>
+	<version>0.9.0</version>
 	<name>ZK Application Test Suite</name>
-	<description>A framework to test ZK-based application	</description>
+	<description>ZK Application Test Suite</description>
+	<url>http://www.zkoss.org/zats</url>
+	<licenses>
+		<license>
+			<name>GNU GENERAL PUBLIC LICENSE, Version 3</name>
+			<url>http://www.gnu.org/licenses/gpl.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<url>http://zkats.googlecode.com/svn/trunk/</url>
+		<connection>scm:svn:http://zkats.googlecode.com/svn/trunk/</connection>
+	</scm>
+	<developers>
+		<developer>
+			<id>zkteam</id>
+			<name>ZK Team</name>
+			<email>info@zkoss.org</email>
+			<url>http://www.zkoss.org</url>
+			<organization>Potix</organization>
+			<organizationUrl>http://www.zkoss.org</organizationUrl>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+			<timezone>8</timezone>
+			<properties>
+				<picUrl>http://www.zkoss.org</picUrl>
+			</properties>
+		</developer>
+	</developers>
+	<packaging>pom</packaging>
 	<modules>
 		<module>../zats-common</module>
 		<module>../zats-mimic</module>
