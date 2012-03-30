@@ -1,7 +1,6 @@
 package org.zkoss.zats.example.testcase;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.zkoss.zats.mimic.Conversations.query;
 
 import java.util.List;
@@ -78,13 +77,13 @@ public class TodoTest {
 		query("button[label='Reset']").click();
 		assertEquals("",itemName.as(Textbox.class).getValue());
 		assertEquals((Integer)0,priority.as(Intbox.class).getValue());
-		assertEquals(true, date.as(Datebox.class).getValue()==null);
+		assertNull(date.as(Datebox.class).getValue());
 
 		//delete
-		assertEquals(2,listbox.getChildren().size());
+		assertEquals(1,listbox.queryAll("listitem").size());
 		listbox.select(0);
 		query("button[label='Delete']").click();
-		assertEquals(1,listbox.getChildren().size());
+		assertEquals(0,listbox.queryAll("listitem").size());
 		
 		//The next line causes IllegalStateException: Components can be accessed only in event listeners
 		//find("textbox").as(Textbox.class).setValue("abc"); 
