@@ -31,8 +31,8 @@ public interface PageAgent extends Agent {
 	String getUuid();
 
 	/**
-	 * 
-	 * @return
+	 * get root component agents at the page.
+	 * @return a list contained root component agents.
 	 */
 	List<ComponentAgent> getRoots();
 	
