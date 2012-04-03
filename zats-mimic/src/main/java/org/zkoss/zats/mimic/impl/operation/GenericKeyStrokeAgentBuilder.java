@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
+import org.zkoss.zats.mimic.impl.ConversationCtrl;
 import org.zkoss.zats.mimic.impl.au.AuUtility;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
@@ -135,7 +136,7 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<KeySt
 			String cmd = Events.ON_CTRL_KEY;
 			Map<String, Object> data = EventDataManager.build(new KeyEvent(cmd, et.getComponent(), keyCode, ctrlKey,
 					shiftKey, altKey, target.getComponent()));
-			et.getConversation().postUpdate(et, cmd, data);
+			((ConversationCtrl)et.getConversation()).postUpdate(et.getUuid(), cmd, data);
 		}
 
 		private void doOnCancel() {
@@ -145,7 +146,7 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<KeySt
 			String cmd = Events.ON_CANCEL;
 			Map<String, Object> data = EventDataManager.build(new KeyEvent(cmd, et.getComponent(), ESC, false, false,
 					false, target.getComponent()));
-			et.getConversation().postUpdate(et, cmd, data);
+			((ConversationCtrl)et.getConversation()).postUpdate(et.getUuid(), cmd, data);
 		}
 
 		private void doOnOK() {
@@ -155,7 +156,7 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<KeySt
 			String cmd = Events.ON_OK;
 			Map<String, Object> data = EventDataManager.build(new KeyEvent(cmd, et.getComponent(), ENTER, false, false,
 					false, target.getComponent()));
-			et.getConversation().postUpdate(et, cmd, data);
+			((ConversationCtrl)et.getConversation()).postUpdate(et.getUuid(), cmd, data);
 		}
 	}
 }

@@ -29,8 +29,8 @@ import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
-import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
+import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
@@ -478,35 +478,43 @@ public class BasicAgentTest {
 
 		ComponentAgent listbox = Conversations.query("#lb");
 		assertEquals(4, listbox.as(Listbox.class).getChildren().size()); // include header
-
-		// single selection
-		String[] values = { "[i0]", "[i1]", "[i2]" };
-		for (int i = 0; i < 3; ++i) {
-			listbox.select(i);
-			assertEquals(values[i], msg.getValue());
-		}
+		List<ComponentAgent> items = listbox.queryAll("listitem");
 
 		// multiple selection
-		listbox.select(0);
+		items.get(0).as(SelectAgent.class).select();
 		assertEquals("[i0]", msg.getValue());
 		assertEquals(1, listbox.as(Listbox.class).getSelectedCount());
-		listbox.as(MultipleSelectAgent.class).select(1);
+		items.get(1).as(SelectAgent.class).select();
 		assertEquals("[i0, i1]", msg.getValue());
 		assertEquals(2, listbox.as(Listbox.class).getSelectedCount());
-		listbox.as(MultipleSelectAgent.class).select(2);
+		items.get(2).as(SelectAgent.class).select();
 		assertEquals("[i0, i1, i2]", msg.getValue());
 		assertEquals(3, listbox.as(Listbox.class).getSelectedCount());
-		listbox.as(MultipleSelectAgent.class).deselect(1);
+		items.get(1).as(SelectAgent.class).deselect();
 		assertEquals("[i0, i2]", msg.getValue());
 		assertEquals(2, listbox.as(Listbox.class).getSelectedCount());
-		listbox.as(MultipleSelectAgent.class).deselect(0);
+		items.get(0).as(SelectAgent.class).deselect();
 		assertEquals("[i2]", msg.getValue());
 		assertEquals(1, listbox.as(Listbox.class).getSelectedCount());
-		listbox.as(MultipleSelectAgent.class).deselect(2);
+		items.get(2).as(SelectAgent.class).deselect();
 		assertEquals("[]", msg.getValue());
 		assertEquals(0, listbox.as(Listbox.class).getSelectedCount());
-		listbox.as(MultipleSelectAgent.class).deselect(2); // should happen nothing
+		items.get(2).as(SelectAgent.class).deselect(); // should happen nothing
 		assertEquals("[]", msg.getValue());
 		assertEquals(0, listbox.as(Listbox.class).getSelectedCount());
+		
+		// single selection
+		Conversations.query("#sbtn").as(ClickAgent.class).click();
+		String[] values = { "[i0]", "[i1]", "[i2]" };
+		for (int i = 0; i < 3; ++i) {
+			items.get(i).as(SelectAgent.class).select();
+			assertEquals(values[i], msg.getValue());
+		}
+	}
+	
+	@Test
+	public void testSelect()
+	{
+		// TODO 
 	}
 }

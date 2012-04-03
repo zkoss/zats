@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.ComponentAgent;
+import org.zkoss.zats.mimic.impl.ConversationCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.RendererAgent;
 import org.zkoss.zk.ui.event.Events;
@@ -57,7 +58,7 @@ public class ListboxRendererAgentBuilder implements OperationAgentBuilder<Render
 			
 			String cmd = Events.ON_RENDER;
 			Map<String, Object> data = EventDataManager.build(new RenderEvent(cmd, new HashSet(ids)));
-			target.getConversation().postUpdate(target, cmd, data);
+			((ConversationCtrl)target.getConversation()).postUpdate(target.getUuid(), cmd, data);
 		};
 	}
 }

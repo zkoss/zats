@@ -1,7 +1,5 @@
 package org.zkoss.zats.testcase.bind;
 
-import java.util.List;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -10,11 +8,7 @@ import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.operation.ClickAgent;
-import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
-import org.zkoss.zats.mimic.operation.RendererAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
-import org.zkoss.zats.mimic.operation.TypeAgent;
-import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Selectbox;
@@ -57,20 +51,20 @@ public class BindTest{
 		ComponentAgent l1 = Conversations.query("#l1");
 		ComponentAgent toggle = Conversations.query("#toggle");
 		 
-		listbox1.as(MultipleSelectAgent.class).select(1);
+		Conversations.queryAll("#listbox1 > listitem").get(1).as(SelectAgent.class).select();
 		
 		Assert.assertArrayEquals(new long[]{1}, ListboxUtil.getSelectedIndexs(listbox1));
 		Assert.assertArrayEquals(new long[]{1}, ListboxUtil.getSelectedIndexs(listbox2));
 		Assert.assertArrayEquals(new long[]{1}, ListboxUtil.getSelectedIndexs(listbox3));
 		Assert.assertEquals("[1]", l1.as(Label.class).getValue());
 		
-		listbox2.as(MultipleSelectAgent.class).select(3);
+		Conversations.queryAll("#listbox2 > listitem").get(3).as(SelectAgent.class).select();
 		Assert.assertArrayEquals(new long[]{1,3}, ListboxUtil.getSelectedIndexs(listbox1));
 		Assert.assertArrayEquals(new long[]{1,3}, ListboxUtil.getSelectedIndexs(listbox2));
 		Assert.assertArrayEquals(new long[]{1,3}, ListboxUtil.getSelectedIndexs(listbox3));
 		Assert.assertEquals("[1, 3]", l1.as(Label.class).getValue());
-		
-		listbox3.as(MultipleSelectAgent.class).select(6);
+
+		Conversations.queryAll("#listbox3 > listitem").get(6).as(SelectAgent.class).select();
 		
 		Assert.assertArrayEquals(new long[]{1,3,6}, ListboxUtil.getSelectedIndexs(listbox1));
 		Assert.assertArrayEquals(new long[]{1,3,6}, ListboxUtil.getSelectedIndexs(listbox2));
@@ -79,13 +73,13 @@ public class BindTest{
 		
 		toggle.as(ClickAgent.class).click();
 //		listbox3.as(RendererAgent.class).render(-1, -1);
-		listbox3.select(7);
+		Conversations.queryAll("#listbox3 > listitem").get(7).as(SelectAgent.class).select();
 		Assert.assertArrayEquals(new long[]{7}, ListboxUtil.getSelectedIndexs(listbox1));
 		Assert.assertArrayEquals(new long[]{7}, ListboxUtil.getSelectedIndexs(listbox2));
 		Assert.assertArrayEquals(new long[]{7}, ListboxUtil.getSelectedIndexs(listbox3));
 		Assert.assertEquals("[7]", l1.as(Label.class).getValue());
 		
-		listbox3.select(1);
+		Conversations.queryAll("#listbox3 > listitem").get(1).as(SelectAgent.class).select();
 		Assert.assertArrayEquals(new long[]{1}, ListboxUtil.getSelectedIndexs(listbox1));
 		Assert.assertArrayEquals(new long[]{1}, ListboxUtil.getSelectedIndexs(listbox2));
 		Assert.assertArrayEquals(new long[]{1}, ListboxUtil.getSelectedIndexs(listbox3));

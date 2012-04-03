@@ -22,6 +22,7 @@ import org.zkoss.json.JSONs;
 import org.zkoss.lang.Strings;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
+import org.zkoss.zats.mimic.impl.ConversationCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.event.Event;
@@ -50,22 +51,23 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 
 		public void type(String value) {
 			try {
+				ConversationCtrl cctrl = (ConversationCtrl) target.getConversation();
 				// focus
 				String cmd = Events.ON_FOCUS;
 				Map<String, Object> data = EventDataManager.build(new Event(cmd, target.getComponent()));
-				target.getConversation().postUpdate(target, cmd, data);
+				cctrl.postUpdate(target.getUuid(), cmd, data);
 				// changing
 				cmd = Events.ON_CHANGING;
 				data = EventDataManager.build(new InputEvent(cmd, target.getComponent(), value, null));
-				target.getConversation().postUpdate(target, cmd, data);
+				cctrl.postUpdate(target.getUuid(), cmd, data);
 				// change (reuse changing event data collection)
 				cmd = Events.ON_CHANGE;
 				putValue(target, value, data); // parse value and put into data collection 
-				target.getConversation().postUpdate(target, cmd, data);
+				cctrl.postUpdate(target.getUuid(), cmd, data);
 				// blur
 				cmd = Events.ON_BLUR;
 				data = EventDataManager.build(new Event(cmd, target.getComponent()));
-				target.getConversation().postUpdate(target, cmd, data);
+				cctrl.postUpdate(target.getUuid(), cmd, data);
 
 			} catch (Exception e) {
 				throw new AgentException("value \"" + value

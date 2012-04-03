@@ -18,7 +18,6 @@ import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
-import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.Component;
 
@@ -155,13 +154,6 @@ public interface ComponentAgent extends Agent{
 	 * @see #as(Class)
 	 */
 	void blur();
-	
-	/**
-	 * Select a sub-item of this component, it is a short cut of {@link SelectAgent#select(int)} <p/>
-	 * If this component doesn't has {@link SelectAgent}, it will throw exception.
-	 * @see #as(Class)
-	 */
-	void select(int index);
 	
 	/**
 	 * Check on this component, it is a short cut of {@link CheckAgent#check(boolean)}<p/>

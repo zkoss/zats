@@ -12,7 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic;
 
 import java.util.List;
-import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 public interface Conversation {
@@ -46,18 +46,7 @@ public interface Conversation {
 
 	HttpSession getSession();
 
-	// FIXME move this method to Conversation Controller 
-	/**
-	 * post an asynchronous update event.
-	 * 
-	 * @param target
-	 *            the component agent which performed this event
-	 * @param command
-	 *            command
-	 * @param data
-	 *            data for update
-	 */
-	void postUpdate(ComponentAgent target, String cmd, Map<String, Object> data);
+	// TODO post(Event) method for posting custom event of test cases
 	
 	/**
 	 * to find the first component agent with the selector in last desktop

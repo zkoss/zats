@@ -36,6 +36,7 @@ import org.zkoss.zats.mimic.ConversationException;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.impl.emulator.Emulator;
 import org.zkoss.zats.mimic.impl.emulator.EmulatorBuilder;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 
 /**
@@ -43,7 +44,7 @@ import org.zkoss.zk.ui.Desktop;
  * 
  * @author pao
  */
-public class EmulatorConversation implements Conversation {
+public class EmulatorConversation implements Conversation , ConversationCtrl{
 	private static Logger logger;
 	private Emulator emulator;
 	private File web;
@@ -152,12 +153,12 @@ public class EmulatorConversation implements Conversation {
 		return (HttpSession) desktopAgent.getDesktop().getSession().getNativeSession();
 	}
 
-	public void postUpdate(ComponentAgent target, String cmd,
+	public void postUpdate(String targetUUID, String cmd,
 			Map<String, Object> data) {
 		// prepare au data
 		String dtid = UrlEncoded.encodeString(desktopAgent.getId());
 		cmd = UrlEncoded.encodeString(cmd);
-		String uuid = UrlEncoded.encodeString(target.getUuid());
+		String uuid = UrlEncoded.encodeString(targetUUID);
 		String param;
 		if (data != null && data.size() > 0) {
 			String jsonData = UrlEncoded.encodeString(JSONValue
@@ -170,8 +171,10 @@ public class EmulatorConversation implements Conversation {
 					cmd, uuid);
 
 		if (logger.isLoggable(Level.FINEST)) {
-			String id = target.getId() != null ? "id " + target.getId() : "uuid " + target.getUuid();
-			logger.finest(id + " perform AU: " + UrlEncoded.decodeString(param, 0, param.length(), "utf-8"));
+			Component comp = desktopAgent.getDesktop().getComponentByUuidIfAny(targetUUID);
+			String id = comp != null ? comp.getId() : null;
+			String title = (id != null ? id : "unknown") + "/" + targetUUID;
+			logger.finest(title + " perform AU: " + UrlEncoded.decodeString(param, 0, param.length(), "utf-8"));
 		}
 		
 		OutputStream os = null;

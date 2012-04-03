@@ -19,7 +19,6 @@ import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
-import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zats.mimic.operation.RendererAgent;
@@ -36,11 +35,11 @@ import org.zkoss.zul.Doublespinner;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Longbox;
 import org.zkoss.zul.Menuitem;
 import org.zkoss.zul.Spinner;
 import org.zkoss.zul.Timebox;
-import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.impl.InputElement;
 
 public class OperationAgentManager {
@@ -90,8 +89,7 @@ public class OperationAgentManager {
 		//----------special case ---
 		
 		// the listbox
-		registerBuilder("5.0.0", "*", Listbox.class, SelectAgent.class, new ListboxSelectAgentBuilder());
-		registerBuilder("5.0.0", "*", Listbox.class, MultipleSelectAgent.class, new ListboxMultipleSelectAgentBuilder());
+		registerBuilder("5.0.0", "*", Listitem.class, SelectAgent.class, new ListboxSelectAgentBuilder());
 		registerBuilder("5.0.0", "*", Listbox.class, RendererAgent.class, new ListboxRendererAgentBuilder());
 
 		// the grid

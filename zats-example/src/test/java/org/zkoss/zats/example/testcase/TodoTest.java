@@ -1,7 +1,10 @@
 package org.zkoss.zats.example.testcase;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.zkoss.zats.mimic.Conversations.query;
+import static org.zkoss.zats.mimic.Conversations.queryAll;
 
 import java.util.List;
 
@@ -11,6 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Listcell;
@@ -57,7 +61,7 @@ public class TodoTest {
 		assertEquals("2012/03/16",cells.get(2).as(Listcell.class).getLabel());
 		
 		//update
-		listbox.select(0);
+		queryAll("listbox > listitem").get(0).as(SelectAgent.class).select();
 		//verify selected
 		assertEquals("one-item",itemName.as(Textbox.class).getValue());
 		assertEquals((Integer)3,priority.as(Intbox.class).getValue());
@@ -72,7 +76,7 @@ public class TodoTest {
 		assertEquals("5",cells.get(1).as(Listcell.class).getLabel());
 		
 		//reset
-		listbox.select(0);
+		queryAll("listbox > listitem").get(0).as(SelectAgent.class).select();
 		assertNotNull(itemName.as(Textbox.class).getValue());
 		query("button[label='Reset']").click();
 		assertEquals("",itemName.as(Textbox.class).getValue());
@@ -81,7 +85,7 @@ public class TodoTest {
 
 		//delete
 		assertEquals(1,listbox.queryAll("listitem").size());
-		listbox.select(0);
+		queryAll("listbox > listitem").get(0).as(SelectAgent.class).select();
 		query("button[label='Delete']").click();
 		assertEquals(0,listbox.queryAll("listitem").size());
 		

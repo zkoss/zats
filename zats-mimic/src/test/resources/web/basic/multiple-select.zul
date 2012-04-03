@@ -5,6 +5,10 @@
 				<label value="selected: " />
 				<label id="msg" />
 			</hbox>
+			<hbox>
+				<button id="sbtn" label="single selection" onClick="lb.multiple = false" />
+				<button id="mbtn" label="multiple selection" onClick="lb.multiple = true" />
+			</hbox>
 			<listbox id="lb" width="250px" multiple="true" onSelect="doSelect()">
 				<listhead>
 					<listheader>col1</listheader>

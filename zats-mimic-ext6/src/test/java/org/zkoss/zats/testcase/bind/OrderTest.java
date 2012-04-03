@@ -84,6 +84,7 @@ public class OrderTest{
 		Conversations.open("/~./bind/order.zul");
 		ComponentAgent window = Conversations.query("#main");
 		ComponentAgent orderList = Conversations.query("#main #orderList");
+		List<ComponentAgent> orderListItems = Conversations.queryAll("#main #orderList > listitem");
 		Assert.assertNotNull(orderList);
 		
 		Order selected = null;
@@ -91,7 +92,7 @@ public class OrderTest{
 		
 		Assert.assertNull(vm.getSelected());
 		
-		orderList.as(SelectAgent.class).select(0);
+		orderListItems.get(0).as(SelectAgent.class).select();
 		selected = vm.getSelected();
 		Assert.assertNotNull(selected);
 		
@@ -99,14 +100,14 @@ public class OrderTest{
 		Assert.assertEquals(selected.getPrice()*selected.getQuantity(), selected.getTotalPrice(),0.1);
 		
 		
-		orderList.as(SelectAgent.class).select(1);
+		orderListItems.get(1).as(SelectAgent.class).select();
 		selected = vm.getSelected();
 		Assert.assertNotNull(selected);
 		
 		Assert.assertEquals("00002", selected.getId());
 		Assert.assertEquals(selected.getPrice()*selected.getQuantity(), selected.getTotalPrice(),0.1);
 		
-		orderList.as(SelectAgent.class).select(3);
+		orderListItems.get(3).as(SelectAgent.class).select();
 		selected = vm.getSelected();
 		Assert.assertNotNull(selected);
 		

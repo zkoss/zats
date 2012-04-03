@@ -15,7 +15,11 @@ import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
-import org.zkoss.zul.*;
+import org.zkoss.zul.Caption;
+import org.zkoss.zul.Groupbox;
+import org.zkoss.zul.Label;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listcell;
 
 public class SearchTest {
 	@BeforeClass
@@ -40,7 +44,8 @@ public class SearchTest {
 
 		ComponentAgent detailBox = Conversations.query("groupbox");
 		ComponentAgent listbox = Conversations.query("listbox");
-		listbox.as(SelectAgent.class).select(0);
+		Conversations.queryAll("listbox > listitem").get(0).as(SelectAgent.class).select();
+		
 		//verify UI logic
 		assertEquals(true, detailBox.as(Groupbox.class).isVisible());
 		//select an item & verify its detail
