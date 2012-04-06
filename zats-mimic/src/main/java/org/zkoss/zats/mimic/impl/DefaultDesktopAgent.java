@@ -92,4 +92,8 @@ public class DefaultDesktopAgent implements DesktopAgent {
 	public List<ComponentAgent> queryAll(String selector) {
 		return Searcher.findAll(this, selector);
 	}
+	
+	public void destroy(){
+		((ConversationCtrl)getConversation()).destroy(this);
+	}
 }

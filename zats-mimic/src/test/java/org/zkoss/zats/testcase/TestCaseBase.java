@@ -22,7 +22,7 @@ public class TestCaseBase
 	@After
 	public void after()
 	{
-		Conversations.clean();
+		Conversations.closeAll();
 	}
 
 }

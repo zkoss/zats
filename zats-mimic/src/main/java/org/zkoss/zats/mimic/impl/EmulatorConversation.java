@@ -13,8 +13,6 @@ package org.zkoss.zats.mimic.impl;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -27,15 +25,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.servlet.http.HttpSession;
+
 import org.eclipse.jetty.util.UrlEncoded;
 import org.zkoss.json.JSONValue;
-import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversation;
 import org.zkoss.zats.mimic.ConversationException;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.impl.emulator.Emulator;
-import org.zkoss.zats.mimic.impl.emulator.EmulatorBuilder;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 
@@ -45,49 +43,19 @@ import org.zkoss.zk.ui.Desktop;
  * @author pao
  */
 public class EmulatorConversation implements Conversation , ConversationCtrl{
-	private static Logger logger;
+	private static Logger logger = Logger.getLogger(EmulatorConversation.class.getName());
 	private Emulator emulator;
-	private File web;
 	private DesktopAgent desktopAgent;
+	private List<DesktopAgent> desktopList = new LinkedList<DesktopAgent>();
+	
 	private List<String> cookies;
 
-	public EmulatorConversation() {
-		logger = Logger.getLogger(EmulatorConversation.class.getName());
-		cookies = new LinkedList<String>();
-		// prepare environment
-		String tmpDir = System.getProperty("java.io.tmpdir", ".");
-		File webinf = new File(tmpDir, "zats/" + System.currentTimeMillis()
-				+ "/WEB-INF");
-		if (!webinf.mkdirs())
-			throw new ConversationException("can't create temp directory");
-		web = webinf.getParentFile();
-		File zk = new File(web, "WEB-INF/zk.xml");
-		copy(EmulatorConversation.class.getResourceAsStream("WEB-INF/zk.xml"),
-				zk);
-		// TODO clean directories
-		zk.deleteOnExit();
-		webinf.deleteOnExit();
+	public EmulatorConversation(Emulator emulator){
+		this.emulator = emulator;
 	}
 
-	public void start(String resourceRoot) {
-		// create emulator
-		emulator = new EmulatorBuilder(web)
-				.addResource(resourceRoot)
-				.descriptor(
-						EmulatorConversation.class
-								.getResource("WEB-INF/web.xml")).create();
-	}
 
-	public synchronized void stop() {
-		try {
-			if (emulator == null)
-				emulator.close();
-		} finally {
-			emulator = null;
-		}
-	}
-
-	public DesktopAgent open(String zulPath) {
+	public DesktopAgent connect(String zulPath) {
 		InputStream is = null;
 		try {
 			// load zul page
@@ -103,7 +71,9 @@ public class EmulatorConversation implements Conversation , ConversationCtrl{
 			Desktop desktop = (Desktop) emulator.getRequestAttributes().get(
 					"javax.zkoss.zk.ui.desktop");
 			// TODO, what if a non-zk(zul) page, throw exception?
-			return desktopAgent = new DefaultDesktopAgent(this, desktop);
+			desktopAgent = new DefaultDesktopAgent(this, desktop);
+			desktopList.add(desktopAgent);
+			return desktopAgent;
 		} catch (Exception e) {
 			throw new ConversationException("", e);
 		} finally {
@@ -111,28 +81,27 @@ public class EmulatorConversation implements Conversation , ConversationCtrl{
 		}
 	}
 	
-	public ComponentAgent query(String selector){
-		return Searcher.find(this,selector);
-	}
-	
-	public List<ComponentAgent> queryAll(String selector){
-		return Searcher.findAll(this,selector);
-	}
 
-	public void clean() {
-		// clean desktop
+	public void close() {
+		for (DesktopAgent d : desktopList){
+			destroy(d);
+		}
+		desktopList.clear();
+	}
+	public void destroy(DesktopAgent desktopAgent){
 		InputStream is = null;
 		try {
 			if (desktopAgent != null) {
 				// use au to remove a desktop
+				logger.config("destory desktop:"+desktopAgent.getId());
 				String url = MessageFormat.format(
 						"/zkau?dtid={0}&cmd_0=rmDesktop&opt_0=i",
 						desktopAgent.getId());
 				HttpURLConnection huc = getConnection(url, "GET");
 				huc.connect();
 				is = huc.getInputStream();
-				if (logger.isLoggable(Level.FINEST))
-					logger.finest(getReplyString(is, "utf-8"));
+				logger.config(getReplyString(is, "utf-8"));
+				
 			}
 		} catch (Exception e) {
 			logger.log(Level.WARNING, "", e);
@@ -142,7 +111,7 @@ public class EmulatorConversation implements Conversation , ConversationCtrl{
 			cookies = new LinkedList<String>();
 		}
 	}
-
+	                      
 	public DesktopAgent getDesktop() {
 		return desktopAgent;
 	}
@@ -225,26 +194,6 @@ public class EmulatorConversation implements Conversation , ConversationCtrl{
 			return huc;
 		} catch (Exception e) {
 			throw new ConversationException("", e);
-		}
-	}
-
-	private void copy(InputStream src, File dest) {
-		OutputStream os = null;
-		try {
-			os = new FileOutputStream(dest);
-			byte[] buf = new byte[65536];
-			int len;
-			while (true) {
-				len = src.read(buf);
-				if (len < 0)
-					break;
-				os.write(buf, 0, len);
-			}
-		} catch (Exception e) {
-			throw new ConversationException("fail to copy file", e);
-		} finally {
-			close(src);
-			close(os);
 		}
 	}
 

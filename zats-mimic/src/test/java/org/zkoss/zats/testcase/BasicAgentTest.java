@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
@@ -57,17 +58,17 @@ public class BasicAgentTest {
 	@After
 	public void after()
 	{
-		Conversations.clean();
+		Conversations.closeAll();
 	}
 	
 	
 	@Test
 	public void testKeyStrokeAgent(){
-		Conversations.open("/~./basic/keystroke.zul");
+		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/keystroke.zul");
 		
-		ComponentAgent inp1 = Conversations.query("#inp1");
-		ComponentAgent inp2 = Conversations.query("#inp2");
-		ComponentAgent l1 = Conversations.query("#l1");
+		ComponentAgent inp1 = desktopAgent.query("#inp1");
+		ComponentAgent inp2 = desktopAgent.query("#inp2");
+		ComponentAgent l1 = desktopAgent.query("#l1");
 		
 		Assert.assertEquals("", l1.as(Label.class).getValue());
 		
@@ -107,10 +108,10 @@ public class BasicAgentTest {
 	
 	@Test
 	public void testTypeAgent1(){
-		Conversations.open("/~./basic/type1.zul");
+		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/type1.zul");
 		
-		ComponentAgent l = Conversations.query("#l1");
-		ComponentAgent inp = Conversations.query("#inp1");
+		ComponentAgent l = desktopAgent.query("#l1");
+		ComponentAgent inp = desktopAgent.query("#inp1");
 		//bandbox
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
@@ -124,8 +125,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("B",l.as(Label.class).getValue());
 		
 		//combobox
-		l = Conversations.query("#l2");
-		inp = Conversations.query("#inp2");
+		l = desktopAgent.query("#l2");
+		inp = desktopAgent.query("#inp2");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("C");
 		Assert.assertEquals("C",l.as(Label.class).getValue());
@@ -136,8 +137,8 @@ public class BasicAgentTest {
 		
 		
 		//textbox
-		l = Conversations.query("#l10");
-		inp = Conversations.query("#inp10");
+		l = desktopAgent.query("#l10");
+		inp = desktopAgent.query("#inp10");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("E");
 		Assert.assertEquals("E",l.as(Label.class).getValue());
@@ -147,8 +148,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("F",l.as(Label.class).getValue());
 		
 		//decimalbox
-		l = Conversations.query("#l4");
-		inp = Conversations.query("#inp4");
+		l = desktopAgent.query("#l4");
+		inp = desktopAgent.query("#inp4");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("1");
 		Assert.assertEquals("1.0",l.as(Label.class).getValue());
@@ -159,8 +160,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("2.33",l.as(Label.class).getValue());
 		
 		//doublebox
-		l = Conversations.query("#l5");
-		inp = Conversations.query("#inp5");
+		l = desktopAgent.query("#l5");
+		inp = desktopAgent.query("#inp5");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("3");
@@ -171,8 +172,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("4.33",l.as(Label.class).getValue());
 		
 		//doublespinner
-		l = Conversations.query("#l6");
-		inp = Conversations.query("#inp6");
+		l = desktopAgent.query("#l6");
+		inp = desktopAgent.query("#inp6");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("5");
@@ -185,8 +186,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("6.33",l.as(Label.class).getValue());
 		
 		//intbox
-		l = Conversations.query("#l7");
-		inp = Conversations.query("#inp7");
+		l = desktopAgent.query("#l7");
+		inp = desktopAgent.query("#inp7");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("7");
 		Assert.assertEquals("7",l.as(Label.class).getValue());
@@ -199,8 +200,8 @@ public class BasicAgentTest {
 		
 		
 		//longbox
-		l = Conversations.query("#l8");
-		inp = Conversations.query("#inp8");
+		l = desktopAgent.query("#l8");
+		inp = desktopAgent.query("#inp8");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("9");
@@ -213,8 +214,8 @@ public class BasicAgentTest {
 		
 		
 		//spinner
-		l = Conversations.query("#l9");
-		inp = Conversations.query("#inp9");
+		l = desktopAgent.query("#l9");
+		inp = desktopAgent.query("#inp9");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("11");
 		Assert.assertEquals("11",l.as(Label.class).getValue());
@@ -224,8 +225,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("12",l.as(Label.class).getValue());
 		
 		//datebox
-		l = Conversations.query("#l3");
-		inp = Conversations.query("#inp3");
+		l = desktopAgent.query("#l3");
+		inp = desktopAgent.query("#inp3");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("20120223");
 		Assert.assertEquals("20120223",l.as(Label.class).getValue());
@@ -235,8 +236,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("20120320",l.as(Label.class).getValue());
 		
 		//timebox
-		l = Conversations.query("#l11");
-		inp = Conversations.query("#inp11");
+		l = desktopAgent.query("#l11");
+		inp = desktopAgent.query("#inp11");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("13:00");
 		Assert.assertEquals("13:00",l.as(Label.class).getValue());
@@ -248,10 +249,10 @@ public class BasicAgentTest {
 	
 	@Test
 	public void testTypeAgent2(){
-		Conversations.open("/~./basic/type2.zul");
+		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/type2.zul");
 		
-		ComponentAgent l = Conversations.query("#l1");
-		ComponentAgent inp = Conversations.query("#inp1");
+		ComponentAgent l = desktopAgent.query("#l1");
+		ComponentAgent inp = desktopAgent.query("#inp1");
 		//bandbox
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
@@ -265,8 +266,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("B",l.as(Label.class).getValue());
 		
 		//combobox
-		l = Conversations.query("#l2");
-		inp = Conversations.query("#inp2");
+		l = desktopAgent.query("#l2");
+		inp = desktopAgent.query("#inp2");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("C");
 		Assert.assertEquals("C",l.as(Label.class).getValue());
@@ -277,8 +278,8 @@ public class BasicAgentTest {
 		
 		
 		//textbox
-		l = Conversations.query("#l10");
-		inp = Conversations.query("#inp10");
+		l = desktopAgent.query("#l10");
+		inp = desktopAgent.query("#inp10");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("E");
 		Assert.assertEquals("E",l.as(Label.class).getValue());
@@ -288,8 +289,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("F",l.as(Label.class).getValue());
 		
 		//decimalbox
-		l = Conversations.query("#l4");
-		inp = Conversations.query("#inp4");
+		l = desktopAgent.query("#l4");
+		inp = desktopAgent.query("#inp4");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("1");
 		Assert.assertEquals("1.0",l.as(Label.class).getValue());
@@ -300,8 +301,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("2222.33",l.as(Label.class).getValue());
 		
 		//doublebox
-		l = Conversations.query("#l5");
-		inp = Conversations.query("#inp5");
+		l = desktopAgent.query("#l5");
+		inp = desktopAgent.query("#inp5");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("3");
@@ -312,8 +313,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("4444.33",l.as(Label.class).getValue());
 		
 		//doublespinner
-		l = Conversations.query("#l6");
-		inp = Conversations.query("#inp6");
+		l = desktopAgent.query("#l6");
+		inp = desktopAgent.query("#inp6");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("5");
@@ -326,8 +327,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("6666.33",l.as(Label.class).getValue());
 		
 		//intbox
-		l = Conversations.query("#l7");
-		inp = Conversations.query("#inp7");
+		l = desktopAgent.query("#l7");
+		inp = desktopAgent.query("#inp7");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("7");
 		Assert.assertEquals("7",l.as(Label.class).getValue());
@@ -340,8 +341,8 @@ public class BasicAgentTest {
 		
 		
 		//longbox
-		l = Conversations.query("#l8");
-		inp = Conversations.query("#inp8");
+		l = desktopAgent.query("#l8");
+		inp = desktopAgent.query("#inp8");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("9");
@@ -354,8 +355,8 @@ public class BasicAgentTest {
 		
 		
 		//spinner
-		l = Conversations.query("#l9");
-		inp = Conversations.query("#inp9");
+		l = desktopAgent.query("#l9");
+		inp = desktopAgent.query("#inp9");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("11");
 		Assert.assertEquals("11",l.as(Label.class).getValue());
@@ -365,8 +366,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("1112",l.as(Label.class).getValue());
 		
 		//datebox
-		l = Conversations.query("#l3");
-		inp = Conversations.query("#inp3");
+		l = desktopAgent.query("#l3");
+		inp = desktopAgent.query("#inp3");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("23022012");
 		Assert.assertEquals("20120223",l.as(Label.class).getValue());
@@ -376,8 +377,8 @@ public class BasicAgentTest {
 		Assert.assertEquals("20120320",l.as(Label.class).getValue());
 		
 		//timebox
-		l = Conversations.query("#l11");
-		inp = Conversations.query("#inp11");
+		l = desktopAgent.query("#l11");
+		inp = desktopAgent.query("#inp11");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("00:13");
 		Assert.assertEquals("13:00",l.as(Label.class).getValue());
@@ -389,9 +390,9 @@ public class BasicAgentTest {
 	
 	@Test
 	public void testOpenAgentTree(){
-		Conversations.open("/~./basic/open-tree.zul");
+		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/open-tree.zul");
 		
-		ComponentAgent tree = Conversations.query("#tree");
+		ComponentAgent tree = desktopAgent.query("#tree");
 		List<ComponentAgent> items = tree.queryAll("treeitem");
 		Assert.assertEquals(2, items.size());
 		
@@ -423,14 +424,14 @@ public class BasicAgentTest {
 	
 	@Test
 	public void testFocusAgent() {
-		Conversations.open("/~./basic/focus.zul");
-		Label curr = Conversations.query("#current").as(Label.class);
-		Label lost = Conversations.query("#lost").as(Label.class);
+		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/focus.zul");
+		Label curr = desktopAgent.query("#current").as(Label.class);
+		Label lost = desktopAgent.query("#lost").as(Label.class);
 		assertTrue(curr.getValue().length() <= 0);
 		assertTrue(curr.getValue().length() <= 0);
 
 		for (int i = 1; i <= 11; ++i) {
-			ComponentAgent comp = Conversations.query("#c" + i);
+			ComponentAgent comp = desktopAgent.query("#c" + i);
 			comp.as(FocusAgent.class).focus();
 			String name = comp.as(AbstractComponent.class).getDefinition().getName();
 			assertEquals(name, curr.getValue());
@@ -441,42 +442,42 @@ public class BasicAgentTest {
 
 	@Test
 	public void testCheckAgent() {
-		Conversations.open("/~./basic/check.zul");
+		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/check.zul");
 
 		// validate msg
-		Label msg = Conversations.query("#msg").as(Label.class);
+		Label msg = desktopAgent.query("#msg").as(Label.class);
 		assertTrue(msg.getValue().length() <= 0);
 
 		// test checkbox and menuitem
 		String label = "";
 		for (int i = 1; i <= 6; ++i) {
-			Conversations.query("#c" + i).as(CheckAgent.class).check(true);
+			desktopAgent.query("#c" + i).as(CheckAgent.class).check(true);
 			label += "c" + i + " ";
 			assertEquals(label, msg.getValue());
 		}
 		// test radiogroup
 		for (int i = 7; i <= 9; ++i) {
-			Conversations.query("#c" + i).as(CheckAgent.class).check(true);
+			desktopAgent.query("#c" + i).as(CheckAgent.class).check(true);
 			assertEquals(label + "c" + i + " ", msg.getValue());
 		}
 	}
 
 	@Test
 	public void testClickAgent() {
-		Conversations.open("/~./basic/click.zul");
-		assertEquals("Hello World!", Conversations.query("#msg").as(Label.class).getValue());
-		Conversations.query("#btn").as(ClickAgent.class).click();
-		assertEquals("Welcome", Conversations.query("#msg").as(Label.class).getValue());
+		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/click.zul");
+		assertEquals("Hello World!", desktopAgent.query("#msg").as(Label.class).getValue());
+		desktopAgent.query("#btn").as(ClickAgent.class).click();
+		assertEquals("Welcome", desktopAgent.query("#msg").as(Label.class).getValue());
 	}
 	
 	@Test
 	public void testMultipleSelect() {
-		Conversations.open("/~./basic/multiple-select.zul");
+		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/multiple-select.zul");
 
-		Label msg = Conversations.query("#msg").as(Label.class);
+		Label msg = desktopAgent.query("#msg").as(Label.class);
 		assertEquals("", msg.getValue());
 
-		ComponentAgent listbox = Conversations.query("#lb");
+		ComponentAgent listbox = desktopAgent.query("#lb");
 		assertEquals(4, listbox.as(Listbox.class).getChildren().size()); // include header
 		List<ComponentAgent> items = listbox.queryAll("listitem");
 
@@ -504,7 +505,7 @@ public class BasicAgentTest {
 		assertEquals(0, listbox.as(Listbox.class).getSelectedCount());
 		
 		// single selection
-		Conversations.query("#sbtn").as(ClickAgent.class).click();
+		desktopAgent.query("#sbtn").as(ClickAgent.class).click();
 		String[] values = { "[i0]", "[i1]", "[i2]" };
 		for (int i = 0; i < 3; ++i) {
 			items.get(i).as(SelectAgent.class).select();

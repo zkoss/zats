@@ -60,4 +60,6 @@ public interface DesktopAgent extends Agent {
 	 * @return the component agents
 	 */
 	List<ComponentAgent> queryAll(String selector);
+	
+	void destroy();
 }

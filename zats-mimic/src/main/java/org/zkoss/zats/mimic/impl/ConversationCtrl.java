@@ -13,6 +13,8 @@ package org.zkoss.zats.mimic.impl;
 
 import java.util.Map;
 
+import org.zkoss.zats.mimic.DesktopAgent;
+
 /**
  * Conversation controller interface.
  * To provide more control on conversation.
@@ -26,4 +28,11 @@ public interface ConversationCtrl {
 	 * @param data data for update
 	 */
 	void postUpdate(String targetUUID, String cmd, Map<String, Object> data);
+	
+	/**
+	 * clean current Desktop and release resources.
+	 */
+	void close();
+	
+	void destroy(DesktopAgent desktopAgent);
 }
