@@ -7,6 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zul.Combobox;
@@ -37,34 +38,34 @@ public class BindTest{
 	@After
 	public void after()
 	{
-		Conversations.clean();
+		Conversations.closeAll();
 	}
 	
 	
 	@Test
 	public void b00810ListboxMultiple(){
-		Conversations.open("/~./bind/B00810ListboxMultiple.zul");
+		DesktopAgent desktop = Conversations.open().connect("/~./bind/B00810ListboxMultiple.zul"); 
 		
-		ComponentAgent listbox1 = Conversations.query("#listbox1");
-		ComponentAgent listbox2 = Conversations.query("#listbox2");
-		ComponentAgent listbox3 = Conversations.query("#listbox3");
-		ComponentAgent l1 = Conversations.query("#l1");
-		ComponentAgent toggle = Conversations.query("#toggle");
+		ComponentAgent listbox1 = desktop.query("#listbox1");
+		ComponentAgent listbox2 = desktop.query("#listbox2");
+		ComponentAgent listbox3 = desktop.query("#listbox3");
+		ComponentAgent l1 = desktop.query("#l1");
+		ComponentAgent toggle = desktop.query("#toggle");
 		 
-		Conversations.queryAll("#listbox1 > listitem").get(1).as(SelectAgent.class).select();
+		desktop.queryAll("#listbox1 > listitem").get(1).as(SelectAgent.class).select();
 		
 		Assert.assertArrayEquals(new long[]{1}, ListboxUtil.getSelectedIndexs(listbox1));
 		Assert.assertArrayEquals(new long[]{1}, ListboxUtil.getSelectedIndexs(listbox2));
 		Assert.assertArrayEquals(new long[]{1}, ListboxUtil.getSelectedIndexs(listbox3));
 		Assert.assertEquals("[1]", l1.as(Label.class).getValue());
 		
-		Conversations.queryAll("#listbox2 > listitem").get(3).as(SelectAgent.class).select();
+		desktop.queryAll("#listbox2 > listitem").get(3).as(SelectAgent.class).select();
 		Assert.assertArrayEquals(new long[]{1,3}, ListboxUtil.getSelectedIndexs(listbox1));
 		Assert.assertArrayEquals(new long[]{1,3}, ListboxUtil.getSelectedIndexs(listbox2));
 		Assert.assertArrayEquals(new long[]{1,3}, ListboxUtil.getSelectedIndexs(listbox3));
 		Assert.assertEquals("[1, 3]", l1.as(Label.class).getValue());
 
-		Conversations.queryAll("#listbox3 > listitem").get(6).as(SelectAgent.class).select();
+		desktop.queryAll("#listbox3 > listitem").get(6).as(SelectAgent.class).select();
 		
 		Assert.assertArrayEquals(new long[]{1,3,6}, ListboxUtil.getSelectedIndexs(listbox1));
 		Assert.assertArrayEquals(new long[]{1,3,6}, ListboxUtil.getSelectedIndexs(listbox2));
@@ -73,13 +74,13 @@ public class BindTest{
 		
 		toggle.as(ClickAgent.class).click();
 //		listbox3.as(RendererAgent.class).render(-1, -1);
-		Conversations.queryAll("#listbox3 > listitem").get(7).as(SelectAgent.class).select();
+		desktop.queryAll("#listbox3 > listitem").get(7).as(SelectAgent.class).select();
 		Assert.assertArrayEquals(new long[]{7}, ListboxUtil.getSelectedIndexs(listbox1));
 		Assert.assertArrayEquals(new long[]{7}, ListboxUtil.getSelectedIndexs(listbox2));
 		Assert.assertArrayEquals(new long[]{7}, ListboxUtil.getSelectedIndexs(listbox3));
 		Assert.assertEquals("[7]", l1.as(Label.class).getValue());
 		
-		Conversations.queryAll("#listbox3 > listitem").get(1).as(SelectAgent.class).select();
+		desktop.queryAll("#listbox3 > listitem").get(1).as(SelectAgent.class).select();
 		Assert.assertArrayEquals(new long[]{1}, ListboxUtil.getSelectedIndexs(listbox1));
 		Assert.assertArrayEquals(new long[]{1}, ListboxUtil.getSelectedIndexs(listbox2));
 		Assert.assertArrayEquals(new long[]{1}, ListboxUtil.getSelectedIndexs(listbox3));
@@ -89,12 +90,12 @@ public class BindTest{
 	
 	@Test
 	public void b00821SelectedIndex(){
-		Conversations.open("/~./bind/B00821SelectedIndex.zul");
+		DesktopAgent desktop = Conversations.open().connect("/~./bind/B00821SelectedIndex.zul");
 		
-		ComponentAgent selectbox = Conversations.query("#selectbox");
-		ComponentAgent listbox = Conversations.query("#listbox");
-		ComponentAgent combobox = Conversations.query("#combobox");
-		ComponentAgent i1 = Conversations.query("#i1");
+		ComponentAgent selectbox = desktop.query("#selectbox");
+		ComponentAgent listbox = desktop.query("#listbox");
+		ComponentAgent combobox = desktop.query("#combobox");
+		ComponentAgent i1 = desktop.query("#i1");
 		
 		i1.type("1");
 		
@@ -112,10 +113,10 @@ public class BindTest{
 	
 	@Test
 	public void b00878WrongValueException2(){
-		Conversations.open("/~./bind/B00878WrongValueException2.zul");
+		DesktopAgent desktop = Conversations.open().connect("/~./bind/B00878WrongValueException2.zul");
 		
-		ComponentAgent l = Conversations.query("#l1");
-		ComponentAgent inp = Conversations.query("#inp1");
+		ComponentAgent l = desktop.query("#l1");
+		ComponentAgent inp = desktop.query("#inp1");
 		//bandbox
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
@@ -129,8 +130,8 @@ public class BindTest{
 		Assert.assertEquals("B",l.as(Label.class).getValue());
 		
 		//combobox
-		l = Conversations.query("#l2");
-		inp = Conversations.query("#inp2");
+		l = desktop.query("#l2");
+		inp = desktop.query("#inp2");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("C");
 		Assert.assertEquals("C",l.as(Label.class).getValue());
@@ -141,8 +142,8 @@ public class BindTest{
 		
 		
 		//textbox
-		l = Conversations.query("#l10");
-		inp = Conversations.query("#inp10");
+		l = desktop.query("#l10");
+		inp = desktop.query("#inp10");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("E");
 		Assert.assertEquals("E",l.as(Label.class).getValue());
@@ -152,8 +153,8 @@ public class BindTest{
 		Assert.assertEquals("F",l.as(Label.class).getValue());
 		
 		//decimalbox
-		l = Conversations.query("#l4");
-		inp = Conversations.query("#inp4");
+		l = desktop.query("#l4");
+		inp = desktop.query("#inp4");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("1");
 		Assert.assertEquals("1.0",l.as(Label.class).getValue());
@@ -164,8 +165,8 @@ public class BindTest{
 		Assert.assertEquals("2.33",l.as(Label.class).getValue());
 		
 		//doublebox
-		l = Conversations.query("#l5");
-		inp = Conversations.query("#inp5");
+		l = desktop.query("#l5");
+		inp = desktop.query("#inp5");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("3");
@@ -176,8 +177,8 @@ public class BindTest{
 		Assert.assertEquals("4.33",l.as(Label.class).getValue());
 		
 		//doublespinner
-		l = Conversations.query("#l6");
-		inp = Conversations.query("#inp6");
+		l = desktop.query("#l6");
+		inp = desktop.query("#inp6");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("5");
@@ -190,8 +191,8 @@ public class BindTest{
 		Assert.assertEquals("6.33",l.as(Label.class).getValue());
 		
 		//intbox
-		l = Conversations.query("#l7");
-		inp = Conversations.query("#inp7");
+		l = desktop.query("#l7");
+		inp = desktop.query("#inp7");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("7");
 		Assert.assertEquals("7",l.as(Label.class).getValue());
@@ -204,8 +205,8 @@ public class BindTest{
 		
 		
 		//longbox
-		l = Conversations.query("#l8");
-		inp = Conversations.query("#inp8");
+		l = desktop.query("#l8");
+		inp = desktop.query("#inp8");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("9");
@@ -218,8 +219,8 @@ public class BindTest{
 		
 		
 		//spinner
-		l = Conversations.query("#l9");
-		inp = Conversations.query("#inp9");
+		l = desktop.query("#l9");
+		inp = desktop.query("#inp9");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("11");
 		Assert.assertEquals("11",l.as(Label.class).getValue());
@@ -229,8 +230,8 @@ public class BindTest{
 		Assert.assertEquals("12",l.as(Label.class).getValue());
 		
 		//datebox
-		l = Conversations.query("#l3");
-		inp = Conversations.query("#inp3");
+		l = desktop.query("#l3");
+		inp = desktop.query("#inp3");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("20120223");
 		Assert.assertEquals("20120223",l.as(Label.class).getValue());
@@ -240,8 +241,8 @@ public class BindTest{
 		Assert.assertEquals("20120320",l.as(Label.class).getValue());
 		
 		//timebox
-		l = Conversations.query("#l11");
-		inp = Conversations.query("#inp11");
+		l = desktop.query("#l11");
+		inp = desktop.query("#inp11");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("13:00");
 		Assert.assertEquals("13:00",l.as(Label.class).getValue());
@@ -253,10 +254,10 @@ public class BindTest{
 	
 	@Test
 	public void b00878WrongValueException3(){
-		Conversations.open("/~./bind/B00878WrongValueException3.zul");
+		DesktopAgent desktop = Conversations.open().connect("/~./bind/B00878WrongValueException3.zul");
 		
-		ComponentAgent l = Conversations.query("#l1");
-		ComponentAgent inp = Conversations.query("#inp1");
+		ComponentAgent l = desktop.query("#l1");
+		ComponentAgent inp = desktop.query("#inp1");
 		//bandbox
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
@@ -270,8 +271,8 @@ public class BindTest{
 		Assert.assertEquals("B",l.as(Label.class).getValue());
 		
 		//combobox
-		l = Conversations.query("#l2");
-		inp = Conversations.query("#inp2");
+		l = desktop.query("#l2");
+		inp = desktop.query("#inp2");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("C");
 		Assert.assertEquals("C",l.as(Label.class).getValue());
@@ -282,8 +283,8 @@ public class BindTest{
 		
 		
 		//textbox
-		l = Conversations.query("#l10");
-		inp = Conversations.query("#inp10");
+		l = desktop.query("#l10");
+		inp = desktop.query("#inp10");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("E");
 		Assert.assertEquals("E",l.as(Label.class).getValue());
@@ -293,8 +294,8 @@ public class BindTest{
 		Assert.assertEquals("F",l.as(Label.class).getValue());
 		
 		//decimalbox
-		l = Conversations.query("#l4");
-		inp = Conversations.query("#inp4");
+		l = desktop.query("#l4");
+		inp = desktop.query("#inp4");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("1");
 		Assert.assertEquals("1.0",l.as(Label.class).getValue());
@@ -305,8 +306,8 @@ public class BindTest{
 		Assert.assertEquals("2222.33",l.as(Label.class).getValue());
 		
 		//doublebox
-		l = Conversations.query("#l5");
-		inp = Conversations.query("#inp5");
+		l = desktop.query("#l5");
+		inp = desktop.query("#inp5");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("3");
@@ -317,8 +318,8 @@ public class BindTest{
 		Assert.assertEquals("4444.33",l.as(Label.class).getValue());
 		
 		//doublespinner
-		l = Conversations.query("#l6");
-		inp = Conversations.query("#inp6");
+		l = desktop.query("#l6");
+		inp = desktop.query("#inp6");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("5");
@@ -331,8 +332,8 @@ public class BindTest{
 		Assert.assertEquals("6666.33",l.as(Label.class).getValue());
 		
 		//intbox
-		l = Conversations.query("#l7");
-		inp = Conversations.query("#inp7");
+		l = desktop.query("#l7");
+		inp = desktop.query("#inp7");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("7");
 		Assert.assertEquals("7",l.as(Label.class).getValue());
@@ -345,8 +346,8 @@ public class BindTest{
 		
 		
 		//longbox
-		l = Conversations.query("#l8");
-		inp = Conversations.query("#inp8");
+		l = desktop.query("#l8");
+		inp = desktop.query("#inp8");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		inp.type("9");
@@ -359,8 +360,8 @@ public class BindTest{
 		
 		
 		//spinner
-		l = Conversations.query("#l9");
-		inp = Conversations.query("#inp9");
+		l = desktop.query("#l9");
+		inp = desktop.query("#inp9");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("11");
 		Assert.assertEquals("11",l.as(Label.class).getValue());
@@ -370,8 +371,8 @@ public class BindTest{
 		Assert.assertEquals("1112",l.as(Label.class).getValue());
 		
 		//datebox
-		l = Conversations.query("#l3");
-		inp = Conversations.query("#inp3");
+		l = desktop.query("#l3");
+		inp = desktop.query("#inp3");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("23022012");
 		Assert.assertEquals("20120223",l.as(Label.class).getValue());
@@ -381,8 +382,8 @@ public class BindTest{
 		Assert.assertEquals("20120320",l.as(Label.class).getValue());
 		
 		//timebox
-		l = Conversations.query("#l11");
-		inp = Conversations.query("#inp11");
+		l = desktop.query("#l11");
+		inp = desktop.query("#inp11");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		inp.type("00:13");
 		Assert.assertEquals("13:00",l.as(Label.class).getValue());

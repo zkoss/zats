@@ -9,6 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.RendererAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.testapp.bind.order.Order;
@@ -43,15 +44,15 @@ public class OrderTest{
 	@After
 	public void after()
 	{
-		Conversations.clean();
+		Conversations.closeAll();
 	}
 	
 	
 	@Test
 	public void testLoad(){
-		Conversations.open("/~./bind/order.zul");
-		ComponentAgent window = Conversations.query("#main");
-		ComponentAgent orderList = Conversations.query("#main #orderList");
+		DesktopAgent desktop = Conversations.open().connect("/~./bind/order.zul");
+		ComponentAgent window = desktop.query("#main");
+		ComponentAgent orderList = desktop.query("#main #orderList");
 		Assert.assertNotNull(orderList);
 		
 		//check header
@@ -81,10 +82,10 @@ public class OrderTest{
 	
 	@Test
 	public void testVM(){
-		Conversations.open("/~./bind/order.zul");
-		ComponentAgent window = Conversations.query("#main");
-		ComponentAgent orderList = Conversations.query("#main #orderList");
-		List<ComponentAgent> orderListItems = Conversations.queryAll("#main #orderList > listitem");
+		DesktopAgent desktop = Conversations.open().connect("/~./bind/order.zul");
+		ComponentAgent window = desktop.query("#main");
+		ComponentAgent orderList = desktop.query("#main #orderList");
+		List<ComponentAgent> orderListItems = desktop.queryAll("#main #orderList > listitem");
 		Assert.assertNotNull(orderList);
 		
 		Order selected = null;
@@ -118,8 +119,8 @@ public class OrderTest{
 	
 	@Test
 	public void testNew(){
-		Conversations.open("/~./bind/order.zul");
-		ComponentAgent window = Conversations.query("#main");
+		DesktopAgent desktop = Conversations.open().connect("/~./bind/order.zul");
+		ComponentAgent window = desktop.query("#main");
 		ComponentAgent orderList = window.query("#orderList");
 		
 		ComponentAgent newBtn = window.query("#newBtn");
@@ -172,9 +173,9 @@ public class OrderTest{
 	
 	@Test
 	public void testLoad2(){
-		Conversations.open("/~./bind/order2.zul");//the grid
-		ComponentAgent window = Conversations.query("#main");
-		ComponentAgent orderList = Conversations.query("#main #orderList");
+		DesktopAgent desktop = Conversations.open().connect("/~./bind/order2.zul");//the grid
+		ComponentAgent window = desktop.query("#main");
+		ComponentAgent orderList = desktop.query("#main #orderList");
 		Assert.assertNotNull(orderList);
 		
 		//check header
@@ -203,8 +204,8 @@ public class OrderTest{
 	
 	@Test
 	public void testNew2(){
-		Conversations.open("/~./bind/order2.zul");
-		ComponentAgent window = Conversations.query("#main");
+		DesktopAgent desktop = Conversations.open().connect("/~./bind/order2.zul");
+		ComponentAgent window = desktop.query("#main");
 		ComponentAgent orderList = window.query("#orderList");
 		
 		ComponentAgent newBtn = window.query("#newBtn");
