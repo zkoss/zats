@@ -44,9 +44,10 @@ public class GenericSelectAgentBuilder implements OperationAgentBuilder<SelectAg
 			Set<String> items = new HashSet<String>();
 			items.add(target.getUuid());
 
+			String desktopId = target.getDesktop().getId();
 			Event event = new SelectEvent(Events.ON_SELECT, parent.getComponent(), items, target.getComponent());
 			Map<String, Object> data = EventDataManager.build(event);
-			((ConversationCtrl) target.getConversation()).postUpdate(parent.getUuid(), event.getName(), data);
+			((ConversationCtrl) target.getConversation()).postUpdate(desktopId, parent.getUuid(), event.getName(), data);
 		}
 
 		public void deselect() {

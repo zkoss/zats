@@ -31,15 +31,17 @@ public class GenericFocusAgentBuilder implements OperationAgentBuilder<FocusAgen
 		}
 
 		public void focus() {
+			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_FOCUS;
 			Map<String, Object> data = EventDataManager.build(new Event(cmd, target.getComponent()));
-			((ConversationCtrl)target.getConversation()).postUpdate(target.getUuid(), cmd, data);
+			((ConversationCtrl)target.getConversation()).postUpdate(desktopId, target.getUuid(), cmd, data);
 		}
 
 		public void blur() {
+			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_BLUR;
 			Map<String, Object> data = EventDataManager.build(new Event(cmd, target.getComponent()));
-			((ConversationCtrl)target.getConversation()).postUpdate(target.getUuid(), cmd, data);
+			((ConversationCtrl)target.getConversation()).postUpdate(desktopId, target.getUuid(), cmd, data);
 		}
 	}
 }

@@ -34,7 +34,6 @@ import org.zkoss.zats.mimic.Conversation;
 import org.zkoss.zats.mimic.ConversationException;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.impl.emulator.Emulator;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 
 /**
@@ -45,10 +44,9 @@ import org.zkoss.zk.ui.Desktop;
 public class EmulatorConversation implements Conversation , ConversationCtrl{
 	private static Logger logger = Logger.getLogger(EmulatorConversation.class.getName());
 	private Emulator emulator;
-	private DesktopAgent desktopAgent;
-	private List<DesktopAgent> desktopList = new LinkedList<DesktopAgent>();
-	
+	private List<DesktopAgent> desktopAgentList = new LinkedList<DesktopAgent>();
 	private List<String> cookies;
+	private CloseListener closeListener;
 
 	public EmulatorConversation(Emulator emulator){
 		this.emulator = emulator;
@@ -71,8 +69,8 @@ public class EmulatorConversation implements Conversation , ConversationCtrl{
 			Desktop desktop = (Desktop) emulator.getRequestAttributes().get(
 					"javax.zkoss.zk.ui.desktop");
 			// TODO, what if a non-zk(zul) page, throw exception?
-			desktopAgent = new DefaultDesktopAgent(this, desktop);
-			desktopList.add(desktopAgent);
+			DesktopAgent desktopAgent = new DefaultDesktopAgent(this, desktop);
+			desktopAgentList.add(desktopAgent);
 			return desktopAgent;
 		} catch (Exception e) {
 			throw new ConversationException("", e);
@@ -83,11 +81,16 @@ public class EmulatorConversation implements Conversation , ConversationCtrl{
 	
 
 	public void close() {
-		for (DesktopAgent d : desktopList){
+		if(closeListener!=null){
+			closeListener.willClose(this);
+		}
+		
+		for (DesktopAgent d : desktopAgentList){
 			destroy(d);
 		}
-		desktopList.clear();
+		desktopAgentList.clear();
 	}
+	
 	public void destroy(DesktopAgent desktopAgent){
 		InputStream is = null;
 		try {
@@ -112,20 +115,21 @@ public class EmulatorConversation implements Conversation , ConversationCtrl{
 		}
 	}
 	                      
-	public DesktopAgent getDesktop() {
-		return desktopAgent;
-	}
 
 	public HttpSession getSession() {
-		if (desktopAgent == null)
+		if (desktopAgentList.isEmpty()){
 			return null;
-		return (HttpSession) desktopAgent.getDesktop().getSession().getNativeSession();
+		}else{
+			return (HttpSession)desktopAgentList.get(0).getDesktop().getSession().getNativeSession();
+		}
+		
 	}
 
-	public void postUpdate(String targetUUID, String cmd,
-			Map<String, Object> data) {
+	public void postUpdate(String desktopId, String targetUUID,
+			String cmd, Map<String, Object> data) {
+		
 		// prepare au data
-		String dtid = UrlEncoded.encodeString(desktopAgent.getId());
+		String dtid = UrlEncoded.encodeString(desktopId);
 		cmd = UrlEncoded.encodeString(cmd);
 		String uuid = UrlEncoded.encodeString(targetUUID);
 		String param;
@@ -140,10 +144,7 @@ public class EmulatorConversation implements Conversation , ConversationCtrl{
 					cmd, uuid);
 
 		if (logger.isLoggable(Level.FINEST)) {
-			Component comp = desktopAgent.getDesktop().getComponentByUuidIfAny(targetUUID);
-			String id = comp != null ? comp.getId() : null;
-			String title = (id != null ? id : "unknown") + "/" + targetUUID;
-			logger.finest(title + " perform AU: " + UrlEncoded.decodeString(param, 0, param.length(), "utf-8"));
+			logger.finest(targetUUID + " perform AU: " + UrlEncoded.decodeString(param, 0, param.length(), "utf-8"));
 		}
 		
 		OutputStream os = null;
@@ -224,5 +225,13 @@ public class EmulatorConversation implements Conversation , ConversationCtrl{
 			close(r);
 		}
 		return reply;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.zkoss.zats.mimic.impl.ConversationCtrl#setCloseListener(org.zkoss.zats.mimic.impl.ConversationCtrl.CloseListener)
+	 */
+	public void setCloseListener(CloseListener l) {
+		closeListener = l;
 	}
 }

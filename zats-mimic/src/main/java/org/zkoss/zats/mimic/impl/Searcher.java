@@ -22,6 +22,7 @@ import org.zkoss.zats.mimic.Agent;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversation;
 import org.zkoss.zats.mimic.ConversationException;
+import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.PageAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -62,41 +63,46 @@ import org.zkoss.zk.ui.Page;
 					String.class);
 
 			// find components
-			List<Component> list;
+			List<Component> foundComponents;
 			
 			Object base = parent.getDelegatee();
 			
 			if (base instanceof Desktop) {
 				Collection<Page> pages = ((Desktop)base).getPages();
-				list = new ArrayList<Component>();
+				foundComponents = new ArrayList<Component>();
 				for(Page p : pages){
 					List<Component> pl = (List<Component>) findByPage.invoke(null, p , selector);
 					if(pl!=null && pl.size()>0){
-						list.addAll(pl);
+						foundComponents.addAll(pl);
 					}
 				}
 			} else if (base instanceof Page) {
-				list = (List<Component>) findByPage.invoke(null,(Page)base, selector);
+				foundComponents = (List<Component>) findByPage.invoke(null,(Page)base, selector);
 			} else if (base instanceof Component){
 				Method findByComp = selectors.getMethod("find",
 						Component.class, String.class);
-				list = (List<Component>) findByComp.invoke(null, (Component)base, selector);
+				foundComponents = (List<Component>) findByComp.invoke(null, (Component)base, selector);
 			} else{
 				throw new ConversationException("unsupported type "+base);
 			}
 			
-			List<ComponentAgent> agents = new ArrayList<ComponentAgent>(list.size());
+			List<ComponentAgent> foundAgents = new ArrayList<ComponentAgent>(foundComponents.size());
 			
-			PageAgent lastPg = null;
-			
-			for (Component comp : list){
+			PageAgent lastPage = null;
+			DesktopAgent desktopAgent = null;
+			//wrap components as ComponentAgent
+			for (Component comp : foundComponents){
 				Page pg = comp.getPage();
-				if(lastPg==null || !lastPg.getDelegatee().equals(pg)){
-					lastPg = new DefaultPageAgent(parent.getConversation().getDesktop(),pg);
+				if (desktopAgent == null) {
+					desktopAgent = new DefaultDesktopAgent(parent.getConversation(), pg.getDesktop());
 				}
-				agents.add(new DefaultComponentAgent(lastPg, comp));
+				//components might come from different pages
+				if(lastPage==null || !lastPage.getDelegatee().equals(pg)){
+					lastPage = new DefaultPageAgent(desktopAgent,pg);
+				}
+				foundAgents.add(new DefaultComponentAgent(lastPage, comp));
 			}
-			return agents;
+			return foundAgents;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -113,11 +119,11 @@ import org.zkoss.zk.ui.Page;
 		return agents.size() > 0 ? agents.get(0) : null;
 	}
 
-	public static ComponentAgent find(Conversation conv,String selector) {
-		return Searcher.find(conv.getDesktop(), selector);
-	}
-
-	public static List<ComponentAgent> findAll(Conversation conv,String selector) {
-		return Searcher.findAll(conv.getDesktop(), selector);
-	}
+//	public static ComponentAgent find(Conversation conv,String selector) {
+//		return Searcher.find(conv.getDesktop(), selector);
+//	}
+//
+//	public static List<ComponentAgent> findAll(Conversation conv,String selector) {
+//		return Searcher.findAll(conv.getDesktop(), selector);
+//	}
 }

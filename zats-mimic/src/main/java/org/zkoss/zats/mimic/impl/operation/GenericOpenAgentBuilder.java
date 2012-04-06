@@ -34,10 +34,11 @@ public class GenericOpenAgentBuilder implements OperationAgentBuilder<OpenAgent>
 		}
 
 		public void open(boolean open) {
+			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_OPEN;
 			Map<String, Object> data = EventDataManager.build(new OpenEvent(cmd, target.getComponent(), open, null,
 					null));
-			((ConversationCtrl)target.getConversation()).postUpdate(target.getUuid(), cmd, data);
+			((ConversationCtrl)target.getConversation()).postUpdate(desktopId, target.getUuid(), cmd, data);
 		}
 	}
 

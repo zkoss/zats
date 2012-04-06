@@ -32,10 +32,11 @@ public class GenericCheckAgentBuilder implements OperationAgentBuilder<CheckAgen
 		}
 
 		public void check(boolean checked) {
+			String desktopId = target.getDesktop().getId();
 			Map<String, Object> data = EventDataManager.build(new CheckEvent(Events.ON_CHECK, target.getComponent(),
 					checked));
 			ConversationCtrl cctrl = (ConversationCtrl) target.getConversation();
-			cctrl.postUpdate(target.getUuid(), Events.ON_CHECK, data);
+			cctrl.postUpdate(desktopId, target.getUuid(), Events.ON_CHECK, data);
 		}
 	}
 }

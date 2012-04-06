@@ -22,11 +22,13 @@ public interface Conversation {
 	
 	DesktopAgent connect(String zul);
 
-
-	DesktopAgent getDesktop();
-
 	HttpSession getSession();
 
 	// TODO post(Event) method for posting custom event of test cases
+	
+	/**
+	 * clean current Desktop and release resources.
+	 */
+	void close();
 	
 }

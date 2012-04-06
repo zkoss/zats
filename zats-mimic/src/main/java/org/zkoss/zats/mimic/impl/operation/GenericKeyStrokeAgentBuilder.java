@@ -133,30 +133,33 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<KeySt
 				throw new AgentException("Code code not found: "+key);
 			}
 			
+			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_CTRL_KEY;
 			Map<String, Object> data = EventDataManager.build(new KeyEvent(cmd, et.getComponent(), keyCode, ctrlKey,
 					shiftKey, altKey, target.getComponent()));
-			((ConversationCtrl)et.getConversation()).postUpdate(et.getUuid(), cmd, data);
+			((ConversationCtrl)et.getConversation()).postUpdate(desktopId, et.getUuid(), cmd, data);
 		}
 
 		private void doOnCancel() {
 			ComponentAgent et = AuUtility.lookupEventTarget(target,Events.ON_CANCEL);
 			if(et==null) return;
 			
+			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_CANCEL;
 			Map<String, Object> data = EventDataManager.build(new KeyEvent(cmd, et.getComponent(), ESC, false, false,
 					false, target.getComponent()));
-			((ConversationCtrl)et.getConversation()).postUpdate(et.getUuid(), cmd, data);
+			((ConversationCtrl)et.getConversation()).postUpdate(desktopId, et.getUuid(), cmd, data);
 		}
 
 		private void doOnOK() {
 			ComponentAgent et = AuUtility.lookupEventTarget(target,Events.ON_OK);
 			if(et==null) return;
 			
+			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_OK;
 			Map<String, Object> data = EventDataManager.build(new KeyEvent(cmd, et.getComponent(), ENTER, false, false,
 					false, target.getComponent()));
-			((ConversationCtrl)et.getConversation()).postUpdate(et.getUuid(), cmd, data);
+			((ConversationCtrl)et.getConversation()).postUpdate(desktopId, et.getUuid(), cmd, data);
 		}
 	}
 }

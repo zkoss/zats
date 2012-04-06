@@ -53,21 +53,22 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 			try {
 				ConversationCtrl cctrl = (ConversationCtrl) target.getConversation();
 				// focus
+				String desktopId = target.getDesktop().getId();
 				String cmd = Events.ON_FOCUS;
 				Map<String, Object> data = EventDataManager.build(new Event(cmd, target.getComponent()));
-				cctrl.postUpdate(target.getUuid(), cmd, data);
+				cctrl.postUpdate(desktopId, target.getUuid(), cmd, data);
 				// changing
 				cmd = Events.ON_CHANGING;
 				data = EventDataManager.build(new InputEvent(cmd, target.getComponent(), value, null));
-				cctrl.postUpdate(target.getUuid(), cmd, data);
+				cctrl.postUpdate(desktopId, target.getUuid(), cmd, data);
 				// change (reuse changing event data collection)
 				cmd = Events.ON_CHANGE;
 				putValue(target, value, data); // parse value and put into data collection 
-				cctrl.postUpdate(target.getUuid(), cmd, data);
+				cctrl.postUpdate(desktopId, target.getUuid(), cmd, data);
 				// blur
 				cmd = Events.ON_BLUR;
 				data = EventDataManager.build(new Event(cmd, target.getComponent()));
-				cctrl.postUpdate(target.getUuid(), cmd, data);
+				cctrl.postUpdate(desktopId, target.getUuid(), cmd, data);
 
 			} catch (Exception e) {
 				throw new AgentException("value \"" + value

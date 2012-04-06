@@ -63,9 +63,10 @@ public class GridRendererAgentBuilder implements OperationAgentBuilder<RendererA
 			}
 			if(ids.size()==0) return;
 			
+			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_RENDER;
 			Map<String, Object> data = EventDataManager.build(new RenderEvent(cmd, new HashSet(ids)));
-			((ConversationCtrl)target.getConversation()).postUpdate(target.getUuid(), cmd, data);
+			((ConversationCtrl)target.getConversation()).postUpdate(desktopId, target.getUuid(), cmd, data);
 		};
 	}
 	

@@ -79,9 +79,10 @@ public class ListboxSelectAgentBuilder implements OperationAgentBuilder<SelectAg
 		}
 
 		private void post(Listbox listbox, Set<String> selected) {
+			String desktopId = target.getDesktop().getId();
 			Event event = new SelectEvent(Events.ON_SELECT, listbox, selected, target.getComponent());
 			Map<String, Object> data = EventDataManager.build(event);
-			((ConversationCtrl) target.getConversation()).postUpdate(listbox.getUuid(), event.getName(), data);
+			((ConversationCtrl) target.getConversation()).postUpdate(desktopId, listbox.getUuid(), event.getName(), data);
 		}
 
 		@SuppressWarnings("unchecked")

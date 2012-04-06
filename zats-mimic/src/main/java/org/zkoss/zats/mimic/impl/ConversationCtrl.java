@@ -13,6 +13,7 @@ package org.zkoss.zats.mimic.impl;
 
 import java.util.Map;
 
+import org.zkoss.zats.mimic.Conversation;
 import org.zkoss.zats.mimic.DesktopAgent;
 
 /**
@@ -23,16 +24,20 @@ import org.zkoss.zats.mimic.DesktopAgent;
 public interface ConversationCtrl {
 	/**
 	 * post an asynchronous update event.
+	 * @param desktopId TODO
 	 * @param targetUUID the UUID of component agent which performed this event
-	 * @param command command
 	 * @param data data for update
+	 * @param command command
 	 */
-	void postUpdate(String targetUUID, String cmd, Map<String, Object> data);
-	
-	/**
-	 * clean current Desktop and release resources.
-	 */
-	void close();
+	void postUpdate(String desktopId, String targetUUID, String cmd, Map<String, Object> data);
 	
 	void destroy(DesktopAgent desktopAgent);
+	
+	void setCloseListener(CloseListener l);
+	
+	//to notify a conversation is going to be closed.
+	interface CloseListener {
+		void willClose(Conversation conv);
+	}
+	
 }

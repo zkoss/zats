@@ -31,21 +31,24 @@ public class GenericClickAgentBuilder implements OperationAgentBuilder<ClickAgen
 		}
 
 		public void click() {
+			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_CLICK;
 			Map<String, Object> data = EventDataManager.build(new MouseEvent(cmd, target.getComponent()));
-			((ConversationCtrl)target.getConversation()).postUpdate(target.getUuid(), cmd, data);
+			((ConversationCtrl)target.getConversation()).postUpdate(desktopId, target.getUuid(), cmd, data);
 		}
 
 		public void doubleClick() {
+			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_DOUBLE_CLICK;
 			Map<String, Object> data = EventDataManager.build(new MouseEvent(cmd, target.getComponent()));
-			((ConversationCtrl)target.getConversation()).postUpdate(target.getUuid(), cmd, data);
+			((ConversationCtrl)target.getConversation()).postUpdate(desktopId, target.getUuid(), cmd, data);
 		}
 
 		public void rightClick() {
+			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_RIGHT_CLICK;
 			Map<String, Object> data = EventDataManager.build(new MouseEvent(cmd, target.getComponent()));
-			((ConversationCtrl)target.getConversation()).postUpdate(target.getUuid(), cmd, data);
+			((ConversationCtrl)target.getConversation()).postUpdate(desktopId, target.getUuid(), cmd, data);
 		}
 	}
 }

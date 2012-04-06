@@ -20,8 +20,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.servlet.http.HttpSession;
-
 import org.zkoss.zats.mimic.impl.ConversationCtrl;
 import org.zkoss.zats.mimic.impl.EmulatorConversation;
 import org.zkoss.zats.mimic.impl.emulator.Emulator;
@@ -44,7 +42,7 @@ public class Conversations {
 	 * @param resourceRoot
 	 * @return Emulator
 	 */
-		public static Emulator start(String resourceRoot){
+	public static void start(String resourceRoot){
 		stop();
 		// prepare environment
 		String tmpDir = System.getProperty("java.io.tmpdir", ".");
@@ -80,7 +78,6 @@ public class Conversations {
 		.addResource(resourceRoot)
 		.descriptor(EmulatorConversation.class.getResource("WEB-INF/web.xml")).create();
 		
-		return emulator;
 	}
 	
 
@@ -93,8 +90,10 @@ public class Conversations {
 	}
 	
 	public static void stop() {
+		closeAll();
 		if (emulator!=null){
 			emulator.close();
+			emulator=null;
 		}
 	}
 
@@ -103,7 +102,16 @@ public class Conversations {
 	 * @return
 	 */
 	public static Conversation open(){
+		if (emulator==null){
+			//throw exception with some information
+			throw new ConversationException("emulator doens't start yet, call start first");
+		}
 		Conversation conversation = ConversationBuilder.create(emulator);
+		((ConversationCtrl)conversation).setCloseListener(new ConversationCtrl.CloseListener() {
+			public void willClose(Conversation conv) {
+				conversations.remove(conv);
+			}
+		});
 		conversations.add(conversation);
 		return conversation;
 	}
@@ -112,38 +120,11 @@ public class Conversations {
 	 * close all conversations and release resources.
 	 */
 	public static void closeAll() {
-		for (Conversation c : conversations){
-			((ConversationCtrl)c).close();
+		//to avoid concurrent modification exception in willClose
+		for (Conversation c : conversations.toArray(new Conversation[conversations.size()])){
+			c.close();
 		}
-		conversations.clear();
 	}
 	
-
-	/**
-	 * get last open conversation's desktop.
-	 * 
-	 * @return desktop.
-	 */
-	public static DesktopAgent getDesktop() {
-		if(conversations.isEmpty()){
-			throw new ConversationException("not in a running converation");
-		}else{
-			return conversations.get(conversations.size()-1).getDesktop();
-		}
-	}
-
-	/**
-	 * last open conversation's session
-	 * 
-	 * @return session or null if it doesn't have.
-	 */
-	public static HttpSession getSession() {
-		if(conversations.isEmpty()){
-			throw new ConversationException("not in a running converation");
-		}else{
-			return conversations.get(conversations.size()-1).getSession();
-		}
-		
-	}
 
 }
