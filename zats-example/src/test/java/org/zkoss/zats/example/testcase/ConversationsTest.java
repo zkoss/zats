@@ -34,23 +34,22 @@ public class ConversationsTest
 	@After
 	public void after()
 	{
-		Conversations.clean();
+		Conversations.closeAll();
 	}
 
 	@Test
 	public void test()
 	{
-		Conversations.open("/session.zul");
+		DesktopAgent desktop = Conversations.open().connect("/session.zul");
 
 		assertNotNull(Conversations.getSession());
 		assertNotNull(Conversations.getDesktop());
 
 		HttpSession session = Conversations.getSession();
-		DesktopAgent desktop = Conversations.getDesktop();
 		assertEquals("session", session.getAttribute("msg"));
 		assertEquals("desktop", desktop.getAttribute("msg"));
 		
-		ComponentAgent win = Conversations.query("#win");
+		ComponentAgent win = desktop.query("#win");
 		assertNotNull(win);
 		assertNotNull(win.as(Window.class));
 		assertEquals("my window",win.as(Window.class).getTitle());

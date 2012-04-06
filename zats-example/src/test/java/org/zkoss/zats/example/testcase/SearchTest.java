@@ -12,6 +12,7 @@ import org.zkoss.zats.example.search.Item;
 import org.zkoss.zats.example.search.ItemRenderer;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
@@ -35,41 +36,41 @@ public class SearchTest {
 
 	@After
 	public void after() {
-		Conversations.clean();
+		Conversations.closeAll();
 	}
 
 	@Test
 	public void test() {
-		Conversations.open("/search.zul");
+		DesktopAgent desktop = Conversations.open().connect("/search.zul");
 
-		ComponentAgent detailBox = Conversations.query("groupbox");
-		ComponentAgent listbox = Conversations.query("listbox");
-		Conversations.queryAll("listbox > listitem").get(0).as(SelectAgent.class).select();
+		ComponentAgent detailBox = desktop.query("groupbox");
+		ComponentAgent listbox = desktop.query("listbox");
+		desktop.queryAll("listbox > listitem").get(0).as(SelectAgent.class).select();
 		
 		//verify UI logic
 		assertEquals(true, detailBox.as(Groupbox.class).isVisible());
 		//select an item & verify its detail
 		//verify detail data by model
 		Item item = (Item)listbox.as(Listbox.class).getModel().getElementAt(0);
-		Label descriptionLabel = Conversations.query("#descriptionLabel").as(Label.class); 
+		Label descriptionLabel = desktop.query("#descriptionLabel").as(Label.class); 
 		assertEquals(descriptionLabel.getValue(), item.getDescription());
-		Label priceLabel = Conversations.query("#priceLabel").as(Label.class);
+		Label priceLabel = desktop.query("#priceLabel").as(Label.class);
 		assertEquals(priceLabel.getValue(),ItemRenderer.priceFormatter.format(item.getPrice()));
-		Label quantityLabel = Conversations.query("#quantityLabel").as(Label.class);
+		Label quantityLabel = desktop.query("#quantityLabel").as(Label.class);
 		assertEquals(true, quantityLabel.getValue().contains(Integer.toString(item.getQuantity())));
-		Label totalPriceLabel = Conversations.query("#totalPriceLabel").as(Label.class);
+		Label totalPriceLabel = desktop.query("#totalPriceLabel").as(Label.class);
 		assertEquals(totalPriceLabel.getValue(),ItemRenderer.priceFormatter.format(item.getTotalPrice()));
 		
 		//verify detail data by label
-		Caption detailCaption = Conversations.query("#detailCaption").as(Caption.class);
+		Caption detailCaption = desktop.query("#detailCaption").as(Caption.class);
 		List<ComponentAgent> cellNodes = listbox.getChild(1).getChildren();
 		assertEquals(detailCaption.getLabel(), cellNodes.get(0).as(Listcell.class).getLabel());
 		assertEquals(priceLabel.getValue(),cellNodes.get(1).as(Listcell.class).getLabel());
 		assertEquals(quantityLabel.getValue(),cellNodes.get(2).as(Listcell.class).getLabel());
 		
 		//search & verify result
-		ComponentAgent filterBox = Conversations.query("#filterBox");
-		ComponentAgent searchButton = Conversations.query("#searchButton");
+		ComponentAgent filterBox = desktop.query("#filterBox");
+		ComponentAgent searchButton = desktop.query("#searchButton");
 		final String KEYWORD = "A";
 		filterBox.as(TypeAgent.class).type(KEYWORD);
 		searchButton.as(ClickAgent.class).click();

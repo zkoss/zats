@@ -3,8 +3,6 @@ package org.zkoss.zats.example.testcase;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.zkoss.zats.mimic.Conversations.query;
-import static org.zkoss.zats.mimic.Conversations.queryAll;
 
 import java.util.List;
 
@@ -14,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Intbox;
@@ -33,35 +32,35 @@ public class TodoTest {
 
 	@After
 	public void after() {
-		Conversations.clean();
+		Conversations.closeAll();
 	}
 
 	@Test
 	public void test() {
 		//visit the target page
-		Conversations.open("/todo.zul");
+		DesktopAgent desktop = Conversations.open().connect("/todo.zul");
 
 		//find components
-		ComponentAgent itemName = query("textbox");
-		ComponentAgent priority = query("intbox");
-		ComponentAgent date = query("datebox");
+		ComponentAgent itemName = desktop.query("textbox");
+		ComponentAgent priority = desktop.query("intbox");
+		ComponentAgent date = desktop.query("datebox");
 
 		//add
 		//itemName.as(TypeAgent.class).type("one-item");
 		itemName.type("one-item");
 		priority.type("3");
 		date.type("2012-03-16");
-		query("button[label='Add']").click();
+		desktop.query("button[label='Add']").click();
 		
 		//verify each listcell's label
-		ComponentAgent listbox = query("listbox");
+		ComponentAgent listbox = desktop.query("listbox");
 		List<ComponentAgent> cells = listbox.queryAll("listitem").get(0).getChildren();
 		assertEquals("one-item",cells.get(0).as(Listcell.class).getLabel());
 		assertEquals("3",cells.get(1).as(Listcell.class).getLabel());
 		assertEquals("2012/03/16",cells.get(2).as(Listcell.class).getLabel());
 		
 		//update
-		queryAll("listbox > listitem").get(0).as(SelectAgent.class).select();
+		desktop.queryAll("listbox > listitem").get(0).as(SelectAgent.class).select();
 		//verify selected
 		assertEquals("one-item",itemName.as(Textbox.class).getValue());
 		assertEquals((Integer)3,priority.as(Intbox.class).getValue());
@@ -69,24 +68,24 @@ public class TodoTest {
 		//modify the todo item
 		itemName.type("one-item modified");
 		priority.type("5");
-		query("button[label='Update']").click();
+		desktop.query("button[label='Update']").click();
 		//retrieve Listitem again to verify it
 		cells = listbox.queryAll("listitem").get(0).getChildren();
 		assertEquals("one-item modified",cells.get(0).as(Listcell.class).getLabel());
 		assertEquals("5",cells.get(1).as(Listcell.class).getLabel());
 		
 		//reset
-		queryAll("listbox > listitem").get(0).as(SelectAgent.class).select();
+		desktop.queryAll("listbox > listitem").get(0).as(SelectAgent.class).select();
 		assertNotNull(itemName.as(Textbox.class).getValue());
-		query("button[label='Reset']").click();
+		desktop.query("button[label='Reset']").click();
 		assertEquals("",itemName.as(Textbox.class).getValue());
 		assertEquals((Integer)0,priority.as(Intbox.class).getValue());
 		assertNull(date.as(Datebox.class).getValue());
 
 		//delete
 		assertEquals(1,listbox.queryAll("listitem").size());
-		queryAll("listbox > listitem").get(0).as(SelectAgent.class).select();
-		query("button[label='Delete']").click();
+		desktop.queryAll("listbox > listitem").get(0).as(SelectAgent.class).select();
+		desktop.query("button[label='Delete']").click();
 		assertEquals(0,listbox.queryAll("listitem").size());
 		
 		//The next line causes IllegalStateException: Components can be accessed only in event listeners

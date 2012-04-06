@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.zkoss.zats.example.testcase.util.LoginOperation;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zul.Label;
@@ -30,17 +31,17 @@ public class LoginLogoutTest {
 
 	@After
 	public void after() {
-		Conversations.clean();
+		Conversations.closeAll();
 	}
 
 	@Test
 	public void test() {
-		Conversations.open("/login.zul");
+		DesktopAgent desktop = Conversations.open().connect("/login.zul");
 
-		ComponentAgent account = Conversations.query("#account");
-		ComponentAgent password = Conversations.query("#password");
-		ComponentAgent login = Conversations.query("button");
-		ComponentAgent msg = Conversations.query("div > label");
+		ComponentAgent account = desktop.query("#account");
+		ComponentAgent password = desktop.query("#password");
+		ComponentAgent login = desktop.query("button");
+		ComponentAgent msg = desktop.query("div > label");
 		
 		//login failed
 		account.as(TypeAgent.class).type("hawk");
@@ -60,9 +61,9 @@ public class LoginLogoutTest {
 	
 	@Test
 	public void testLoginOperation() {
-		Conversations.open("/login.zul");
-		assertEquals(false, LoginOperation.login("hawk","1111"));
-		assertEquals(true, LoginOperation.login("hawk","1234"));
+		DesktopAgent desktop = Conversations.open().connect("/login.zul");
+		assertEquals(false, LoginOperation.login(desktop, "hawk", "1111"));
+		assertEquals(true, LoginOperation.login(desktop, "hawk", "1234"));
 			
 	}
 }

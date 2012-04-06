@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zul.Label;
 
 public class HelloTest {
@@ -24,15 +25,15 @@ public class HelloTest {
 
 	@After
 	public void after() {
-		Conversations.clean();
+		Conversations.closeAll();
 	}
 
 	@Test
 	public void test() {
-		Conversations.open("/hello.zul");
+		DesktopAgent desktop = Conversations.open().connect("/hello.zul");
 
-		ComponentAgent button = Conversations.query("button");
-		ComponentAgent label = Conversations.query("label");
+		ComponentAgent button = desktop.query("button");
+		ComponentAgent label = desktop.query("label");
 		
 		//button.as(ClickAgent.class).click();
 		button.click();
