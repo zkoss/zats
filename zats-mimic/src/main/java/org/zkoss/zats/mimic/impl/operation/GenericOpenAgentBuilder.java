@@ -34,6 +34,7 @@ public class GenericOpenAgentBuilder implements OperationAgentBuilder<OpenAgent>
 		}
 
 		public void open(boolean open) {
+			//TODO to determine its closable to send AU
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_OPEN;
 			Map<String, Object> data = EventDataManager.build(new OpenEvent(cmd, target.getComponent(), open, null,

@@ -17,6 +17,7 @@ import java.util.Map;
 import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zats.mimic.operation.CloseAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
@@ -38,8 +39,11 @@ import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Longbox;
 import org.zkoss.zul.Menuitem;
+import org.zkoss.zul.Panel;
 import org.zkoss.zul.Spinner;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Timebox;
+import org.zkoss.zul.Window;
 import org.zkoss.zul.impl.InputElement;
 
 public class OperationAgentManager {
@@ -85,6 +89,11 @@ public class OperationAgentManager {
 		
 		// the open
 		registerBuilder("5.0.0", "*", AbstractComponent.class, OpenAgent.class, new GenericOpenAgentBuilder());
+		
+		// the close
+		registerBuilder("5.0.0", "*", Window.class, CloseAgent.class, new GenericCloseAgentBuilder());
+		registerBuilder("5.0.0", "*", Panel.class, CloseAgent.class, new GenericCloseAgentBuilder());
+		registerBuilder("5.0.0", "*", Tab.class, CloseAgent.class, new GenericCloseAgentBuilder());
 
 		//----------special case ---
 		

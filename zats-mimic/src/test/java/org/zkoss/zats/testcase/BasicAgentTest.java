@@ -28,6 +28,7 @@ import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zats.mimic.operation.CloseAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
@@ -514,8 +515,28 @@ public class BasicAgentTest {
 	}
 	
 	@Test
-	public void testSelect()
-	{
+	public void testSelect(){
 		// TODO 
+	}
+	
+	@Test
+	public void testClose(){
+		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/close.zul");
+		
+		ComponentAgent panel = desktopAgent.query("panel[title='closable']");
+		panel.as(CloseAgent.class).close();
+		Assert.assertNull(panel.getComponent().getPage());
+		
+		ComponentAgent window = desktopAgent.query("window[title='closable']");
+		window.as(CloseAgent.class).close();
+		Assert.assertNull(window.getComponent().getPage());
+		
+		ComponentAgent tab = desktopAgent.query("tab[label='closable']");
+		tab.as(CloseAgent.class).close();
+		Assert.assertNull(tab.getComponent().getPage());
+		
+		panel = desktopAgent.query("panel[title='non-close']");
+		panel.as(CloseAgent.class).close();
+		Assert.assertNotNull(panel.getComponent().getPage());
 	}
 }

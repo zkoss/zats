@@ -1,0 +1,21 @@
+<zk>
+	<panel title="closable" closable="true">
+	</panel>
+	<tabbox>
+		<tabs>
+			<tab label="closable" closable="true"></tab>
+		</tabs>
+	</tabbox>
+	<window title="closable" border="normal" closable="true">
+	</window>
+	<separator bar="true" height="30px"></separator>
+	<panel title="non-close">
+	</panel>
+	<tabbox>
+		<tabs>
+			<tab label="non-close"></tab>
+		</tabs>
+	</tabbox>
+	<window title="non-close" border="normal">
+	</window>
+</zk>
