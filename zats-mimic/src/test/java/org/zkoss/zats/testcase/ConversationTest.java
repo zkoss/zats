@@ -57,7 +57,7 @@ public class ConversationTest {
 	}
 	
 	@Test
-	public void test2Desktops(){
+	public void test2Conversations(){
 		DesktopAgent desktop1 = Conversations.open().connect("/basic/click.zul");
 		DesktopAgent desktop2 = Conversations.open().connect("/basic/click.zul");
 		assertNotSame(desktop1, desktop2);
