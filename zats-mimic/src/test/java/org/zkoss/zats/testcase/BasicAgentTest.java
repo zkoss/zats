@@ -30,6 +30,7 @@ import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
+import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zk.ui.AbstractComponent;
@@ -481,41 +482,83 @@ public class BasicAgentTest {
 		assertEquals(4, listbox.as(Listbox.class).getChildren().size()); // include header
 		List<ComponentAgent> items = listbox.queryAll("listitem");
 
-		// multiple selection
-		items.get(0).as(SelectAgent.class).select();
+		// listbox multiple selection
+		items.get(0).as(MultipleSelectAgent.class).select();
 		assertEquals("[i0]", msg.getValue());
 		assertEquals(1, listbox.as(Listbox.class).getSelectedCount());
-		items.get(1).as(SelectAgent.class).select();
+		items.get(1).as(MultipleSelectAgent.class).select();
 		assertEquals("[i0, i1]", msg.getValue());
 		assertEquals(2, listbox.as(Listbox.class).getSelectedCount());
-		items.get(2).as(SelectAgent.class).select();
+		items.get(2).as(MultipleSelectAgent.class).select();
 		assertEquals("[i0, i1, i2]", msg.getValue());
 		assertEquals(3, listbox.as(Listbox.class).getSelectedCount());
-		items.get(1).as(SelectAgent.class).deselect();
+		items.get(1).as(MultipleSelectAgent.class).deselect();
 		assertEquals("[i0, i2]", msg.getValue());
 		assertEquals(2, listbox.as(Listbox.class).getSelectedCount());
-		items.get(0).as(SelectAgent.class).deselect();
+		items.get(0).as(MultipleSelectAgent.class).deselect();
 		assertEquals("[i2]", msg.getValue());
 		assertEquals(1, listbox.as(Listbox.class).getSelectedCount());
-		items.get(2).as(SelectAgent.class).deselect();
+		items.get(2).as(MultipleSelectAgent.class).deselect();
 		assertEquals("[]", msg.getValue());
 		assertEquals(0, listbox.as(Listbox.class).getSelectedCount());
-		items.get(2).as(SelectAgent.class).deselect(); // should happen nothing
+		items.get(2).as(MultipleSelectAgent.class).deselect(); // should happen nothing
 		assertEquals("[]", msg.getValue());
 		assertEquals(0, listbox.as(Listbox.class).getSelectedCount());
 		
-		// single selection
-		desktopAgent.query("#sbtn").as(ClickAgent.class).click();
+		// listbox single selection
+		desktopAgent.query("#lbcb checkbox").as(CheckAgent.class).check(false);
 		String[] values = { "[i0]", "[i1]", "[i2]" };
 		for (int i = 0; i < 3; ++i) {
 			items.get(i).as(SelectAgent.class).select();
 			assertEquals(values[i], msg.getValue());
 		}
+		
+		// TODO tree multiple selection
+		
+		
 	}
 	
 	@Test
-	public void testSelect()
-	{
-		// TODO 
+	public void testSelect() {
+		DesktopAgent desktop = Conversations.open().connect("/~./basic/select.zul");
+
+		Label selected = desktop.query("#selected").as(Label.class);
+		assertEquals("", selected.getValue());
+
+		// combobox
+		String[] labels = new String[] { "cbi1", "cbi2", "cbi3" };
+		List<ComponentAgent> cbitems = desktop.queryAll("#cb > comboitem");
+		assertEquals(labels.length, cbitems.size());
+		for (int i = 0; i < labels.length; ++i) {
+			cbitems.get(i).as(SelectAgent.class).select();
+			assertEquals(labels[i], selected.getValue());
+		}
+
+		// tabbox
+		labels = new String[] { "tb1.tab1", "tb1.tab2" };
+		List<ComponentAgent> tab = desktop.queryAll("#tb1 tab");
+		assertEquals(labels.length, tab.size());
+		for (int i = 0; i < labels.length; ++i) {
+			tab.get(i).as(SelectAgent.class).select();
+			assertEquals(labels[i], selected.getValue());
+		}
+
+		// tab
+		labels = new String[] { "tb2.tab1", "tb2.tab2" };
+		tab = desktop.queryAll("#tb2 tab");
+		assertEquals(labels.length, tab.size());
+		for (int i = 0; i < labels.length; ++i) {
+			tab.get(i).as(SelectAgent.class).select();
+			assertEquals(labels[i], selected.getValue());
+		}
+
+		// tree
+		labels = new String[] { "ti1", "ti1.1", "ti1.2" };
+		List<ComponentAgent> titems = desktop.queryAll("#t treeitem");
+		assertEquals(labels.length, titems.size());
+		for (int i = 0; i < labels.length; ++i) {
+			titems.get(i).as(SelectAgent.class).select();
+			assertEquals(labels[i], selected.getValue());
+		}
 	}
 }

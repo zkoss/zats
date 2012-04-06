@@ -5,11 +5,11 @@
 				<label value="selected: " />
 				<label id="msg" />
 			</hbox>
-			<hbox>
-				<button id="sbtn" label="single selection" onClick="lb.multiple = false" />
-				<button id="mbtn" label="multiple selection" onClick="lb.multiple = true" />
+			<hbox id="lbcb">
+				<checkbox label="multiple" onCheck="lb.multiple = self.checked" checked="true" />
+				<checkbox label="checkable" onCheck="lb.checkmark = self.checked" checked="false" />
 			</hbox>
-			<listbox id="lb" width="250px" multiple="true" onSelect="doSelect()">
+			<listbox id="lb" width="250px" multiple="true" onSelect="doListboxSelect()">
 				<listhead>
 					<listheader>col1</listheader>
 					<listheader>col2</listheader>
@@ -39,16 +39,55 @@
 					</listcell>
 				</listitem>
 			</listbox>
+			<hbox id="tcb">
+				<checkbox label="multiple" onCheck="t.multiple = self.checked" checked="true" />
+				<checkbox label="checkable" onCheck="t.checkmark = self.checked" checked="false" />
+			</hbox>
+			<tree id="t" multiple="true" onSelect="doTreeSelect()">
+				<treecols>
+					<treecol label="col1" />
+				</treecols>
+				<treechildren>
+					<treeitem id="ti1">
+						<treerow>
+							<treecell>
+								<label>ti1</label>
+							</treecell>
+						</treerow>
+						<treechildren>
+							<treeitem id="ti1.1">
+								<treerow>
+									<treecell>ti1.1</treecell>
+								</treerow>
+							</treeitem>
+							<treeitem id="ti1.2">
+								<treerow>
+									<treecell>ti1.2</treecell>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+				</treechildren>
+			</tree>
 		</vbox>
 	</window>
 	<zscript>
 		<![CDATA[
-	void doSelect() {
+	void doListboxSelect() {
 		Label msg = (Label)win.getFellow("msg");
 		Listbox lb = (Listbox)win.getFellow("lb");
-		ArrayList list = new ArrayList();				
+		ArrayList list = new ArrayList();
 		for(Object o : lb.getSelectedItems())
 			list.add(((Listitem)o).getId());
+		Collections.sort(list);
+		msg.setValue(list.toString());
+	}
+	void doTreeSelect() {
+		Label msg = (Label)win.getFellow("msg");
+		Tree tree = (Tree)win.getFellow("t");
+		ArrayList list = new ArrayList();
+		for(Object o : tree.getSelectedItems())
+			list.add(((Treeitem)o).getId());
 		Collections.sort(list);
 		msg.setValue(list.toString());
 	}

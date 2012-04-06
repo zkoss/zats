@@ -1,0 +1,63 @@
+<zk>
+	<vbox>
+		<hbox>
+			<label>selected:</label>
+			<label id="selected"></label>
+		</hbox>
+		<combobox id="cb" onSelect="selected.value = self.selectedItem.label">
+			<comboitem label="cbi1" />
+			<comboitem label="cbi2" />
+			<comboitem label="cbi3" />
+		</combobox>
+		<tabbox id="tb1" onSelect="selected.value = self.selectedTab.label">
+			<tabs>
+				<tab label="tb1.tab1" />
+				<tab label="tb1.tab2" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>tb1.tab1.panel</tabpanel>
+				<tabpanel>tb1.tab2.panel</tabpanel>
+			</tabpanels>
+		</tabbox>
+		<tabbox id="tb2">
+			<tabs>
+				<tab label="tb2.tab1" onSelect="selected.value = self.label" />
+				<tab label="tb2.tab2" onSelect="selected.value = self.label" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>tb2.tab1.panel</tabpanel>
+				<tabpanel>tb2.tab2.panel</tabpanel>
+			</tabpanels>
+		</tabbox>
+		<tree id="t" onSelect="selected.value=self.selectedItem.id">
+			<treecols>
+				<treecol label="col1" />
+			</treecols>
+			<treechildren>
+				<treeitem id="ti1">
+					<treerow>
+						<treecell>
+							<label>ti1</label>
+						</treecell>
+					</treerow>
+					<treechildren>
+						<treeitem id="ti1.1">
+							<treerow>
+								<treecell>ti1.1</treecell>
+							</treerow>
+						</treeitem>
+						<treeitem id="ti1.2">
+							<treerow>
+								<treecell>ti1.2</treecell>
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+			</treechildren>
+		</tree>
+	</vbox>
+	<zscript><![CDATA[
+	public void dummy() {
+	}
+	]]></zscript>
+</zk>

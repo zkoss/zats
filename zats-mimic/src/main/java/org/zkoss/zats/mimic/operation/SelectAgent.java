@@ -13,8 +13,6 @@ package org.zkoss.zats.mimic.operation;
 
 /**
  * To do selection on a component.
- * According multiple selection status of parent component (such as listbox),
- * this selection might be performed at multiple selection mode.
  * @author dennis
  */
 public interface SelectAgent extends OperationAgent {
@@ -23,10 +21,4 @@ public interface SelectAgent extends OperationAgent {
 	 * to select a item.
 	 */
 	public void select();
-
-	/**
-	 * to deselect a item.
-	 * If the parent component isn't at multiple selection mode, it will throw exception. 
-	 */
-	public void deselect();
 }

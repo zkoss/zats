@@ -9,6 +9,7 @@ import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Label;
@@ -52,20 +53,20 @@ public class BindTest{
 		ComponentAgent l1 = desktop.query("#l1");
 		ComponentAgent toggle = desktop.query("#toggle");
 		 
-		desktop.queryAll("#listbox1 > listitem").get(1).as(SelectAgent.class).select();
+		desktop.queryAll("#listbox1 > listitem").get(1).as(MultipleSelectAgent.class).select();
 		
 		Assert.assertArrayEquals(new long[]{1}, ListboxUtil.getSelectedIndexs(listbox1));
 		Assert.assertArrayEquals(new long[]{1}, ListboxUtil.getSelectedIndexs(listbox2));
 		Assert.assertArrayEquals(new long[]{1}, ListboxUtil.getSelectedIndexs(listbox3));
 		Assert.assertEquals("[1]", l1.as(Label.class).getValue());
 		
-		desktop.queryAll("#listbox2 > listitem").get(3).as(SelectAgent.class).select();
+		desktop.queryAll("#listbox2 > listitem").get(3).as(MultipleSelectAgent.class).select();
 		Assert.assertArrayEquals(new long[]{1,3}, ListboxUtil.getSelectedIndexs(listbox1));
 		Assert.assertArrayEquals(new long[]{1,3}, ListboxUtil.getSelectedIndexs(listbox2));
 		Assert.assertArrayEquals(new long[]{1,3}, ListboxUtil.getSelectedIndexs(listbox3));
 		Assert.assertEquals("[1, 3]", l1.as(Label.class).getValue());
 
-		desktop.queryAll("#listbox3 > listitem").get(6).as(SelectAgent.class).select();
+		desktop.queryAll("#listbox3 > listitem").get(6).as(MultipleSelectAgent.class).select();
 		
 		Assert.assertArrayEquals(new long[]{1,3,6}, ListboxUtil.getSelectedIndexs(listbox1));
 		Assert.assertArrayEquals(new long[]{1,3,6}, ListboxUtil.getSelectedIndexs(listbox2));

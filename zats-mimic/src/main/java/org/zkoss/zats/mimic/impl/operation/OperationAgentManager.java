@@ -19,6 +19,7 @@ import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
+import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zats.mimic.operation.RendererAgent;
@@ -28,6 +29,7 @@ import org.zkoss.zhtml.Input;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Decimalbox;
 import org.zkoss.zul.Doublebox;
@@ -39,7 +41,9 @@ import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Longbox;
 import org.zkoss.zul.Menuitem;
 import org.zkoss.zul.Spinner;
+import org.zkoss.zul.Tab;
 import org.zkoss.zul.Timebox;
+import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.impl.InputElement;
 
 public class OperationAgentManager {
@@ -82,6 +86,19 @@ public class OperationAgentManager {
 		// the check of zhtml
 		registerBuilder("5.0.0", "*", Input.class, CheckAgent.class, new GenericCheckAgentBuilder());
 		
+		// the single select
+		registerBuilder("5.0.0", "*", Comboitem.class, SelectAgent.class,
+				new AbstractSelectAgentBuilder.ComboitemSelectAgentBuilder());
+		registerBuilder("5.0.0", "*", Tab.class, SelectAgent.class,
+				new AbstractSelectAgentBuilder.TabSelectAgentBuilder());
+		registerBuilder("5.0.0", "*", Listitem.class, SelectAgent.class,
+				new AbstractSelectAgentBuilder.LisitemSelectAgentBuilder());
+		registerBuilder("5.0.0", "*", Treeitem.class, SelectAgent.class,
+				new AbstractSelectAgentBuilder.TreeSelectAgentBuilder());
+		
+		// the multiple select
+		registerBuilder("5.0.0", "*", Listitem.class, MultipleSelectAgent.class, new ListitemSelectAgentBuilder());
+		registerBuilder("5.0.0", "*", Treeitem.class, MultipleSelectAgent.class, new TreeitemSelectAgentBuilder());
 		
 		// the open
 		registerBuilder("5.0.0", "*", AbstractComponent.class, OpenAgent.class, new GenericOpenAgentBuilder());
@@ -89,7 +106,6 @@ public class OperationAgentManager {
 		//----------special case ---
 		
 		// the listbox
-		registerBuilder("5.0.0", "*", Listitem.class, SelectAgent.class, new ListboxSelectAgentBuilder());
 		registerBuilder("5.0.0", "*", Listbox.class, RendererAgent.class, new ListboxRendererAgentBuilder());
 
 		// the grid
