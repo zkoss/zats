@@ -42,10 +42,10 @@ public class ConversationsTest
 	{
 		DesktopAgent desktop = Conversations.open().connect("/session.zul");
 
-		assertNotNull(Conversations.getSession());
-		assertNotNull(Conversations.getDesktop());
+		assertNotNull(desktop.getConversation().getSession());
+		assertNotNull(desktop);
 
-		HttpSession session = Conversations.getSession();
+		HttpSession session = desktop.getConversation().getSession();
 		assertEquals("session", session.getAttribute("msg"));
 		assertEquals("desktop", desktop.getAttribute("msg"));
 		

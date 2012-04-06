@@ -26,7 +26,7 @@ public class LoginOperation {
 		passwordBox.as(TypeAgent.class).type(password);
 		login.as(ClickAgent.class).click();
 		
-		HttpSession session = Conversations.getSession();
+		HttpSession session = desktop.getConversation().getSession();
 		if (session.getAttribute("user")==null){
 			return false;
 		}else{

@@ -52,7 +52,7 @@ public class LoginLogoutTest {
 		//login success
 		password.as(TypeAgent.class).type("1234");
 		login.as(ClickAgent.class).click();
-		HttpSession session = Conversations.getSession();
+		HttpSession session = desktop.getConversation().getSession();
 		assertEquals(account.as(Textbox.class).getValue(), session.getAttribute("user"));
 //		ComponentNode mainWin = Conversations.query("window"); no handle redirect for now
 //		assertEquals("Main",mainWin.as(Window.class).getTitle());
