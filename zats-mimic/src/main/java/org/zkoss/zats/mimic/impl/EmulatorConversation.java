@@ -100,9 +100,12 @@ public class EmulatorConversation implements Conversation , ConversationCtrl{
 				String url = MessageFormat.format(
 						"/zkau?dtid={0}&cmd_0=rmDesktop&opt_0=i",
 						desktopAgent.getId());
-				HttpURLConnection huc = getConnection(url, "GET");
-				huc.connect();
-				is = huc.getInputStream();
+				HttpURLConnection connection = getConnection(url, "GET");
+				for (String cookie : cookies){
+					connection.addRequestProperty("Cookie", cookie.split(";", 2)[0]);
+				}
+				connection.connect();
+				is = connection.getInputStream();
 				logger.config(getReplyString(is, "utf-8"));
 				
 			}
