@@ -28,6 +28,7 @@ import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zats.mimic.operation.CloseAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
@@ -560,5 +561,27 @@ public class BasicAgentTest {
 			titems.get(i).as(SelectAgent.class).select();
 			assertEquals(labels[i], selected.getValue());
 		}
+	}
+	
+	@Test
+	public void testClose(){
+		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/close.zul");
+		
+		ComponentAgent panel = desktopAgent.query("panel[title='closable']");
+		panel.as(CloseAgent.class).close();
+		Assert.assertNull(panel.getComponent().getPage());
+		
+		ComponentAgent window = desktopAgent.query("window[title='closable']");
+		window.as(CloseAgent.class).close();
+		Assert.assertNull(window.getComponent().getPage());
+		
+		ComponentAgent tab = desktopAgent.query("tab[label='closable']");
+		tab.as(CloseAgent.class).close();
+		Assert.assertNull(tab.getComponent().getPage());
+		
+		// issue of checking flag at server-side 
+		//	panel = desktopAgent.query("panel[title='non-close']");
+		//	panel.as(CloseAgent.class).close();
+		//	Assert.assertNotNull(panel.getComponent().getPage());
 	}
 }

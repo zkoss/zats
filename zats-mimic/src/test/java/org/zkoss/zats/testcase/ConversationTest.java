@@ -13,6 +13,7 @@ package org.zkoss.zats.testcase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
+import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -57,7 +58,7 @@ public class ConversationTest {
 	}
 	
 	@Test
-	public void test2Desktops(){
+	public void test2Conversations(){
 		DesktopAgent desktop1 = Conversations.open().connect("/basic/click.zul");
 		DesktopAgent desktop2 = Conversations.open().connect("/basic/click.zul");
 		assertNotSame(desktop1, desktop2);
@@ -69,6 +70,23 @@ public class ConversationTest {
 		assertEquals("Hello World!", desktop2.query("#msg").as(Label.class).getValue());
 		desktop2.query("#btn").as(ClickAgent.class).click();
 		assertEquals("Welcome", desktop2.query("#msg").as(Label.class).getValue());
+	}
+	
+	//close conversation or desktop 
+	@Test
+	public void testDestroyDesktop() throws Exception{
+		DesktopAgent desktop = Conversations.open().connect("/basic/click.zul");
+		desktop.getDesktop().getWebApp().getConfiguration().addListener(org.zkoss.zats.testapp.DesktopCleanListener.class);
+		Conversations.closeAll();
+		Assert.assertFalse(desktop.getDesktop().isAlive());
+		
+		desktop = Conversations.open().connect("/basic/click.zul");
+		desktop.getConversation().close();
+		Assert.assertFalse(desktop.getDesktop().isAlive());
+		
+		desktop = Conversations.open().connect("/basic/click.zul");
+		desktop.destroy();
+		Assert.assertFalse(desktop.getDesktop().isAlive());
 	}
 
 }
