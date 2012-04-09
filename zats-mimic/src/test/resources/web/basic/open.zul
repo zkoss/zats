@@ -1,0 +1,106 @@
+<zk>
+	<zscript><![CDATA[
+	void show(Event event) {
+		boolean opened = ((OpenEvent)event).isOpen();
+		String id = event.getTarget().getId();
+		if(opened)
+			open.setValue(id);
+		else
+			close.setValue(id);
+	}
+	ListModel listmodel = new ListModelList(Arrays.asList(new String[]{ "data 1", "data 2", "data 3" }));
+]]></zscript>
+	<vbox width="600px">
+		<hbox>
+			<label>open:</label>
+			<label id="open" />
+		</hbox>
+		<hbox>
+			<label>close:</label>
+			<label id="close" />
+		</hbox>
+		<bandbox id="aBandbox" onOpen="show(event);">
+			<bandpopup>
+				<label>bandbox content</label>
+			</bandpopup>
+		</bandbox>
+		<combobox id="aCombobox" onOpen="show(event);" model="${listmodel }"></combobox>
+		<groupbox id="aGroupbox" onOpen="show(event);" closable="true" mold="3d">
+			<caption>aGroupbox</caption>
+			<label>groupbox content</label>
+		</groupbox>
+		<grid id="aGrid" fixedLayout="true">
+			<columns>
+				<column width="150px">column 1</column>
+				<column>column 2</column>
+			</columns>
+			<rows>
+				<row>
+					<label value="row content" />
+					<detail id="aDetail" onOpen="show(event);">
+						<label value="detail content" />
+					</detail>
+				</row>
+				<group id="aGroup" onOpen="show(event);">
+					<label value="group" />
+				</group>
+				<row>
+					<label value="group content 1-1" />
+					<label value="group content 1-2" />
+				</row>
+				<row>
+					<label value="group content 2-1" />
+					<label value="group content 2-2" />
+				</row>
+			</rows>
+		</grid>
+		<listbox id="aListbox">
+			<listhead>
+				<listheader>column 1</listheader>
+				<listheader>column 2</listheader>
+			</listhead>
+			<listgroup id="aListgroup" onOpen="show(event);">
+				<listcell label="group" />
+			</listgroup>
+			<listitem>
+				<listcell label="group content 1-1" />
+				<listcell label="group content 1-2" />
+			</listitem>
+			<listitem>
+				<listcell label="group content 2-1" />
+				<listcell label="group content 2-2" />
+			</listitem>
+		</listbox>
+		<tree id="aTree">
+			<treecols>
+				<treecol label="column 1" />
+			</treecols>
+			<treechildren>
+				<treeitem id="treeitem1" onOpen="show(event);">
+					<treerow>
+						<treecell label="treeitem 1" />
+					</treerow>
+					<treechildren>
+						<treeitem id="treeitem1-1">
+							<treerow>
+								<treecell label="treeitem 1-1" />
+							</treerow>
+						</treeitem>
+						<treeitem id="treeitem1-2" onOpen="show(event);">
+							<treerow>
+								<treecell label="treeitem 1-2" />
+							</treerow>
+							<treechildren>
+								<treeitem id="treeitem1-2-1" onOpen="show(event);">
+									<treerow>
+										<treecell label="treeitem 1-2-1" />
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+			</treechildren>
+		</tree>
+	</vbox>
+</zk>
