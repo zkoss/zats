@@ -55,14 +55,14 @@
 							</treecell>
 						</treerow>
 						<treechildren>
-							<treeitem id="ti1.1">
+							<treeitem id="ti1-1">
 								<treerow>
-									<treecell>ti1.1</treecell>
+									<treecell>ti1-1</treecell>
 								</treerow>
 							</treeitem>
-							<treeitem id="ti1.2">
+							<treeitem id="ti1-2">
 								<treerow>
-									<treecell>ti1.2</treecell>
+									<treecell>ti1-2</treecell>
 								</treerow>
 							</treeitem>
 						</treechildren>

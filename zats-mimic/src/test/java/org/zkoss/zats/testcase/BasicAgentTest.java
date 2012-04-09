@@ -12,7 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.testcase;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.List;
 import java.util.Stack;
@@ -37,6 +37,7 @@ import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treeitem;
 
 /**
@@ -506,7 +507,7 @@ public class BasicAgentTest {
 		assertEquals("[]", msg.getValue());
 		assertEquals(0, listbox.as(Listbox.class).getSelectedCount());
 		
-		// listbox single selection
+		// listbox single selection (extra test)
 		desktopAgent.query("#lbcb checkbox").as(CheckAgent.class).check(false);
 		String[] values = { "[i0]", "[i1]", "[i2]" };
 		for (int i = 0; i < 3; ++i) {
@@ -514,9 +515,60 @@ public class BasicAgentTest {
 			assertEquals(values[i], msg.getValue());
 		}
 		
-		// TODO tree multiple selection
-		
-		
+		// tree multiple selection
+		desktopAgent.query("#ti1").as(MultipleSelectAgent.class).select();
+		assertEquals("[ti1]", msg.getValue());
+		desktopAgent.query("#ti1-2").as(MultipleSelectAgent.class).select();
+		assertEquals("[ti1, ti1-2]", msg.getValue());
+		desktopAgent.query("#ti1-1").as(MultipleSelectAgent.class).select();
+		assertEquals("[ti1, ti1-1, ti1-2]", msg.getValue());
+		desktopAgent.query("#ti1-1").as(MultipleSelectAgent.class).select();
+		assertEquals("[ti1, ti1-1, ti1-2]", msg.getValue());
+		desktopAgent.query("#ti1").as(MultipleSelectAgent.class).deselect();
+		assertEquals("[ti1-1, ti1-2]", msg.getValue());
+		desktopAgent.query("#ti1-2").as(MultipleSelectAgent.class).deselect();
+		assertEquals("[ti1-1]", msg.getValue());
+		desktopAgent.query("#ti1-2").as(MultipleSelectAgent.class).deselect();
+		assertEquals("[ti1-1]", msg.getValue());
+		desktopAgent.query("#ti1-1").as(MultipleSelectAgent.class).deselect();
+		assertEquals("[]", msg.getValue());
+
+		desktopAgent.queryAll("#tcb > checkbox").get(1).as(CheckAgent.class).check(true);
+		assertTrue(desktopAgent.query("#t").as(Tree.class).isCheckmark());
+
+		desktopAgent.query("#ti1").as(MultipleSelectAgent.class).select();
+		assertEquals("[ti1]", msg.getValue());
+		desktopAgent.query("#ti1-2").as(MultipleSelectAgent.class).select();
+		assertEquals("[ti1, ti1-2]", msg.getValue());
+		desktopAgent.query("#ti1-1").as(MultipleSelectAgent.class).select();
+		assertEquals("[ti1, ti1-1, ti1-2]", msg.getValue());
+		desktopAgent.query("#ti1-1").as(MultipleSelectAgent.class).select();
+		assertEquals("[ti1, ti1-1, ti1-2]", msg.getValue());
+		desktopAgent.query("#ti1").as(MultipleSelectAgent.class).deselect();
+		assertEquals("[ti1-1, ti1-2]", msg.getValue());
+		desktopAgent.query("#ti1-2").as(MultipleSelectAgent.class).deselect();
+		assertEquals("[ti1-1]", msg.getValue());
+		desktopAgent.query("#ti1-2").as(MultipleSelectAgent.class).deselect();
+		assertEquals("[ti1-1]", msg.getValue());
+		desktopAgent.query("#ti1-1").as(MultipleSelectAgent.class).deselect();
+		assertEquals("[]", msg.getValue());
+
+		desktopAgent.queryAll("#tcb > checkbox").get(0).as(CheckAgent.class).check(false);
+		assertFalse(desktopAgent.query("#t").as(Tree.class).isMultiple());
+
+		desktopAgent.query("#ti1").as(SelectAgent.class).select();
+		assertEquals("[ti1]", msg.getValue());
+		desktopAgent.query("#ti1-2").as(SelectAgent.class).select();
+		assertEquals("[ti1-2]", msg.getValue());
+		desktopAgent.query("#ti1-1").as(SelectAgent.class).select();
+		assertEquals("[ti1-1]", msg.getValue());
+
+		try {
+			desktopAgent.query("#ti1").as(MultipleSelectAgent.class).select();
+			fail();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	@Test
