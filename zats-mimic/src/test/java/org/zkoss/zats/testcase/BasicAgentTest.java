@@ -532,7 +532,16 @@ public class BasicAgentTest {
 		assertEquals("[ti1-1]", msg.getValue());
 		desktopAgent.query("#ti1-1").as(MultipleSelectAgent.class).deselect();
 		assertEquals("[]", msg.getValue());
+		
+		// tree multiple selection - single select at multiple selection mode
+		desktopAgent.query("#ti1-2").as(SelectAgent.class).select();
+		assertEquals("[ti1-2]", msg.getValue());
+		desktopAgent.query("#ti1-1").as(SelectAgent.class).select();
+		assertEquals("[ti1-1]", msg.getValue());
+		desktopAgent.query("#ti1").as(SelectAgent.class).select();
+		assertEquals("[ti1]", msg.getValue());
 
+		// tree multiple selection - with check mark
 		desktopAgent.queryAll("#tcb > checkbox").get(1).as(CheckAgent.class).check(true);
 		assertTrue(desktopAgent.query("#t").as(Tree.class).isCheckmark());
 
@@ -553,15 +562,16 @@ public class BasicAgentTest {
 		desktopAgent.query("#ti1-1").as(MultipleSelectAgent.class).deselect();
 		assertEquals("[]", msg.getValue());
 
+		// tree single selection (extra test)
 		desktopAgent.queryAll("#tcb > checkbox").get(0).as(CheckAgent.class).check(false);
 		assertFalse(desktopAgent.query("#t").as(Tree.class).isMultiple());
 
-		desktopAgent.query("#ti1").as(SelectAgent.class).select();
-		assertEquals("[ti1]", msg.getValue());
 		desktopAgent.query("#ti1-2").as(SelectAgent.class).select();
 		assertEquals("[ti1-2]", msg.getValue());
 		desktopAgent.query("#ti1-1").as(SelectAgent.class).select();
 		assertEquals("[ti1-1]", msg.getValue());
+		desktopAgent.query("#ti1").as(SelectAgent.class).select();
+		assertEquals("[ti1]", msg.getValue());
 
 		try {
 			desktopAgent.query("#ti1").as(MultipleSelectAgent.class).select();

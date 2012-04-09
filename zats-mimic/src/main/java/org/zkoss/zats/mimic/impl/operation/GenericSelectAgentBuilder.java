@@ -49,9 +49,5 @@ public class GenericSelectAgentBuilder implements OperationAgentBuilder<SelectAg
 			Map<String, Object> data = EventDataManager.build(event);
 			((ConversationCtrl) target.getConversation()).postUpdate(desktopId, parent.getUuid(), event.getName(), data);
 		}
-
-		public void deselect() {
-			throw new RuntimeException(target + " can't deselect");
-		}
 	}
 }

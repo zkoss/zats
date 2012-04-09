@@ -100,8 +100,10 @@ public class OperationAgentManager {
 				new AbstractSelectAgentBuilder.TreeSelectAgentBuilder());
 		
 		// the multiple select
-		registerBuilder("5.0.0", "*", Listitem.class, MultipleSelectAgent.class, new ListitemSelectAgentBuilder());
-		registerBuilder("5.0.0", "*", Treeitem.class, MultipleSelectAgent.class, new TreeitemSelectAgentBuilder());
+		registerBuilder("5.0.0", "*", Listitem.class, MultipleSelectAgent.class,
+				new AbstractMultipleSelectAgentBuilder.ListitemMultipleSelectAgentBuilder());
+		registerBuilder("5.0.0", "*", Treeitem.class, MultipleSelectAgent.class,
+				new AbstractMultipleSelectAgentBuilder.TreeitemMultipleSelectAgentBuilder());
 		
 		// the open
 		registerBuilder("5.0.0", "*", AbstractComponent.class, OpenAgent.class, new GenericOpenAgentBuilder());
