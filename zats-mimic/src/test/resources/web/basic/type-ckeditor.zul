@@ -1,0 +1,18 @@
+<zk>
+	<vbox>
+		<hbox>
+			<label>content:</label>
+			<label id="content" />
+		</hbox>
+		<ckeditor id="ck" onChange="show();" onChanging="dummy();">
+			<attribute name="value"><![CDATA[<b>Hello</b>]]></attribute>
+		</ckeditor>
+	</vbox>
+	<zscript><![CDATA[
+	void show() {
+		content.setValue(ck.getValue());
+	}
+	void dummy() {
+	}
+]]></zscript>
+</zk>

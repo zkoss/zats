@@ -133,6 +133,13 @@ public class OperationAgentManager {
 		// the grid
 		registerBuilder("5.0.0", "*", Grid.class, RendererAgent.class, new GridRendererAgentBuilder());
 
+		// the ckeditor (optional)
+		try {
+			registerBuilder("5.0.0", "*", "org.zkforge.ckez.CKeditor", TypeAgent.class,
+					"org.zkoss.zats.mimic.impl.operation.CKEditorTypeAgentBuilder");
+		} catch (Exception e) {
+			// ckeditor doesn't exist
+		}
 	}
 
 	/**
