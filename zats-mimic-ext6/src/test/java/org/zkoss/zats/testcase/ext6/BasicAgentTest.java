@@ -19,6 +19,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Toolbarbutton;
 
@@ -69,5 +70,27 @@ public class BasicAgentTest {
 
 		desktop.query("#tbb5").check(false);
 		assertEquals(values[3], checked.getValue());
+	}
+	
+	@Test
+	public void testOpenAgent() {
+		DesktopAgent desktop = Conversations.open().connect("/~./basic/open-ext6.zul");
+
+		Label open = desktop.query("#open").as(Label.class);
+		Label close = desktop.query("#close").as(Label.class);
+		assertEquals("", open.getValue());
+		assertEquals("", close.getValue());
+
+		String values[] = { "", "" };
+		// combobutton
+		String id = "#aCombobutton";
+		values[0] = id.substring(1);
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(values[0], open.getValue());
+		assertEquals(values[1], close.getValue());
+		values[1] = id.substring(1);
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(values[0], open.getValue());
+		assertEquals(values[1], close.getValue());
 	}
 }

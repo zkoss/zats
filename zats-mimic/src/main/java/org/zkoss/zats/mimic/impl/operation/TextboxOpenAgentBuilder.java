@@ -22,6 +22,7 @@ import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zul.Textbox;
 
 /**
+ * A implementation of open agent builder for sub-class of textbox. 
  * @author pao
  */
 public class TextboxOpenAgentBuilder implements OperationAgentBuilder<OpenAgent> {
@@ -38,7 +39,7 @@ public class TextboxOpenAgentBuilder implements OperationAgentBuilder<OpenAgent>
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_OPEN;
 
-			String value = ((Textbox) target).getValue();
+			String value = target.as(Textbox.class).getValue();
 			OpenEvent event = new OpenEvent(cmd, target.getComponent(), open, null, value);
 			Map<String, Object> data = EventDataManager.build(event);
 			((ConversationCtrl) target.getConversation()).postUpdate(desktopId, target.getUuid(), cmd, data);

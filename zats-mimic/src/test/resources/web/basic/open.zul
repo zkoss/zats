@@ -91,7 +91,7 @@
 								<treecell label="treeitem 1-2" />
 							</treerow>
 							<treechildren>
-								<treeitem id="treeitem1-2-1" onOpen="show(event);">
+								<treeitem id="treeitem1-2-1">
 									<treerow>
 										<treecell label="treeitem 1-2-1" />
 									</treerow>

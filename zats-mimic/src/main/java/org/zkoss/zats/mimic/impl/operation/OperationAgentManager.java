@@ -29,15 +29,21 @@ import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zhtml.Input;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Decimalbox;
+import org.zkoss.zul.Detail;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Doublespinner;
 import org.zkoss.zul.Grid;
+import org.zkoss.zul.Group;
+import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listgroup;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Longbox;
 import org.zkoss.zul.Menuitem;
@@ -106,7 +112,13 @@ public class OperationAgentManager {
 				new AbstractMultipleSelectAgentBuilder.TreeitemMultipleSelectAgentBuilder());
 		
 		// the open
-		registerBuilder("5.0.0", "*", AbstractComponent.class, OpenAgent.class, new GenericOpenAgentBuilder());
+		registerBuilder("5.0.0", "*", Groupbox.class, OpenAgent.class, new GenericOpenAgentBuilder());
+		registerBuilder("5.0.0", "*", Detail.class, OpenAgent.class, new GenericOpenAgentBuilder());
+		registerBuilder("5.0.0", "*", Group.class, OpenAgent.class, new GenericOpenAgentBuilder());
+		registerBuilder("5.0.0", "*", Listgroup.class, OpenAgent.class, new GenericOpenAgentBuilder());
+		registerBuilder("5.0.0", "*", Treeitem.class, OpenAgent.class, new GenericOpenAgentBuilder());
+		registerBuilder("5.0.0", "*", Bandbox.class, OpenAgent.class, new TextboxOpenAgentBuilder());
+		registerBuilder("5.0.0", "*", Combobox.class, OpenAgent.class, new TextboxOpenAgentBuilder());
 		
 		// the close
 		registerBuilder("5.0.0", "*", Window.class, CloseAgent.class, new GenericCloseAgentBuilder());
