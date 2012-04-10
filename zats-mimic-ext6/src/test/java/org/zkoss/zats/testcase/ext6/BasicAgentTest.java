@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.zkoss.zats.mimic.Conversations;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
+import org.zkoss.zats.mimic.operation.SelectByIndexAgent;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Toolbarbutton;
 
@@ -92,5 +93,19 @@ public class BasicAgentTest {
 		desktop.query(id).as(OpenAgent.class).open(false);
 		assertEquals(values[0], open.getValue());
 		assertEquals(values[1], close.getValue());
+	}
+	
+	@Test
+	public void testSelectByIndexAgent() {
+		DesktopAgent desktop = Conversations.open().connect("/~./basic/selectbox.zul");
+		
+		Label msg = desktop.query("#msg").as(Label.class);
+		assertEquals("", msg.getValue());
+
+		SelectByIndexAgent sb = desktop.query("#sb").as(SelectByIndexAgent.class);
+		for (int i = 3; i >= 1; --i) {
+			sb.select(i - 1);
+			assertEquals("item" + i, msg.getValue());
+		}
 	}
 }
