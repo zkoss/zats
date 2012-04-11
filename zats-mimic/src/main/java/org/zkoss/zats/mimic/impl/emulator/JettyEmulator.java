@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.InetSocketAddress;
+import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -52,13 +53,13 @@ public class JettyEmulator implements Emulator {
 	private Map<String, Object> requestAttributes;
 	private Map<String, String[]> requestParameters;
 
-	public JettyEmulator(String contentRoot, String descriptor) {
-		this(new String[] { contentRoot }, descriptor);
+	public JettyEmulator(String contentRoot, String descriptor, String contextPath) {
+		this(new String[] { contentRoot }, descriptor, contextPath);
 	}
 
-	public JettyEmulator(String[] resources, String descriptor) {
-		if (resources == null || resources.length <= 0)
-			throw new IllegalArgumentException("contentPath can't be null.");
+	public JettyEmulator(String[] contentRoots, String descriptor, String contextPath) {
+		if (contentRoots == null || contentRoots.length <= 0)
+			throw new IllegalArgumentException("contentRoots can't be null.");
 		if (descriptor == null)
 			throw new IllegalArgumentException("descriptor can't be null.");
 
@@ -70,9 +71,11 @@ public class JettyEmulator implements Emulator {
 			// create server
 			server = new Server(new InetSocketAddress(getHost(), 0));
 			final WebAppContext contextHandler = new WebAppContext();
-			contextHandler.setBaseResource(new ResourceCollection(resources));
+			ResourceCollection resourceCollection = new ResourceCollection(contentRoots);
+			
+			contextHandler.setBaseResource(resourceCollection);
 			contextHandler.setDescriptor(descriptor);
-			contextHandler.setContextPath("/");
+			contextHandler.setContextPath(contextPath);
 			contextHandler.setParentLoaderPriority(true);
 			// observe request and get related ref.
 			HandlerCollection handlers = new HandlerCollection();

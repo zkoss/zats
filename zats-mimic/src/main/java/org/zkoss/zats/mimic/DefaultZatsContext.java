@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -39,6 +40,8 @@ public class DefaultZatsContext implements ZatsContext{
 	private List<Client> clients = new LinkedList<Client>();
 	private Emulator emulator ;
 	
+	//keep the file should be clean when destroying.
+	private List<File> tempFiles = new ArrayList<File>();
 
 	public void init(String resourceRoot){
 		if(emulator!=null) {
@@ -46,16 +49,23 @@ public class DefaultZatsContext implements ZatsContext{
 		}
 		// prepare environment
 		String tmpDir = System.getProperty("java.io.tmpdir", ".");
-		File webinf = new File(tmpDir, "zats/" + System.currentTimeMillis()
-				+ "/WEB-INF");
+		File tmpZats = new File(tmpDir,"zats");
+		tmpZats.mkdirs();
+		
+		File webTemp = new File(tmpZats,Long.toHexString(System.currentTimeMillis()));
+		webTemp.mkdirs();
+		tempFiles.add(0,webTemp);
+		
+		File webinf = new File(webTemp, "WEB-INF");
+		tempFiles.add(0,webinf);
 		if (!webinf.mkdirs())
-			throw new ZatsException("can't create temp directory");
-		File web = webinf.getParentFile();
+			throw new ZatsException("can't create temp directory : "+webinf);
+		
 		InputStream src = EmulatorClient.class.getResourceAsStream("WEB-INF/zk.xml");
-		File dest = new File(web, "WEB-INF/zk.xml");
+		File zkxml = new File(webinf, "zk.xml");
 		OutputStream os = null;
 		try {
-			os = new FileOutputStream(dest);
+			os = new FileOutputStream(zkxml);
 			byte[] buf = new byte[65536];
 			int len;
 			while (true) {
@@ -70,12 +80,10 @@ public class DefaultZatsContext implements ZatsContext{
 			close(src);
 			close(os);
 		}
-		// TODO clean directories
-		dest.deleteOnExit();
-		webinf.deleteOnExit();
+		tempFiles.add(0,zkxml);
 		
-		emulator = new EmulatorBuilder(web)
-			.addResource(resourceRoot)
+		emulator = new EmulatorBuilder(webTemp)
+			.addContentRoot(resourceRoot)
 			.descriptor(EmulatorClient.class.getResource("WEB-INF/web.xml")).create();
 		
 	}
@@ -95,6 +103,12 @@ public class DefaultZatsContext implements ZatsContext{
 			emulator.close();
 			emulator=null;
 		}
+		for(File f:tempFiles){
+			if(!f.delete()){
+				f.deleteOnExit();
+			}
+		}
+		tempFiles.clear();
 	}
 
 	/**

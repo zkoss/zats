@@ -22,57 +22,57 @@ import java.util.List;
  * @author pao
  */
 public class EmulatorBuilder {
-	private String contentRoot;
+//	private String contentRoot;
 	private String descriptor;
-	private List<String> resources;
+	private List<String> contentRoots;
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param contentRoot
+	 * @param contentFolder
 	 *            the web application root path.
 	 */
-	public EmulatorBuilder(String contentRoot) {
-		if (contentRoot == null)
+	public EmulatorBuilder(String contentFolder) {
+		if (contentFolder == null)
 			throw new NullPointerException();
-		this.contentRoot = contentRoot;
-		this.descriptor = (contentRoot + "/WEB-INF/web.xml").replaceAll("//+",
+//		this.contentRoot = contentFolder;
+		this.descriptor = (contentFolder + "/WEB-INF/web.xml").replaceAll("//+",
 				"/");
-		this.resources = new ArrayList<String>();
-		this.resources.add(contentRoot);
+		this.contentRoots = new ArrayList<String>();
+		this.contentRoots.add(contentFolder);
 	}
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param contentPath
+	 * @param contentFolder
 	 *            the web application root path.
 	 */
-	public EmulatorBuilder(File contentPath) {
-		this(contentPath.getAbsolutePath());
+	public EmulatorBuilder(File contentFolder) {
+		this(contentFolder.getAbsolutePath());
 	}
 
 	/**
-	 * add additional resource directory.
+	 * add additional resource root directory.
 	 * 
 	 * @param resourceRoot
 	 *            directory path.
 	 * @return self reference.
 	 */
-	public EmulatorBuilder addResource(String resourceRoot) {
-		resources.add(resourceRoot);
+	public EmulatorBuilder addContentRoot(String contentRoot) {
+		contentRoots.add(contentRoot);
 		return this;
 	}
 
 	/**
-	 * add additional resource directory.
+	 * add additional resource root directory.
 	 * 
 	 * @param resourceRoot
 	 *            directory path.
 	 * @return self reference.
 	 */
-	public EmulatorBuilder addResource(File resourceRoot) {
-		return addResource(resourceRoot.getAbsolutePath());
+	public EmulatorBuilder addContentRoot(File resourceRoot) {
+		return addContentRoot(resourceRoot.getAbsolutePath());
 	}
 
 	/**
@@ -106,10 +106,7 @@ public class EmulatorBuilder {
 	 * @return a new emulator
 	 */
 	public Emulator create() {
-		if (resources.size() <= 1)
-			return new JettyEmulator(contentRoot, descriptor);
-		else
-			return new JettyEmulator(resources.toArray(new String[0]),
-					descriptor);
+		return new JettyEmulator(contentRoots.toArray(new String[contentRoots.size()]),
+					descriptor,"/");
 	}
 }

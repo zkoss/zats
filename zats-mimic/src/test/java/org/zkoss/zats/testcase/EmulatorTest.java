@@ -49,7 +49,7 @@ public class EmulatorTest extends HttpServlet {
 		String html = "<html><body>hello</body></html>";
 		copy(new ByteArrayInputStream(html.getBytes("ISO-8859-1")), new File(dir2, "index.html"));
 		emulator = new EmulatorBuilder(dir1).descriptor(EmulatorTest.class.getResource("web.xml"))
-				.addResource(dir2).create();
+				.addContentRoot(dir2).create();
 
 		Emulator e = emulator;
 		URL url = new URL(e.getAddress() + "/echo");
