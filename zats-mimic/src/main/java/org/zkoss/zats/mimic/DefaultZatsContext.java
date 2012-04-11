@@ -102,6 +102,9 @@ public class DefaultZatsContext implements ZatsContext{
 	 * @return
 	 */
 	public Client newClient(){
+		if(emulator==null){
+			throw new ZatsException("not initialize yet, please call init first");
+		}
 		Client client = new EmulatorClient(emulator);
 		((ClientCtrl)client).setDestroyListener(new ClientCtrl.DestroyListener() {
 			public void willDestroy(Client conv) {

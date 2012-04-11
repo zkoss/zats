@@ -20,6 +20,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.Client;
+import org.zkoss.zats.mimic.DefaultZatsContext;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
@@ -47,6 +48,22 @@ public class ContextTest {
 	public void after()
 	{
 		Zats.cleanup();
+	}
+	
+	@Test
+	public void testNestedZatsContext() {
+		//to test open a local zul
+		DefaultZatsContext ctx = new DefaultZatsContext();
+		try{
+			ctx.init("./src/test/resources/web");
+			Client client = ctx.newClient();
+			DesktopAgent desktop = client.connect("/basic/click.zul");
+			assertEquals("Hello World!", desktop.query("#msg").as(Label.class).getValue());
+			desktop.query("#btn").as(ClickAgent.class).click();
+			assertEquals("Welcome", desktop.query("#msg").as(Label.class).getValue());
+		}finally{
+			ctx.destroy();
+		}
 	}
 
 	@Test
