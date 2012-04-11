@@ -36,6 +36,7 @@ import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
+import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
@@ -743,5 +744,16 @@ public class BasicAgentTest {
 		desktop.query(id).as(OpenAgent.class).open(false);
 		assertEquals(values[0], open.getValue());
 		assertEquals(values[1], close.getValue());
+	}
+	
+	@Test
+	public void testCKEditorTypeAgent() {
+		DesktopAgent desktop = Conversations.open().connect("/~./basic/type-ckeditor.zul");
+
+		Label content = desktop.query("#content").as(Label.class);
+		assertEquals("", content.getValue());
+
+		desktop.query("#ck").as(TypeAgent.class).type("Hello world");
+		assertEquals("Hello world", content.getValue());
 	}
 }

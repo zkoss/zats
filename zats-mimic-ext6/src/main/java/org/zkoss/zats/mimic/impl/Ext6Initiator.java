@@ -18,14 +18,17 @@ import org.zkoss.zats.mimic.impl.operation.DateTypeAgentBuilderZK6;
 import org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericOpenAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.OperationAgentManager;
+import org.zkoss.zats.mimic.impl.operation.SelectboxSelectByIndexAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.TimeTypeAgentBuilderZK6;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
+import org.zkoss.zats.mimic.operation.SelectByIndexAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.util.WebAppInit;
 import org.zkoss.zul.Combobutton;
 import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Selectbox;
 import org.zkoss.zul.Timebox;
 import org.zkoss.zul.Toolbarbutton;
 
@@ -49,6 +52,8 @@ public class Ext6Initiator implements WebAppInit{
 				new TimeTypeAgentBuilderZK6()); // date format changed in zk6
 		OperationAgentManager.registerBuilder("6.0.0", "*", Combobutton.class, OpenAgent.class,
 				new GenericOpenAgentBuilder()); // combobutton introduced since zk6
+		OperationAgentManager.registerBuilder("6.0.0", "*", Selectbox.class, SelectByIndexAgent.class,
+				new SelectboxSelectByIndexAgentBuilder()); // selectbox introduced since zk6
 		
 		//event data
 //		EventDataManager.registerBuilder("6.0.0","*", RenderEvent.class, new EventDataBuilder(){
