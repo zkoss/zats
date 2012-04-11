@@ -748,7 +748,7 @@ public class BasicAgentTest {
 	
 	@Test
 	public void testCKEditorTypeAgent() {
-		DesktopAgent desktop = Conversations.open().connect("/~./basic/type-ckeditor.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/type-ckeditor.zul");
 
 		Label content = desktop.query("#content").as(Label.class);
 		assertEquals("", content.getValue());

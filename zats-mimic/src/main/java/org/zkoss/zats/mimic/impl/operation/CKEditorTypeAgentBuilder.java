@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.impl.ConversationCtrl;
+import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.event.Events;
@@ -40,7 +40,7 @@ public class CKEditorTypeAgentBuilder implements OperationAgentBuilder<TypeAgent
 		public void type(String value) {
 			try {
 				String desktopId = target.getDesktop().getId();
-				ConversationCtrl ctrl = (ConversationCtrl) target.getConversation();
+				ClientCtrl ctrl = (ClientCtrl) target.getClient();
 				// changing
 				String cmd = Events.ON_CHANGING;
 				InputEvent event = new InputEvent(cmd, target.getComponent(), value, null);

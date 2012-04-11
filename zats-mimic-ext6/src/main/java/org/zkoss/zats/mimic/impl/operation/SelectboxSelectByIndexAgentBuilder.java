@@ -16,7 +16,7 @@ import java.util.Map;
 
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.impl.ConversationCtrl;
+import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.operation.SelectByIndexAgent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Selectbox;
@@ -51,7 +51,7 @@ public class SelectboxSelectByIndexAgentBuilder implements OperationAgentBuilder
 			String cmd = Events.ON_SELECT;
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("", index);
-			ConversationCtrl ctrl = (ConversationCtrl) target.getConversation();
+			ClientCtrl ctrl = (ClientCtrl) target.getClient();
 			ctrl.postUpdate(target.getDesktop().getId(), target.getUuid(), cmd, data);
 		}
 	}

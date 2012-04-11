@@ -97,7 +97,7 @@ public class BasicAgentTest {
 	
 	@Test
 	public void testSelectByIndexAgent() {
-		DesktopAgent desktop = Conversations.open().connect("/~./basic/selectbox.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/selectbox.zul");
 		
 		Label msg = desktop.query("#msg").as(Label.class);
 		assertEquals("", msg.getValue());
