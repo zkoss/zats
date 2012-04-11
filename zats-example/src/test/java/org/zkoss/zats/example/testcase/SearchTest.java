@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.zkoss.zats.example.search.Item;
 import org.zkoss.zats.example.search.ItemRenderer;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
@@ -25,23 +25,23 @@ import org.zkoss.zul.Listcell;
 public class SearchTest {
 	@BeforeClass
 	public static void init() {
-		Conversations.start("./src/main/webapp"); // user can load by
+		Zats.init("./src/main/webapp"); // user can load by
 													// configuration file
 	}
 
 	@AfterClass
 	public static void end() {
-		Conversations.stop();
+		Zats.end();
 	}
 
 	@After
 	public void after() {
-		Conversations.closeAll();
+		Zats.cleanup();
 	}
 
 	@Test
 	public void test() {
-		DesktopAgent desktop = Conversations.open().connect("/search.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/search.zul");
 
 		ComponentAgent detailBox = desktop.query("groupbox");
 		ComponentAgent listbox = desktop.query("listbox");

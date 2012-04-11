@@ -14,7 +14,7 @@ package org.zkoss.zats.mimic.impl.operation;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.impl.ConversationCtrl;
+import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zk.ui.event.Events;
@@ -42,7 +42,7 @@ public class TextboxOpenAgentBuilder implements OperationAgentBuilder<OpenAgent>
 			String value = target.as(Textbox.class).getValue();
 			OpenEvent event = new OpenEvent(cmd, target.getComponent(), open, null, value);
 			Map<String, Object> data = EventDataManager.build(event);
-			((ConversationCtrl) target.getConversation()).postUpdate(desktopId, target.getUuid(), cmd, data);
+			((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
 		}
 	}
 

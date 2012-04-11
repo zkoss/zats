@@ -19,7 +19,8 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.Client;
+import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zul.Label;
@@ -29,29 +30,30 @@ import org.zkoss.zul.Label;
  * @author dennis
  *
  */
-public class ConversationTest {
+public class ContextTest {
 	@BeforeClass
 	public static void init()
 	{
-		Conversations.start("./src/test/resources/web");
+		Zats.init("./src/test/resources/web");
 	}
 
 	@AfterClass
 	public static void end()
 	{
-		Conversations.stop();
+		Zats.end();
 	}
 
 	@After
 	public void after()
 	{
-		Conversations.closeAll();
+		Zats.cleanup();
 	}
 
 	@Test
 	public void testLoadLocal() {
 		//to test open a local zul
-		DesktopAgent desktop = Conversations.open().connect("/basic/click.zul");
+		Client client = Zats.newClient();
+		DesktopAgent desktop = client.connect("/basic/click.zul");
 		assertEquals("Hello World!", desktop.query("#msg").as(Label.class).getValue());
 		desktop.query("#btn").as(ClickAgent.class).click();
 		assertEquals("Welcome", desktop.query("#msg").as(Label.class).getValue());
@@ -59,9 +61,10 @@ public class ConversationTest {
 	
 	@Test
 	public void test2Conversations(){
-		DesktopAgent desktop1 = Conversations.open().connect("/basic/click.zul");
-		DesktopAgent desktop2 = Conversations.open().connect("/basic/click.zul");
+		DesktopAgent desktop1 = Zats.newClient().connect("/basic/click.zul");
+		DesktopAgent desktop2 = Zats.newClient().connect("/basic/click.zul");
 		assertNotSame(desktop1, desktop2);
+		assertNotSame(desktop1.getSession().getId(), desktop2.getSession().getId());
 		
 		assertEquals("Hello World!", desktop1.query("#msg").as(Label.class).getValue());
 		desktop1.query("#btn").as(ClickAgent.class).click();
@@ -75,16 +78,16 @@ public class ConversationTest {
 	//close conversation or desktop 
 	@Test
 	public void testDestroyDesktop() throws Exception{
-		DesktopAgent desktop = Conversations.open().connect("/basic/click.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/basic/click.zul");
 		desktop.getDesktop().getWebApp().getConfiguration().addListener(org.zkoss.zats.testapp.DesktopCleanListener.class);
-		Conversations.closeAll();
+		Zats.cleanup();
 		Assert.assertFalse(desktop.getDesktop().isAlive());
 		
-		desktop = Conversations.open().connect("/basic/click.zul");
-		desktop.getConversation().close();
+		desktop = Zats.newClient().connect("/basic/click.zul");
+		desktop.getClient().destroy();
 		Assert.assertFalse(desktop.getDesktop().isAlive());
 		
-		desktop = Conversations.open().connect("/basic/click.zul");
+		desktop = Zats.newClient().connect("/basic/click.zul");
 		desktop.destroy();
 		Assert.assertFalse(desktop.getDesktop().isAlive());
 	}

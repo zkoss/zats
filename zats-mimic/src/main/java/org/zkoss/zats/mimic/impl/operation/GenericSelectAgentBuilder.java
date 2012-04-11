@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.impl.ConversationCtrl;
+import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.AuUtility;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.SelectAgent;
@@ -47,7 +47,7 @@ public class GenericSelectAgentBuilder implements OperationAgentBuilder<SelectAg
 			String desktopId = target.getDesktop().getId();
 			Event event = new SelectEvent(Events.ON_SELECT, parent.getComponent(), items, target.getComponent());
 			Map<String, Object> data = EventDataManager.build(event);
-			((ConversationCtrl) target.getConversation()).postUpdate(desktopId, parent.getUuid(), event.getName(), data);
+			((ClientCtrl) target.getClient()).postUpdate(desktopId, parent.getUuid(), event.getName(), data);
 		}
 	}
 }

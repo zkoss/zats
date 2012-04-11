@@ -9,16 +9,20 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
-package org.zkoss.zats.mimic;
-
-public class ConversationException extends RuntimeException {
+package org.zkoss.zats;
+/**
+ * the exception represents a zats system error
+ * @author dennis
+ *
+ */
+public class ZatsException extends RuntimeException {
 	private static final long serialVersionUID = -307047315005722126L;
 
-	public ConversationException(String message) {
+	public ZatsException(String message) {
 		super(message);
 	}
 
-	public ConversationException(String message, Throwable cause) {
+	public ZatsException(String message, Throwable cause) {
 		super(message, cause);
 	}
 }

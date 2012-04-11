@@ -13,7 +13,7 @@ package org.zkoss.zats.mimic.impl.operation;
 
 import org.zkoss.zats.mimic.Agent;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.Conversation;
+import org.zkoss.zats.mimic.Client;
 
 /**
  * Simply wrap the component agent for component operation
@@ -27,8 +27,8 @@ public abstract class AgentDelegator implements Agent {
 		this.target = target;
 	}
 
-	public Conversation getConversation() {
-		return target.getConversation();
+	public Client getClient() {
+		return target.getClient();
 	}
 	
 	public Object getDelegatee(){

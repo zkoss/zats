@@ -14,7 +14,7 @@ package org.zkoss.zats.mimic.impl.operation;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.impl.ConversationCtrl;
+import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zk.ui.event.Event;
@@ -34,14 +34,14 @@ public class GenericFocusAgentBuilder implements OperationAgentBuilder<FocusAgen
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_FOCUS;
 			Map<String, Object> data = EventDataManager.build(new Event(cmd, target.getComponent()));
-			((ConversationCtrl)target.getConversation()).postUpdate(desktopId, target.getUuid(), cmd, data);
+			((ClientCtrl)target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
 		}
 
 		public void blur() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_BLUR;
 			Map<String, Object> data = EventDataManager.build(new Event(cmd, target.getComponent()));
-			((ConversationCtrl)target.getConversation()).postUpdate(desktopId, target.getUuid(), cmd, data);
+			((ClientCtrl)target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
 		}
 	}
 }

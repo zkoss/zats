@@ -15,19 +15,25 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.Conversation;
+import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.PageAgent;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
-
+/**
+ * 
+ * @author dennis
+ *
+ */
 public class DefaultDesktopAgent implements DesktopAgent {
-	private Conversation conversation;
+	private Client client;
 	private Desktop desktop;
 
-	public DefaultDesktopAgent(Conversation conversation, Desktop desktop) {
-		this.conversation = conversation;
+	public DefaultDesktopAgent(Client client, Desktop desktop) {
+		this.client = client;
 		this.desktop = desktop;
 	}
 
@@ -43,8 +49,8 @@ public class DefaultDesktopAgent implements DesktopAgent {
 		return desktop.getAttribute(name);
 	}
 
-	public Conversation getConversation() {
-		return conversation;
+	public Client getClient() {
+		return client;
 	}
 
 	public List<PageAgent> getPages() {
@@ -79,21 +85,21 @@ public class DefaultDesktopAgent implements DesktopAgent {
 			.toString();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.zkoss.zats.mimic.DesktopAgent#query(java.lang.String)
-	 */
 	public ComponentAgent query(String selector) {
 		return Searcher.find(this, selector);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.zkoss.zats.mimic.DesktopAgent#queryAll(java.lang.String)
-	 */
 	public List<ComponentAgent> queryAll(String selector) {
 		return Searcher.findAll(this, selector);
 	}
 	
 	public void destroy(){
-		((ConversationCtrl)getConversation()).destroy(this);
+		((ClientCtrl)getClient()).destroy(this);
 	}
+
+	public HttpSession getSession() {
+		return ((ClientCtrl)getClient()).getSession();
+	}
+	
+	
 }

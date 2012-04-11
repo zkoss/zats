@@ -12,19 +12,21 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic;
 
 /**
- * A interface represented a agent for a agent from ZUML structure. e.x , the Desktop , Page or Component
+ * A interface represented a agent for a element from ZUML structure. e.x , the Desktop , Page or Component
  * 
  * @author pao
+ * @author Dennis
  */
 public interface Agent {
 
 
 	/**
-	 * get conversation this agent belonged to.
-	 * 
-	 * @return conversation
+	 * get client this agent belonged to.
 	 */
-	Conversation getConversation();
+	Client getClient();
 	
+	/**
+	 * get the delegatee object
+	 */
 	Object getDelegatee();
 }

@@ -14,7 +14,7 @@ package org.zkoss.zats.mimic.impl.au;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.zkoss.zats.mimic.ConversationException;
+import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zk.ui.event.CheckEvent;
 import org.zkoss.zk.ui.event.Event;
@@ -104,7 +104,7 @@ public class EventDataManager {
 		}
 
 		if (builder == null) {
-			throw new ConversationException("build for event not found : "
+			throw new AgentException("build for event not found : "
 					+ evt);
 		}
 

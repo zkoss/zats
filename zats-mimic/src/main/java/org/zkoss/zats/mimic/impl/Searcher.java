@@ -16,12 +16,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
+
 import org.zkoss.Version;
+import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.common.select.Selectors;
 import org.zkoss.zats.mimic.Agent;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.Conversation;
-import org.zkoss.zats.mimic.ConversationException;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.PageAgent;
 import org.zkoss.zk.ui.Component;
@@ -83,7 +83,7 @@ import org.zkoss.zk.ui.Page;
 						Component.class, String.class);
 				foundComponents = (List<Component>) findByComp.invoke(null, (Component)base, selector);
 			} else{
-				throw new ConversationException("unsupported type "+base);
+				throw new ZatsException("unsupported type "+base);
 			}
 			
 			List<ComponentAgent> foundAgents = new ArrayList<ComponentAgent>(foundComponents.size());
@@ -94,7 +94,7 @@ import org.zkoss.zk.ui.Page;
 			for (Component comp : foundComponents){
 				Page pg = comp.getPage();
 				if (desktopAgent == null) {
-					desktopAgent = new DefaultDesktopAgent(parent.getConversation(), pg.getDesktop());
+					desktopAgent = new DefaultDesktopAgent(parent.getClient(), pg.getDesktop());
 				}
 				//components might come from different pages
 				if(lastPage==null || !lastPage.getDelegatee().equals(pg)){
@@ -118,12 +118,4 @@ import org.zkoss.zk.ui.Page;
 		List<ComponentAgent> agents = findAll(parent, selector);
 		return agents.size() > 0 ? agents.get(0) : null;
 	}
-
-//	public static ComponentAgent find(Conversation conv,String selector) {
-//		return Searcher.find(conv.getDesktop(), selector);
-//	}
-//
-//	public static List<ComponentAgent> findAll(Conversation conv,String selector) {
-//		return Searcher.findAll(conv.getDesktop(), selector);
-//	}
 }

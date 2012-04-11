@@ -22,7 +22,7 @@ import org.zkoss.json.JSONs;
 import org.zkoss.lang.Strings;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.impl.ConversationCtrl;
+import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.event.Event;
@@ -51,7 +51,7 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 
 		public void type(String value) {
 			try {
-				ConversationCtrl cctrl = (ConversationCtrl) target.getConversation();
+				ClientCtrl cctrl = (ClientCtrl) target.getClient();
 				// focus
 				String desktopId = target.getDesktop().getId();
 				String cmd = Events.ON_FOCUS;

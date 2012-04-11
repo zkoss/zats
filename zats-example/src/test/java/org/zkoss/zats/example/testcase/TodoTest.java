@@ -11,7 +11,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zul.Datebox;
@@ -22,23 +22,23 @@ import org.zkoss.zul.Textbox;
 public class TodoTest {
 	@BeforeClass
 	public static void init() {
-		Conversations.start("./src/main/webapp"); 
+		Zats.init("./src/main/webapp"); 
 	}
 
 	@AfterClass
 	public static void end() {
-		Conversations.stop();
+		Zats.end();
 	}
 
 	@After
 	public void after() {
-		Conversations.closeAll();
+		Zats.cleanup();
 	}
 
 	@Test
 	public void test() {
 		//visit the target page
-		DesktopAgent desktop = Conversations.open().connect("/todo.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/todo.zul");
 
 		//find components
 		ComponentAgent itemName = desktop.query("textbox");

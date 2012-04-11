@@ -1,4 +1,4 @@
-/* EmulatorConversation.java
+/* EmulatorClient.java
 
 	Purpose:
 		
@@ -30,25 +30,25 @@ import javax.servlet.http.HttpSession;
 
 import org.eclipse.jetty.util.UrlEncoded;
 import org.zkoss.json.JSONValue;
-import org.zkoss.zats.mimic.Conversation;
-import org.zkoss.zats.mimic.ConversationException;
+import org.zkoss.zats.ZatsException;
+import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.impl.emulator.Emulator;
 import org.zkoss.zk.ui.Desktop;
 
 /**
- * The test conversation implemented by server emulator.
+ * The server emulator client implement
  * 
  * @author pao
  */
-public class EmulatorConversation implements Conversation , ConversationCtrl{
-	private static Logger logger = Logger.getLogger(EmulatorConversation.class.getName());
+public class EmulatorClient implements Client , ClientCtrl{
+	private static Logger logger = Logger.getLogger(EmulatorClient.class.getName());
 	private Emulator emulator;
 	private List<DesktopAgent> desktopAgentList = new LinkedList<DesktopAgent>();
 	private List<String> cookies;
-	private CloseListener closeListener;
+	private DestroyListener destroyListener;
 
-	public EmulatorConversation(Emulator emulator){
+	public EmulatorClient(Emulator emulator){
 		this.emulator = emulator;
 	}
 
@@ -73,16 +73,16 @@ public class EmulatorConversation implements Conversation , ConversationCtrl{
 			desktopAgentList.add(desktopAgent);
 			return desktopAgent;
 		} catch (Exception e) {
-			throw new ConversationException("", e);
+			throw new ZatsException("", e);
 		} finally {
 			close(is);
 		}
 	}
 	
 
-	public void close() {
-		if(closeListener!=null){
-			closeListener.willClose(this);
+	public void destroy() {
+		if(destroyListener!=null){
+			destroyListener.willDestroy(this);
 		}
 		
 		for (DesktopAgent d : desktopAgentList){
@@ -157,11 +157,10 @@ public class EmulatorConversation implements Conversation , ConversationCtrl{
 			HttpURLConnection c = getConnection("/zkau", "POST");
 			c.setDoOutput(true);
 			c.setDoInput(true);
-			for (String cookie : cookies)
-				c.addRequestProperty("Cookie", cookie.split(";", 2)[0]); // handle
-																			// cookie
-																			// for
-																			// session
+			for (String cookie : cookies){
+				// handle cookie for session
+				c.addRequestProperty("Cookie", cookie.split(";", 2)[0]);
+			}
 			c.setRequestProperty("Content-Type",
 					"application/x-www-form-urlencoded;charset=UTF-8");
 			c.connect();
@@ -174,7 +173,7 @@ public class EmulatorConversation implements Conversation , ConversationCtrl{
 			if (logger.isLoggable(Level.FINEST))
 				logger.finest(getReplyString(is, c.getContentEncoding()));
 		} catch (Exception e) {
-			throw new ConversationException("", e);
+			throw new ZatsException("", e);
 		} finally {
 			close(os);
 			close(is);
@@ -197,7 +196,7 @@ public class EmulatorConversation implements Conversation , ConversationCtrl{
 					"zh-tw,en-us;q=0.7,en;q=0.3");
 			return huc;
 		} catch (Exception e) {
-			throw new ConversationException("", e);
+			throw new ZatsException("", e);
 		}
 	}
 
@@ -230,11 +229,7 @@ public class EmulatorConversation implements Conversation , ConversationCtrl{
 		return reply;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see org.zkoss.zats.mimic.impl.ConversationCtrl#setCloseListener(org.zkoss.zats.mimic.impl.ConversationCtrl.CloseListener)
-	 */
-	public void setCloseListener(CloseListener l) {
-		closeListener = l;
+	public void setDestroyListener(DestroyListener l) {
+		destroyListener = l;
 	}
 }

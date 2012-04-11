@@ -17,7 +17,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zul.Label;
@@ -30,22 +30,22 @@ import org.zkoss.zul.Toolbarbutton;
 public class BasicAgentTest {
 	@BeforeClass
 	public static void init() {
-		Conversations.start(".");
+		Zats.init(".");
 	}
 
 	@AfterClass
 	public static void end() {
-		Conversations.stop();
+		Zats.end();
 	}
 
 	@After
 	public void after() {
-		Conversations.closeAll();
+		Zats.cleanup();
 	}
 
 	@Test
 	public void testToolbarButtonCheck() {
-		DesktopAgent desktop = Conversations.open().connect("/~./basic/toolbar.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/toolbar.zul");
 
 		for (int i = 1; i <= 6; ++i)
 			assertEquals("tbb" + i, desktop.query("#tbb" + i).as(Toolbarbutton.class).getLabel());
@@ -74,7 +74,7 @@ public class BasicAgentTest {
 	
 	@Test
 	public void testOpenAgent() {
-		DesktopAgent desktop = Conversations.open().connect("/~./basic/open-ext6.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/open-ext6.zul");
 
 		Label open = desktop.query("#open").as(Label.class);
 		Label close = desktop.query("#close").as(Label.class);

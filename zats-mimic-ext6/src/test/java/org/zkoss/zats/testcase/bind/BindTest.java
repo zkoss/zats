@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
@@ -27,25 +27,25 @@ public class BindTest{
 	public static void init()
 	{
 //		Conversations.start("./src/test/resources/web");
-		Conversations.start(".");
+		Zats.init(".");
 	}
 
 	@AfterClass
 	public static void end()
 	{
-		Conversations.stop();
+		Zats.end();
 	}
 
 	@After
 	public void after()
 	{
-		Conversations.closeAll();
+		Zats.cleanup();
 	}
 	
 	
 	@Test
 	public void b00810ListboxMultiple(){
-		DesktopAgent desktop = Conversations.open().connect("/~./bind/B00810ListboxMultiple.zul"); 
+		DesktopAgent desktop = Zats.newClient().connect("/~./bind/B00810ListboxMultiple.zul"); 
 		
 		ComponentAgent listbox1 = desktop.query("#listbox1");
 		ComponentAgent listbox2 = desktop.query("#listbox2");
@@ -91,7 +91,7 @@ public class BindTest{
 	
 	@Test
 	public void b00821SelectedIndex(){
-		DesktopAgent desktop = Conversations.open().connect("/~./bind/B00821SelectedIndex.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/~./bind/B00821SelectedIndex.zul");
 		
 		ComponentAgent selectbox = desktop.query("#selectbox");
 		ComponentAgent listbox = desktop.query("#listbox");
@@ -114,7 +114,7 @@ public class BindTest{
 	
 	@Test
 	public void b00878WrongValueException2(){
-		DesktopAgent desktop = Conversations.open().connect("/~./bind/B00878WrongValueException2.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/~./bind/B00878WrongValueException2.zul");
 		
 		ComponentAgent l = desktop.query("#l1");
 		ComponentAgent inp = desktop.query("#inp1");
@@ -255,7 +255,7 @@ public class BindTest{
 	
 	@Test
 	public void b00878WrongValueException3(){
-		DesktopAgent desktop = Conversations.open().connect("/~./bind/B00878WrongValueException3.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/~./bind/B00878WrongValueException3.zul");
 		
 		ComponentAgent l = desktop.query("#l1");
 		ComponentAgent inp = desktop.query("#inp1");

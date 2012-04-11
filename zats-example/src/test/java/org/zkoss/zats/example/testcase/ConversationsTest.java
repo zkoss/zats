@@ -10,7 +10,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zul.Label;
@@ -22,30 +22,30 @@ public class ConversationsTest
 	public static void init()
 	{
 //		Conversations.start("."); //from project folder
-		Conversations.start("./src/main/webapp"); // user can load by configuration file
+		Zats.init("./src/main/webapp"); // user can load by configuration file
 	}
 
 	@AfterClass
 	public static void end()
 	{
-		Conversations.stop();//
+		Zats.end();//
 	}
 
 	@After
 	public void after()
 	{
-		Conversations.closeAll();
+		Zats.cleanup();
 	}
 
 	@Test
 	public void test()
 	{
-		DesktopAgent desktop = Conversations.open().connect("/session.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/session.zul");
 
-		assertNotNull(desktop.getConversation().getSession());
+		assertNotNull(desktop.getSession());
 		assertNotNull(desktop);
 
-		HttpSession session = desktop.getConversation().getSession();
+		HttpSession session = desktop.getSession();
 		assertEquals("session", session.getAttribute("msg"));
 		assertEquals("desktop", desktop.getAttribute("msg"));
 		

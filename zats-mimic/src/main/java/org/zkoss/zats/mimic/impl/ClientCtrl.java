@@ -1,4 +1,4 @@
-/* ConversationCtrl.java
+/* ClientCtrl.java
 
 	Purpose:
 		
@@ -13,15 +13,17 @@ package org.zkoss.zats.mimic.impl;
 
 import java.util.Map;
 
-import org.zkoss.zats.mimic.Conversation;
+import javax.servlet.http.HttpSession;
+
+import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
 
 /**
- * Conversation controller interface.
- * To provide more control on conversation.
+ * Client controller interface.
+ * To provide more control of the client.
  * @author pao
  */
-public interface ConversationCtrl {
+public interface ClientCtrl {
 	/**
 	 * post an asynchronous update event.
 	 * @param desktopId TODO
@@ -33,11 +35,13 @@ public interface ConversationCtrl {
 	
 	void destroy(DesktopAgent desktopAgent);
 	
-	void setCloseListener(CloseListener l);
+	void setDestroyListener(DestroyListener l);
 	
-	//to notify a conversation is going to be closed.
-	interface CloseListener {
-		void willClose(Conversation conv);
+	HttpSession getSession();
+	
+	//to notify a client is going to be destroyed.
+	interface DestroyListener {
+		void willDestroy(Client conv);
 	}
 	
 }

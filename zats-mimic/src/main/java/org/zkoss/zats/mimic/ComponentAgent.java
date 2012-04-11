@@ -22,7 +22,7 @@ import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.Component;
 
 /**
- * The component agent
+ * The component agent, represents a server zk component
  * 
  * @author pao
  */
@@ -97,7 +97,7 @@ public interface ComponentAgent extends Agent{
 	 * is usually a {@link OperationAgent} or a native {@link Component} <br/>
 	 * 
 	 * if it cannot transfer to target class, it will throw
-	 * {@link ConversationException}.
+	 * {@link AgentException}.
 	 * 
 	 * @param clazz
 	 *            class of specify operation.

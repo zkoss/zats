@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.Conversation;
+import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.PageAgent;
 import org.zkoss.zk.ui.Component;
@@ -56,8 +56,8 @@ public class DefaultPageAgent implements PageAgent {
 		return agents;
 	}
 
-	public Conversation getConversation() {
-		return desktopAgent.getConversation();
+	public Client getClient() {
+		return desktopAgent.getClient();
 	}
 
 	public DesktopAgent getDesktop() {

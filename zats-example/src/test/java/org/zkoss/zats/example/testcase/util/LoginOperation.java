@@ -4,7 +4,7 @@ package org.zkoss.zats.example.testcase.util;
 import javax.servlet.http.HttpSession;
 
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
@@ -26,7 +26,7 @@ public class LoginOperation {
 		passwordBox.as(TypeAgent.class).type(password);
 		login.as(ClickAgent.class).click();
 		
-		HttpSession session = desktop.getConversation().getSession();
+		HttpSession session = desktop.getSession();
 		if (session.getAttribute("user")==null){
 			return false;
 		}else{

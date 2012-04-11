@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.After;
 import org.junit.Test;
-import org.zkoss.zats.mimic.impl.EmulatorConversation;
+import org.zkoss.zats.mimic.impl.EmulatorClient;
 import org.zkoss.zats.mimic.impl.emulator.Emulator;
 import org.zkoss.zats.mimic.impl.emulator.EmulatorBuilder;
 

@@ -14,7 +14,7 @@ package org.zkoss.zats.mimic.impl.operation;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.impl.ConversationCtrl;
+import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zk.ui.event.CheckEvent;
@@ -35,7 +35,7 @@ public class GenericCheckAgentBuilder implements OperationAgentBuilder<CheckAgen
 			String desktopId = target.getDesktop().getId();
 			Map<String, Object> data = EventDataManager.build(new CheckEvent(Events.ON_CHECK, target.getComponent(),
 					checked));
-			ConversationCtrl cctrl = (ConversationCtrl) target.getConversation();
+			ClientCtrl cctrl = (ClientCtrl) target.getClient();
 			cctrl.postUpdate(desktopId, target.getUuid(), Events.ON_CHECK, data);
 		}
 	}

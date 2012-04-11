@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.impl.ConversationCtrl;
+import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.RendererAgent;
 import org.zkoss.zk.ui.Component;
@@ -66,7 +66,7 @@ public class GridRendererAgentBuilder implements OperationAgentBuilder<RendererA
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_RENDER;
 			Map<String, Object> data = EventDataManager.build(new RenderEvent(cmd, new HashSet(ids)));
-			((ConversationCtrl)target.getConversation()).postUpdate(desktopId, target.getUuid(), cmd, data);
+			((ClientCtrl)target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
 		};
 	}
 	

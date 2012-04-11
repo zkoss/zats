@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
+import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.ConversationException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 
@@ -46,7 +46,7 @@ public class AuUtility {
 	}
 
 	static void setEssential(Map<String,Object> data,String key, Object obj){
-		if(obj==null) throw new ConversationException("data of "+key+" is null");
+		if(obj==null) throw new AgentException("data of "+key+" is null");
 		data.put(key, toSafeJsonObject(obj));
 	}
 

@@ -7,30 +7,30 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zul.Label;
 
 public class HelloTest {
 	@BeforeClass
 	public static void init() {
-		Conversations.start("./src/main/webapp"); // user can load by
+		Zats.init("./src/main/webapp"); // user can load by
 													// configuration file
 	}
 
 	@AfterClass
 	public static void end() {
-		Conversations.stop();
+		Zats.end();
 	}
 
 	@After
 	public void after() {
-		Conversations.closeAll();
+		Zats.cleanup();
 	}
 
 	@Test
 	public void test() {
-		DesktopAgent desktop = Conversations.open().connect("/hello.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/hello.zul");
 
 		ComponentAgent button = desktop.query("button");
 		ComponentAgent label = desktop.query("label");

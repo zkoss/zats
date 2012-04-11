@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.RendererAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
@@ -32,25 +32,25 @@ public class OrderTest{
 	@BeforeClass
 	public static void init()
 	{
-		Conversations.start("./src/test/resources");
+		Zats.init("./src/test/resources");
 	}
 
 	@AfterClass
 	public static void end()
 	{
-		Conversations.stop();
+		Zats.end();
 	}
 
 	@After
 	public void after()
 	{
-		Conversations.closeAll();
+		Zats.cleanup();
 	}
 	
 	
 	@Test
 	public void testLoad(){
-		DesktopAgent desktop = Conversations.open().connect("/~./bind/order.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/~./bind/order.zul");
 		ComponentAgent window = desktop.query("#main");
 		ComponentAgent orderList = desktop.query("#main #orderList");
 		Assert.assertNotNull(orderList);
@@ -82,7 +82,7 @@ public class OrderTest{
 	
 	@Test
 	public void testVM(){
-		DesktopAgent desktop = Conversations.open().connect("/~./bind/order.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/~./bind/order.zul");
 		ComponentAgent window = desktop.query("#main");
 		ComponentAgent orderList = desktop.query("#main #orderList");
 		List<ComponentAgent> orderListItems = desktop.queryAll("#main #orderList > listitem");
@@ -119,7 +119,7 @@ public class OrderTest{
 	
 	@Test
 	public void testNew(){
-		DesktopAgent desktop = Conversations.open().connect("/~./bind/order.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/~./bind/order.zul");
 		ComponentAgent window = desktop.query("#main");
 		ComponentAgent orderList = window.query("#orderList");
 		
@@ -173,7 +173,7 @@ public class OrderTest{
 	
 	@Test
 	public void testLoad2(){
-		DesktopAgent desktop = Conversations.open().connect("/~./bind/order2.zul");//the grid
+		DesktopAgent desktop = Zats.newClient().connect("/~./bind/order2.zul");//the grid
 		ComponentAgent window = desktop.query("#main");
 		ComponentAgent orderList = desktop.query("#main #orderList");
 		Assert.assertNotNull(orderList);
@@ -204,7 +204,7 @@ public class OrderTest{
 	
 	@Test
 	public void testNew2(){
-		DesktopAgent desktop = Conversations.open().connect("/~./bind/order2.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/~./bind/order2.zul");
 		ComponentAgent window = desktop.query("#main");
 		ComponentAgent orderList = window.query("#orderList");
 		

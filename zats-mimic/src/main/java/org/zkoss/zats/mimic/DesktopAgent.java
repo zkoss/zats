@@ -13,8 +13,15 @@ package org.zkoss.zats.mimic;
 
 import java.util.List;
 
-import org.zkoss.zk.ui.Desktop;
+import javax.servlet.http.HttpSession;
 
+import org.zkoss.zk.ui.Desktop;
+/**
+ * The desktop agent, represents a server zk desktop
+ * 
+ * @author pao
+ * @author Dennis
+ */
 public interface DesktopAgent extends Agent {
 	/**
 	 * get ID. of this the desktop.
@@ -60,6 +67,11 @@ public interface DesktopAgent extends Agent {
 	 * @return the component agents
 	 */
 	List<ComponentAgent> queryAll(String selector);
+	
+	/**
+	 * get the http session object that relates to this desktop
+	 */
+	HttpSession getSession();
 	
 	void destroy();
 }

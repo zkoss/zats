@@ -14,7 +14,12 @@ package org.zkoss.zats.mimic;
 import java.util.List;
 
 import org.zkoss.zk.ui.Page;
-
+/**
+ * The page agent, represents a server zk page
+ * 
+ * @author pao
+ * @author Dennis
+ */
 public interface PageAgent extends Agent {
 	/**
 	 * get ID. of the page.

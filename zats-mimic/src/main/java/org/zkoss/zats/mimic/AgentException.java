@@ -12,7 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic;
 
 /**
- * @author dennis
+ * an exception be threw by a Agent, it is usually represent a load or ajax error 
+ * @author Dennis
  *
  */
 public class AgentException extends RuntimeException{

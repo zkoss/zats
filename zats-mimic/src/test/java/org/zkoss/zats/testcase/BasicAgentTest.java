@@ -26,7 +26,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.Conversations;
+import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
@@ -50,26 +50,25 @@ public class BasicAgentTest {
 	@BeforeClass
 	public static void init()
 	{
-//		Conversations.start("./src/test/resources");
-		Conversations.start(".");
+		Zats.init(".");
 	}
 
 	@AfterClass
 	public static void end()
 	{
-		Conversations.stop();
+		Zats.end();
 	}
 
 	@After
 	public void after()
 	{
-		Conversations.closeAll();
+		Zats.cleanup();
 	}
 	
 	
 	@Test
 	public void testKeyStrokeAgent(){
-		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/keystroke.zul");
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/keystroke.zul");
 		
 		ComponentAgent inp1 = desktopAgent.query("#inp1");
 		ComponentAgent inp2 = desktopAgent.query("#inp2");
@@ -113,7 +112,7 @@ public class BasicAgentTest {
 	
 	@Test
 	public void testTypeAgent1(){
-		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/type1.zul");
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/type1.zul");
 		
 		ComponentAgent l = desktopAgent.query("#l1");
 		ComponentAgent inp = desktopAgent.query("#inp1");
@@ -254,7 +253,7 @@ public class BasicAgentTest {
 	
 	@Test
 	public void testTypeAgent2(){
-		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/type2.zul");
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/type2.zul");
 		
 		ComponentAgent l = desktopAgent.query("#l1");
 		ComponentAgent inp = desktopAgent.query("#inp1");
@@ -395,7 +394,7 @@ public class BasicAgentTest {
 	
 	@Test
 	public void testOpenAgentTree(){
-		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/open-tree.zul");
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/open-tree.zul");
 		
 		ComponentAgent tree = desktopAgent.query("#tree");
 		List<ComponentAgent> items = tree.queryAll("treeitem");
@@ -429,7 +428,7 @@ public class BasicAgentTest {
 	
 	@Test
 	public void testFocusAgent() {
-		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/focus.zul");
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/focus.zul");
 		Label curr = desktopAgent.query("#current").as(Label.class);
 		Label lost = desktopAgent.query("#lost").as(Label.class);
 		assertTrue(curr.getValue().length() <= 0);
@@ -447,7 +446,7 @@ public class BasicAgentTest {
 
 	@Test
 	public void testCheckAgent() {
-		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/check.zul");
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/check.zul");
 
 		// validate msg
 		Label msg = desktopAgent.query("#msg").as(Label.class);
@@ -469,7 +468,7 @@ public class BasicAgentTest {
 
 	@Test
 	public void testClickAgent() {
-		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/click.zul");
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/click.zul");
 		assertEquals("Hello World!", desktopAgent.query("#msg").as(Label.class).getValue());
 		desktopAgent.query("#btn").as(ClickAgent.class).click();
 		assertEquals("Welcome", desktopAgent.query("#msg").as(Label.class).getValue());
@@ -477,7 +476,7 @@ public class BasicAgentTest {
 	
 	@Test
 	public void testMultipleSelectAgent() {
-		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/multiple-select.zul");
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/multiple-select.zul");
 
 		Label msg = desktopAgent.query("#msg").as(Label.class);
 		assertEquals("", msg.getValue());
@@ -585,7 +584,7 @@ public class BasicAgentTest {
 	
 	@Test
 	public void testSelectAgent() {
-		DesktopAgent desktop = Conversations.open().connect("/~./basic/select.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/select.zul");
 
 		Label selected = desktop.query("#selected").as(Label.class);
 		assertEquals("", selected.getValue());
@@ -629,7 +628,7 @@ public class BasicAgentTest {
 	
 	@Test
 	public void testCloseAgent(){
-		DesktopAgent desktopAgent = Conversations.open().connect("/~./basic/close.zul");
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/close.zul");
 		
 		ComponentAgent panel = desktopAgent.query("panel[title='closable']");
 		panel.as(CloseAgent.class).close();
@@ -651,7 +650,7 @@ public class BasicAgentTest {
 	
 	@Test
 	public void testOpenAgent(){
-		DesktopAgent desktop = Conversations.open().connect("/~./basic/open.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/open.zul");
 
 		Label open = desktop.query("#open").as(Label.class);
 		Label close = desktop.query("#close").as(Label.class);

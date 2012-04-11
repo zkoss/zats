@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.impl.ConversationCtrl;
+import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zk.ui.Component;
@@ -72,7 +72,7 @@ public class AbstractMultipleSelectAgentBuilder {
 			String desktopId = target.getDesktop().getId();
 			Event event = new SelectEvent(Events.ON_SELECT, component, selected, target.getComponent());
 			Map<String, Object> data = EventDataManager.build(event);
-			ConversationCtrl ctrl = (ConversationCtrl) target.getConversation();
+			ClientCtrl ctrl = (ClientCtrl) target.getClient();
 			ctrl.postUpdate(desktopId, component.getUuid(), event.getName(), data);
 		}
 
