@@ -53,15 +53,20 @@ public class JettyEmulator implements Emulator {
 	private Map<String, Object> requestAttributes;
 	private Map<String, String[]> requestParameters;
 
+	
 	public JettyEmulator(String contentRoot, String descriptor, String contextPath) {
 		this(new String[] { contentRoot }, descriptor, contextPath);
 	}
 
+	/**
+	 * new a jetty emulator
+	 * @param contentRoots the content roots.
+	 * @param descriptor specify the web.xml, if null then use /WEB-INF/web.xml that in contentRoots
+	 * @param contextPath specify the context, if null then use "/"
+	 */
 	public JettyEmulator(String[] contentRoots, String descriptor, String contextPath) {
 		if (contentRoots == null || contentRoots.length <= 0)
 			throw new IllegalArgumentException("contentRoots can't be null.");
-		if (descriptor == null)
-			throw new IllegalArgumentException("descriptor can't be null.");
 
 		lock = new ReentrantLock(true);
 		requestAttributes = new HashMap<String, Object>();
@@ -74,8 +79,11 @@ public class JettyEmulator implements Emulator {
 			ResourceCollection resourceCollection = new ResourceCollection(contentRoots);
 			
 			contextHandler.setBaseResource(resourceCollection);
-			contextHandler.setDescriptor(descriptor);
-			contextHandler.setContextPath(contextPath);
+			if(descriptor!=null){
+				contextHandler.setDescriptor(descriptor);
+			}
+			contextHandler.setContextPath(contextPath==null?"/":contextPath);
+			
 			contextHandler.setParentLoaderPriority(true);
 			// observe request and get related ref.
 			HandlerCollection handlers = new HandlerCollection();

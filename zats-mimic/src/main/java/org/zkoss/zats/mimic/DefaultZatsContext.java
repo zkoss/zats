@@ -82,9 +82,10 @@ public class DefaultZatsContext implements ZatsContext{
 		}
 		tempFiles.add(0,zkxml);
 		
-		emulator = new EmulatorBuilder(webTemp)
+		emulator = new EmulatorBuilder()
+			.addContentRoot(webTemp.getAbsolutePath())
 			.addContentRoot(resourceRoot)
-			.descriptor(EmulatorClient.class.getResource("WEB-INF/web.xml")).create();
+			.setDescriptor(EmulatorClient.class.getResource("WEB-INF/web.xml").toString()).create();
 		
 	}
 	

@@ -16,15 +16,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.zkoss.zats.ZatsException;
+
 /**
  * The builder for creating new emulator.
  * 
  * @author pao
  */
 public class EmulatorBuilder {
-//	private String contentRoot;
-	private String descriptor;
-	private List<String> contentRoots;
+	private String descriptor;//the path of web.xml
+	private String contextPath = "/";
+	private List<String> contentRoots;//the paths of content root
 
 	/**
 	 * Constructor.
@@ -32,25 +34,10 @@ public class EmulatorBuilder {
 	 * @param contentFolder
 	 *            the web application root path.
 	 */
-	public EmulatorBuilder(String contentFolder) {
-		if (contentFolder == null)
-			throw new NullPointerException();
-//		this.contentRoot = contentFolder;
-		this.descriptor = (contentFolder + "/WEB-INF/web.xml").replaceAll("//+",
-				"/");
+	public EmulatorBuilder() {
 		this.contentRoots = new ArrayList<String>();
-		this.contentRoots.add(contentFolder);
 	}
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param contentFolder
-	 *            the web application root path.
-	 */
-	public EmulatorBuilder(File contentFolder) {
-		this(contentFolder.getAbsolutePath());
-	}
 
 	/**
 	 * add additional resource root directory.
@@ -65,39 +52,24 @@ public class EmulatorBuilder {
 	}
 
 	/**
-	 * add additional resource root directory.
-	 * 
-	 * @param resourceRoot
-	 *            directory path.
-	 * @return self reference.
-	 */
-	public EmulatorBuilder addContentRoot(File resourceRoot) {
-		return addContentRoot(resourceRoot.getAbsolutePath());
-	}
-
-	/**
 	 * specify the path of web.xml. default value is "./WEB-INF/web.xml".
 	 * 
 	 * @param path
 	 *            specify path.
 	 * @return self reference.
 	 */
-	public EmulatorBuilder descriptor(String path) {
-		if (path == null)
-			throw new NullPointerException();
-		this.descriptor = path;
+	public EmulatorBuilder setDescriptor(String descriptor) {
+		//if a descriptor is null, it use the file in content root
+		this.descriptor = descriptor;
 		return this;
 	}
-
-	/**
-	 * specify the path of web.xml. default value is "./WEB-INF/web.xml".
-	 * 
-	 * @param path
-	 *            URL of specify path.
-	 * @return self reference.
-	 */
-	public EmulatorBuilder descriptor(URL path) {
-		return descriptor(path.toString());
+	
+	
+	public EmulatorBuilder setContextPath(String contextPath) {
+		if(contextPath==null)
+			throw new ZatsException("unll context path");
+		this.contextPath = contextPath;
+		return this;
 	}
 
 	/**
@@ -106,7 +78,12 @@ public class EmulatorBuilder {
 	 * @return a new emulator
 	 */
 	public Emulator create() {
+//		if(descriptor==null)
+//			throw new ZatsException("web.xml url not found");
+		if(contentRoots.size()==0)
+			throw new ZatsException("not content root found");
+		
 		return new JettyEmulator(contentRoots.toArray(new String[contentRoots.size()]),
-					descriptor,"/");
+					descriptor,contextPath);
 	}
 }
