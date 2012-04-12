@@ -37,7 +37,9 @@ public class Zats {
 		return instance;
 	}
 	/**
-	 * to initialize a test runtime and hold a {@link ZatsContext}, the default context is {@link DefaultZatsContext}. 
+	 * To initialize a test runtime and hold a {@link ZatsContext}, the default context is {@link DefaultZatsContext}.
+	 * It use built-in configuration files(web.xml,zk.xml) for starting quickly and safely.
+	 *  
 	 * @param resourceRoot the resource root folder of the zul, it is usually the web content folder.
 	 */
 	public static void init(String resourceRoot){

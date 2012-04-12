@@ -11,8 +11,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl.emulator;
 
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,10 +76,8 @@ public class EmulatorBuilder {
 	 * @return a new emulator
 	 */
 	public Emulator create() {
-//		if(descriptor==null)
-//			throw new ZatsException("web.xml url not found");
 		if(contentRoots.size()==0)
-			throw new ZatsException("not content root found");
+			throw new ZatsException("no content root found");
 		
 		return new JettyEmulator(contentRoots.toArray(new String[contentRoots.size()]),
 					descriptor,contextPath);

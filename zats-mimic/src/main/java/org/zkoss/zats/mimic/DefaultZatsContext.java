@@ -42,30 +42,66 @@ public class DefaultZatsContext implements ZatsContext{
 	
 	//keep the file should be clean when destroying.
 	private List<File> tempFiles = new ArrayList<File>();
+	
+	private boolean builtinConfig = true;
+	
+	/**
+	 * Create a zats context, it use built-in config file(web.xml, zk.xml) to init the context safely.
+	 */
+	public DefaultZatsContext(){}
+	
+	/**
+	 * Create a zats context, it use built-in config files(web.xml, zk.xml) to init the context quickly and safely. <br/>
+	 * If you want to use the application's config file, you have to set builtinConfig to false
+	 * and provide them in /WEB-INF/ in your resourceRoot folder (resourceRoot is provide when calling {@link #init(String)})
+	 * @param builtinConfig use the builtin web.xml and zk.xml, default true
+	 */
+	public DefaultZatsContext(boolean builtinConfig){
+		this.builtinConfig = builtinConfig;
+	}
 
 	public void init(String resourceRoot){
 		if(emulator!=null) {
 			throw new ZatsException("already started up");
 		}
-		// prepare environment
-		String tmpDir = System.getProperty("java.io.tmpdir", ".");
-		File tmpZats = new File(tmpDir,"zats");
-		tmpZats.mkdirs();
+		// prepare builtin environment
+		File builtInWeb = null;
+		if(builtinConfig){
+			String tmpDir = System.getProperty("java.io.tmpdir", ".");
+			File tmpZats = new File(tmpDir,"zats");
+			tmpZats.mkdirs();
+			
+			builtInWeb = new File(tmpZats,Long.toHexString(System.currentTimeMillis()));
+			builtInWeb.mkdirs();
+			tempFiles.add(0,builtInWeb);
+			
+			File webinf = new File(builtInWeb, "WEB-INF");
+			tempFiles.add(0,webinf);
+			if (!webinf.mkdirs())
+				throw new ZatsException("can't create temp directory : "+webinf);
+			
+			File webxml = new File(webinf, "web.xml");
+			copy(webxml,EmulatorClient.class.getResourceAsStream("WEB-INF/web.xml"));
+			tempFiles.add(0,webxml);
+			
+			File zkxml = new File(webinf, "zk.xml");
+			copy(zkxml,EmulatorClient.class.getResourceAsStream("WEB-INF/zk.xml"));
+			tempFiles.add(0,zkxml);
+		}
 		
-		File webTemp = new File(tmpZats,Long.toHexString(System.currentTimeMillis()));
-		webTemp.mkdirs();
-		tempFiles.add(0,webTemp);
+		EmulatorBuilder builder = new EmulatorBuilder();
 		
-		File webinf = new File(webTemp, "WEB-INF");
-		tempFiles.add(0,webinf);
-		if (!webinf.mkdirs())
-			throw new ZatsException("can't create temp directory : "+webinf);
-		
-		InputStream src = EmulatorClient.class.getResourceAsStream("WEB-INF/zk.xml");
-		File zkxml = new File(webinf, "zk.xml");
+		if(builtinConfig){
+			builder.addContentRoot(builtInWeb.getAbsolutePath());
+		}
+		builder.addContentRoot(resourceRoot);
+		emulator = builder.create();
+	}
+
+	private void copy(File file, InputStream src) {
 		OutputStream os = null;
 		try {
-			os = new FileOutputStream(zkxml);
+			os = new FileOutputStream(file);
 			byte[] buf = new byte[65536];
 			int len;
 			while (true) {
@@ -75,20 +111,12 @@ public class DefaultZatsContext implements ZatsContext{
 				os.write(buf, 0, len);
 			}
 		} catch (Exception e) {
-			throw new ZatsException("fail to copy file", e);
+			throw new ZatsException("fail to copy file "+file, e);
 		} finally {
 			close(src);
 			close(os);
 		}
-		tempFiles.add(0,zkxml);
-		
-		emulator = new EmulatorBuilder()
-			.addContentRoot(webTemp.getAbsolutePath())
-			.addContentRoot(resourceRoot)
-			.setDescriptor(EmulatorClient.class.getResource("WEB-INF/web.xml").toString()).create();
-		
 	}
-	
 
 	private static void close(Closeable c) {
 		try {

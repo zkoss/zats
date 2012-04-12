@@ -65,6 +65,20 @@ public class ContextTest {
 			ctx.destroy();
 		}
 	}
+	
+	@Test
+	public void testCustomConfigZatsContext() {
+		//to test open a local zul
+		DefaultZatsContext ctx = new DefaultZatsContext(false);
+		try{
+			ctx.init("./src/test/resources/web");
+			Client client = ctx.newClient();
+			DesktopAgent desktop = client.connect("/basic/custom-config.zul");
+			assertEquals("hello zats", desktop.query("#msg").as(Label.class).getValue());
+		}finally{
+			ctx.destroy();
+		}
+	}
 
 	@Test
 	public void testLoadLocal() {
