@@ -12,15 +12,19 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.testcase.ext6;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.SelectByIndexAgent;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Toolbarbutton;
 
@@ -106,6 +110,33 @@ public class BasicAgentTest {
 		for (int i = 3; i >= 1; --i) {
 			sb.select(i - 1);
 			assertEquals("item" + i, msg.getValue());
+		}
+	}
+	
+	@Test
+	public void testClickAll() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/click-ext6.zul");
+
+		Label target = desktop.query("#target").as(Label.class);
+		Label event = desktop.query("#eventName").as(Label.class);
+		assertEquals("", target.getValue());
+		assertEquals("", event.getValue());
+
+		ComponentAgent comps = desktop.query("#comps");
+		assertNotNull(comps);
+
+		String[] names = { "combobutton", "idspace" };
+		for (String name : names) {
+			ClickAgent agent = comps.query(name).as(ClickAgent.class);
+			agent.click();
+			assertEquals(name, target.getValue());
+			assertEquals(Events.ON_CLICK, event.getValue());
+			agent.doubleClick();
+			assertEquals(name, target.getValue());
+			assertEquals(Events.ON_DOUBLE_CLICK, event.getValue());
+			agent.rightClick();
+			assertEquals(name, target.getValue());
+			assertEquals(Events.ON_RIGHT_CLICK, event.getValue());
 		}
 	}
 }

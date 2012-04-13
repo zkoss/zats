@@ -13,6 +13,7 @@ package org.zkoss.zats.testcase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -26,8 +27,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.CloseAgent;
@@ -38,6 +39,7 @@ import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Tree;
@@ -755,5 +757,38 @@ public class BasicAgentTest {
 
 		desktop.query("#ck").as(TypeAgent.class).type("Hello world");
 		assertEquals("Hello world", content.getValue());
+	}
+	
+	@Test
+	public void testClickAll() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/click-all.zul");
+
+		Label target = desktop.query("#target").as(Label.class);
+		Label event = desktop.query("#eventName").as(Label.class);
+		assertEquals("", target.getValue());
+		assertEquals("", event.getValue());
+		
+		ComponentAgent comps = desktop.query("#comps");
+		assertNotNull(comps);
+		
+		String[] names = { "a", "applet", "button", "captcha", "fileupload", "fisheye", "fisheyebar", "html",
+				"include", "image", "imagemap", "label", "menu", "menubar", "menuitem", "menupopup", "menuseparator",
+				"popup", "progressmeter", "separator", "space", "toolbar", "toolbarbutton", "bandbox", "colorbox",
+				"combobox", "comboitem", "datebox", "decimalbox", "doublebox", "doublespinner", "intbox", "longbox",
+				"spinner", "textbox", "timebox", "checkbox", "radio", "radiogroup", "slider", "caption", "div",
+				"groupbox", "panel", "span", "tabbox", "tab", "window", "grid", "detail", "group", "listbox",
+				"listitem", "listgroup", "tree", "treeitem" };
+		for (String name : names) {
+			ClickAgent agent = comps.query(name).as(ClickAgent.class);
+			agent.click();
+			assertEquals(name, target.getValue());
+			assertEquals(Events.ON_CLICK, event.getValue());
+			agent.doubleClick();
+			assertEquals(name, target.getValue());
+			assertEquals(Events.ON_DOUBLE_CLICK, event.getValue());
+			agent.rightClick();
+			assertEquals(name, target.getValue());
+			assertEquals(Events.ON_RIGHT_CLICK, event.getValue());
+		}
 	}
 }
