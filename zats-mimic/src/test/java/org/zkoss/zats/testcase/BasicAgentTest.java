@@ -437,7 +437,7 @@ public class BasicAgentTest {
 		assertTrue(curr.getValue().length() <= 0);
 		assertTrue(curr.getValue().length() <= 0);
 
-		for (int i = 1; i <= 11; ++i) {
+		for (int i = 1; i <= 15; ++i) {
 			ComponentAgent comp = desktopAgent.query("#c" + i);
 			comp.as(FocusAgent.class).focus();
 			String name = comp.as(AbstractComponent.class).getDefinition().getName();
