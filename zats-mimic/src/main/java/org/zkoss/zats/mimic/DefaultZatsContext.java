@@ -43,21 +43,24 @@ public class DefaultZatsContext implements ZatsContext{
 	//keep the file should be clean when destroying.
 	private List<File> tempFiles = new ArrayList<File>();
 	
-	private boolean builtinConfig = true;
+	private boolean useAppConfig = false;
 	
 	/**
-	 * Create a zats context, it use built-in config file(web.xml, zk.xml) to init the context safely.
+	 * Create a zats context, it uses built-in config file(web.xml, zk.xml) to init the context quickly and safely.
 	 */
-	public DefaultZatsContext(){}
+	public DefaultZatsContext(){
+		this(false);
+	}
 	
 	/**
-	 * Create a zats context, it use built-in config files(web.xml, zk.xml) to init the context quickly and safely. <br/>
-	 * If you want to use the application's config file, you have to set builtinConfig to false
-	 * and provide them in /WEB-INF/ in your resourceRoot folder (resourceRoot is provide when calling {@link #init(String)})
-	 * @param builtinConfig use the builtin web.xml and zk.xml, default true
+	 * Create a zats context. <br/> 
+	 * If you set useAppConfig to true, it will use the application's config file (web.xml and zk.xml, zk.xml is optional),
+	 * and you have to provide them in /WEB-INF/ in your resourceRoot folder (resourceRoot is parameter when calling {@link #init(String)})
+	 * If you set useAppConfig to false, it will use built-in config files(web.xml, zk.xml) to init the context quickly and safely. 
+	 * @param useAppConfig use the application web.xml and zk.xml
 	 */
-	public DefaultZatsContext(boolean builtinConfig){
-		this.builtinConfig = builtinConfig;
+	public DefaultZatsContext(boolean useAppConfig){
+		this.useAppConfig = useAppConfig;
 	}
 
 	public void init(String resourceRoot){
@@ -66,7 +69,7 @@ public class DefaultZatsContext implements ZatsContext{
 		}
 		// prepare builtin environment
 		File builtInWeb = null;
-		if(builtinConfig){
+		if(!useAppConfig){
 			String tmpDir = System.getProperty("java.io.tmpdir", ".");
 			File tmpZats = new File(tmpDir,"zats");
 			tmpZats.mkdirs();
@@ -91,7 +94,7 @@ public class DefaultZatsContext implements ZatsContext{
 		
 		EmulatorBuilder builder = new EmulatorBuilder();
 		
-		if(builtinConfig){
+		if(!useAppConfig){
 			builder.addContentRoot(builtInWeb.getAbsolutePath());
 		}
 		builder.addContentRoot(resourceRoot);

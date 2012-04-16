@@ -69,7 +69,7 @@ public class ContextTest {
 	@Test
 	public void testCustomConfigZatsContext() {
 		//to test open a local zul
-		DefaultZatsContext ctx = new DefaultZatsContext(false);
+		DefaultZatsContext ctx = new DefaultZatsContext(true);
 		try{
 			ctx.init("./src/test/resources/web");
 			Client client = ctx.newClient();
