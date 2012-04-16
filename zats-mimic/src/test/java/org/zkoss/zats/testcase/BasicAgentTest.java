@@ -36,6 +36,7 @@ import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
+import org.zkoss.zats.mimic.operation.RendererAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.AbstractComponent;
@@ -789,6 +790,50 @@ public class BasicAgentTest {
 			agent.rightClick();
 			assertEquals(name, target.getValue());
 			assertEquals(Events.ON_RIGHT_CLICK, event.getValue());
+		}
+	}
+	
+	@Test
+	public void testRendererAgent() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/render.zul");
+
+		List<ComponentAgent> indexes = desktop.query("#index").queryAll("comboitem");
+		assertEquals(1000, indexes.size());
+		Label ic = desktop.query("#listitemContent").as(Label.class);
+		Label rc = desktop.query("#rowContent").as(Label.class);
+		assertEquals("", ic.getValue());
+		assertEquals("", rc.getValue());
+
+		int index = 0;
+		indexes.get(index).as(SelectAgent.class).select();
+		assertEquals("item" + index, ic.getValue());
+		assertEquals("item" + index, rc.getValue());
+
+		for (int i = 900; i <= 999; ++i) {
+			indexes.get(i).as(SelectAgent.class).select();
+			assertEquals(i + " doesn't render", ic.getValue());
+			assertEquals(i + " doesn't render", rc.getValue());
+		}
+
+		desktop.query("#listbox").as(RendererAgent.class).render(900, 949);
+		desktop.query("#grid").as(RendererAgent.class).render(900, 949);
+		for (int i = 900; i <= 949; ++i) {
+			indexes.get(i).as(SelectAgent.class).select();
+			assertEquals("item" + i, ic.getValue());
+			assertEquals("item" + i, rc.getValue());
+		}
+		for (int i = 950; i <= 999; ++i) {
+			indexes.get(i).as(SelectAgent.class).select();
+			assertEquals(i + " doesn't render", ic.getValue());
+			assertEquals(i + " doesn't render", rc.getValue());
+		}
+
+		desktop.query("#listbox").as(RendererAgent.class).render(0, 999);
+		desktop.query("#grid").as(RendererAgent.class).render(0, 999);
+		for (int i = 0; i <= 999; ++i) {
+			indexes.get(i).as(SelectAgent.class).select();
+			assertEquals("item" + i, ic.getValue());
+			assertEquals("item" + i, rc.getValue());
 		}
 	}
 }

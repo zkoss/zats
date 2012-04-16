@@ -135,14 +135,12 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", Panel.class, CloseAgent.class, new GenericCloseAgentBuilder());
 		registerBuilder("5.0.0", "*", Tab.class, CloseAgent.class, new GenericCloseAgentBuilder());
 
-		//----------special case ---
-		
-		// the listbox
+		// the render
 		registerBuilder("5.0.0", "*", Listbox.class, RendererAgent.class, new ListboxRendererAgentBuilder());
-
-		// the grid
 		registerBuilder("5.0.0", "*", Grid.class, RendererAgent.class, new GridRendererAgentBuilder());
 
+		//----------special case ---
+		
 		// the ckeditor (optional)
 		try {
 			registerBuilder("5.0.0", "*", "org.zkforge.ckez.CKeditor", TypeAgent.class,
