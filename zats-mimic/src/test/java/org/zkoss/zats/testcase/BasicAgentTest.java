@@ -17,7 +17,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import org.junit.After;
@@ -438,7 +441,7 @@ public class BasicAgentTest {
 		assertTrue(curr.getValue().length() <= 0);
 		assertTrue(curr.getValue().length() <= 0);
 
-		for (int i = 1; i <= 15; ++i) {
+		for (int i = 1; i <= 17; ++i) {
 			ComponentAgent comp = desktopAgent.query("#c" + i);
 			comp.as(FocusAgent.class).focus();
 			String name = comp.as(AbstractComponent.class).getDefinition().getName();
@@ -834,6 +837,200 @@ public class BasicAgentTest {
 			indexes.get(i).as(SelectAgent.class).select();
 			assertEquals("item" + i, ic.getValue());
 			assertEquals("item" + i, rc.getValue());
+		}
+	}
+	
+	@Test
+	public void testKeyStrokeAgentOnInputElements() {
+		// prepare all CtrlKey strings
+		char[] words = new char[26];
+		for (char c = 'a'; c <= 'z'; ++c)
+			words[(int) (c - 'a')] = c;
+
+		char[] numbers = new char[10];
+		for (char c = '0'; c <= '9'; ++c)
+			numbers[(int) (c - '0')] = c;
+
+		String[] ns = { "#home", "#end", "#ins", "#del", "#bak", "#left", "#right", "#up", "#down", "#pgup", "#pgdn",
+				"#f1", "#f2", "#f3", "#f4", "#f5", "#f6", "#f7", "#f8", "#f9", "#f10", "#f11", "#f12" };
+		int[] nsc = { 36, 35, 45, 46, 8, 37, 39, 38, 40, 33, 34, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122,
+				123 };
+
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(ns[0], "" + nsc[0]);
+		map.put(ns[1], "" + nsc[1]);
+
+		List<String> ctrls = new ArrayList<String>();
+		List<String> alts = new ArrayList<String>();
+		List<String> shifts = new ArrayList<String>();
+		int c = 65;
+		for (char w : words) {
+			ctrls.add("^" + w);
+			alts.add("@" + w);
+			map.put("^" + w, "" + c);
+			map.put("@" + w, "" + c);
+			c++;
+		}
+		c = 48;
+		for (char n : numbers) {
+			ctrls.add("^" + n);
+			alts.add("@" + n);
+			map.put("^" + n, "" + c);
+			map.put("@" + n, "" + c);
+			c++;
+		}
+		for (int i = 0; i < ns.length; ++i) {
+			String n = ns[i];
+			ctrls.add("^" + n);
+			alts.add("@" + n);
+			shifts.add("$" + n);
+			map.put("^" + n, "" + nsc[i]);
+			map.put("@" + n, "" + nsc[i]);
+			map.put("$" + n, "" + nsc[i]);
+		}
+
+		//		generate a string contained all ctrl key 
+		//		for(String s : ctrls)
+		//			System.out.print(s);
+		//		for(String s : alts)
+		//			System.out.print(s);
+		//		for(String s : shifts)
+		//			System.out.print(s);
+		//		System.out.println("");
+
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/keystroke-input.zul");
+
+		Label target = desktop.query("#target").as(Label.class);
+		Label ref = desktop.query("#ref").as(Label.class);
+		Label event = desktop.query("#eventName").as(Label.class);
+		Label code = desktop.query("#code").as(Label.class);
+		Label ctrl = desktop.query("#ctrl").as(Label.class);
+		assertEquals("", target.getValue());
+		assertEquals("", ref.getValue());
+		assertEquals("", event.getValue());
+		assertEquals("", code.getValue());
+		assertEquals("", ctrl.getValue());
+
+		// components handle event
+		List<ComponentAgent> comps = desktop.query("#bySelf").getChildren();
+		assertEquals(17, comps.size());
+
+		// onOk
+		for (ComponentAgent comp : comps) {
+			comp.stroke("#enter");
+			assertEquals(comp.getComponent().getDefinition().getName(), target.getValue());
+			assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+			assertEquals(Events.ON_OK, event.getValue());
+			assertEquals("13", code.getValue());
+			assertEquals("none", ctrl.getValue());
+		}
+
+		// onCancel
+		for (ComponentAgent comp : comps) {
+			comp.stroke("#esc");
+			assertEquals(comp.getComponent().getDefinition().getName(), target.getValue());
+			assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+			assertEquals(Events.ON_CANCEL, event.getValue());
+			assertEquals("27", code.getValue());
+			assertEquals("none", ctrl.getValue());
+		}
+
+		// onCtrlKey - ctrl
+		for (String k : ctrls) {
+			for (ComponentAgent comp : comps) {
+				comp.stroke(k);
+				assertEquals(comp.getComponent().getDefinition().getName(), target.getValue());
+				assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+				assertEquals(Events.ON_CTRL_KEY, event.getValue());
+				assertEquals(map.get(k), code.getValue());
+				assertEquals("ctrl", ctrl.getValue());
+			}
+		}
+
+		// onCtrlKey - alt
+		for (String k : alts) {
+			for (ComponentAgent comp : comps) {
+				comp.stroke(k);
+				assertEquals(comp.getComponent().getDefinition().getName(), target.getValue());
+				assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+				assertEquals(Events.ON_CTRL_KEY, event.getValue());
+				assertEquals(map.get(k), code.getValue());
+				assertEquals("alt", ctrl.getValue());
+			}
+		}
+
+		// onCtrlKey - shift
+		for (String k : shifts) {
+			for (ComponentAgent comp : comps) {
+				comp.stroke(k);
+				assertEquals(comp.getComponent().getDefinition().getName(), target.getValue());
+				assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+				assertEquals(Events.ON_CTRL_KEY, event.getValue());
+				assertEquals(map.get(k), code.getValue());
+				assertEquals("shift", ctrl.getValue());
+			}
+		}
+
+		// parent component handle event
+		ComponentAgent parent = desktop.query("#byParent");
+		String targetName = parent.getComponent().getDefinition().getName();
+		comps = parent.getChildren();
+		assertEquals(17, comps.size());
+
+		// onOk
+		for (ComponentAgent comp : comps) {
+			comp.stroke("#enter");
+			assertEquals(targetName, target.getValue());
+			assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+			assertEquals(Events.ON_OK, event.getValue());
+			assertEquals("13", code.getValue());
+			assertEquals("none", ctrl.getValue());
+		}
+
+		// onCancel
+		for (ComponentAgent comp : comps) {
+			comp.stroke("#esc");
+			assertEquals(targetName, target.getValue());
+			assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+			assertEquals(Events.ON_CANCEL, event.getValue());
+			assertEquals("27", code.getValue());
+			assertEquals("none", ctrl.getValue());
+		}
+
+		// onCtrlKey - ctrl
+		for (String k : ctrls) {
+			for (ComponentAgent comp : comps) {
+				comp.stroke(k);
+				assertEquals(targetName, target.getValue());
+				assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+				assertEquals(Events.ON_CTRL_KEY, event.getValue());
+				assertEquals(map.get(k), code.getValue());
+				assertEquals("ctrl", ctrl.getValue());
+			}
+		}
+
+		// onCtrlKey - alt
+		for (String k : alts) {
+			for (ComponentAgent comp : comps) {
+				comp.stroke(k);
+				assertEquals(targetName, target.getValue());
+				assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+				assertEquals(Events.ON_CTRL_KEY, event.getValue());
+				assertEquals(map.get(k), code.getValue());
+				assertEquals("alt", ctrl.getValue());
+			}
+		}
+
+		// onCtrlKey - shift
+		for (String k : shifts) {
+			for (ComponentAgent comp : comps) {
+				comp.stroke(k);
+				assertEquals(targetName, target.getValue());
+				assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+				assertEquals(Events.ON_CTRL_KEY, event.getValue());
+				assertEquals(map.get(k), code.getValue());
+				assertEquals("shift", ctrl.getValue());
+			}
 		}
 	}
 }

@@ -38,14 +38,16 @@
 					onBlur="lost.value = self.definition.name" />
 				<checkbox id="c14" label="checkbox" onFocus="current.value = self.definition.name"
 					onBlur="lost.value = self.definition.name" />
-				<listbox id="c15" onFocus="current.value = self.definition.name"
+				<radio id="c15" label="radio" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name" />
+				<listbox id="c16" onFocus="current.value = self.definition.name"
 					onBlur="lost.value = self.definition.name">
 					<listhead>
 						<listheader label="listheader" />
 					</listhead>
 					<listitem label="listitem" />
 				</listbox>
-				<tree id="c16" onFocus="current.value = self.definition.name"
+				<tree id="c17" onFocus="current.value = self.definition.name"
 					onBlur="lost.value = self.definition.name">
 					<treecols>
 						<treecol label="treecol" />
