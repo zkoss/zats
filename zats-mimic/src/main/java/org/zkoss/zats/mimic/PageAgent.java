@@ -13,7 +13,7 @@ package org.zkoss.zats.mimic;
 
 import java.util.List;
 /**
- * The page agent, represents a server zk page
+ * The page agent, represents a server-side zk page
  * 
  * @author pao
  * @author Dennis

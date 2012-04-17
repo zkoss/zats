@@ -12,13 +12,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.operation;
 
 /**
- * To change the check status of components.
+ * To change the check status of a component.
  * @author pao
  */
 public interface CheckAgent extends OperationAgent {
 	
 	/**
 	 * change the check status.
+	 * @param checked true for checked
 	 */
 	void check(boolean checked);
 }

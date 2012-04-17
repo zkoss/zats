@@ -53,7 +53,7 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 	}
 	
 	/**
-	 * Create a zats context. <br/> 
+	 * Create a zats Environment. <br/> 
 	 * If you set useAppConfig to true, it will use the application's config file (web.xml and zk.xml, zk.xml is optional),
 	 * and you have to provide them in /WEB-INF/ in your resourceRoot folder (resourceRoot is parameter when calling {@link #init(String)})
 	 * If you set useAppConfig to false, it will use built-in config files(web.xml, zk.xml) to init the context quickly and safely. 
@@ -162,7 +162,7 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 	}
 	
 	/**
-	 * close all client and release resources.
+	 * close all clients and release resources.
 	 */
 	public void cleanup() {
 		//to avoid concurrent modification exception in willClose

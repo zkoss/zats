@@ -12,7 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.operation;
 
 /**
- * This agent fires 3 zk component events that related to key, <b>onOK</b>, <b>onCancel</b> and <b>onCtrlKey</b>. 
+ * This agent fires 3 zk component events that relate to keystroke, <b>onOK</b>, <b>onCancel</b> and <b>onCtrlKey</b>. 
  * @author dennis
  *
  */
@@ -73,7 +73,7 @@ public interface KeyStrokeAgent extends OperationAgent{
 	 * </dl>
 	 *
 	 * <p>Note: it doesn't support Ctrl+Alt, Shift+Ctrl, Shift+Alt or Shift+Ctrl+Alt.
-	 * @param String key
+	 * @param key keystroke string
 	 */
 	void stroke(String key);
 	

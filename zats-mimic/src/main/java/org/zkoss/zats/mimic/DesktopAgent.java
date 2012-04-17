@@ -13,7 +13,7 @@ package org.zkoss.zats.mimic;
 
 import java.util.List;
 /**
- * The desktop agent, represents a server zk desktop
+ * The desktop agent, represents a server-side zk desktop
  * 
  * @author pao
  * @author Dennis

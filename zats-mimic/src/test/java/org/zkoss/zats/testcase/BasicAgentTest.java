@@ -650,7 +650,7 @@ public class BasicAgentTest {
 		tab.as(CloseAgent.class).close();
 		Assert.assertNull(((Component)tab.getDelegatee()).getPage());
 		
-		// issue of checking flag at server-side 
+		// TODO close a closable=false component, it will still be closed. ignore this case for now.
 		//	panel = desktopAgent.query("panel[title='non-close']");
 		//	panel.as(CloseAgent.class).close();
 		//	Assert.assertNotNull(panel.getDelegatee().getPage());

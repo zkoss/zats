@@ -21,7 +21,7 @@ import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 
 /**
- * The component agent, represents a server zk component
+ * The component agent, wraps a server-side zk component.
  * 
  * @author pao
  */

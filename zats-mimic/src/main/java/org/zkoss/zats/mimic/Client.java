@@ -13,7 +13,7 @@ package org.zkoss.zats.mimic;
 
 
 /**
- * Represent a client that can connect to multiple zul files
+ * Represent a client that can connect to zul files
  * @author Hawk
  * @author Dennis
  *
