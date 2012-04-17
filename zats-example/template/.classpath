@@ -9,20 +9,20 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="lib/hamcrest-core-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/javax.servlet-2.5.0.v201103041518.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-continuation-7.6.2.v20120308.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-http-7.6.2.v20120308.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-io-7.6.2.v20120308.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-security-7.6.2.v20120308.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-server-7.6.2.v20120308.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-servlet-7.6.2.v20120308.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-util-7.6.2.v20120308.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-webapp-7.6.2.v20120308.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-xml-7.6.2.v20120308.jar"/>
-	<classpathentry kind="lib" path="lib/junit-4.10.jar"/>
-	<classpathentry kind="lib" path="lib/zats-common-0.9.0-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/zats-mimic-0.9.0-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/zats-mimic-ext6-0.9.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/hamcrest-core.jar"/>
+	<classpathentry kind="lib" path="lib/javax.servlet.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-continuation.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-http.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-io.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-security.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-server.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-servlet.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-util.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-webapp.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-xml.jar"/>
+	<classpathentry kind="lib" path="lib/junit.jar"/>
+	<classpathentry kind="lib" path="lib/zats-common.jar"/>
+	<classpathentry kind="lib" path="lib/zats-mimic.jar"/>
+	<classpathentry kind="lib" path="lib/zats-mimic-ext6.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
