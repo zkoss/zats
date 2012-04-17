@@ -39,7 +39,7 @@ import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
-import org.zkoss.zats.mimic.operation.RendererAgent;
+import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.AbstractComponent;
@@ -819,8 +819,8 @@ public class BasicAgentTest {
 			assertEquals(i + " doesn't render", rc.getValue());
 		}
 
-		desktop.query("#listbox").as(RendererAgent.class).render(900, 949);
-		desktop.query("#grid").as(RendererAgent.class).render(900, 949);
+		desktop.query("#listbox").as(RenderAgent.class).render(900, 949);
+		desktop.query("#grid").as(RenderAgent.class).render(900, 949);
 		for (int i = 900; i <= 949; ++i) {
 			indexes.get(i).as(SelectAgent.class).select();
 			assertEquals("item" + i, ic.getValue());
@@ -832,8 +832,8 @@ public class BasicAgentTest {
 			assertEquals(i + " doesn't render", rc.getValue());
 		}
 
-		desktop.query("#listbox").as(RendererAgent.class).render(0, 999);
-		desktop.query("#grid").as(RendererAgent.class).render(0, 999);
+		desktop.query("#listbox").as(RenderAgent.class).render(0, 999);
+		desktop.query("#grid").as(RenderAgent.class).render(0, 999);
 		for (int i = 0; i <= 999; ++i) {
 			indexes.get(i).as(SelectAgent.class).select();
 			assertEquals("item" + i, ic.getValue());

@@ -23,7 +23,7 @@ import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
-import org.zkoss.zats.mimic.operation.RendererAgent;
+import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zhtml.Input;
@@ -136,8 +136,8 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", Tab.class, CloseAgent.class, new GenericCloseAgentBuilder());
 
 		// the render
-		registerBuilder("5.0.0", "*", Listbox.class, RendererAgent.class, new ListboxRendererAgentBuilder());
-		registerBuilder("5.0.0", "*", Grid.class, RendererAgent.class, new GridRendererAgentBuilder());
+		registerBuilder("5.0.0", "*", Listbox.class, RenderAgent.class, new ListboxRendererAgentBuilder());
+		registerBuilder("5.0.0", "*", Grid.class, RenderAgent.class, new GridRendererAgentBuilder());
 
 		//----------special case ---
 		

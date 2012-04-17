@@ -20,7 +20,7 @@ package org.zkoss.zats.mimic.operation;
  * @author dennis
  *
  */
-public interface RendererAgent extends OperationAgent{
+public interface RenderAgent extends OperationAgent{
 
 	/**
 	 * render the sub-item from index x to y. both x and y are included.
