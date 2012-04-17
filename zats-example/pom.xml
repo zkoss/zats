@@ -38,6 +38,7 @@
 	<packaging>war</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
 	</properties>
 	<repositories>
 		<repository>
@@ -82,7 +83,6 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>${project.artifactId}</finalName>
 		<pluginManagement>
 			<plugins>
     			<!-- Ignore/Execute plugin execution -->
@@ -141,8 +141,7 @@
 						</goals>
 						<configuration>
 							<outputDirectory>${project.build.directory}/lib</outputDirectory>
-							<includeScope>test</includeScope>
-							<excludeArtifactIds>zhtml,zul,zk,zweb,zcommon,commons-fileupload,zel,bsh</excludeArtifactIds>
+							<includeGroupIds>org.zkoss.zats,org.eclipse.jetty,junit</includeGroupIds>
 							<stripVersion>true</stripVersion>
 						</configuration>
 					</execution>
@@ -159,7 +158,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<finalName>zats-example</finalName>
+							<finalName>zats-example.${maven.build.timestamp}</finalName>
 							<appendAssemblyId>false</appendAssemblyId>
 							<descriptors>
 								<descriptor>assembly.xml</descriptor>
