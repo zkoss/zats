@@ -1,4 +1,4 @@
-/* RendererAgent.java
+/* RenderAgent.java
 
 	Purpose:
 		
