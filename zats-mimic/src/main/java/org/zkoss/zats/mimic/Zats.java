@@ -30,7 +30,7 @@ public class Zats {
 				//the default emulator zats environment
 				instance = new DefaultZatsEnvironment();
 			}else{
-				throw new ZatsException("instance not foudn, please call init first");
+				throw new ZatsException("instance not found, please call init first");
 			}
 
 		}
