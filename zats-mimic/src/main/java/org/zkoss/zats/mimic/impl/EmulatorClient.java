@@ -11,6 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.InputStream;
@@ -63,8 +64,12 @@ public class EmulatorClient implements Client , ClientCtrl{
 
 			cookies = huc.getHeaderFields().get("Set-Cookie");
 			is = huc.getInputStream();
-			if (logger.isLoggable(Level.FINEST))
+			if (logger.isLoggable(Level.FINEST)) {
 				logger.finest(getReplyString(is, huc.getContentEncoding()));
+			} else {
+				consumeReply(is);
+			}
+			
 			// get specified objects such as Desktop
 			Desktop desktop = (Desktop) emulator.getRequestAttributes().get(
 					"javax.zkoss.zk.ui.desktop");
@@ -170,8 +175,11 @@ public class EmulatorClient implements Client , ClientCtrl{
 			// TODO, read response, handle redirect.
 			// read response
 			is = c.getInputStream();
-			if (logger.isLoggable(Level.FINEST))
+			if (logger.isLoggable(Level.FINEST)) {
 				logger.finest(getReplyString(is, c.getContentEncoding()));
+			} else {
+				consumeReply(is);
+			}
 		} catch (Exception e) {
 			throw new ZatsException("", e);
 		} finally {
@@ -207,6 +215,18 @@ public class EmulatorClient implements Client , ClientCtrl{
 		}
 	}
 
+	private void consumeReply(InputStream is) {
+		try {
+			is = new BufferedInputStream(is);
+			while (is.read() >= 0) {
+			}
+		} catch (Throwable e) {
+			logger.log(Level.WARNING, "", e);
+		} finally {
+			close(is);
+		}
+	}
+	
 	private String getReplyString(InputStream is, String encoding) {
 		String reply = null;
 		Reader r = null;
