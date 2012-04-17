@@ -1,4 +1,4 @@
-/* ZatsContext.java
+/* DefaultZatsEnvironment.java
 
 	Purpose:
 		
@@ -28,13 +28,13 @@ import org.zkoss.zats.mimic.impl.emulator.Emulator;
 import org.zkoss.zats.mimic.impl.emulator.EmulatorBuilder;
 
 /**
- * A default implementation of ZatsContext
+ * A default implementation of {@link ZatsEnvironment}
  *   
  * @author Hawk
  * @author Dennis
  */
-public class DefaultZatsContext implements ZatsContext{
-	private static Logger logger = Logger.getLogger(DefaultZatsContext.class.getName());;
+public class DefaultZatsEnvironment implements ZatsEnvironment{
+	private static Logger logger = Logger.getLogger(DefaultZatsEnvironment.class.getName());;
 	
 	
 	private List<Client> clients = new LinkedList<Client>();
@@ -48,7 +48,7 @@ public class DefaultZatsContext implements ZatsContext{
 	/**
 	 * Create a zats context, it uses built-in config file(web.xml, zk.xml) to init the context quickly and safely.
 	 */
-	public DefaultZatsContext(){
+	public DefaultZatsEnvironment(){
 		this(false);
 	}
 	
@@ -59,7 +59,7 @@ public class DefaultZatsContext implements ZatsContext{
 	 * If you set useAppConfig to false, it will use built-in config files(web.xml, zk.xml) to init the context quickly and safely. 
 	 * @param useAppConfig use the application web.xml and zk.xml
 	 */
-	public DefaultZatsContext(boolean useAppConfig){
+	public DefaultZatsEnvironment(boolean useAppConfig){
 		this.useAppConfig = useAppConfig;
 	}
 

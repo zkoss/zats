@@ -19,6 +19,7 @@ import org.zkoss.zats.mimic.impl.au.EventDataBuilder;
 import org.zkoss.zats.mimic.impl.operation.OperationAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.OperationAgentManager;
 import org.zkoss.zats.mimic.operation.OperationAgent;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 
 /**
@@ -37,7 +38,7 @@ public class ValueResolverManager {
 				if (OperationAgent.class.isAssignableFrom(clazz)) {
 					Class<OperationAgent> opc = (Class<OperationAgent>) clazz;
 					OperationAgentBuilder<OperationAgent> builder = OperationAgentManager.getBuilder(
-							agent.getComponent(), opc);
+							(Component)agent.getDelegatee(), opc);
 					if (builder != null)
 						return (T) builder.getOperation(agent);
 				}
@@ -48,8 +49,8 @@ public class ValueResolverManager {
 		registerResolver("5.0.0","*",new ValueResolver(){
 			@SuppressWarnings("unchecked")
 			public <T> T resolve(ComponentAgent agent, Class<T> clazz) {
-				if (clazz.isInstance(agent.getComponent())) {
-					return (T) agent.getComponent();
+				if (clazz.isInstance((Component)agent.getDelegatee())) {
+					return (T) agent.getDelegatee();
 				}
 				return null;
 			}

@@ -17,6 +17,7 @@ import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.CloseAgent;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 
@@ -36,7 +37,7 @@ public class GenericCloseAgentBuilder implements OperationAgentBuilder<CloseAgen
 		public void close() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_CLOSE;
-			Map<String, Object> data = EventDataManager.build(new Event(cmd, target.getComponent()));
+			Map<String, Object> data = EventDataManager.build(new Event(cmd, (Component)target.getDelegatee()));
 			((ClientCtrl)target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
 		}
 	}

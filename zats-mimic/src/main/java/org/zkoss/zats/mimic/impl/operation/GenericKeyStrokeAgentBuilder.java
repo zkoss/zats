@@ -19,6 +19,7 @@ import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.AuUtility;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.KeyEvent;
 
@@ -135,8 +136,8 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<KeySt
 			
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_CTRL_KEY;
-			Map<String, Object> data = EventDataManager.build(new KeyEvent(cmd, et.getComponent(), keyCode, ctrlKey,
-					shiftKey, altKey, target.getComponent()));
+			Map<String, Object> data = EventDataManager.build(new KeyEvent(cmd, (Component)et.getDelegatee(), keyCode, ctrlKey,
+					shiftKey, altKey, (Component)target.getDelegatee()));
 			((ClientCtrl)et.getClient()).postUpdate(desktopId, et.getUuid(), cmd, data);
 		}
 
@@ -146,8 +147,8 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<KeySt
 			
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_CANCEL;
-			Map<String, Object> data = EventDataManager.build(new KeyEvent(cmd, et.getComponent(), ESC, false, false,
-					false, target.getComponent()));
+			Map<String, Object> data = EventDataManager.build(new KeyEvent(cmd, (Component)et.getDelegatee(), ESC, false, false,
+					false, (Component)target.getDelegatee()));
 			((ClientCtrl)et.getClient()).postUpdate(desktopId, et.getUuid(), cmd, data);
 		}
 
@@ -157,8 +158,8 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<KeySt
 			
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_OK;
-			Map<String, Object> data = EventDataManager.build(new KeyEvent(cmd, et.getComponent(), ENTER, false, false,
-					false, target.getComponent()));
+			Map<String, Object> data = EventDataManager.build(new KeyEvent(cmd, (Component)et.getDelegatee(), ENTER, false, false,
+					false, (Component)target.getDelegatee()));
 			((ClientCtrl)et.getClient()).postUpdate(desktopId, et.getUuid(), cmd, data);
 		}
 	}

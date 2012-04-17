@@ -20,6 +20,7 @@ import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.AuUtility;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.SelectAgent;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
@@ -45,7 +46,7 @@ public class GenericSelectAgentBuilder implements OperationAgentBuilder<SelectAg
 			items.add(target.getUuid());
 
 			String desktopId = target.getDesktop().getId();
-			Event event = new SelectEvent(Events.ON_SELECT, parent.getComponent(), items, target.getComponent());
+			Event event = new SelectEvent(Events.ON_SELECT, (Component)parent.getDelegatee(), items, (Component)target.getDelegatee());
 			Map<String, Object> data = EventDataManager.build(event);
 			((ClientCtrl) target.getClient()).postUpdate(desktopId, parent.getUuid(), event.getName(), data);
 		}

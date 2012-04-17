@@ -13,6 +13,7 @@ import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 
@@ -41,11 +42,12 @@ public class ConversationsTest
 	public void test()
 	{
 		DesktopAgent desktop = Zats.newClient().connect("/session.zul");
-
-		assertNotNull(desktop.getSession());
+		
 		assertNotNull(desktop);
+		assertNotNull(((Desktop)desktop.getDelegatee()).getSession());
+		
 
-		HttpSession session = desktop.getSession();
+		HttpSession session = (HttpSession)((Desktop)desktop.getDelegatee()).getSession().getNativeSession();
 		assertEquals("session", session.getAttribute("msg"));
 		assertEquals("desktop", desktop.getAttribute("msg"));
 		

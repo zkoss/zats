@@ -117,15 +117,6 @@ public class EmulatorClient implements Client, ClientCtrl {
 		}
 	}
 
-	public HttpSession getSession() {
-		if (desktopAgentList.isEmpty()) {
-			return null;
-		} else {
-			return (HttpSession) desktopAgentList.get(0).getDesktop().getSession().getNativeSession();
-		}
-
-	}
-
 	public void postUpdate(String desktopId, String targetUUID, String cmd, Map<String, Object> data) {
 
 		// prepare au data

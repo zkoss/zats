@@ -37,8 +37,6 @@ public interface ClientCtrl {
 	
 	void setDestroyListener(DestroyListener l);
 	
-	HttpSession getSession();
-	
 	//to notify a client is going to be destroyed.
 	interface DestroyListener {
 		void willDestroy(Client conv);

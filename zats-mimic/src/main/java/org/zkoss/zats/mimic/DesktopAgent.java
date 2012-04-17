@@ -12,10 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic;
 
 import java.util.List;
-
-import javax.servlet.http.HttpSession;
-
-import org.zkoss.zk.ui.Desktop;
 /**
  * The desktop agent, represents a server zk desktop
  * 
@@ -45,14 +41,6 @@ public interface DesktopAgent extends Agent {
 	 * @return attribute value or null if not found or otherwise.
 	 */
 	Object getAttribute(String name);
-
-
-	/**
-	 * get the native Desktop.
-	 * 
-	 * @return desktop
-	 */
-	Desktop getDesktop();
 	
 	/**
 	 * to find the first component agent with the selector
@@ -67,11 +55,7 @@ public interface DesktopAgent extends Agent {
 	 * @return the component agents
 	 */
 	List<ComponentAgent> queryAll(String selector);
-	
-	/**
-	 * get the http session object that relates to this desktop
-	 */
-	HttpSession getSession();
+
 	
 	void destroy();
 }

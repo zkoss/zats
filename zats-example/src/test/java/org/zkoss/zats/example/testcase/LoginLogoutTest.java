@@ -14,6 +14,7 @@ import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
 
@@ -52,7 +53,7 @@ public class LoginLogoutTest {
 		//login success
 		password.as(TypeAgent.class).type("1234");
 		login.as(ClickAgent.class).click();
-		HttpSession session = desktop.getSession();
+		HttpSession session = (HttpSession)((Desktop)desktop.getDelegatee()).getSession().getNativeSession();
 		assertEquals(account.as(Textbox.class).getValue(), session.getAttribute("user"));
 //		ComponentNode mainWin = Conversations.query("window"); no handle redirect for now
 //		assertEquals("Main",mainWin.as(Window.class).getTitle());

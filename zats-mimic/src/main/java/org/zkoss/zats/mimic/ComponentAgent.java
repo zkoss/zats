@@ -19,7 +19,6 @@ import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
-import org.zkoss.zk.ui.Component;
 
 /**
  * The component agent, represents a server zk component
@@ -86,11 +85,6 @@ public interface ComponentAgent extends Agent{
 	 * @return page agent.
 	 */
 	PageAgent getPage();
-	
-	/**
-	 * get the wrapped component
-	 */
-	Component getComponent();
 
 	/**
 	 * try to transfer the component agent to the target class, the target class

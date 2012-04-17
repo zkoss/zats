@@ -43,6 +43,7 @@ import org.zkoss.zats.mimic.operation.RendererAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
@@ -639,20 +640,20 @@ public class BasicAgentTest {
 		
 		ComponentAgent panel = desktopAgent.query("panel[title='closable']");
 		panel.as(CloseAgent.class).close();
-		Assert.assertNull(panel.getComponent().getPage());
+		Assert.assertNull(((Component)panel.getDelegatee()).getPage());
 		
 		ComponentAgent window = desktopAgent.query("window[title='closable']");
 		window.as(CloseAgent.class).close();
-		Assert.assertNull(window.getComponent().getPage());
+		Assert.assertNull(((Component)window.getDelegatee()).getPage());
 		
 		ComponentAgent tab = desktopAgent.query("tab[label='closable']");
 		tab.as(CloseAgent.class).close();
-		Assert.assertNull(tab.getComponent().getPage());
+		Assert.assertNull(((Component)tab.getDelegatee()).getPage());
 		
 		// issue of checking flag at server-side 
 		//	panel = desktopAgent.query("panel[title='non-close']");
 		//	panel.as(CloseAgent.class).close();
-		//	Assert.assertNotNull(panel.getComponent().getPage());
+		//	Assert.assertNotNull(panel.getDelegatee().getPage());
 	}
 	
 	@Test
@@ -918,8 +919,8 @@ public class BasicAgentTest {
 		// onOk
 		for (ComponentAgent comp : comps) {
 			comp.stroke("#enter");
-			assertEquals(comp.getComponent().getDefinition().getName(), target.getValue());
-			assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+			assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), target.getValue());
+			assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
 			assertEquals(Events.ON_OK, event.getValue());
 			assertEquals("13", code.getValue());
 			assertEquals("none", ctrl.getValue());
@@ -928,8 +929,8 @@ public class BasicAgentTest {
 		// onCancel
 		for (ComponentAgent comp : comps) {
 			comp.stroke("#esc");
-			assertEquals(comp.getComponent().getDefinition().getName(), target.getValue());
-			assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+			assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), target.getValue());
+			assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
 			assertEquals(Events.ON_CANCEL, event.getValue());
 			assertEquals("27", code.getValue());
 			assertEquals("none", ctrl.getValue());
@@ -939,8 +940,8 @@ public class BasicAgentTest {
 		for (String k : ctrls) {
 			for (ComponentAgent comp : comps) {
 				comp.stroke(k);
-				assertEquals(comp.getComponent().getDefinition().getName(), target.getValue());
-				assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), target.getValue());
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
 				assertEquals(Events.ON_CTRL_KEY, event.getValue());
 				assertEquals(map.get(k), code.getValue());
 				assertEquals("ctrl", ctrl.getValue());
@@ -951,8 +952,8 @@ public class BasicAgentTest {
 		for (String k : alts) {
 			for (ComponentAgent comp : comps) {
 				comp.stroke(k);
-				assertEquals(comp.getComponent().getDefinition().getName(), target.getValue());
-				assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), target.getValue());
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
 				assertEquals(Events.ON_CTRL_KEY, event.getValue());
 				assertEquals(map.get(k), code.getValue());
 				assertEquals("alt", ctrl.getValue());
@@ -963,8 +964,8 @@ public class BasicAgentTest {
 		for (String k : shifts) {
 			for (ComponentAgent comp : comps) {
 				comp.stroke(k);
-				assertEquals(comp.getComponent().getDefinition().getName(), target.getValue());
-				assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), target.getValue());
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
 				assertEquals(Events.ON_CTRL_KEY, event.getValue());
 				assertEquals(map.get(k), code.getValue());
 				assertEquals("shift", ctrl.getValue());
@@ -973,7 +974,7 @@ public class BasicAgentTest {
 
 		// parent component handle event
 		ComponentAgent parent = desktop.query("#byParent");
-		String targetName = parent.getComponent().getDefinition().getName();
+		String targetName = ((Component)parent.getDelegatee()).getDefinition().getName();
 		comps = parent.getChildren();
 		assertEquals(17, comps.size());
 
@@ -981,7 +982,7 @@ public class BasicAgentTest {
 		for (ComponentAgent comp : comps) {
 			comp.stroke("#enter");
 			assertEquals(targetName, target.getValue());
-			assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+			assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
 			assertEquals(Events.ON_OK, event.getValue());
 			assertEquals("13", code.getValue());
 			assertEquals("none", ctrl.getValue());
@@ -991,7 +992,7 @@ public class BasicAgentTest {
 		for (ComponentAgent comp : comps) {
 			comp.stroke("#esc");
 			assertEquals(targetName, target.getValue());
-			assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+			assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
 			assertEquals(Events.ON_CANCEL, event.getValue());
 			assertEquals("27", code.getValue());
 			assertEquals("none", ctrl.getValue());
@@ -1002,7 +1003,7 @@ public class BasicAgentTest {
 			for (ComponentAgent comp : comps) {
 				comp.stroke(k);
 				assertEquals(targetName, target.getValue());
-				assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
 				assertEquals(Events.ON_CTRL_KEY, event.getValue());
 				assertEquals(map.get(k), code.getValue());
 				assertEquals("ctrl", ctrl.getValue());
@@ -1014,7 +1015,7 @@ public class BasicAgentTest {
 			for (ComponentAgent comp : comps) {
 				comp.stroke(k);
 				assertEquals(targetName, target.getValue());
-				assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
 				assertEquals(Events.ON_CTRL_KEY, event.getValue());
 				assertEquals(map.get(k), code.getValue());
 				assertEquals("alt", ctrl.getValue());
@@ -1026,7 +1027,7 @@ public class BasicAgentTest {
 			for (ComponentAgent comp : comps) {
 				comp.stroke(k);
 				assertEquals(targetName, target.getValue());
-				assertEquals(comp.getComponent().getDefinition().getName(), ref.getValue());
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
 				assertEquals(Events.ON_CTRL_KEY, event.getValue());
 				assertEquals(map.get(k), code.getValue());
 				assertEquals("shift", ctrl.getValue());

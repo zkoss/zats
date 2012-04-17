@@ -37,7 +37,7 @@ public class AuUtility {
 	public static ComponentAgent lookupEventTarget(ComponentAgent c, String evtname) {
 		if (c == null)
 			return null;
-		Component comp = c.getComponent();
+		Component comp = (Component)c.getDelegatee();
 		if (Events.isListened(comp, evtname, true)) {
 			return c;
 		}

@@ -25,6 +25,7 @@ import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
@@ -55,11 +56,11 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 				// focus
 				String desktopId = target.getDesktop().getId();
 				String cmd = Events.ON_FOCUS;
-				Map<String, Object> data = EventDataManager.build(new Event(cmd, target.getComponent()));
+				Map<String, Object> data = EventDataManager.build(new Event(cmd, (Component)target.getDelegatee()));
 				cctrl.postUpdate(desktopId, target.getUuid(), cmd, data);
 				// changing
 				cmd = Events.ON_CHANGING;
-				data = EventDataManager.build(new InputEvent(cmd, target.getComponent(), value, null));
+				data = EventDataManager.build(new InputEvent(cmd, (Component)target.getDelegatee(), value, null));
 				cctrl.postUpdate(desktopId, target.getUuid(), cmd, data);
 				// change (reuse changing event data collection)
 				cmd = Events.ON_CHANGE;
@@ -67,7 +68,7 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 				cctrl.postUpdate(desktopId, target.getUuid(), cmd, data);
 				// blur
 				cmd = Events.ON_BLUR;
-				data = EventDataManager.build(new Event(cmd, target.getComponent()));
+				data = EventDataManager.build(new Event(cmd, (Component)target.getDelegatee()));
 				cctrl.postUpdate(desktopId, target.getUuid(), cmd, data);
 
 			} catch (Exception e) {
