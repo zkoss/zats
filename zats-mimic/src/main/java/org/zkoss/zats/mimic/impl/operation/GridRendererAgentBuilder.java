@@ -19,7 +19,7 @@ import java.util.Map;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
-import org.zkoss.zats.mimic.operation.RendererAgent;
+import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Grid;
@@ -32,15 +32,15 @@ import org.zkoss.zul.impl.LoadStatus;
  * @author dennis
  *
  */
-public class GridRendererAgentBuilder implements OperationAgentBuilder<RendererAgent> {
-	public RendererAgent getOperation(final ComponentAgent target) {
+public class GridRendererAgentBuilder implements OperationAgentBuilder<RenderAgent> {
+	public RenderAgent getOperation(final ComponentAgent target) {
 		if(!target.is(Grid.class)){
 			throw new RuntimeException("target "+target+" cannot transfer to Grid");
 		}
 		return new RendererAgentImpl(target);
 	}
 	
-	class RendererAgentImpl extends AgentDelegator implements RendererAgent{
+	class RendererAgentImpl extends AgentDelegator implements RenderAgent{
 		public RendererAgentImpl(ComponentAgent target) {
 			super(target);
 		}

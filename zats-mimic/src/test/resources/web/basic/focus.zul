@@ -32,21 +32,41 @@
 					onBlur="lost.value = self.definition.name" />
 				<textbox id="c11" onFocus="current.value = self.definition.name"
 					onBlur="lost.value = self.definition.name" />
-			</vbox>
-			<vbox>
-				<label value="for manual test: " />
-				<button label="clean" />
-				<button label="c1" onClick="win.getFellow(self.getLabel()).focus();" />
-				<button label="c2" onClick="win.getFellow(self.getLabel()).focus();" />
-				<button label="c3" onClick="win.getFellow(self.getLabel()).focus();" />
-				<button label="c4" onClick="win.getFellow(self.getLabel()).focus();" />
-				<button label="c5" onClick="win.getFellow(self.getLabel()).focus();" />
-				<button label="c6" onClick="win.getFellow(self.getLabel()).focus();" />
-				<button label="c7" onClick="win.getFellow(self.getLabel()).focus();" />
-				<button label="c8" onClick="win.getFellow(self.getLabel()).focus();" />
-				<button label="c9" onClick="win.getFellow(self.getLabel()).focus();" />
-				<button label="c10" onClick="win.getFellow(self.getLabel()).focus();" />
-				<button label="c11" onClick="win.getFellow(self.getLabel()).focus();" />
+				<a id="c12" label="a" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name" />
+				<button id="c13" label="button" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name" />
+				<checkbox id="c14" label="checkbox" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name" />
+				<radio id="c15" label="radio" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name" />
+				<listbox id="c16" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name">
+					<listhead>
+						<listheader label="listheader" />
+					</listhead>
+					<listitem label="listitem" />
+				</listbox>
+				<tree id="c17" onFocus="current.value = self.definition.name"
+					onBlur="lost.value = self.definition.name">
+					<treecols>
+						<treecol label="treecol" />
+					</treecols>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="treecell" />
+							</treerow>
+							<treechildren>
+								<treeitem>
+									<treerow>
+										<treecell label="treecell" />
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</treeitem>
+					</treechildren>
+				</tree>
 			</vbox>
 		</hbox>
 	</window>

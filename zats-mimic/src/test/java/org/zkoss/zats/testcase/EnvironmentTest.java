@@ -13,6 +13,9 @@ package org.zkoss.zats.testcase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
+
+import javax.servlet.http.HttpSession;
+
 import junit.framework.Assert;
 
 import org.junit.After;
@@ -20,9 +23,11 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.Client;
+import org.zkoss.zats.mimic.DefaultZatsEnvironment;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zul.Label;
 
 /**
@@ -30,7 +35,7 @@ import org.zkoss.zul.Label;
  * @author dennis
  *
  */
-public class ContextTest {
+public class EnvironmentTest {
 	@BeforeClass
 	public static void init()
 	{
@@ -48,6 +53,50 @@ public class ContextTest {
 	{
 		Zats.cleanup();
 	}
+	
+	@Test
+	public void testNestedZatsEnvironment() {
+		//to test open a local zul
+		DefaultZatsEnvironment ctx = new DefaultZatsEnvironment();
+		try{
+			ctx.init("./src/test/resources/web");
+			Client client = ctx.newClient();
+			DesktopAgent desktop = client.connect("/basic/click.zul");
+			assertEquals("Hello World!", desktop.query("#msg").as(Label.class).getValue());
+			desktop.query("#btn").as(ClickAgent.class).click();
+			assertEquals("Welcome", desktop.query("#msg").as(Label.class).getValue());
+		}finally{
+			ctx.destroy();
+		}
+	}
+	
+	@Test
+	public void testCustomConfigZatsEnvironment2() {
+		//to test open a local zul
+		DefaultZatsEnvironment ctx = new DefaultZatsEnvironment();//test first, the zk-library property is loaded in static
+		try {
+			ctx.init("./src/test/resources/web");
+			Client client = ctx.newClient();
+			DesktopAgent desktop = client.connect("/basic/custom-config.zul");
+			//default config
+			assertEquals("", desktop.query("#msg").as(Label.class).getValue());
+		} finally {
+			ctx.destroy();
+		}
+				
+		//to test open a local zul
+		ctx = new DefaultZatsEnvironment("./src/test/resources/web/WEB-INF");
+		try{
+			ctx.init("./src/test/resources/web");
+			Client client = ctx.newClient();
+			DesktopAgent desktop = client.connect("/basic/custom-config.zul");
+			//custom config
+			assertEquals("hello zats", desktop.query("#msg").as(Label.class).getValue());
+		}finally{
+			ctx.destroy();
+		}
+	}
+
 
 	@Test
 	public void testLoadLocal() {
@@ -64,7 +113,8 @@ public class ContextTest {
 		DesktopAgent desktop1 = Zats.newClient().connect("/basic/click.zul");
 		DesktopAgent desktop2 = Zats.newClient().connect("/basic/click.zul");
 		assertNotSame(desktop1, desktop2);
-		assertNotSame(desktop1.getSession().getId(), desktop2.getSession().getId());
+		assertNotSame(((HttpSession)((Desktop)desktop1.getDelegatee()).getSession().getNativeSession()).getId(),
+				((HttpSession)((Desktop)desktop2.getDelegatee()).getSession().getNativeSession()).getId());
 		
 		assertEquals("Hello World!", desktop1.query("#msg").as(Label.class).getValue());
 		desktop1.query("#btn").as(ClickAgent.class).click();
@@ -79,17 +129,17 @@ public class ContextTest {
 	@Test
 	public void testDestroyDesktop() throws Exception{
 		DesktopAgent desktop = Zats.newClient().connect("/basic/click.zul");
-		desktop.getDesktop().getWebApp().getConfiguration().addListener(org.zkoss.zats.testapp.DesktopCleanListener.class);
+		((Desktop)desktop.getDelegatee()).getWebApp().getConfiguration().addListener(org.zkoss.zats.testapp.DesktopCleanListener.class);
 		Zats.cleanup();
-		Assert.assertFalse(desktop.getDesktop().isAlive());
+		Assert.assertFalse(((Desktop)desktop.getDelegatee()).isAlive());
 		
 		desktop = Zats.newClient().connect("/basic/click.zul");
 		desktop.getClient().destroy();
-		Assert.assertFalse(desktop.getDesktop().isAlive());
+		Assert.assertFalse(((Desktop)desktop.getDelegatee()).isAlive());
 		
 		desktop = Zats.newClient().connect("/basic/click.zul");
 		desktop.destroy();
-		Assert.assertFalse(desktop.getDesktop().isAlive());
+		Assert.assertFalse(((Desktop)desktop.getDelegatee()).isAlive());
 	}
 
 }

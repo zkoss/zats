@@ -14,7 +14,7 @@ package org.zkoss.zats.mimic.operation;
 import org.zkoss.zats.mimic.Agent;
 
 /**
- * operation of client side behavior
+ * The base class of all operation agents that mimic user action
  * 
  * @author pao
  */

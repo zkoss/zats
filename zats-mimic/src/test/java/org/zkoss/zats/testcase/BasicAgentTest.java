@@ -13,10 +13,14 @@ package org.zkoss.zats.testcase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import org.junit.After;
@@ -26,8 +30,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.CloseAgent;
@@ -35,9 +39,12 @@ import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
+import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Tree;
@@ -435,7 +442,7 @@ public class BasicAgentTest {
 		assertTrue(curr.getValue().length() <= 0);
 		assertTrue(curr.getValue().length() <= 0);
 
-		for (int i = 1; i <= 11; ++i) {
+		for (int i = 1; i <= 17; ++i) {
 			ComponentAgent comp = desktopAgent.query("#c" + i);
 			comp.as(FocusAgent.class).focus();
 			String name = comp.as(AbstractComponent.class).getDefinition().getName();
@@ -633,20 +640,20 @@ public class BasicAgentTest {
 		
 		ComponentAgent panel = desktopAgent.query("panel[title='closable']");
 		panel.as(CloseAgent.class).close();
-		Assert.assertNull(panel.getComponent().getPage());
+		Assert.assertNull(((Component)panel.getDelegatee()).getPage());
 		
 		ComponentAgent window = desktopAgent.query("window[title='closable']");
 		window.as(CloseAgent.class).close();
-		Assert.assertNull(window.getComponent().getPage());
+		Assert.assertNull(((Component)window.getDelegatee()).getPage());
 		
 		ComponentAgent tab = desktopAgent.query("tab[label='closable']");
 		tab.as(CloseAgent.class).close();
-		Assert.assertNull(tab.getComponent().getPage());
+		Assert.assertNull(((Component)tab.getDelegatee()).getPage());
 		
-		// issue of checking flag at server-side 
+		// TODO close a closable=false component, it will still be closed. ignore this case for now.
 		//	panel = desktopAgent.query("panel[title='non-close']");
 		//	panel.as(CloseAgent.class).close();
-		//	Assert.assertNotNull(panel.getComponent().getPage());
+		//	Assert.assertNotNull(panel.getDelegatee().getPage());
 	}
 	
 	@Test
@@ -755,5 +762,276 @@ public class BasicAgentTest {
 
 		desktop.query("#ck").as(TypeAgent.class).type("Hello world");
 		assertEquals("Hello world", content.getValue());
+	}
+	
+	@Test
+	public void testClickAll() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/click-all.zul");
+
+		Label target = desktop.query("#target").as(Label.class);
+		Label event = desktop.query("#eventName").as(Label.class);
+		assertEquals("", target.getValue());
+		assertEquals("", event.getValue());
+		
+		ComponentAgent comps = desktop.query("#comps");
+		assertNotNull(comps);
+		
+		String[] names = { "a", "applet", "button", "captcha", "fileupload", "fisheye", "fisheyebar", "html",
+				"include", "image", "imagemap", "label", "menu", "menubar", "menuitem", "menupopup", "menuseparator",
+				"popup", "progressmeter", "separator", "space", "toolbar", "toolbarbutton", "bandbox", "colorbox",
+				"combobox", "comboitem", "datebox", "decimalbox", "doublebox", "doublespinner", "intbox", "longbox",
+				"spinner", "textbox", "timebox", "checkbox", "radio", "radiogroup", "slider", "caption", "div",
+				"groupbox", "panel", "span", "tabbox", "tab", "window", "grid", "detail", "group", "listbox",
+				"listitem", "listgroup", "tree", "treeitem" };
+		for (String name : names) {
+			ClickAgent agent = comps.query(name).as(ClickAgent.class);
+			agent.click();
+			assertEquals(name, target.getValue());
+			assertEquals(Events.ON_CLICK, event.getValue());
+			agent.doubleClick();
+			assertEquals(name, target.getValue());
+			assertEquals(Events.ON_DOUBLE_CLICK, event.getValue());
+			agent.rightClick();
+			assertEquals(name, target.getValue());
+			assertEquals(Events.ON_RIGHT_CLICK, event.getValue());
+		}
+	}
+	
+	@Test
+	public void testRendererAgent() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/render.zul");
+
+		List<ComponentAgent> indexes = desktop.query("#index").queryAll("comboitem");
+		assertEquals(1000, indexes.size());
+		Label ic = desktop.query("#listitemContent").as(Label.class);
+		Label rc = desktop.query("#rowContent").as(Label.class);
+		assertEquals("", ic.getValue());
+		assertEquals("", rc.getValue());
+
+		int index = 0;
+		indexes.get(index).as(SelectAgent.class).select();
+		assertEquals("item" + index, ic.getValue());
+		assertEquals("item" + index, rc.getValue());
+
+		for (int i = 900; i <= 999; ++i) {
+			indexes.get(i).as(SelectAgent.class).select();
+			assertEquals(i + " doesn't render", ic.getValue());
+			assertEquals(i + " doesn't render", rc.getValue());
+		}
+
+		desktop.query("#listbox").as(RenderAgent.class).render(900, 949);
+		desktop.query("#grid").as(RenderAgent.class).render(900, 949);
+		for (int i = 900; i <= 949; ++i) {
+			indexes.get(i).as(SelectAgent.class).select();
+			assertEquals("item" + i, ic.getValue());
+			assertEquals("item" + i, rc.getValue());
+		}
+		for (int i = 950; i <= 999; ++i) {
+			indexes.get(i).as(SelectAgent.class).select();
+			assertEquals(i + " doesn't render", ic.getValue());
+			assertEquals(i + " doesn't render", rc.getValue());
+		}
+
+		desktop.query("#listbox").as(RenderAgent.class).render(0, 999);
+		desktop.query("#grid").as(RenderAgent.class).render(0, 999);
+		for (int i = 0; i <= 999; ++i) {
+			indexes.get(i).as(SelectAgent.class).select();
+			assertEquals("item" + i, ic.getValue());
+			assertEquals("item" + i, rc.getValue());
+		}
+	}
+	
+	@Test
+	public void testKeyStrokeAgentOnInputElements() {
+		// prepare all CtrlKey strings
+		char[] words = new char[26];
+		for (char c = 'a'; c <= 'z'; ++c)
+			words[(int) (c - 'a')] = c;
+
+		char[] numbers = new char[10];
+		for (char c = '0'; c <= '9'; ++c)
+			numbers[(int) (c - '0')] = c;
+
+		String[] ns = { "#home", "#end", "#ins", "#del", "#bak", "#left", "#right", "#up", "#down", "#pgup", "#pgdn",
+				"#f1", "#f2", "#f3", "#f4", "#f5", "#f6", "#f7", "#f8", "#f9", "#f10", "#f11", "#f12" };
+		int[] nsc = { 36, 35, 45, 46, 8, 37, 39, 38, 40, 33, 34, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122,
+				123 };
+
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(ns[0], "" + nsc[0]);
+		map.put(ns[1], "" + nsc[1]);
+
+		List<String> ctrls = new ArrayList<String>();
+		List<String> alts = new ArrayList<String>();
+		List<String> shifts = new ArrayList<String>();
+		int c = 65;
+		for (char w : words) {
+			ctrls.add("^" + w);
+			alts.add("@" + w);
+			map.put("^" + w, "" + c);
+			map.put("@" + w, "" + c);
+			c++;
+		}
+		c = 48;
+		for (char n : numbers) {
+			ctrls.add("^" + n);
+			alts.add("@" + n);
+			map.put("^" + n, "" + c);
+			map.put("@" + n, "" + c);
+			c++;
+		}
+		for (int i = 0; i < ns.length; ++i) {
+			String n = ns[i];
+			ctrls.add("^" + n);
+			alts.add("@" + n);
+			shifts.add("$" + n);
+			map.put("^" + n, "" + nsc[i]);
+			map.put("@" + n, "" + nsc[i]);
+			map.put("$" + n, "" + nsc[i]);
+		}
+
+		//		generate a string contained all ctrl key 
+		//		for(String s : ctrls)
+		//			System.out.print(s);
+		//		for(String s : alts)
+		//			System.out.print(s);
+		//		for(String s : shifts)
+		//			System.out.print(s);
+		//		System.out.println("");
+
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/keystroke-input.zul");
+
+		Label target = desktop.query("#target").as(Label.class);
+		Label ref = desktop.query("#ref").as(Label.class);
+		Label event = desktop.query("#eventName").as(Label.class);
+		Label code = desktop.query("#code").as(Label.class);
+		Label ctrl = desktop.query("#ctrl").as(Label.class);
+		assertEquals("", target.getValue());
+		assertEquals("", ref.getValue());
+		assertEquals("", event.getValue());
+		assertEquals("", code.getValue());
+		assertEquals("", ctrl.getValue());
+
+		// components handle event
+		List<ComponentAgent> comps = desktop.query("#bySelf").getChildren();
+		assertEquals(17, comps.size());
+
+		// onOk
+		for (ComponentAgent comp : comps) {
+			comp.stroke("#enter");
+			assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), target.getValue());
+			assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
+			assertEquals(Events.ON_OK, event.getValue());
+			assertEquals("13", code.getValue());
+			assertEquals("none", ctrl.getValue());
+		}
+
+		// onCancel
+		for (ComponentAgent comp : comps) {
+			comp.stroke("#esc");
+			assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), target.getValue());
+			assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
+			assertEquals(Events.ON_CANCEL, event.getValue());
+			assertEquals("27", code.getValue());
+			assertEquals("none", ctrl.getValue());
+		}
+
+		// onCtrlKey - ctrl
+		for (String k : ctrls) {
+			for (ComponentAgent comp : comps) {
+				comp.stroke(k);
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), target.getValue());
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
+				assertEquals(Events.ON_CTRL_KEY, event.getValue());
+				assertEquals(map.get(k), code.getValue());
+				assertEquals("ctrl", ctrl.getValue());
+			}
+		}
+
+		// onCtrlKey - alt
+		for (String k : alts) {
+			for (ComponentAgent comp : comps) {
+				comp.stroke(k);
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), target.getValue());
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
+				assertEquals(Events.ON_CTRL_KEY, event.getValue());
+				assertEquals(map.get(k), code.getValue());
+				assertEquals("alt", ctrl.getValue());
+			}
+		}
+
+		// onCtrlKey - shift
+		for (String k : shifts) {
+			for (ComponentAgent comp : comps) {
+				comp.stroke(k);
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), target.getValue());
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
+				assertEquals(Events.ON_CTRL_KEY, event.getValue());
+				assertEquals(map.get(k), code.getValue());
+				assertEquals("shift", ctrl.getValue());
+			}
+		}
+
+		// parent component handle event
+		ComponentAgent parent = desktop.query("#byParent");
+		String targetName = ((Component)parent.getDelegatee()).getDefinition().getName();
+		comps = parent.getChildren();
+		assertEquals(17, comps.size());
+
+		// onOk
+		for (ComponentAgent comp : comps) {
+			comp.stroke("#enter");
+			assertEquals(targetName, target.getValue());
+			assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
+			assertEquals(Events.ON_OK, event.getValue());
+			assertEquals("13", code.getValue());
+			assertEquals("none", ctrl.getValue());
+		}
+
+		// onCancel
+		for (ComponentAgent comp : comps) {
+			comp.stroke("#esc");
+			assertEquals(targetName, target.getValue());
+			assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
+			assertEquals(Events.ON_CANCEL, event.getValue());
+			assertEquals("27", code.getValue());
+			assertEquals("none", ctrl.getValue());
+		}
+
+		// onCtrlKey - ctrl
+		for (String k : ctrls) {
+			for (ComponentAgent comp : comps) {
+				comp.stroke(k);
+				assertEquals(targetName, target.getValue());
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
+				assertEquals(Events.ON_CTRL_KEY, event.getValue());
+				assertEquals(map.get(k), code.getValue());
+				assertEquals("ctrl", ctrl.getValue());
+			}
+		}
+
+		// onCtrlKey - alt
+		for (String k : alts) {
+			for (ComponentAgent comp : comps) {
+				comp.stroke(k);
+				assertEquals(targetName, target.getValue());
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
+				assertEquals(Events.ON_CTRL_KEY, event.getValue());
+				assertEquals(map.get(k), code.getValue());
+				assertEquals("alt", ctrl.getValue());
+			}
+		}
+
+		// onCtrlKey - shift
+		for (String k : shifts) {
+			for (ComponentAgent comp : comps) {
+				comp.stroke(k);
+				assertEquals(targetName, target.getValue());
+				assertEquals(((Component)comp.getDelegatee()).getDefinition().getName(), ref.getValue());
+				assertEquals(Events.ON_CTRL_KEY, event.getValue());
+				assertEquals(map.get(k), code.getValue());
+				assertEquals("shift", ctrl.getValue());
+			}
+		}
 	}
 }

@@ -36,9 +36,14 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.util.component.LifeCycle.Listener;
+import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.resource.ResourceCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+/**
+ * The emulator implementation in Jetty Server.
+ * @author pao
+ */
 public class JettyEmulator implements Emulator {
 	private ReentrantLock lock;
 
@@ -52,15 +57,19 @@ public class JettyEmulator implements Emulator {
 	private Map<String, Object> requestAttributes;
 	private Map<String, String[]> requestParameters;
 
-	public JettyEmulator(String contentRoot, String descriptor) {
-		this(new String[] { contentRoot }, descriptor);
+	public JettyEmulator(Resource contentRoot, String descriptor, String contextPath) {
+		this(new Resource[] { contentRoot }, descriptor, contextPath);
 	}
 
-	public JettyEmulator(String[] resources, String descriptor) {
-		if (resources == null || resources.length <= 0)
-			throw new IllegalArgumentException("contentPath can't be null.");
-		if (descriptor == null)
-			throw new IllegalArgumentException("descriptor can't be null.");
+	/**
+	 * new a jetty emulator
+	 * @param contentRoots the content roots.
+	 * @param descriptor specify the web.xml, if null then use /WEB-INF/web.xml that in contentRoots
+	 * @param contextPath specify the context, if null then use "/"
+	 */
+	public JettyEmulator(Resource[] contentRoots, String descriptor, String contextPath) {
+		if (contentRoots == null || contentRoots.length <= 0)
+			throw new IllegalArgumentException("contentRoots can't be null.");
 
 		lock = new ReentrantLock(true);
 		requestAttributes = new HashMap<String, Object>();
@@ -70,9 +79,14 @@ public class JettyEmulator implements Emulator {
 			// create server
 			server = new Server(new InetSocketAddress(getHost(), 0));
 			final WebAppContext contextHandler = new WebAppContext();
-			contextHandler.setBaseResource(new ResourceCollection(resources));
-			contextHandler.setDescriptor(descriptor);
-			contextHandler.setContextPath("/");
+			ResourceCollection resourceCollection = new ResourceCollection(contentRoots);
+
+			contextHandler.setBaseResource(resourceCollection);
+			if (descriptor != null) {
+				contextHandler.setDescriptor(descriptor);
+			}
+			contextHandler.setContextPath(contextPath == null ? "/" : contextPath);
+
 			contextHandler.setParentLoaderPriority(true);
 			// observe request and get related ref.
 			HandlerCollection handlers = new HandlerCollection();
@@ -82,22 +96,15 @@ public class JettyEmulator implements Emulator {
 			server.setHandler(handlers);
 
 			// synchronize initial step
-			final BlockingQueue<Object> queue = new ArrayBlockingQueue<Object>(
-					1, true);
-			contextHandler.addLifeCycleListener((Listener) Proxy
-					.newProxyInstance(Thread.currentThread()
-							.getContextClassLoader(),
-							new Class<?>[] { Listener.class },
-							new InvocationHandler() {
-								public Object invoke(Object proxy,
-										Method method, Object[] args)
-										throws Throwable {
-									if ("lifeCycleStarted".equals(method
-											.getName()))
-										queue.add(method.getName());
-									return null;
-								}
-							}));
+			final BlockingQueue<Object> queue = new ArrayBlockingQueue<Object>(1, true);
+			contextHandler.addLifeCycleListener((Listener) Proxy.newProxyInstance(Thread.currentThread()
+					.getContextClassLoader(), new Class<?>[] { Listener.class }, new InvocationHandler() {
+				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+					if ("lifeCycleStarted".equals(method.getName()))
+						queue.add(method.getName());
+					return null;
+				}
+			}));
 			// start server and wait for started
 			server.start();
 			queue.take();
@@ -110,8 +117,7 @@ public class JettyEmulator implements Emulator {
 				}
 			}
 			// get servlet context and synchronize access
-			context = getWrappedContext(contextHandler.getServletHandler()
-					.getServletContext());
+			context = getWrappedContext(contextHandler.getServletHandler().getServletContext());
 		} catch (Exception e) {
 			throw new EmulatorException("", e);
 		}
@@ -139,8 +145,7 @@ public class JettyEmulator implements Emulator {
 
 	public String getAddress() {
 		if (address == null)
-			address = MessageFormat.format("http://{0}:{1,number,#}",
-					getHost(), getPort());
+			address = MessageFormat.format("http://{0}:{1,number,#}", getHost(), getPort());
 		return address;
 	}
 
@@ -185,12 +190,9 @@ public class JettyEmulator implements Emulator {
 	}
 
 	private ServletContext getWrappedContext(final ServletContext delegate) {
-		return (ServletContext) Proxy.newProxyInstance(Thread.currentThread()
-				.getContextClassLoader(),
-				new Class<?>[] { ServletContext.class },
-				new InvocationHandler() {
-					public Object invoke(Object proxy, Method method,
-							Object[] args) throws Throwable {
+		return (ServletContext) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+				new Class<?>[] { ServletContext.class }, new InvocationHandler() {
+					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 						if (!method.getName().startsWith("getAttribute"))
 							return method.invoke(delegate, args);
 						lock.lock();
@@ -209,8 +211,7 @@ public class JettyEmulator implements Emulator {
 	 * @author pao
 	 */
 	private class BeforeHandler extends AbstractHandler {
-		public void handle(String target, Request baseRequest,
-				HttpServletRequest request, HttpServletResponse response)
+		public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 				throws IOException, ServletException {
 			// lock access of all attributes
 			lock.lock();
@@ -225,13 +226,11 @@ public class JettyEmulator implements Emulator {
 	 */
 	private class AfterHandler extends AbstractHandler {
 		@SuppressWarnings("unchecked")
-		public void handle(String target, Request baseRequest,
-				HttpServletRequest request, HttpServletResponse response)
+		public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 				throws IOException, ServletException {
 			try {
 				// copy attributes for test case
-				requestParameters = new HashMap<String, String[]>(
-						request.getParameterMap());
+				requestParameters = new HashMap<String, String[]>(request.getParameterMap());
 				HttpSession session = request.getSession(false);
 				sessionId = session != null ? session.getId() : null;
 				sessionAttributes = new HashMap<String, Object>();

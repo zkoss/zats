@@ -12,9 +12,19 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.impl.emulator;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
+import org.eclipse.jetty.util.URIUtil;
+import org.eclipse.jetty.util.resource.FileResource;
+import org.eclipse.jetty.util.resource.Resource;
+import org.zkoss.zats.ZatsException;
 
 /**
  * The builder for creating new emulator.
@@ -22,57 +32,68 @@ import java.util.List;
  * @author pao
  */
 public class EmulatorBuilder {
-	private String contentRoot;
-	private String descriptor;
-	private List<String> resources;
+	private static Logger logger = Logger.getLogger(EmulatorBuilder.class.getName());
+	private String descriptor;//the path of web.xml
+	private String contextPath = "/";
+	
+	private Resource webWebInf;//the first resource that contains WEB-INF
+	private List<Resource> contentRoots;//the paths of content root
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param contentRoot
+	 * @param contentFolder
 	 *            the web application root path.
 	 */
-	public EmulatorBuilder(String contentRoot) {
-		if (contentRoot == null)
-			throw new NullPointerException();
-		this.contentRoot = contentRoot;
-		this.descriptor = (contentRoot + "/WEB-INF/web.xml").replaceAll("//+",
-				"/");
-		this.resources = new ArrayList<String>();
-		this.resources.add(contentRoot);
+	public EmulatorBuilder() {
+		this.contentRoots = new ArrayList<Resource>();
 	}
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param contentPath
-	 *            the web application root path.
-	 */
-	public EmulatorBuilder(File contentPath) {
-		this(contentPath.getAbsolutePath());
+	public EmulatorBuilder setWebInf(String webInfPathOrUrl) {
+		webWebInf = new WebWebInfResource(toRecource(webInfPathOrUrl));
+		return this;
 	}
-
-	/**
-	 * add additional resource directory.
-	 * 
-	 * @param resourceRoot
-	 *            directory path.
-	 * @return self reference.
-	 */
-	public EmulatorBuilder addResource(String resourceRoot) {
-		resources.add(resourceRoot);
+	
+	public EmulatorBuilder setWebInf(URL webInf) {
+		webWebInf = new WebWebInfResource(toRecource(webInf));
 		return this;
 	}
 
 	/**
-	 * add additional resource directory.
+	 * add additional resource root directory.
 	 * 
-	 * @param resourceRoot
-	 *            directory path.
+	 * @param contentRootPathOrUrl directory path.
 	 * @return self reference.
 	 */
-	public EmulatorBuilder addResource(File resourceRoot) {
-		return addResource(resourceRoot.getAbsolutePath());
+	public EmulatorBuilder addContentRoot(String contentRootPathOrUrl) {
+		contentRoots.add(toRecource(contentRootPathOrUrl));
+		return this;
+	}
+	/**
+	 * add additional resource root directory.
+	 * 
+	 * @param contentRoot directory url.
+	 * @return self reference.
+	 */
+	public EmulatorBuilder addContentRoot(URL contentRoot) {
+		contentRoots.add(toRecource(contentRoot));
+		return this;
+	}
+	
+	private Resource toRecource(String pathOrUrl){
+		try {
+			return Resource.newResource(pathOrUrl);
+		} catch (Exception x) {
+			throw new RuntimeException(x.getMessage(),x);
+		}
+	}
+	
+	private Resource toRecource(URL url){
+		try {
+			return Resource.newResource(url);
+		} catch (Exception x) {
+			throw new RuntimeException(x.getMessage(),x);
+		}
 	}
 
 	/**
@@ -82,22 +103,18 @@ public class EmulatorBuilder {
 	 *            specify path.
 	 * @return self reference.
 	 */
-	public EmulatorBuilder descriptor(String path) {
-		if (path == null)
-			throw new NullPointerException();
-		this.descriptor = path;
+	public EmulatorBuilder setDescriptor(String descriptor) {
+		//if a descriptor is null, it use the file in content root
+		this.descriptor = descriptor;
 		return this;
 	}
-
-	/**
-	 * specify the path of web.xml. default value is "./WEB-INF/web.xml".
-	 * 
-	 * @param path
-	 *            URL of specify path.
-	 * @return self reference.
-	 */
-	public EmulatorBuilder descriptor(URL path) {
-		return descriptor(path.toString());
+	
+	
+	public EmulatorBuilder setContextPath(String contextPath) {
+		if(contextPath==null)
+			throw new ZatsException("unll context path");
+		this.contextPath = contextPath;
+		return this;
 	}
 
 	/**
@@ -106,10 +123,155 @@ public class EmulatorBuilder {
 	 * @return a new emulator
 	 */
 	public Emulator create() {
-		if (resources.size() <= 1)
-			return new JettyEmulator(contentRoot, descriptor);
-		else
-			return new JettyEmulator(resources.toArray(new String[0]),
-					descriptor);
+		if(webWebInf==null && contentRoots.size()==0)
+			throw new ZatsException("no content root found");
+		List<Resource> lr;
+		
+		if(webWebInf!=null){//insert the webWebInfo
+			lr = new ArrayList<Resource>(contentRoots);
+			lr.add(0, webWebInf);
+		}else{
+			lr = contentRoots;
+		}
+		
+		return new JettyEmulator(lr.toArray(new Resource[lr.size()]),
+					descriptor,contextPath);
 	}
+	
+	static class WebWebInfResource extends Resource{
+
+		Resource webInf;
+		
+		public WebWebInfResource(Resource webInf){
+			this.webInf = webInf;
+		}
+		
+		@Override
+		public boolean isContainedIn(Resource r) throws MalformedURLException {
+			URL wurl = webInf.getURL();
+			URL rurl = r.getURL();
+			if(wurl==null||rurl==null) return false;
+			String wp = wurl.toExternalForm();
+			String rp = rurl.toExternalForm();
+			return rp.startsWith(wp);
+		}
+
+		@Override
+		public void release() {
+		}
+		@Override
+		public boolean exists() {
+			return true;
+		}
+
+		@Override
+		public boolean isDirectory() {
+			return true;
+		}
+
+		@Override
+		public long lastModified() {
+			return -1;
+		}
+
+		@Override
+		public long length() {
+			return -1;
+		}
+
+		@Override
+		public URL getURL() {
+			URL wurl = webInf.getURL();
+			if(wurl==null) return null;
+			String wp = wurl.toExternalForm();
+			//the parent url
+			if(wp.endsWith("/")){
+				wp = wp.substring(0,wp.length()-1);
+			}
+			wp = wp.substring(0,wp.lastIndexOf('/')+1);
+			try {
+				return new URL(wp);
+			} catch (MalformedURLException e) {
+				logger.warning(e.getMessage());
+			}
+			return null;
+		}
+
+		@Override
+		public File getFile() throws IOException {
+			URL url = getURL();
+			File f = url==null?null:new File(url.getFile());
+			return f;
+		}
+
+		@Override
+		public String getName() {
+			try {
+				File f = getFile();
+				if(f!=null) return f.getName();
+			} catch (IOException e) {
+				logger.warning(e.getMessage());
+			}
+			return "Unknow";
+		}
+
+		@Override
+		public InputStream getInputStream() throws IOException {
+			throw new IOException("cannot open input stream in virtual folder");
+		}
+
+		@Override
+		public OutputStream getOutputStream() throws IOException, SecurityException {
+			throw new IOException("cannot open output stream in virtual folder");
+		}
+
+		@Override
+		public boolean delete() throws SecurityException {
+			return false;
+		}
+
+		@Override
+		public boolean renameTo(Resource dest) throws SecurityException {
+			return false;
+		}
+
+		@Override
+		public String[] list() {
+			return new String[]{"WEB-INF"};
+		}
+
+		@Override
+		public Resource addPath(String path) throws IOException, MalformedURLException {
+			if (path==null)
+	            return null;
+	        String p = URIUtil.canonicalPath(path);
+	        p = p.startsWith("/")?p.substring(1):p;
+			
+			if(p.startsWith("WEB-INF/")){
+				p = p.substring("WEB-INF".length());
+				return webInf.addPath(p);
+			}
+			
+			return toNonExist(path);//the bad resource
+		}
+		
+		
+		
+		Resource toNonExist(String path){
+			String tmpDir = System.getProperty("java.io.tmpdir", ".");
+			try {
+				return new FileResource(new File(tmpDir,"zats/non_exist/"+path).toURL());
+			} catch (Exception x) {
+				logger.warning(x.getMessage());
+				throw new RuntimeException(x.getMessage(),x);
+			}
+		}
+		
+		public String toString(){
+			URL url = getURL();
+			return url==null?super.toString():url.toExternalForm();
+		}
+		
+	}
+	
 }

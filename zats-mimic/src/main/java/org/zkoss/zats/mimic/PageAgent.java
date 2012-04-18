@@ -12,10 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic;
 
 import java.util.List;
-
-import org.zkoss.zk.ui.Page;
 /**
- * The page agent, represents a server zk page
+ * The page agent, represents a server-side zk page
  * 
  * @author pao
  * @author Dennis
@@ -54,13 +52,6 @@ public interface PageAgent extends Agent {
 	 * get desktop of this page
 	 */
 	DesktopAgent getDesktop();
-
-	/**
-	 * get the native Page.
-	 * 
-	 * @return page
-	 */
-	Page getPage();
 	
 	/**
 	 * to find the first component agent with the selector in this page

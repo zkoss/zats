@@ -18,13 +18,13 @@ package org.zkoss.zats.mimic.operation;
 public interface MultipleSelectAgent extends OperationAgent {
 
 	/**
-	 * to select a item.
+	 * to select an item.
 	 * If the parent component isn't at multiple selection mode, it will throw exception. 
 	 */
 	public void select();
 
 	/**
-	 * to deselect a item.
+	 * to de-select an item.
 	 * If the parent component isn't at multiple selection mode, it will throw exception. 
 	 */
 	public void deselect();

@@ -10,42 +10,47 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
+import org.zkoss.zats.mimic.DefaultZatsEnvironment;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zats.mimic.ZatsEnvironment;
 import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 
-public class ConversationsTest
+public class EnvironmentTest2
 {
+	static ZatsEnvironment env;
 	@BeforeClass
 	public static void init()
 	{
-//		Conversations.start("."); //from project folder
-		Zats.init("./src/main/webapp"); // user can load by configuration file
+		env = new DefaultZatsEnvironment("./src/main/webapp/WEB-INF");
+		env.init("./src/main/webapp"); // user can load by configuration file
 	}
 
 	@AfterClass
 	public static void end()
 	{
-		Zats.end();//
+		env.destroy();
 	}
 
 	@After
 	public void after()
 	{
-		Zats.cleanup();
+		env.cleanup();
 	}
 
 	@Test
 	public void test()
 	{
-		DesktopAgent desktop = Zats.newClient().connect("/session.zul");
-
-		assertNotNull(desktop.getSession());
+		DesktopAgent desktop = env.newClient().connect("/session.zul");
+		
 		assertNotNull(desktop);
+		assertNotNull(((Desktop)desktop.getDelegatee()).getSession());
+		
 
-		HttpSession session = desktop.getSession();
+		HttpSession session = (HttpSession)((Desktop)desktop.getDelegatee()).getSession().getNativeSession();
 		assertEquals("session", session.getAttribute("msg"));
 		assertEquals("desktop", desktop.getAttribute("msg"));
 		

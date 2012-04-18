@@ -17,6 +17,7 @@ import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.MouseEvent;
 
@@ -33,21 +34,21 @@ public class GenericClickAgentBuilder implements OperationAgentBuilder<ClickAgen
 		public void click() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_CLICK;
-			Map<String, Object> data = EventDataManager.build(new MouseEvent(cmd, target.getComponent()));
+			Map<String, Object> data = EventDataManager.build(new MouseEvent(cmd, (Component)target.getDelegatee()));
 			((ClientCtrl)target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
 		}
 
 		public void doubleClick() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_DOUBLE_CLICK;
-			Map<String, Object> data = EventDataManager.build(new MouseEvent(cmd, target.getComponent()));
+			Map<String, Object> data = EventDataManager.build(new MouseEvent(cmd, (Component)target.getDelegatee()));
 			((ClientCtrl)target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
 		}
 
 		public void rightClick() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_RIGHT_CLICK;
-			Map<String, Object> data = EventDataManager.build(new MouseEvent(cmd, target.getComponent()));
+			Map<String, Object> data = EventDataManager.build(new MouseEvent(cmd, (Component)target.getDelegatee()));
 			((ClientCtrl)target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
 		}
 	}

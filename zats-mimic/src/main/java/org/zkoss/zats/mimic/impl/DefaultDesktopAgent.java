@@ -96,10 +96,5 @@ public class DefaultDesktopAgent implements DesktopAgent {
 	public void destroy(){
 		((ClientCtrl)getClient()).destroy(this);
 	}
-
-	public HttpSession getSession() {
-		return ((ClientCtrl)getClient()).getSession();
-	}
-	
 	
 }

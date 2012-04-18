@@ -1,4 +1,4 @@
-/* ZatsContext.java
+/* ZatsEnvironment.java
 
 	Purpose:
 		
@@ -13,21 +13,21 @@ package org.zkoss.zats.mimic;
 
 
 /**
- * the zats context object, to init/destroy a zats runtime for the testing
+ * the zats environment, to init/destroy a zats runtime for the testing
  *   
  * @author Hawk
  * @author Dennis
  */
-public interface ZatsContext {
+public interface ZatsEnvironment {
 	
 	/**
-	 * initial this context
+	 * initial this environment
 	 * @param resourceRoot the resource root folder of the zul, it is usually the web content folder.
 	 */
 	public void init(String resourceRoot);
 
 	/**
-	 * destroy this context to release the resource.
+	 * destroy this environment to release the resource.
 	 */
 	public void destroy();
 

@@ -18,6 +18,7 @@ import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
 
@@ -43,7 +44,7 @@ public class CKEditorTypeAgentBuilder implements OperationAgentBuilder<TypeAgent
 				ClientCtrl ctrl = (ClientCtrl) target.getClient();
 				// changing
 				String cmd = Events.ON_CHANGING;
-				InputEvent event = new InputEvent(cmd, target.getComponent(), value, null);
+				InputEvent event = new InputEvent(cmd, (Component)target.getDelegatee(), value, null);
 				Map<String, Object> data = EventDataManager.build(event);
 				ctrl.postUpdate(desktopId, target.getUuid(), cmd, data);
 				// change (reuse changing event data collection)

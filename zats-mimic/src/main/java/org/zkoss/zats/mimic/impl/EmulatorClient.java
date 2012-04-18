@@ -5,12 +5,13 @@
 	Description:
 		
 	History:
-		Mar 20, 2012 Created by Pao Wang
+		Mar 20, 2012 Created by pao
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.InputStream;
@@ -26,8 +27,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.servlet.http.HttpSession;
-
 import org.eclipse.jetty.util.UrlEncoded;
 import org.zkoss.json.JSONValue;
 import org.zkoss.zats.ZatsException;
@@ -38,20 +37,18 @@ import org.zkoss.zk.ui.Desktop;
 
 /**
  * The server emulator client implement
- * 
  * @author pao
  */
-public class EmulatorClient implements Client , ClientCtrl{
+public class EmulatorClient implements Client, ClientCtrl {
 	private static Logger logger = Logger.getLogger(EmulatorClient.class.getName());
 	private Emulator emulator;
 	private List<DesktopAgent> desktopAgentList = new LinkedList<DesktopAgent>();
 	private List<String> cookies;
 	private DestroyListener destroyListener;
 
-	public EmulatorClient(Emulator emulator){
+	public EmulatorClient(Emulator emulator) {
 		this.emulator = emulator;
 	}
-
 
 	public DesktopAgent connect(String zulPath) {
 		InputStream is = null;
@@ -63,51 +60,51 @@ public class EmulatorClient implements Client , ClientCtrl{
 
 			cookies = huc.getHeaderFields().get("Set-Cookie");
 			is = huc.getInputStream();
-			if (logger.isLoggable(Level.FINEST))
+			if (logger.isLoggable(Level.FINEST)) {
 				logger.finest(getReplyString(is, huc.getContentEncoding()));
+			} else {
+				consumeReply(is);
+			}
+
 			// get specified objects such as Desktop
-			Desktop desktop = (Desktop) emulator.getRequestAttributes().get(
-					"javax.zkoss.zk.ui.desktop");
+			Desktop desktop = (Desktop) emulator.getRequestAttributes().get("javax.zkoss.zk.ui.desktop");
 			// TODO, what if a non-zk(zul) page, throw exception?
 			DesktopAgent desktopAgent = new DefaultDesktopAgent(this, desktop);
 			desktopAgentList.add(desktopAgent);
 			return desktopAgent;
 		} catch (Exception e) {
-			throw new ZatsException("", e);
+			throw new ZatsException(e.getMessage(), e);
 		} finally {
 			close(is);
 		}
 	}
-	
 
 	public void destroy() {
-		if(destroyListener!=null){
+		if (destroyListener != null) {
 			destroyListener.willDestroy(this);
 		}
-		
-		for (DesktopAgent d : desktopAgentList){
+
+		for (DesktopAgent d : desktopAgentList) {
 			destroy(d);
 		}
 		desktopAgentList.clear();
 	}
-	
-	public void destroy(DesktopAgent desktopAgent){
+
+	public void destroy(DesktopAgent desktopAgent) {
 		InputStream is = null;
 		try {
 			if (desktopAgent != null) {
 				// use au to remove a desktop
-				logger.config("destory desktop:"+desktopAgent.getId());
-				String url = MessageFormat.format(
-						"/zkau?dtid={0}&cmd_0=rmDesktop&opt_0=i",
-						desktopAgent.getId());
+				logger.config("destory desktop:" + desktopAgent.getId());
+				String url = MessageFormat.format("/zkau?dtid={0}&cmd_0=rmDesktop&opt_0=i", desktopAgent.getId());
 				HttpURLConnection connection = getConnection(url, "GET");
-				for (String cookie : cookies){
+				for (String cookie : cookies) {
 					connection.addRequestProperty("Cookie", cookie.split(";", 2)[0]);
 				}
 				connection.connect();
 				is = connection.getInputStream();
 				logger.config(getReplyString(is, "utf-8"));
-				
+
 			}
 		} catch (Exception e) {
 			logger.log(Level.WARNING, "", e);
@@ -117,39 +114,24 @@ public class EmulatorClient implements Client , ClientCtrl{
 			cookies = new LinkedList<String>();
 		}
 	}
-	                      
 
-	public HttpSession getSession() {
-		if (desktopAgentList.isEmpty()){
-			return null;
-		}else{
-			return (HttpSession)desktopAgentList.get(0).getDesktop().getSession().getNativeSession();
-		}
-		
-	}
+	public void postUpdate(String desktopId, String targetUUID, String cmd, Map<String, Object> data) {
 
-	public void postUpdate(String desktopId, String targetUUID,
-			String cmd, Map<String, Object> data) {
-		
 		// prepare au data
 		String dtid = UrlEncoded.encodeString(desktopId);
 		cmd = UrlEncoded.encodeString(cmd);
 		String uuid = UrlEncoded.encodeString(targetUUID);
 		String param;
 		if (data != null && data.size() > 0) {
-			String jsonData = UrlEncoded.encodeString(JSONValue
-					.toJSONString(data));
-			param = MessageFormat.format(
-					"dtid={0}&cmd_0={1}&uuid_0={2}&data_0={3}", dtid, cmd,
-					uuid, jsonData);
+			String jsonData = UrlEncoded.encodeString(JSONValue.toJSONString(data));
+			param = MessageFormat.format("dtid={0}&cmd_0={1}&uuid_0={2}&data_0={3}", dtid, cmd, uuid, jsonData);
 		} else
-			param = MessageFormat.format("dtid={0}&cmd_0={1}&uuid_0={2}", dtid,
-					cmd, uuid);
+			param = MessageFormat.format("dtid={0}&cmd_0={1}&uuid_0={2}", dtid, cmd, uuid);
 
 		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest(targetUUID + " perform AU: " + UrlEncoded.decodeString(param, 0, param.length(), "utf-8"));
 		}
-		
+
 		OutputStream os = null;
 		InputStream is = null;
 		try {
@@ -157,12 +139,11 @@ public class EmulatorClient implements Client , ClientCtrl{
 			HttpURLConnection c = getConnection("/zkau", "POST");
 			c.setDoOutput(true);
 			c.setDoInput(true);
-			for (String cookie : cookies){
+			for (String cookie : cookies) {
 				// handle cookie for session
 				c.addRequestProperty("Cookie", cookie.split(";", 2)[0]);
 			}
-			c.setRequestProperty("Content-Type",
-					"application/x-www-form-urlencoded;charset=UTF-8");
+			c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 			c.connect();
 			os = c.getOutputStream();
 			os.write(param.getBytes("utf-8"));
@@ -170,8 +151,11 @@ public class EmulatorClient implements Client , ClientCtrl{
 			// TODO, read response, handle redirect.
 			// read response
 			is = c.getInputStream();
-			if (logger.isLoggable(Level.FINEST))
+			if (logger.isLoggable(Level.FINEST)) {
 				logger.finest(getReplyString(is, c.getContentEncoding()));
+			} else {
+				consumeReply(is);
+			}
 		} catch (Exception e) {
 			throw new ZatsException("", e);
 		} finally {
@@ -186,14 +170,10 @@ public class EmulatorClient implements Client , ClientCtrl{
 			HttpURLConnection huc = (HttpURLConnection) url.openConnection();
 			huc.setRequestMethod(method);
 			huc.setUseCaches(false);
-			huc.addRequestProperty("Host",
-					emulator.getHost() + ":" + emulator.getPort());
-			huc.addRequestProperty("User-Agent",
-					"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)");
-			huc.addRequestProperty("Accept",
-					"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-			huc.addRequestProperty("Accept-Language",
-					"zh-tw,en-us;q=0.7,en;q=0.3");
+			huc.addRequestProperty("Host", emulator.getHost() + ":" + emulator.getPort());
+			huc.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)");
+			huc.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+			huc.addRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
 			return huc;
 		} catch (Exception e) {
 			throw new ZatsException("", e);
@@ -207,13 +187,24 @@ public class EmulatorClient implements Client , ClientCtrl{
 		}
 	}
 
+	private void consumeReply(InputStream is) {
+		try {
+			is = new BufferedInputStream(is);
+			while (is.read() >= 0) {
+			}
+		} catch (Throwable e) {
+			logger.log(Level.WARNING, "", e);
+		} finally {
+			close(is);
+		}
+	}
+
 	private String getReplyString(InputStream is, String encoding) {
 		String reply = null;
 		Reader r = null;
 		try {
 			StringBuilder sb = new StringBuilder();
-			r = new BufferedReader(new InputStreamReader(is,
-					encoding != null ? encoding : "ISO-8859-1"));
+			r = new BufferedReader(new InputStreamReader(is, encoding != null ? encoding : "ISO-8859-1"));
 			while (true) {
 				int c = r.read();
 				if (c < 0)

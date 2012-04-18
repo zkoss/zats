@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="Hello"?>
+<window title="My First window" border="normal" width="200px">
+	<label id="msg" />
+	<zscript>
+		String hello = org.zkoss.lang.Library.getProperty("zats.hello");
+		msg.setValue(hello);
+	</zscript>
+</window>

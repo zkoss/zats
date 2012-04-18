@@ -1,0 +1,125 @@
+<zk>
+	<vbox onOK='msg.setValue("document level");'>
+		<hbox>
+			<label id="target" />
+			<label id="ref" />
+			<label id="eventName" />
+			<label id="code" />
+			<label id="ctrl" />
+			<label id="msg" />
+		</hbox>
+		<hbox>
+			<vbox id="bySelf">
+				<bandbox></bandbox>
+				<combobox>
+					<comboitem label="comboitem"></comboitem>
+				</combobox>
+				<datebox></datebox>
+				<decimalbox></decimalbox>
+				<doublebox></doublebox>
+				<doublespinner></doublespinner>
+				<intbox></intbox>
+				<longbox></longbox>
+				<spinner></spinner>
+				<textbox></textbox>
+				<timebox></timebox>
+				<checkbox label="checkbox"></checkbox>
+				<radio label="radio"></radio>
+				<a>a</a>
+				<button label="button" />
+				<listbox height="50px">
+					<listhead>
+						<listheader label="listheader" />
+					</listhead>
+					<listitem label="listitem" />
+				</listbox>
+				<tree height="50px">
+					<treecols>
+						<treecol label="treecol" />
+					</treecols>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="treecell" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</tree>
+			</vbox>
+			<vbox id="byParent" onOK="">
+				<bandbox></bandbox>
+				<combobox>
+					<comboitem label="comboitem"></comboitem>
+				</combobox>
+				<datebox></datebox>
+				<decimalbox></decimalbox>
+				<doublebox></doublebox>
+				<doublespinner></doublespinner>
+				<intbox></intbox>
+				<longbox></longbox>
+				<spinner></spinner>
+				<textbox></textbox>
+				<timebox></timebox>
+				<checkbox label="checkbox"></checkbox>
+				<radio label="radio"></radio>
+				<a>a</a>
+				<button label="button" />
+				<listbox height="50px">
+					<listhead>
+						<listheader label="listheader" />
+					</listhead>
+					<listitem label="listitem" />
+				</listbox>
+				<tree height="50px">
+					<treecols>
+						<treecol label="treecol" />
+					</treecols>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="treecell" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</tree>
+			</vbox>
+		</hbox>
+	</vbox>
+	<zscript><![CDATA[
+	org.zkoss.zk.ui.event.EventListener listener = new org.zkoss.zk.ui.event.EventListener() {
+		public void onEvent(Event event) {
+			KeyEvent e = (KeyEvent)event;
+			target.setValue(e.getTarget().getDefinition().getName());
+			ref.setValue(e.getReference().getDefinition().getName());
+			eventName.setValue(e.getName());
+			code.setValue("" + e.getKeyCode());
+			if(e.isAltKey())
+				ctrl.setValue("alt");
+			else if(e.isCtrlKey())
+				ctrl.setValue("ctrl");
+			else if(e.isShiftKey())
+				ctrl.setValue("shift");
+			else
+				ctrl.setValue("none");
+		}
+	};
+	void listenAll(Component container) {
+		LinkedList queue = new LinkedList(container.getChildren());
+		while(!queue.isEmpty()) {
+			org.zkoss.zul.impl.XulElement comp = (org.zkoss.zul.impl.XulElement)queue.remove();
+			queue.addAll(comp.getChildren());
+			listen(comp);
+		}
+	}
+	void listen(org.zkoss.zul.impl.XulElement comp) {
+		comp.addEventListener(Events.ON_OK, listener);
+		comp.addEventListener(Events.ON_CANCEL, listener);
+		comp.addEventListener(Events.ON_CTRL_KEY, listener);
+		comp.setCtrlKeys("^a^b^c^d^e^f^g^h^i^j^k^l^m^n^o^p^q^r^s^t^u^v^w^x^y^z^0^1^2^3^4^5^6^7^8^9^#home^#end^#ins^#del^#bak^#left^#right^#up^#down^#pgup^#pgdn^#f1^#f2^#f3^#f4^#f5^#f6^#f7^#f8^#f9^#f10^#f11^#f12@a@b@c@d@e@f@g@h@i@j@k@l@m@n@o@p@q@r@s@t@u@v@w@x@y@z@0@1@2@3@4@5@6@7@8@9@#home@#end@#ins@#del@#bak@#left@#right@#up@#down@#pgup@#pgdn@#f1@#f2@#f3@#f4@#f5@#f6@#f7@#f8@#f9@#f10@#f11@#f12$#home$#end$#ins$#del$#bak$#left$#right$#up$#down$#pgup$#pgdn$#f1$#f2$#f3$#f4$#f5$#f6$#f7$#f8$#f9$#f10$#f11$#f12");
+	}
+	listen(bySelf);
+	listenAll(bySelf);
+	listen(byParent);
+]]>
+</zscript>
+</zk>

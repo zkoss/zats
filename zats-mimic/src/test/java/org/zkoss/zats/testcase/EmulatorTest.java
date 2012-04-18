@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.After;
 import org.junit.Test;
-import org.zkoss.zats.mimic.impl.EmulatorClient;
 import org.zkoss.zats.mimic.impl.emulator.Emulator;
 import org.zkoss.zats.mimic.impl.emulator.EmulatorBuilder;
 
@@ -48,8 +47,8 @@ public class EmulatorTest extends HttpServlet {
 		dir2.mkdirs();
 		String html = "<html><body>hello</body></html>";
 		copy(new ByteArrayInputStream(html.getBytes("ISO-8859-1")), new File(dir2, "index.html"));
-		emulator = new EmulatorBuilder(dir1).descriptor(EmulatorTest.class.getResource("web.xml"))
-				.addResource(dir2).create();
+		emulator = new EmulatorBuilder().addContentRoot(dir1.getAbsolutePath()).setDescriptor(EmulatorTest.class.getResource("web.xml").toString())
+				.addContentRoot(dir2.getAbsolutePath()).create();
 
 		Emulator e = emulator;
 		URL url = new URL(e.getAddress() + "/echo");

@@ -16,28 +16,30 @@ import org.zkoss.zats.ZatsException;
 
 
 /**
- * The main class to start or stop the default {@link ZatsContext}
+ * The main class to start or stop the default {@link ZatsEnvironment}
  * @author Hawk
  * @author Dennis
  */
 public class Zats {
-	//the singleton default context
-	private static ZatsContext instance;
+	//the singleton default environment
+	private static ZatsEnvironment instance;
 	
-	private synchronized static ZatsContext getInstance(boolean create){
+	private synchronized static ZatsEnvironment getInstance(boolean create){
 		if(instance == null){
 			if(create){
-				//the default emulator zats context
-				instance = new DefaultZatsContext();
+				//the default emulator zats environment
+				instance = new DefaultZatsEnvironment();
 			}else{
-				throw new ZatsException("instance not foudn, please call init first");
+				throw new ZatsException("instance not found, please call init first");
 			}
 
 		}
 		return instance;
 	}
 	/**
-	 * to initialize a test runtime and hold a {@link ZatsContext}, the default context is {@link DefaultZatsContext}. 
+	 * To initialize a test runtime and hold a {@link ZatsEnvironment}, the default environment is {@link DefaultZatsEnvironment}.
+	 * It use built-in configuration files(web.xml,zk.xml) for starting quickly and safely.
+	 *  
 	 * @param resourceRoot the resource root folder of the zul, it is usually the web content folder.
 	 */
 	public static void init(String resourceRoot){
@@ -45,7 +47,7 @@ public class Zats {
 	}
 	
 	/**
-	 * to end the test runtime and destroy the held {@link ZatsContext}. 
+	 * to end the test runtime and destroy the held {@link ZatsEnvironment}. 
 	 */
 	public static void end() {
 		getInstance(true).destroy();
@@ -60,7 +62,7 @@ public class Zats {
 	}
 	
 	/**
-	 * to cleanup the held {@link ZatsContext}
+	 * to cleanup the held {@link ZatsEnvironment}
 	 */
 	public static void cleanup() {
 		getInstance(true).cleanup();

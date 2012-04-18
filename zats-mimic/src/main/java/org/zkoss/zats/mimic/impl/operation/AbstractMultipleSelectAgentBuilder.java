@@ -70,7 +70,7 @@ public class AbstractMultipleSelectAgentBuilder {
 
 		private void post(Component component, Set<String> selected) {
 			String desktopId = target.getDesktop().getId();
-			Event event = new SelectEvent(Events.ON_SELECT, component, selected, target.getComponent());
+			Event event = new SelectEvent(Events.ON_SELECT, component, selected, (Component)target.getDelegatee());
 			Map<String, Object> data = EventDataManager.build(event);
 			ClientCtrl ctrl = (ClientCtrl) target.getClient();
 			ctrl.postUpdate(desktopId, component.getUuid(), event.getName(), data);

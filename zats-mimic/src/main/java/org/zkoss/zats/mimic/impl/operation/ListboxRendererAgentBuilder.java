@@ -18,7 +18,7 @@ import java.util.Map;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
-import org.zkoss.zats.mimic.operation.RendererAgent;
+import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
@@ -28,15 +28,15 @@ import org.zkoss.zul.event.RenderEvent;
  * @author dennis
  *
  */
-public class ListboxRendererAgentBuilder implements OperationAgentBuilder<RendererAgent> {
-	public RendererAgent getOperation(final ComponentAgent target) {
+public class ListboxRendererAgentBuilder implements OperationAgentBuilder<RenderAgent> {
+	public RenderAgent getOperation(final ComponentAgent target) {
 		if(!target.is(Listbox.class)){
 			throw new RuntimeException("target "+target+" cannot transfer to Listbox");
 		}
 		return new RendererAgentImpl(target);
 	}
 	
-	class RendererAgentImpl extends AgentDelegator implements RendererAgent{
+	class RendererAgentImpl extends AgentDelegator implements RenderAgent{
 		public RendererAgentImpl(ComponentAgent target) {
 			super(target);
 		}

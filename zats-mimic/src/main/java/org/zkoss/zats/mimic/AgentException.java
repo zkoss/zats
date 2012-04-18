@@ -12,7 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic;
 
 /**
- * an exception be threw by a Agent, it is usually represent a load or ajax error 
+ * an exception thrown by an Agent, it usually represents a loading or AJAX error 
  * @author Dennis
  *
  */

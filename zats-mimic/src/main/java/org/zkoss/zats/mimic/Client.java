@@ -13,7 +13,7 @@ package org.zkoss.zats.mimic;
 
 
 /**
- * Represent a client that can connect to multiple zul files
+ * Represent a client that can connect to zul files
  * @author Hawk
  * @author Dennis
  *
@@ -23,7 +23,7 @@ public interface Client {
 	/**
 	 * connect to a zul file, you have to provide the path that relative to the resource root folder
 	 * 
-	 * @see ZatsContext#init(String)
+	 * @see ZatsEnvironment#init(String)
 	 */
 	DesktopAgent connect(String zulPath);
 

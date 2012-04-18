@@ -1,0 +1,60 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+	<zscript>
+		<![CDATA[
+	ListModelList combomodel = new ListModelList();
+	ListModelList listmodel = new ListModelList();
+	for(int i = 0; i < 1000; ++i) {
+		combomodel.add(i);
+		listmodel.add("item" + i);
+	}
+	void show() {
+		int i = index.getSelectedIndex();
+		Component item = (Component)listbox.getChildren().get(i + 1); // skip listhead
+		List content = ((Component)item.getChildren().get(0)).getChildren(); // listitem -> listcell -> content
+		if(content.size() > 0)
+			listitemContent.setValue(((Label)content.get(0)).getValue());
+		else
+			listitemContent.setValue(i + " doesn't render");
+
+		Rows rows = grid.getRows();
+		content = ((Component)rows.getChildren().get(i)).getChildren(); // rows -> row -> content
+		String value = ((Label)content.get(0)).getValue();
+		if(value == null || value.trim().length() <= 0)
+			rowContent.setValue(i + " doesn't render");
+		else
+			rowContent.setValue(value);
+	}
+]]>
+	</zscript>
+	<vbox>
+		<hbox align="center">
+			<label value="index:" />
+			<combobox id="index" model="${combomodel }" onSelect="show()" />
+		</hbox>
+		<hbox>
+			<label value="listitem content:" />
+			<label id="listitemContent" />
+		</hbox>
+		<hbox>
+			<label value="row content:" />
+			<label id="rowContent" />
+		</hbox>
+		<listbox id="listbox" model="${listmodel }" width="600px" height="200px">
+			<listhead>
+				<listheader label="listheader" />
+			</listhead>
+			<listitem self="@{each='data' }">
+				<listcell>
+					<label value="@{data }" />
+				</listcell>
+			</listitem>
+		</listbox>
+		<separator />
+		<grid id="grid" model="${listmodel }" width="600px" height="200px">
+			<columns>
+				<column label="column" />
+			</columns>
+		</grid>
+	</vbox>
+</zk>

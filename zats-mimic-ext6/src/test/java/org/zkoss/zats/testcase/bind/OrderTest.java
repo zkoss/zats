@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zats.mimic.operation.RendererAgent;
+import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.testapp.bind.order.Order;
 import org.zkoss.zats.testapp.bind.order.OrderVM;
@@ -153,7 +153,7 @@ public class OrderTest{
 		saveBtn.click();
 		
 		//render the new item 
-		orderList.as(RendererAgent.class).render(size,size);//render last
+		orderList.as(RenderAgent.class).render(size,size);//render last
 		
 		//check the last item has the new data
 		items = orderList.queryAll("listitem");
@@ -235,7 +235,7 @@ public class OrderTest{
 		saveBtn.click();
 		
 		//render the new item 
-		orderList.as(RendererAgent.class).render(size,size);//render last
+		orderList.as(RenderAgent.class).render(size,size);//render last
 		
 		//check the last item has the new data
 		items = orderList.queryAll("row");

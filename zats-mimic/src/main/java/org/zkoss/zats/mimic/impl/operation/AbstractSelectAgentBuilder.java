@@ -49,7 +49,7 @@ public class AbstractSelectAgentBuilder {
 			items.add(target.getUuid());
 
 			Component ancestry = getTargetForPosting();
-			Event event = new SelectEvent(Events.ON_SELECT, ancestry, items, target.getComponent());
+			Event event = new SelectEvent(Events.ON_SELECT, ancestry, items, (Component)target.getDelegatee());
 			Map<String, Object> data = EventDataManager.build(event);
 			postprocess(data);
 			((ClientCtrl) target.getClient()).postUpdate(target.getDesktop().getId(), ancestry.getUuid(),
@@ -77,7 +77,7 @@ public class AbstractSelectAgentBuilder {
 			return new SingleSelectAgentImpl(target) {
 				@Override
 				protected Component getTargetForPosting() {
-					return target.getComponent();
+					return (Component)target.getDelegatee();
 				}
 			};
 		}

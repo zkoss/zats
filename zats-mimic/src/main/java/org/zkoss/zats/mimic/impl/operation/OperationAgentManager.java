@@ -23,13 +23,15 @@ import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
-import org.zkoss.zats.mimic.operation.RendererAgent;
+import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zhtml.Input;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zul.A;
 import org.zkoss.zul.Bandbox;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
@@ -51,6 +53,7 @@ import org.zkoss.zul.Panel;
 import org.zkoss.zul.Spinner;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Timebox;
+import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.Window;
 import org.zkoss.zul.impl.InputElement;
@@ -65,8 +68,15 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", AbstractComponent.class, ClickAgent.class, new GenericClickAgentBuilder());
 		registerBuilder("5.0.0", "*", AbstractComponent.class, KeyStrokeAgent.class, new GenericKeyStrokeAgentBuilder());
 
-		// the inputs
+		// the focus
 		registerBuilder("5.0.0", "*", InputElement.class, FocusAgent.class, new GenericFocusAgentBuilder());
+		registerBuilder("5.0.0", "*", A.class, FocusAgent.class, new GenericFocusAgentBuilder());
+		registerBuilder("5.0.0", "*", Button.class, FocusAgent.class, new GenericFocusAgentBuilder());
+		registerBuilder("5.0.0", "*", Checkbox.class, FocusAgent.class, new GenericFocusAgentBuilder());
+		registerBuilder("5.0.0", "*", Listbox.class, FocusAgent.class, new GenericFocusAgentBuilder());
+		registerBuilder("5.0.0", "*", Tree.class, FocusAgent.class, new GenericFocusAgentBuilder());
+		
+		// the inputs
 		registerBuilder("5.0.0", "*", InputElement.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.TextTypeAgentBuilder());
 		registerBuilder("5.0.0", "*", Intbox.class, TypeAgent.class,
@@ -125,14 +135,12 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", Panel.class, CloseAgent.class, new GenericCloseAgentBuilder());
 		registerBuilder("5.0.0", "*", Tab.class, CloseAgent.class, new GenericCloseAgentBuilder());
 
+		// the render
+		registerBuilder("5.0.0", "*", Listbox.class, RenderAgent.class, new ListboxRendererAgentBuilder());
+		registerBuilder("5.0.0", "*", Grid.class, RenderAgent.class, new GridRendererAgentBuilder());
+
 		//----------special case ---
 		
-		// the listbox
-		registerBuilder("5.0.0", "*", Listbox.class, RendererAgent.class, new ListboxRendererAgentBuilder());
-
-		// the grid
-		registerBuilder("5.0.0", "*", Grid.class, RendererAgent.class, new GridRendererAgentBuilder());
-
 		// the ckeditor (optional)
 		try {
 			registerBuilder("5.0.0", "*", "org.zkforge.ckez.CKeditor", TypeAgent.class,
