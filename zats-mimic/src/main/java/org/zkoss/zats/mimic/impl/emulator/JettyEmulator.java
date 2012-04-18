@@ -36,6 +36,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.util.component.LifeCycle.Listener;
+import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.resource.ResourceCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -56,8 +57,8 @@ public class JettyEmulator implements Emulator {
 	private Map<String, Object> requestAttributes;
 	private Map<String, String[]> requestParameters;
 
-	public JettyEmulator(String contentRoot, String descriptor, String contextPath) {
-		this(new String[] { contentRoot }, descriptor, contextPath);
+	public JettyEmulator(Resource contentRoot, String descriptor, String contextPath) {
+		this(new Resource[] { contentRoot }, descriptor, contextPath);
 	}
 
 	/**
@@ -66,7 +67,7 @@ public class JettyEmulator implements Emulator {
 	 * @param descriptor specify the web.xml, if null then use /WEB-INF/web.xml that in contentRoots
 	 * @param contextPath specify the context, if null then use "/"
 	 */
-	public JettyEmulator(String[] contentRoots, String descriptor, String contextPath) {
+	public JettyEmulator(Resource[] contentRoots, String descriptor, String contextPath) {
 		if (contentRoots == null || contentRoots.length <= 0)
 			throw new IllegalArgumentException("contentRoots can't be null.");
 

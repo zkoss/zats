@@ -27,8 +27,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.servlet.http.HttpSession;
-
 import org.eclipse.jetty.util.UrlEncoded;
 import org.zkoss.json.JSONValue;
 import org.zkoss.zats.ZatsException;
@@ -75,7 +73,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 			desktopAgentList.add(desktopAgent);
 			return desktopAgent;
 		} catch (Exception e) {
-			throw new ZatsException("", e);
+			throw new ZatsException(e.getMessage(), e);
 		} finally {
 			close(is);
 		}

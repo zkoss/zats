@@ -71,18 +71,32 @@ public class EnvironmentTest {
 	}
 	
 	@Test
-	public void testCustomConfigZatsEnvironment() {
+	public void testCustomConfigZatsEnvironment2() {
 		//to test open a local zul
-		DefaultZatsEnvironment ctx = new DefaultZatsEnvironment(true);
+		DefaultZatsEnvironment ctx = new DefaultZatsEnvironment();//test first, the zk-library property is loaded in static
+		try {
+			ctx.init("./src/test/resources/web");
+			Client client = ctx.newClient();
+			DesktopAgent desktop = client.connect("/basic/custom-config.zul");
+			//default config
+			assertEquals("", desktop.query("#msg").as(Label.class).getValue());
+		} finally {
+			ctx.destroy();
+		}
+				
+		//to test open a local zul
+		ctx = new DefaultZatsEnvironment("./src/test/resources/web/WEB-INF");
 		try{
 			ctx.init("./src/test/resources/web");
 			Client client = ctx.newClient();
 			DesktopAgent desktop = client.connect("/basic/custom-config.zul");
+			//custom config
 			assertEquals("hello zats", desktop.query("#msg").as(Label.class).getValue());
 		}finally{
 			ctx.destroy();
 		}
 	}
+
 
 	@Test
 	public void testLoadLocal() {

@@ -11,12 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -40,94 +35,44 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 	private List<Client> clients = new LinkedList<Client>();
 	private Emulator emulator ;
 	
-	//keep the file should be clean when destroying.
-	private List<File> tempFiles = new ArrayList<File>();
-	
-	private boolean useAppConfig = false;
+	private String webInfPathOrUrl;
 	
 	/**
 	 * Create a zats context, it uses built-in config file(web.xml, zk.xml) to init the context quickly and safely.
 	 */
 	public DefaultZatsEnvironment(){
-		this(false);
+		this(null);
 	}
 	
 	/**
-	 * Create a zats Environment. <br/> 
-	 * If you set useAppConfig to true, it will use the application's config file (web.xml and zk.xml, zk.xml is optional),
-	 * and you have to provide them in /WEB-INF/ in your resourceRoot folder (resourceRoot is parameter when calling {@link #init(String)})
-	 * If you set useAppConfig to false, it will use built-in config files(web.xml, zk.xml) to init the context quickly and safely. 
-	 * @param useAppConfig use the application web.xml and zk.xml
+	 * Create a zats Environment. <br/>
+	 * The webInfPathOrUrl is the folder of the WEB-INF to start the zats environment. 
+	 * @param webInfFolder the folder of WEB-INF, a null value means use built-in WEB-INF folder.
 	 */
-	public DefaultZatsEnvironment(boolean useAppConfig){
-		this.useAppConfig = useAppConfig;
+	public DefaultZatsEnvironment(String webInfPathOrUrl){
+		this.webInfPathOrUrl = webInfPathOrUrl;
 	}
 
 	public void init(String resourceRoot){
 		if(emulator!=null) {
 			throw new ZatsException("already started up");
 		}
-		// prepare builtin environment
-		File builtInWeb = null;
-		if(!useAppConfig){
-			String tmpDir = System.getProperty("java.io.tmpdir", ".");
-			File tmpZats = new File(tmpDir,"zats");
-			tmpZats.mkdirs();
-			
-			builtInWeb = new File(tmpZats,Long.toHexString(System.currentTimeMillis()));
-			builtInWeb.mkdirs();
-			tempFiles.add(0,builtInWeb);
-			
-			File webinf = new File(builtInWeb, "WEB-INF");
-			tempFiles.add(0,webinf);
-			if (!webinf.mkdirs())
-				throw new ZatsException("can't create temp directory : "+webinf);
-			
-			File webxml = new File(webinf, "web.xml");
-			copy(webxml,EmulatorClient.class.getResourceAsStream("WEB-INF/web.xml"));
-			tempFiles.add(0,webxml);
-			
-			File zkxml = new File(webinf, "zk.xml");
-			copy(zkxml,EmulatorClient.class.getResourceAsStream("WEB-INF/zk.xml"));
-			tempFiles.add(0,zkxml);
+		if(webInfPathOrUrl==null){
+			URL weburl = EmulatorClient.class.getResource("WEB-INF/web.xml");
+			if(weburl==null){
+				throw new IllegalStateException("built-in web.xml not found");
+			}
+			webInfPathOrUrl = weburl.toExternalForm();
+			//the web-info url
+			webInfPathOrUrl = webInfPathOrUrl.substring(0,webInfPathOrUrl.lastIndexOf('/')+1);
 		}
 		
 		EmulatorBuilder builder = new EmulatorBuilder();
-		
-		if(!useAppConfig){
-			builder.addContentRoot(builtInWeb.getAbsolutePath());
-		}
+		builder.setWebInf(webInfPathOrUrl);
 		builder.addContentRoot(resourceRoot);
 		emulator = builder.create();
 	}
 
-	private void copy(File file, InputStream src) {
-		OutputStream os = null;
-		try {
-			os = new FileOutputStream(file);
-			byte[] buf = new byte[65536];
-			int len;
-			while (true) {
-				len = src.read(buf);
-				if (len < 0)
-					break;
-				os.write(buf, 0, len);
-			}
-		} catch (Exception e) {
-			throw new ZatsException("fail to copy file "+file, e);
-		} finally {
-			close(src);
-			close(os);
-		}
-	}
-
-	private static void close(Closeable c) {
-		try {
-			c.close();
-		} catch (Throwable e) {
-			logger.severe("Cannot close" +c);
-		}
-	}
 	
 	public void destroy() {
 		cleanup();
@@ -135,12 +80,6 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 			emulator.close();
 			emulator=null;
 		}
-		for(File f:tempFiles){
-			if(!f.delete()){
-				f.deleteOnExit();
-			}
-		}
-		tempFiles.clear();
 	}
 
 	/**
