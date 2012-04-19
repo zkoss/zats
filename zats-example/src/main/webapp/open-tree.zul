@@ -1,0 +1,10 @@
+<zk>			                                 
+	<zscript>					
+	import org.zkoss.zats.example.operation.BinaryTreeModel;
+	
+	BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zats.example.operation.BigList(15)));
+	</zscript>
+	<space height="30px"/>
+	<tree id="tree" model="${btm}" width="300px" zclass="z-dottree"/>
+</zk>
+		
