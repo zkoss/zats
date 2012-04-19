@@ -1,4 +1,4 @@
-package org.zkoss.zats.example.testcase;
+package org.zkoss.zats.example.testcase.operation;
 
 import junit.framework.Assert;
 
@@ -40,7 +40,7 @@ public class RenderTest {
 
 	
 	@Test
-	public void testRendererAgent() {
+	public void testAgent() {
 		DesktopAgent desktop = Zats.newClient().connect("/render.zul");
 
 		ComponentAgent listbox = desktop.query("#listbox");

@@ -1,4 +1,4 @@
-package org.zkoss.zats.example.testcase;
+package org.zkoss.zats.example.testcase.operation;
 
 import static org.junit.Assert.assertEquals;
 

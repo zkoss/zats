@@ -1,4 +1,4 @@
-package org.zkoss.zats.example.testcase;
+package org.zkoss.zats.example.testcase.operation;
 
 import java.util.List;
 
@@ -64,9 +64,9 @@ public class MultipleSelectTest {
 		Assert.assertEquals("[i2]", msg.getValue());
 		Assert.assertEquals(1, listbox.as(Listbox.class).getSelectedCount());
 
-		items.get(2).as(MultipleSelectAgent.class).deselect(); // should happen nothing
-		Assert.assertEquals("[]", msg.getValue());
-		Assert.assertEquals(0, listbox.as(Listbox.class).getSelectedCount());
+		items.get(0).as(MultipleSelectAgent.class).deselect(); // should happen nothing
+		Assert.assertEquals("[i2]", msg.getValue());
+		Assert.assertEquals(1, listbox.as(Listbox.class).getSelectedCount());
 
 		//single select in multiple selection mode
 		String[] values = { "[i0]", "[i1]", "[i2]" };
