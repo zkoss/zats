@@ -1,0 +1,16 @@
+<zk>
+	<vbox width="300px">
+		<separator height="30px" />
+		<panel title="closable" closable="true" border="normal" />
+		<separator height="30px" />
+		<tabbox>
+			<tabs>
+				<tab label="closable" closable="true"></tab>
+			</tabs>
+		</tabbox>
+		<separator height="30px"></separator>
+
+		<window title="closable" border="normal" closable="true" />
+	</vbox>
+
+</zk>
