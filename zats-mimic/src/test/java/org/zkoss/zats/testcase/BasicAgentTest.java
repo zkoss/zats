@@ -797,6 +797,9 @@ public class BasicAgentTest {
 		}
 	}
 	
+	/*
+	 * I found listbox and grid preload 20 items instead of 7 which is specified in configuration reference
+	 */
 	@Test
 	public void testRendererAgent() {
 		DesktopAgent desktop = Zats.newClient().connect("/~./basic/render.zul");
@@ -852,14 +855,15 @@ public class BasicAgentTest {
 		for (char c = '0'; c <= '9'; ++c)
 			numbers[(int) (c - '0')] = c;
 
-		String[] ns = { "#home", "#end", "#ins", "#del", "#bak", "#left", "#right", "#up", "#down", "#pgup", "#pgdn",
+		String[] keys = { "#home", "#end", "#ins", "#del", "#bak", "#left", "#right", "#up", "#down", "#pgup", "#pgdn",
 				"#f1", "#f2", "#f3", "#f4", "#f5", "#f6", "#f7", "#f8", "#f9", "#f10", "#f11", "#f12" };
-		int[] nsc = { 36, 35, 45, 46, 8, 37, 39, 38, 40, 33, 34, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122,
+		//javascript key code, http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
+		int[] keycodes = { 36, 35, 45, 46, 8, 37, 39, 38, 40, 33, 34, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122,
 				123 };
 
 		Map<String, String> map = new HashMap<String, String>();
-		map.put(ns[0], "" + nsc[0]);
-		map.put(ns[1], "" + nsc[1]);
+		map.put(keys[0], "" + keycodes[0]);
+		map.put(keys[1], "" + keycodes[1]);
 
 		List<String> ctrls = new ArrayList<String>();
 		List<String> alts = new ArrayList<String>();
@@ -880,14 +884,14 @@ public class BasicAgentTest {
 			map.put("@" + n, "" + c);
 			c++;
 		}
-		for (int i = 0; i < ns.length; ++i) {
-			String n = ns[i];
+		for (int i = 0; i < keys.length; ++i) {
+			String n = keys[i];
 			ctrls.add("^" + n);
 			alts.add("@" + n);
 			shifts.add("$" + n);
-			map.put("^" + n, "" + nsc[i]);
-			map.put("@" + n, "" + nsc[i]);
-			map.put("$" + n, "" + nsc[i]);
+			map.put("^" + n, "" + keycodes[i]);
+			map.put("@" + n, "" + keycodes[i]);
+			map.put("$" + n, "" + keycodes[i]);
 		}
 
 		//		generate a string contained all ctrl key 
