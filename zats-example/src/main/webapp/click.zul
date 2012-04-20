@@ -1,0 +1,23 @@
+<zk>
+	<vbox>
+		<hbox>
+			<label>Event:</label>
+			<label id="eventName"></label>
+		</hbox>
+		<label id="mylabel" value="double click label" />
+	</vbox>
+	<zscript><![CDATA[
+	EventListener listener = new EventListener() {
+		public void onEvent(Event event) {
+			eventName.setValue(event.getName());
+		}
+	};
+	void listen(Component comp) {
+		comp.addEventListener(Events.ON_CLICK, listener);
+		comp.addEventListener(Events.ON_DOUBLE_CLICK, listener);
+		comp.addEventListener(Events.ON_RIGHT_CLICK, listener);
+	}
+	listen(mylabel);
+]]>
+	</zscript>
+</zk>

@@ -11,6 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl.emulator;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -88,6 +89,14 @@ public class JettyEmulator implements Emulator {
 			contextHandler.setContextPath(contextPath == null ? "/" : contextPath);
 
 			contextHandler.setParentLoaderPriority(true);
+			// fix issue: the jetty temp. directory is always the same according the configuration of emulator
+			// specify different temp. directory to solve this issue.
+			File tmpFile = File.createTempFile("jetty.", ".tmp");
+			tmpFile.deleteOnExit();
+			File tmpDir = new File(tmpFile.getParent() , tmpFile.getName() + ".dir");
+			tmpDir.mkdirs();
+			contextHandler.setTempDirectory(tmpDir);
+			
 			// observe request and get related ref.
 			HandlerCollection handlers = new HandlerCollection();
 			handlers.addHandler(new BeforeHandler());
@@ -127,6 +136,7 @@ public class JettyEmulator implements Emulator {
 		if (server == null)
 			return;
 		try {
+			server.stop();
 			server.destroy();
 		} catch (Throwable e) {
 			// do nothing
