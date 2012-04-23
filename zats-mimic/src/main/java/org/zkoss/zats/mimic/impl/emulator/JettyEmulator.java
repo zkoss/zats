@@ -20,10 +20,14 @@ import java.net.InetSocketAddress;
 import java.text.MessageFormat;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -46,6 +50,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
  * @author pao
  */
 public class JettyEmulator implements Emulator {
+	private static Logger logger = Logger.getLogger(JettyEmulator.class.getName());
 	private ReentrantLock lock;
 
 	private Server server;
@@ -57,6 +62,9 @@ public class JettyEmulator implements Emulator {
 	private Map<String, Object> sessionAttributes;
 	private Map<String, Object> requestAttributes;
 	private Map<String, String[]> requestParameters;
+
+	/** temp directory for jetty server */
+	private File tmpDir;
 
 	public JettyEmulator(Resource contentRoot, String descriptor, String contextPath) {
 		this(new Resource[] { contentRoot }, descriptor, contextPath);
@@ -71,7 +79,6 @@ public class JettyEmulator implements Emulator {
 	public JettyEmulator(Resource[] contentRoots, String descriptor, String contextPath) {
 		if (contentRoots == null || contentRoots.length <= 0)
 			throw new IllegalArgumentException("contentRoots can't be null.");
-
 		lock = new ReentrantLock(true);
 		requestAttributes = new HashMap<String, Object>();
 		requestParameters = new HashMap<String, String[]>();
@@ -92,10 +99,14 @@ public class JettyEmulator implements Emulator {
 			// fix issue: the jetty temp. directory is always the same according the configuration of emulator
 			// specify different temp. directory to solve this issue.
 			File tmpFile = File.createTempFile("jetty.", ".tmp");
-			tmpFile.deleteOnExit();
-			File tmpDir = new File(tmpFile.getParent() , tmpFile.getName() + ".dir");
+			if (!tmpFile.delete())
+				tmpFile.deleteOnExit();
+			tmpDir = new File(tmpFile.getParent(), tmpFile.getName() + ".dir");
 			tmpDir.mkdirs();
-			contextHandler.setTempDirectory(tmpDir);
+			if (tmpDir.exists())
+				contextHandler.setTempDirectory(tmpDir);
+			else
+				tmpDir = null;
 			
 			// observe request and get related ref.
 			HandlerCollection handlers = new HandlerCollection();
@@ -135,6 +146,7 @@ public class JettyEmulator implements Emulator {
 	public void close() {
 		if (server == null)
 			return;
+		// shutdown server
 		try {
 			server.stop();
 			server.destroy();
@@ -143,6 +155,45 @@ public class JettyEmulator implements Emulator {
 		} finally {
 			server = null;
 		}
+		
+		// clean resources
+		if (tmpDir.getName().startsWith("jetty.")) { // fuse 1
+			List<File> resources = depthFirstSearch(tmpDir);
+			if (resources.size() < 10) { // fuse 2
+				String tmpPath = tmpDir.getAbsolutePath();
+				for (File r : resources) {
+					String targetPath = r.getAbsolutePath();
+					if (targetPath.startsWith(tmpPath)) // fuse 3
+					{
+						r.delete();
+						if (logger.isLoggable(Level.FINE))
+							logger.fine("delete resource: " + targetPath);
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * search sub-files from specify directory with depth first order. 
+	 * @param dir search root directory
+	 * @return file list with depth first order. return null if source directory is null or not existed.
+	 */
+	private List<File> depthFirstSearch(File dir) {
+		if (dir == null || !dir.exists())
+			return null;
+		LinkedList<File> targetSquence = new LinkedList<File>();
+		LinkedList<File> stack = new LinkedList<File>();
+		stack.add(dir);
+		while (!stack.isEmpty()) {
+			File item = stack.removeFirst();
+			if (item.isDirectory()) {
+				for (File child : item.listFiles())
+					stack.addFirst(child);
+			}
+			targetSquence.addFirst(item);
+		}
+		return targetSquence;
 	}
 
 	public String getHost() {
