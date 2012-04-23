@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.zats</groupId>
 	<artifactId>zats-common</artifactId>
@@ -17,13 +18,17 @@
 		<url>http://zkats.googlecode.com/svn/trunk/</url>
 		<connection>scm:svn:http://zkats.googlecode.com/svn/trunk/</connection>
 	</scm>
+	<organization>
+		<name>Potix Corporation</name>
+		<url>http://www.zkoss.org</url>
+	</organization>
 	<developers>
 		<developer>
 			<id>zkteam</id>
 			<name>ZK Team</name>
 			<email>info@zkoss.org</email>
 			<url>http://www.zkoss.org</url>
-			<organization>Potix</organization>
+			<organization>Potix Corporation</organization>
 			<organizationUrl>http://www.zkoss.org</organizationUrl>
 			<roles>
 				<role>architect</role>
@@ -62,6 +67,20 @@
 				<configuration>
 					<source>1.5</source>
 					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+						</manifest>
+					</archive>
 				</configuration>
 			</plugin>
 		</plugins>
