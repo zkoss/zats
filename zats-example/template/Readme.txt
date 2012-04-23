@@ -1,0 +1,1 @@
+Users have to deploy ZK CE jar under WEB-INF/lib to make this project work correctly.
