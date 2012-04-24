@@ -130,7 +130,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<finalName>${project.artifactId}-${project.version}</finalName>
+							<finalName>${project.artifactId}-mimic-${project.version}</finalName>
 							<appendAssemblyId>false</appendAssemblyId>
 							<descriptors>
 								<descriptor>assembly.xml</descriptor>
