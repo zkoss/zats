@@ -42,6 +42,7 @@ import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zats.mimic.operation.TypingAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
@@ -1036,6 +1037,34 @@ public class BasicAgentTest {
 				assertEquals(map.get(k), code.getValue());
 				assertEquals("shift", ctrl.getValue());
 			}
+		}
+	}
+	
+	@Test
+	public void testTypingAgent() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/typing.zul");
+
+		// labels for validation
+		Label event = desktop.query("#eventName").as(Label.class);
+		Label target = desktop.query("#target").as(Label.class);
+		Label value = desktop.query("#value").as(Label.class);
+		assertEquals("", event.getValue());
+		assertEquals("", target.getValue());
+		assertEquals("", value.getValue());
+
+		// components handle event
+		List<ComponentAgent> comps = desktop.query("#inputs").getChildren();
+		assertEquals(11, comps.size());
+
+		for (int i = 0; i < comps.size(); ++i) {
+			// typing
+			String text = "type " + i;
+			ComponentAgent comp = comps.get(i);
+			comp.as(TypingAgent.class).typing(text);
+			// validate
+			assertEquals("onChanging", event.getValue());
+			assertEquals(((Component) comp.getDelegatee()).getDefinition().getName(), target.getValue());
+			assertEquals(text, value.getValue());
 		}
 	}
 }

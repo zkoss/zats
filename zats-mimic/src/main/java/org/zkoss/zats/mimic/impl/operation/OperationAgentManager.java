@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.impl.Util;
-import org.zkoss.zats.mimic.impl.operation.AbstractTypeAgentBuilder.TextTypeAgentBuilder;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.CloseAgent;
@@ -27,6 +26,7 @@ import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zats.mimic.operation.TypingAgent;
 import org.zkoss.zhtml.Input;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
@@ -76,6 +76,10 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", Checkbox.class, FocusAgent.class, new GenericFocusAgentBuilder());
 		registerBuilder("5.0.0", "*", Listbox.class, FocusAgent.class, new GenericFocusAgentBuilder());
 		registerBuilder("5.0.0", "*", Tree.class, FocusAgent.class, new GenericFocusAgentBuilder());
+		
+		// the typing
+		registerBuilder("5.0.0", "*", InputElement.class, TypingAgent.class,
+				new GenericTypingAgentBuilder());
 		
 		// the inputs
 		registerBuilder("5.0.0", "*", InputElement.class, TypeAgent.class,
