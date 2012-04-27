@@ -26,7 +26,6 @@ import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zul.impl.FormatInputElement;
@@ -53,24 +52,12 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 		public void type(String value) {
 			try {
 				ClientCtrl cctrl = (ClientCtrl) target.getClient();
-				// focus
-				String desktopId = target.getDesktop().getId();
-				String cmd = Events.ON_FOCUS;
-				Map<String, Object> data = EventDataManager.build(new Event(cmd, (Component)target.getDelegatee()));
-				cctrl.postUpdate(desktopId, target.getUuid(), cmd, data);
-				// changing
-				cmd = Events.ON_CHANGING;
-				data = EventDataManager.build(new InputEvent(cmd, (Component)target.getDelegatee(), value, null));
-				cctrl.postUpdate(desktopId, target.getUuid(), cmd, data);
-				// change (reuse changing event data collection)
-				cmd = Events.ON_CHANGE;
+				String cmd = Events.ON_CHANGE;
+				InputEvent event = new InputEvent(cmd, (Component) target.getDelegatee(), value, null);
+				Map<String, Object> data = EventDataManager.build(event);
 				putValue(target, value, data); // parse value and put into data collection 
-				cctrl.postUpdate(desktopId, target.getUuid(), cmd, data);
-				// blur
-				cmd = Events.ON_BLUR;
-				data = EventDataManager.build(new Event(cmd, (Component)target.getDelegatee()));
-				cctrl.postUpdate(desktopId, target.getUuid(), cmd, data);
-
+				cctrl.postUpdate(target.getDesktop().getId(), target.getUuid(), cmd, data);
+				
 			} catch (Exception e) {
 				throw new AgentException("value \"" + value
 						+ "\"is invalid for the component: "

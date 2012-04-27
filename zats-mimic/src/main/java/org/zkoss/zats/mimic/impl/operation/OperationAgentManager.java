@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.impl.Util;
+import org.zkoss.zats.mimic.impl.operation.AbstractTypeAgentBuilder.TextTypeAgentBuilder;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.CloseAgent;
@@ -144,10 +145,11 @@ public class OperationAgentManager {
 		// the ckeditor (optional)
 		try {
 			registerBuilder("5.0.0", "*", "org.zkforge.ckez.CKeditor", TypeAgent.class,
-					"org.zkoss.zats.mimic.impl.operation.CKEditorTypeAgentBuilder");
+					"org.zkoss.zats.mimic.impl.operation.AbstractTypeAgentBuilder$TextTypeAgentBuilder");
 		} catch (Exception e) {
 			// ckeditor doesn't exist
 		}
+		
 	}
 
 	/**
