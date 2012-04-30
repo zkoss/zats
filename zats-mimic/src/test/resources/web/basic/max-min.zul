@@ -9,6 +9,12 @@
 			<button label="restore window" onClick="win.minimized = false; win.maximized = false" />
 			<button label="restore panel" onClick="pane.minimized = false; pane.maximized = false" />
 		</hbox>
+		<hbox id="switches">
+			<button label="switch window maximizable" onClick="win.maximizable = !win.maximizable" />
+			<button label="switch window minimizable" onClick="win.minimizable = !win.minimizable" />
+			<button label="switch panel maximizable" onClick="pane.maximizable = !pane.maximizable" />
+			<button label="switch panel minimizable" onClick="pane.minimizable = !pane.minimizable" />
+		</hbox>
 		<vbox id="layouts" width="600px" height="600px">
 			<window id="win" maximizable="true" minimizable="true" border="normal" title="window"
 				height="200px" width="200px">

@@ -1134,6 +1134,30 @@ public class BasicAgentTest {
 		assertEquals("onMinimize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("false", flag.getValue());
-		
+
+		// test disabled
+		for (ComponentAgent ca : desktop.queryAll("#switches button"))
+			ca.as(ClickAgent.class).click();
+
+		try {
+			desktop.query("window").as(MaximizeAgent.class).setMaximized(true);
+			fail();
+		} catch (AgentException e) {
+		}
+		try {
+			desktop.query("window").as(MaximizeAgent.class).setMinimized(true);
+			fail();
+		} catch (AgentException e) {
+		}
+		try {
+			desktop.query("panel").as(MaximizeAgent.class).setMaximized(true);
+			fail();
+		} catch (AgentException e) {
+		}
+		try {
+			desktop.query("panel").as(MaximizeAgent.class).setMinimized(true);
+			fail();
+		} catch (AgentException e) {
+		}
 	}
 }
