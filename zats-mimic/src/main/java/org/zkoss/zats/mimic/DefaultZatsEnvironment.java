@@ -36,21 +36,34 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 	private Emulator emulator ;
 	
 	private String webInfPathOrUrl;
+	private String contextPath;
 	
 	/**
-	 * Create a zats context, it uses built-in config file(web.xml, zk.xml) to init the context quickly and safely.
+	 * Create a zats context, it uses built-in config file(web.xml, zk.xml) to init the context quickly and safely. <br/>
 	 */
 	public DefaultZatsEnvironment(){
-		this(null);
+		this(null,null);
 	}
 	
 	/**
 	 * Create a zats Environment. <br/>
-	 * The webInfPathOrUrl is the folder of the WEB-INF to start the zats environment. 
+	 * The webInfPathOrUrl is the folder of the WEB-INF to start the zats environment.  <br/>
 	 * @param webInfFolder the folder of WEB-INF, a null value means use built-in WEB-INF folder.
 	 */
 	public DefaultZatsEnvironment(String webInfPathOrUrl){
 		this.webInfPathOrUrl = webInfPathOrUrl;
+	}
+	
+	/**
+	 * Create a zats Environment. <br/>
+	 * The webInfPathOrUrl is the folder of the WEB-INF to start the zats environment, for example "./src/test/resources/web/WEB-INF". <br/>
+	 * The contextPath is the path of the application context, for example "/" or "/myapp". <br/>
+	 * @param webInfFolder the folder of WEB-INF, a null value means suing built-in WEB-INF folder.
+	 * @param contextPath the name of the application, a null value means using "/"
+	 */
+	public DefaultZatsEnvironment(String webInfPathOrUrl,String contextPath){
+		this.webInfPathOrUrl = webInfPathOrUrl;
+		this.contextPath = contextPath;
 	}
 
 	public void init(String resourceRoot){
@@ -69,6 +82,7 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 		
 		EmulatorBuilder builder = new EmulatorBuilder();
 		builder.setWebInf(webInfPathOrUrl);
+		builder.setContextPath(contextPath==null?"/":contextPath);
 		builder.addContentRoot(resourceRoot);
 		emulator = builder.create();
 	}

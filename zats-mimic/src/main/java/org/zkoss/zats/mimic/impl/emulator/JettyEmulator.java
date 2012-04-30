@@ -56,6 +56,7 @@ public class JettyEmulator implements Emulator {
 	private Server server;
 	private int port;
 	private String address;
+	private String contextPath;
 
 	private ServletContext context;
 	private String sessionId;
@@ -82,7 +83,7 @@ public class JettyEmulator implements Emulator {
 		lock = new ReentrantLock(true);
 		requestAttributes = new HashMap<String, Object>();
 		requestParameters = new HashMap<String, String[]>();
-
+		this.contextPath = contextPath == null ? "/" : contextPath;
 		try {
 			// create server
 			server = new Server(new InetSocketAddress(getHost(), 0));
@@ -93,7 +94,7 @@ public class JettyEmulator implements Emulator {
 			if (descriptor != null) {
 				contextHandler.setDescriptor(descriptor);
 			}
-			contextHandler.setContextPath(contextPath == null ? "/" : contextPath);
+			contextHandler.setContextPath(this.contextPath);
 
 			contextHandler.setParentLoaderPriority(true);
 			// fix issue: the jetty temp. directory is always the same according the configuration of emulator
@@ -203,10 +204,19 @@ public class JettyEmulator implements Emulator {
 	public int getPort() {
 		return port;
 	}
+	
+	public String getContextPath(){
+		return contextPath;
+	}
 
 	public String getAddress() {
-		if (address == null)
-			address = MessageFormat.format("http://{0}:{1,number,#}", getHost(), getPort());
+		if (address == null){
+			String cp = getContextPath();
+			if(cp.endsWith("/")){//
+				cp = cp.substring(0,cp.length()-1);
+			}
+			address = MessageFormat.format("http://{0}:{1,number,#}{2}", getHost(), getPort(),cp);
+		}
 		return address;
 	}
 
