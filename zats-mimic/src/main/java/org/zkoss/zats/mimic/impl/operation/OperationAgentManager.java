@@ -20,6 +20,7 @@ import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.CloseAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
+import org.zkoss.zats.mimic.operation.MaximizeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
@@ -139,6 +140,10 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", Listbox.class, RenderAgent.class, new ListboxRendererAgentBuilder());
 		registerBuilder("5.0.0", "*", Grid.class, RenderAgent.class, new GridRendererAgentBuilder());
 
+		// the maximize
+		registerBuilder("5.0.0", "*", Window.class, MaximizeAgent.class, new GenericMaximizeAgentBuilder());
+		registerBuilder("5.0.0", "*", Panel.class, MaximizeAgent.class, new GenericMaximizeAgentBuilder());
+		
 		//----------special case ---
 		
 		// the ckeditor (optional)

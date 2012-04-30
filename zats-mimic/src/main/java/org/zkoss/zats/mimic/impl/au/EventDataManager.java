@@ -20,6 +20,8 @@ import org.zkoss.zk.ui.event.CheckEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.event.KeyEvent;
+import org.zkoss.zk.ui.event.MaximizeEvent;
+import org.zkoss.zk.ui.event.MinimizeEvent;
 import org.zkoss.zk.ui.event.MouseEvent;
 import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.event.SelectEvent;
@@ -45,6 +47,8 @@ public class EventDataManager {
 		registerBuilder("5.0.0", "*", SelectEvent.class, new SelectEventDataBuilder());
 		registerBuilder("5.0.0", "*", KeyEvent.class, new KeyEventDataBuilder());
 		registerBuilder("5.0.0", "*", RenderEvent.class, new RenderEventDataBuilder());
+		registerBuilder("5.0.0", "*", MaximizeEvent.class, new MaximizeEventDataBuilder());
+		registerBuilder("5.0.0", "*", MinimizeEvent.class, new MinimizeEventDataBuilder());
 		//TODO more
 	}
 	
