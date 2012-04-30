@@ -24,4 +24,10 @@ public interface TypeAgent extends OperationAgent {
 	 * @param value the input value
 	 */
 	public void type(String value);
+
+	/**
+	 * To simulate typing data into a component and it will send onChanging event to server.
+	 * @param value the typing value.
+	 */
+	public void typing(String value);
 }

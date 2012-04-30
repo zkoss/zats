@@ -75,19 +75,19 @@
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zhtml</artifactId>
 			<version>${zk.version}</version>
-			<scope>provided</scope>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zkex</artifactId>
 			<version>${zk.version}</version>
-			<scope>provided</scope>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zkmax</artifactId>
 			<version>${zk.version}</version>
-			<scope>provided</scope>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
@@ -98,11 +98,17 @@
 			<groupId>org.zkoss.zkforge</groupId>
 			<artifactId>ckez</artifactId>
 			<version>3.6.0.0</version>
-			<scope>provided</scope>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zkplus</artifactId>
+			<version>${zk.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zul</artifactId>
 			<version>${zk.version}</version>
 			<scope>provided</scope>
 		</dependency>

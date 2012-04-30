@@ -42,7 +42,6 @@ import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
-import org.zkoss.zats.mimic.operation.TypingAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
@@ -758,11 +757,22 @@ public class BasicAgentTest {
 	public void testCKEditorTypeAgent() {
 		DesktopAgent desktop = Zats.newClient().connect("/~./basic/type-ckeditor.zul");
 
-		Label content = desktop.query("#content").as(Label.class);
-		assertEquals("", content.getValue());
+		Label eventName = desktop.query("#eventName").as(Label.class);
+		Label change = desktop.query("#change").as(Label.class);
+		Label changing = desktop.query("#changing").as(Label.class);
+		assertEquals("", eventName.getValue());
+		assertEquals("", change.getValue());
+		assertEquals("", changing.getValue());
+
+		desktop.query("#ck").as(TypeAgent.class).typing("Hello");
+		assertEquals("onChanging", eventName.getValue());
+		assertEquals("", change.getValue());
+		assertEquals("Hello", changing.getValue());
 
 		desktop.query("#ck").as(TypeAgent.class).type("Hello world");
-		assertEquals("Hello world", content.getValue());
+		assertEquals("onChange", eventName.getValue());
+		assertEquals("Hello world", change.getValue());
+		assertEquals("Hello", changing.getValue());
 	}
 	
 	@Test
@@ -1060,7 +1070,7 @@ public class BasicAgentTest {
 			// typing
 			String text = "type " + i;
 			ComponentAgent comp = comps.get(i);
-			comp.as(TypingAgent.class).typing(text);
+			comp.as(TypeAgent.class).typing(text);
 			// validate
 			assertEquals("onChanging", event.getValue());
 			assertEquals(((Component) comp.getDelegatee()).getDefinition().getName(), target.getValue());

@@ -64,6 +64,14 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 						+ target, e);
 			}
 		}
+
+		public void typing(String value) {
+			String desktopId = target.getDesktop().getId();
+			String cmd = Events.ON_CHANGING;
+			InputEvent event = new InputEvent(cmd, (Component) target.getDelegatee(), value, null);
+			Map<String, Object> data = EventDataManager.build(event);
+			((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
+		}
 	}
 
 	/**
