@@ -37,6 +37,12 @@ public interface Emulator extends Closeable {
 	 * @return URL.
 	 */
 	String getAddress();
+	
+	/**
+	 * get the context path of the application
+	 * @return the context path
+	 */
+	public String getContextPath();
 
 	/**
 	 * get the reference of servlet context in the emulator.
