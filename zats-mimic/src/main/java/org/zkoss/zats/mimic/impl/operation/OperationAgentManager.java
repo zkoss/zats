@@ -18,6 +18,7 @@ import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.CloseAgent;
+import org.zkoss.zats.mimic.operation.DragAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MaximizeAgent;
@@ -30,6 +31,7 @@ import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zhtml.Input;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zul.A;
 import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Button;
@@ -143,6 +145,9 @@ public class OperationAgentManager {
 		// the maximize
 		registerBuilder("5.0.0", "*", Window.class, MaximizeAgent.class, new GenericMaximizeAgentBuilder());
 		registerBuilder("5.0.0", "*", Panel.class, MaximizeAgent.class, new GenericMaximizeAgentBuilder());
+		
+		//drag & drop
+		registerBuilder("5.0.0", "*", HtmlBasedComponent.class, DragAgent.class, new GenericDragAgentBuilder());
 		
 		//----------special case ---
 		

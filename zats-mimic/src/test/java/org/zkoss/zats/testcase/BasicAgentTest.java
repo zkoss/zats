@@ -35,6 +35,7 @@ import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.CloseAgent;
+import org.zkoss.zats.mimic.operation.DragAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MaximizeAgent;
@@ -48,6 +49,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listcell;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treeitem;
 
@@ -1159,5 +1162,31 @@ public class BasicAgentTest {
 			fail();
 		} catch (AgentException e) {
 		}
+	}
+	
+	@Test
+	public void testDragDrop(){
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/drag.zul");
+		ComponentAgent leftBox = desktop.query("#left");
+		Assert.assertEquals(6, leftBox.queryAll("listitem").size());
+		
+		ComponentAgent rightBox = desktop.query("#right");
+		Assert.assertEquals(2, rightBox.queryAll("listitem").size());
+		
+		//move 1 item from left to right
+		ComponentAgent draggedItem = leftBox.query("listcell[label='ZK Forge']").getParent();
+		draggedItem.as(DragAgent.class).dropOn(rightBox);
+		Assert.assertEquals(5, leftBox.queryAll("listitem").size());
+		Assert.assertEquals(3, rightBox.queryAll("listitem").size());
+		Assert.assertNotNull(rightBox.query("listcell[label='ZK Forge']"));
+		
+		//move lower item before upper item
+		ComponentAgent upperItem = rightBox.query("listcell[label='ZK Studio']").getParent();
+		ComponentAgent lowerItem = rightBox.query("listcell[label='ZK Forge']").getParent();
+		Assert.assertEquals(1, upperItem.as(Listitem.class).getIndex());
+		Assert.assertEquals(2, lowerItem.as(Listitem.class).getIndex());
+		lowerItem.as(DragAgent.class).dropOn(upperItem);
+		Assert.assertEquals(2, upperItem.as(Listitem.class).getIndex());
+		Assert.assertEquals(1, lowerItem.as(Listitem.class).getIndex());
 	}
 }

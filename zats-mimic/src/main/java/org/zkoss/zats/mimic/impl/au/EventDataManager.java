@@ -17,6 +17,7 @@ import java.util.Map;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zk.ui.event.CheckEvent;
+import org.zkoss.zk.ui.event.DropEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.event.KeyEvent;
@@ -49,6 +50,8 @@ public class EventDataManager {
 		registerBuilder("5.0.0", "*", RenderEvent.class, new RenderEventDataBuilder());
 		registerBuilder("5.0.0", "*", MaximizeEvent.class, new MaximizeEventDataBuilder());
 		registerBuilder("5.0.0", "*", MinimizeEvent.class, new MinimizeEventDataBuilder());
+		registerBuilder("5.0.0", "*", MinimizeEvent.class, new MinimizeEventDataBuilder());
+		registerBuilder("5.0.0", "*", DropEvent.class, new DropEventDataBuilder());
 		//TODO more
 	}
 	
