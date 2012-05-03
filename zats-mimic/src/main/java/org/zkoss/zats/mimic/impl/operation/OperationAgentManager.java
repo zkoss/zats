@@ -20,6 +20,7 @@ import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.CloseAgent;
 import org.zkoss.zats.mimic.operation.DragAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
+import org.zkoss.zats.mimic.operation.HoverAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MaximizeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
@@ -148,6 +149,9 @@ public class OperationAgentManager {
 		
 		//drag & drop
 		registerBuilder("5.0.0", "*", HtmlBasedComponent.class, DragAgent.class, new GenericDragAgentBuilder());
+		
+		//hover
+		registerBuilder("5.0.0", "*", HtmlBasedComponent.class, HoverAgent.class, new GenericHoverAgentBuilder());
 		
 		//----------special case ---
 		

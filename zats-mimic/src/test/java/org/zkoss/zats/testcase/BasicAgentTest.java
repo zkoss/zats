@@ -37,6 +37,7 @@ import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.CloseAgent;
 import org.zkoss.zats.mimic.operation.DragAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
+import org.zkoss.zats.mimic.operation.HoverAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MaximizeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
@@ -49,7 +50,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treeitem;
@@ -59,6 +59,14 @@ import org.zkoss.zul.Treeitem;
  *
  */
 public class BasicAgentTest {
+	
+	private static final String[] componentNames = { "a", "applet", "button", "captcha", "fileupload", "fisheye", "fisheyebar", "html",
+			"include", "image", "imagemap", "label", "menu", "menubar", "menuitem", "menupopup", "menuseparator",
+			"popup", "progressmeter", "separator", "space", "toolbar", "toolbarbutton", "bandbox", "colorbox",
+			"combobox", "comboitem", "datebox", "decimalbox", "doublebox", "doublespinner", "intbox", "longbox",
+			"spinner", "textbox", "timebox", "checkbox", "radio", "radiogroup", "slider", "caption", "div",
+			"groupbox", "panel", "span", "tabbox", "tab", "window", "grid", "detail", "group", "listbox",
+			"listitem", "listgroup", "tree", "treeitem" };
 	@BeforeClass
 	public static void init()
 	{
@@ -779,6 +787,7 @@ public class BasicAgentTest {
 		assertEquals("Hello", changing.getValue());
 	}
 	
+		
 	@Test
 	public void testClickAll() {
 		DesktopAgent desktop = Zats.newClient().connect("/~./basic/click-all.zul");
@@ -791,14 +800,8 @@ public class BasicAgentTest {
 		ComponentAgent comps = desktop.query("#comps");
 		assertNotNull(comps);
 		
-		String[] names = { "a", "applet", "button", "captcha", "fileupload", "fisheye", "fisheyebar", "html",
-				"include", "image", "imagemap", "label", "menu", "menubar", "menuitem", "menupopup", "menuseparator",
-				"popup", "progressmeter", "separator", "space", "toolbar", "toolbarbutton", "bandbox", "colorbox",
-				"combobox", "comboitem", "datebox", "decimalbox", "doublebox", "doublespinner", "intbox", "longbox",
-				"spinner", "textbox", "timebox", "checkbox", "radio", "radiogroup", "slider", "caption", "div",
-				"groupbox", "panel", "span", "tabbox", "tab", "window", "grid", "detail", "group", "listbox",
-				"listitem", "listgroup", "tree", "treeitem" };
-		for (String name : names) {
+		
+		for (String name : componentNames) {
 			ClickAgent agent = comps.query(name).as(ClickAgent.class);
 			agent.click();
 			assertEquals(name, target.getValue());
@@ -809,6 +812,30 @@ public class BasicAgentTest {
 			agent.rightClick();
 			assertEquals(name, target.getValue());
 			assertEquals(Events.ON_RIGHT_CLICK, event.getValue());
+		}
+	}
+	
+	@Test
+	public void testHover() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/click-all.zul");
+
+		Label target = desktop.query("#target").as(Label.class);
+		Label event = desktop.query("#eventName").as(Label.class);
+		assertEquals("", target.getValue());
+		assertEquals("", event.getValue());
+		
+		ComponentAgent comps = desktop.query("#comps");
+		assertNotNull(comps);
+		
+		
+		for (String name : componentNames) {
+			HoverAgent agent = comps.query(name).as(HoverAgent.class);
+			agent.moveOver();
+			assertEquals(name, target.getValue());
+			assertEquals(Events.ON_MOUSE_OVER, event.getValue());
+			agent.moveOut();
+			assertEquals(name, target.getValue());
+			assertEquals(Events.ON_MOUSE_OUT, event.getValue());
 		}
 	}
 	
