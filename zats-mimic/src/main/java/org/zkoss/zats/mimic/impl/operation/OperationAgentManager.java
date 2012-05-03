@@ -101,6 +101,13 @@ public class OperationAgentManager {
 				new AbstractTypeAgentBuilder.DateTypeAgentBuilder());
 		registerBuilder("5.0.0", "*", Timebox.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.TimeTypeAgentBuilder());
+		//colorbox in zkex.jar which is optional
+		try{
+			registerBuilder("5.0.0", "*", "org.zkoss.zkex.zul.Colorbox", TypeAgent.class,
+					"org.zkoss.zats.mimic.impl.operation.ColorTypeAgentBuilder");
+		}catch (Exception e) {
+			// doesn't exist
+		}
 
 		// the check
 		registerBuilder("5.0.0", "*", Menuitem.class, CheckAgent.class, new GenericCheckAgentBuilder());

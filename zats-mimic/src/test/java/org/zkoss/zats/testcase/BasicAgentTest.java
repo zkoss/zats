@@ -269,6 +269,25 @@ public class BasicAgentTest {
 		Assert.assertEquals("13:00",l.as(Label.class).getValue());
 		inp.type("14:02");
 		Assert.assertEquals("14:02",l.as(Label.class).getValue());
+		
+		//colorbox
+		l = desktopAgent.query("#l12");
+		inp = desktopAgent.query("colorbox");
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		inp.type("#0000ff");
+		Assert.assertEquals("#0000ff",l.as(Label.class).getValue());
+		try{
+			inp.type("invalid value");
+			fail("Cannot accept invalid input");
+		}catch(AgentException ae){
+			Assert.assertEquals("#0000ff",l.as(Label.class).getValue());
+		}
+		try{
+			inp.as(TypeAgent.class).typing("invalid value");
+			fail("Colorbox does not support typing");
+		}catch(AgentException ae){
+			Assert.assertEquals("#0000ff",l.as(Label.class).getValue());
+		}
 	}
 	
 	@Test

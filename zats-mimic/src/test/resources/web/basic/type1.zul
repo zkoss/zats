@@ -34,6 +34,7 @@
 			<hbox>spinner <spinner id="inp9" width="100px" constraint="no negative" onChange='l9.setValue(""+self.getValue())'/>(no negative)</hbox>
 			<hbox>textbox <textbox id="inp10" width="100px" constraint="no empty" onChange='l10.setValue(self.getValue())'/>(no empty)</hbox>
 			<hbox>timebox <timebox id="inp11" width="100px" constraint="${c}" onChange='l11.setValue(f2.format(self.getValue()))' format="HH:mm"/>()</hbox>
+			<hbox>colorbox <colorbox onChange="l12.setValue(self.getValue())" /> </hbox>
 		</vbox>
 				
 		<vbox>
@@ -47,7 +48,8 @@
 			<hbox><label id="l8" /></hbox>
 			<hbox><label id="l9" /></hbox>
 			<hbox><label id="l10"/></hbox>
-			<hbox><label id="l11" /></hbox> <!-- value="@bind(vm.timeboxVal) @converter('formatedDate',format='HH:mm')" --> 
+			<hbox><label id="l11" /></hbox> <!-- value="@bind(vm.timeboxVal) @converter('formatedDate',format='HH:mm')" -->
+			<hbox><label id="l12" /></hbox> 
 		</vbox>		
 
 		</hbox>
