@@ -136,6 +136,8 @@ public class BasicAgentTest {
 		
 		ComponentAgent l = desktopAgent.query("#l1");
 		ComponentAgent inp = desktopAgent.query("#inp1");
+		
+		final String TEXT_4_SELECTION="ABCDE";
 		//bandbox
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
@@ -145,8 +147,11 @@ public class BasicAgentTest {
 		inp.type("");
 		Assert.assertEquals("A",l.as(Label.class).getValue());
 		
-		inp.type("B");
-		Assert.assertEquals("B",l.as(Label.class).getValue());
+		inp.type(TEXT_4_SELECTION);
+		Assert.assertEquals(TEXT_4_SELECTION,l.as(Label.class).getValue());
+		
+		inp.as(TypeAgent.class).select(1, 2);
+		Assert.assertEquals(TEXT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		//combobox
 		l = desktopAgent.query("#l2");
@@ -156,9 +161,11 @@ public class BasicAgentTest {
 		Assert.assertEquals("C",l.as(Label.class).getValue());
 		inp.type("");
 		Assert.assertEquals("C",l.as(Label.class).getValue());
-		inp.type("D");
-		Assert.assertEquals("D",l.as(Label.class).getValue());
+		inp.type(TEXT_4_SELECTION);
+		Assert.assertEquals(TEXT_4_SELECTION,l.as(Label.class).getValue());
 		
+		inp.as(TypeAgent.class).select(1, 2);
+		Assert.assertEquals(TEXT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		//textbox
 		l = desktopAgent.query("#l10");
@@ -168,8 +175,13 @@ public class BasicAgentTest {
 		Assert.assertEquals("E",l.as(Label.class).getValue());
 		inp.type("");
 		Assert.assertEquals("E",l.as(Label.class).getValue());
-		inp.type("F");
-		Assert.assertEquals("F",l.as(Label.class).getValue());
+		inp.type(TEXT_4_SELECTION);
+		Assert.assertEquals(TEXT_4_SELECTION,l.as(Label.class).getValue());
+		
+		inp.as(TypeAgent.class).select(1, 2);
+		Assert.assertEquals(TEXT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
+		
+		final String DIGIT_4_SELECTION="12345";
 		
 		//decimalbox
 		l = desktopAgent.query("#l4");
@@ -183,6 +195,10 @@ public class BasicAgentTest {
 		inp.type("2.33");
 		Assert.assertEquals("2.33",l.as(Label.class).getValue());
 		
+		inp.type(DIGIT_4_SELECTION);
+		inp.as(TypeAgent.class).select(1, 2);
+		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
+		
 		//doublebox
 		l = desktopAgent.query("#l5");
 		inp = desktopAgent.query("#inp5");
@@ -195,6 +211,10 @@ public class BasicAgentTest {
 		inp.type("4.33");
 		Assert.assertEquals("4.33",l.as(Label.class).getValue());
 		
+		inp.type(DIGIT_4_SELECTION);
+		inp.as(TypeAgent.class).select(1, 2);
+		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
+		
 		//doublespinner
 		l = desktopAgent.query("#l6");
 		inp = desktopAgent.query("#inp6");
@@ -202,12 +222,14 @@ public class BasicAgentTest {
 		
 		inp.type("5");
 		Assert.assertEquals("5.0",l.as(Label.class).getValue());
-
 		inp.type("-5");
 		Assert.assertEquals("5.0",l.as(Label.class).getValue());
-
 		inp.type("6.33");
 		Assert.assertEquals("6.33",l.as(Label.class).getValue());
+		
+		inp.type(DIGIT_4_SELECTION);
+		inp.as(TypeAgent.class).select(1, 2);
+		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		//intbox
 		l = desktopAgent.query("#l7");
@@ -220,7 +242,9 @@ public class BasicAgentTest {
 		inp.type("8");
 		Assert.assertEquals("8",l.as(Label.class).getValue());
 		
-		
+		inp.type(DIGIT_4_SELECTION);
+		inp.as(TypeAgent.class).select(1, 2);
+		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		
 		//longbox
@@ -235,6 +259,9 @@ public class BasicAgentTest {
 		inp.type("10");
 		Assert.assertEquals("10",l.as(Label.class).getValue());
 		
+		inp.type(DIGIT_4_SELECTION);
+		inp.as(TypeAgent.class).select(1, 2);
+		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		
 		//spinner
@@ -248,6 +275,10 @@ public class BasicAgentTest {
 		inp.type("12");
 		Assert.assertEquals("12",l.as(Label.class).getValue());
 		
+		inp.type(DIGIT_4_SELECTION);
+		inp.as(TypeAgent.class).select(1, 2);
+		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
+		
 		//datebox
 		l = desktopAgent.query("#l3");
 		inp = desktopAgent.query("#inp3");
@@ -259,6 +290,10 @@ public class BasicAgentTest {
 		inp.type("20120320");
 		Assert.assertEquals("20120320",l.as(Label.class).getValue());
 		
+		inp.as(TypeAgent.class).select(1, 2);
+		Assert.assertEquals("20120320".substring(1, 2),l.as(Label.class).getValue());
+		
+		
 		//timebox
 		l = desktopAgent.query("#l11");
 		inp = desktopAgent.query("#inp11");
@@ -269,6 +304,9 @@ public class BasicAgentTest {
 		Assert.assertEquals("13:00",l.as(Label.class).getValue());
 		inp.type("14:02");
 		Assert.assertEquals("14:02",l.as(Label.class).getValue());
+		
+		inp.as(TypeAgent.class).select(1, 2);
+		Assert.assertEquals("14:02".substring(1, 2),l.as(Label.class).getValue());
 		
 		//colorbox
 		l = desktopAgent.query("#l12");

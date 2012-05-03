@@ -15,6 +15,7 @@ package org.zkoss.zats.mimic.operation;
  * The type operation.
  * @author pao
  */
+
 public interface TypeAgent extends OperationAgent {
 
 	/**
@@ -30,4 +31,11 @@ public interface TypeAgent extends OperationAgent {
 	 * @param value the typing value.
 	 */
 	public void typing(String value);
+	
+	/**
+	 * To select (highlight) a range to text of an InputElement by specifying 2 indexes. Index value begins from 0.
+	 * @param start 
+	 * @param end
+	 */
+	public void select(int start, int end);
 }

@@ -66,6 +66,16 @@ public class ColorTypeAgentBuilder implements OperationAgentBuilder<TypeAgent>{
 
 		}
 
+		/* (non-Javadoc)
+		 * @see org.zkoss.zats.mimic.operation.TypeAgent#select(int, int)
+		 */
+		public void select(int start, int end) {
+			throw new AgentException("Unsuppported operation");
+			
+		}
+		
+		
+
 	}
 
 }

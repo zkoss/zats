@@ -26,11 +26,15 @@ import org.zkoss.zk.ui.event.MinimizeEvent;
 import org.zkoss.zk.ui.event.MouseEvent;
 import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.event.SelectEvent;
+import org.zkoss.zk.ui.event.SelectionEvent;
 import org.zkoss.zul.event.RenderEvent;
 
 /**
- * The manager of event data builder.
+ * The manager of event data builder. <br/>
  * 
+ * To deal with the issue that different version might contains different data content for the same event,
+ *  we design registration mechanism. We can register different Event Data Builder for the same event 
+ *  in different version.
  * @author dennis
  */
 public class EventDataManager {
@@ -52,6 +56,7 @@ public class EventDataManager {
 		registerBuilder("5.0.0", "*", MinimizeEvent.class, new MinimizeEventDataBuilder());
 		registerBuilder("5.0.0", "*", MinimizeEvent.class, new MinimizeEventDataBuilder());
 		registerBuilder("5.0.0", "*", DropEvent.class, new DropEventDataBuilder());
+		registerBuilder("5.0.0", "*", SelectionEvent.class, new SelectionEventDataBuilder());
 		//TODO more
 	}
 	

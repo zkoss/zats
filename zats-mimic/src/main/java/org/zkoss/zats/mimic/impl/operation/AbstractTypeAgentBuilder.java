@@ -28,7 +28,9 @@ import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
+import org.zkoss.zk.ui.event.SelectionEvent;
 import org.zkoss.zul.impl.FormatInputElement;
+import org.zkoss.zul.impl.InputElement;
 
 /**
  * The abstract builder of typing operation.
@@ -69,6 +71,18 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_CHANGING;
 			InputEvent event = new InputEvent(cmd, (Component) target.getDelegatee(), value, null);
+			Map<String, Object> data = EventDataManager.build(event);
+			((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
+		}
+
+		/* (non-Javadoc)
+		 * @see org.zkoss.zats.mimic.operation.TypeAgent#select(int, int)
+		 */
+		public void select(int start, int end) {
+			String desktopId = target.getDesktop().getId();
+			String cmd = Events.ON_SELECTION;
+			String selectedText = ((InputElement)target.getDelegatee()).getText().substring(start, end);
+			SelectionEvent event = new SelectionEvent(cmd, (Component) target.getDelegatee(), start, end,selectedText);
 			Map<String, Object> data = EventDataManager.build(event);
 			((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
 		}
