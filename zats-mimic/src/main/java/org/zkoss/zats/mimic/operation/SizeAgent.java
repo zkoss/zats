@@ -28,7 +28,7 @@ public interface SizeAgent extends OperationAgent {
 	 * If the component isn't minimizable, it will throw exception.
 	 * @param minimized true indicated minimization.
 	 */
-	void minimized(boolean minimized);
+	void minimize(boolean minimized);
 	
 	/**
 	 * To resize component.
