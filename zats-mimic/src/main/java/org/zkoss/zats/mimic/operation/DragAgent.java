@@ -21,7 +21,7 @@ public interface DragAgent extends OperationAgent{
 
 	/**
 	 * drag and drop a component
-	 * @param target the destination component which you want to drop to
+	 * @param target the destination component which you want to drop on
 	 */
 	public void dropOn(ComponentAgent target);
 }

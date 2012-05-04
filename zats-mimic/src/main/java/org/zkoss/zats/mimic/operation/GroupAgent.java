@@ -1,11 +1,10 @@
-/* PagingAgent.java
+/* GroupAgent.java
 
 	Purpose:
 		
 	Description:
 		
 	History:
-
 		May 4, 2012 Created by pao
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
@@ -13,14 +12,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.operation;
 
 /**
- * The agent for switching page operation.
+ * The agent for group changing operation.
  * @author pao
  */
-public interface PagingAgent extends OperationAgent {
-
+public interface GroupAgent extends OperationAgent {
 	/**
-	 * To switch to specify page.
-	 * @param page index of page.
+	 * To group this column.
 	 */
-	public void goTo(int page);
+	void group();
 }
