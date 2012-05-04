@@ -26,7 +26,7 @@ public interface RenderAgent extends OperationAgent{
 	/**
 	 * render the sub-item from index "start" to "end". both "start" and "end" are included.
 	 * @param start the start index(zero-base, included) of sub-item to render, -1 means from 0 
-	 * @param end the end index(zero-base, included) of sub-item to render, -1 means to end of the sub-items
+	 * @param end the end index(zero-base, exclusive) of sub-item to render, -1 means to end of the sub-items
 	 */
 	public void render(int start, int end);
 	

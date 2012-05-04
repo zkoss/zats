@@ -19,8 +19,9 @@ public interface MoveAgent {
 
 	/**
 	 * To move a component.
+	 * unit is pixel.
 	 * @param left distance from left.
 	 * @param top distance from top.
 	 */
-	void move(int left, int top);
+	void moveTo(int left, int top);
 }

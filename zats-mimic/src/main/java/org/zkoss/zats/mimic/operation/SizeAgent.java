@@ -32,8 +32,8 @@ public interface SizeAgent extends OperationAgent {
 	
 	/**
 	 * To resize component.
-	 * @param width new width.
-	 * @param height specify -1, if only resize width.
+	 * @param width new width or specify -1 if no change.
+	 * @param height new height or specify -1 if no change.
 	 */
 	void resize(int width , int height);
 }

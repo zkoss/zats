@@ -34,8 +34,8 @@ public interface TypeAgent extends OperationAgent {
 	
 	/**
 	 * To select (highlight) a range to text of an InputElement by specifying 2 indexes. Index value begins from 0.
-	 * @param start 
-	 * @param end
+	 * @param start the beginning index, inclusive.
+	 * @param end the ending index, exclusive.
 	 */
 	public void select(int start, int end);
 }

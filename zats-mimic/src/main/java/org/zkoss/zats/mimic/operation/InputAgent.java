@@ -21,5 +21,5 @@ public interface InputAgent extends OperationAgent {
 	/**
 	 * To input value into component.
 	 */
-	void input(Object... value);
+	void input(Object value);
 }
