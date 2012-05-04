@@ -21,5 +21,5 @@ public interface PagingAgent extends OperationAgent {
 	 * To switch to specify page.
 	 * @param page index of page.
 	 */
-	public void toPage(int page);
+	public void gtTo(int page);
 }
