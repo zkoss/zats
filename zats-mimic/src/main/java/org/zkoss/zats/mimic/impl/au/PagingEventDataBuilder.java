@@ -14,7 +14,6 @@ package org.zkoss.zats.mimic.impl.au;
 import java.util.Map;
 
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zul.event.PagingEvent;
 
 /**

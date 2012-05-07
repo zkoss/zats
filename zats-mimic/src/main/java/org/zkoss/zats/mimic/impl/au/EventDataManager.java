@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.event.MouseEvent;
 import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.event.SelectionEvent;
+import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.RenderEvent;
 
 /**
@@ -57,6 +58,7 @@ public class EventDataManager {
 		registerBuilder("5.0.0", "*", MinimizeEvent.class, new MinimizeEventDataBuilder());
 		registerBuilder("5.0.0", "*", DropEvent.class, new DropEventDataBuilder());
 		registerBuilder("5.0.0", "*", SelectionEvent.class, new SelectionEventDataBuilder());
+		registerBuilder("5.0.0", "*", PagingEvent.class, new PagingEventDataBuilder());
 		//TODO more
 	}
 	

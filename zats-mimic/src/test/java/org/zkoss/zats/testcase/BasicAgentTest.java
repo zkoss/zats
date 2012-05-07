@@ -42,6 +42,7 @@ import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MaximizeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
+import org.zkoss.zats.mimic.operation.PagingAgent;
 import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
@@ -51,6 +52,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Paging;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treeitem;
 
@@ -1272,5 +1274,32 @@ public class BasicAgentTest {
 		lowerItem.as(DragAgent.class).dropOn(upperItem);
 		Assert.assertEquals(2, upperItem.as(Listitem.class).getIndex());
 		Assert.assertEquals(1, lowerItem.as(Listitem.class).getIndex());
+	}
+	
+	@Test
+	public void testPaging(){
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/paging.zul");
+		ComponentAgent paging = desktop.query("listbox > paging");
+		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
+		
+		paging.as(PagingAgent.class).goTo(1);
+		Assert.assertEquals("1", desktop.query("#listboxPageIndex").as(Label.class).getValue());
+		
+		paging = desktop.query("#grid > paging");
+		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
+		
+		paging.as(PagingAgent.class).goTo(1);
+		Assert.assertEquals("1", desktop.query("#gridPageIndex").as(Label.class).getValue());
+		
+		paging = desktop.query("tree > paging");
+		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
+		
+		paging.as(PagingAgent.class).goTo(1);
+		Assert.assertEquals("1", desktop.query("#treePageIndex").as(Label.class).getValue());
+		
+		paging = desktop.query("#pg");
+		paging.as(PagingAgent.class).goTo(1);
+		Assert.assertEquals("1", desktop.query("#leftGridPageIndex").as(Label.class).getValue());
+		Assert.assertEquals("1", desktop.query("#rightGridPageIndex").as(Label.class).getValue());
 	}
 }
