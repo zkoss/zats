@@ -32,6 +32,8 @@ public interface SizeAgent extends OperationAgent {
 	
 	/**
 	 * To resize component.
+	 * If components didn't configure widths or heights, 
+	 * the widths will change to 200px and the heights will change to 100px.
 	 * @param width new width or specify -1 if no change.
 	 * @param height new height or specify -1 if no change.
 	 */
