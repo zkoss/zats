@@ -52,8 +52,8 @@ public class AbstractSelectAgentBuilder {
 			Event event = new SelectEvent(Events.ON_SELECT, ancestry, items, (Component)target.getDelegatee());
 			Map<String, Object> data = EventDataManager.build(event);
 			postprocess(data);
-			((ClientCtrl) target.getClient()).postUpdate(target.getDesktop().getId(), ancestry.getUuid(),
-					event.getName(), data);
+			((ClientCtrl) target.getClient()).postUpdate(target.getDesktop().getId(), event.getName(), ancestry.getUuid(),
+					data, null);
 		}
 
 		public void deselect() {

@@ -13,8 +13,6 @@ package org.zkoss.zats.mimic.impl;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
 import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
 
@@ -26,12 +24,13 @@ import org.zkoss.zats.mimic.DesktopAgent;
 public interface ClientCtrl {
 	/**
 	 * post an asynchronous update event.
-	 * @param desktopId TODO
-	 * @param targetUUID the UUID of component agent which performed this event
-	 * @param data data for update
-	 * @param command command
+	 * @param desktopId
+	 * @param cmd
+	 * @param targetUUID
+	 * @param data
+	 * @param option
 	 */
-	void postUpdate(String desktopId, String targetUUID, String cmd, Map<String, Object> data);
+	void postUpdate(String desktopId, String cmd, String targetUUID, Map<String, Object> data,String option);
 	
 	void destroy(DesktopAgent desktopAgent);
 	

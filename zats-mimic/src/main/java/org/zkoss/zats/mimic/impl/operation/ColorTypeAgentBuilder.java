@@ -53,7 +53,7 @@ public class ColorTypeAgentBuilder implements OperationAgentBuilder<ComponentAge
 				String cmd = Events.ON_CHANGE;
 				Map<String, Object> data = new HashMap<String, Object>();
 				data.put("color",value); // parse value and put into data collection 
-				((ClientCtrl) target.getClient()).postUpdate(target.getDesktop().getId(), target.getUuid(), cmd, data);
+				((ClientCtrl) target.getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
 			}else{
 				throw new AgentException("value \"" + value
 						+ "\"is invalid for the component: "

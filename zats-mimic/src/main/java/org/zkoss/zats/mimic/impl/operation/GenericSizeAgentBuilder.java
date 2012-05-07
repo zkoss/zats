@@ -49,7 +49,7 @@ public class GenericSizeAgentBuilder implements OperationAgentBuilder<ComponentA
 			String cmd = Events.ON_MAXIMIZE;
 			MaximizeEvent event = new MaximizeEvent(cmd, comp, "", "", comp.getWidth(), comp.getHeight(), maximized);
 			Map<String, Object> data = EventDataManager.build(event);
-			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), target.getUuid(), cmd, data);
+			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
 		}
 
 		public void minimize(boolean minimized) {
@@ -58,7 +58,7 @@ public class GenericSizeAgentBuilder implements OperationAgentBuilder<ComponentA
 			String cmd = Events.ON_MINIMIZE;
 			MinimizeEvent event = new MinimizeEvent(cmd, comp, "", "", comp.getWidth(), comp.getHeight(), minimized);
 			Map<String, Object> data = EventDataManager.build(event);
-			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), target.getUuid(), cmd, data);
+			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
 		}
 
 		public void resize(int width, int height) {
@@ -94,7 +94,7 @@ public class GenericSizeAgentBuilder implements OperationAgentBuilder<ComponentA
 			String cmd = Events.ON_SIZE;
 			SizeEvent event = new SizeEvent(cmd, comp, width + "px", height + "px", 0);
 			Map<String, Object> data = EventDataManager.build(event);
-			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), target.getUuid(), cmd, data);
+			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
 		}
 
 		/**

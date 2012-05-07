@@ -73,7 +73,7 @@ public class AbstractMultipleSelectAgentBuilder {
 			Event event = new SelectEvent(Events.ON_SELECT, component, selected, (Component)target.getDelegatee());
 			Map<String, Object> data = EventDataManager.build(event);
 			ClientCtrl ctrl = (ClientCtrl) target.getClient();
-			ctrl.postUpdate(desktopId, component.getUuid(), event.getName(), data);
+			ctrl.postUpdate(desktopId, event.getName(), component.getUuid(), data, null);
 		}
 
 		abstract protected Component getTargetForPosting();

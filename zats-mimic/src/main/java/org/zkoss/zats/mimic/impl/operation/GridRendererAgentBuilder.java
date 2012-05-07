@@ -68,7 +68,7 @@ public class GridRendererAgentBuilder implements OperationAgentBuilder<Component
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_RENDER;
 			Map<String, Object> data = EventDataManager.build(new RenderEvent(cmd, new HashSet(ids)));
-			((ClientCtrl)target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
+			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
 		};
 	}
 	

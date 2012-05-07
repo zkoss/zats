@@ -38,21 +38,21 @@ public class GenericClickAgentBuilder implements OperationAgentBuilder<Component
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_CLICK;
 			Map<String, Object> data = EventDataManager.build(new MouseEvent(cmd, (Component)target.getDelegatee()));
-			((ClientCtrl)target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
+			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
 		}
 
 		public void doubleClick() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_DOUBLE_CLICK;
 			Map<String, Object> data = EventDataManager.build(new MouseEvent(cmd, (Component)target.getDelegatee()));
-			((ClientCtrl)target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
+			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
 		}
 
 		public void rightClick() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_RIGHT_CLICK;
 			Map<String, Object> data = EventDataManager.build(new MouseEvent(cmd, (Component)target.getDelegatee()));
-			((ClientCtrl)target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
+			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
 		}
 	}
 }

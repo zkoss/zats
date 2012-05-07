@@ -62,7 +62,7 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 				InputEvent event = new InputEvent(cmd, (Component) target.getDelegatee(), value, null);
 				Map<String, Object> data = EventDataManager.build(event);
 				putValue(target, value, data); // parse value and put into data collection 
-				cctrl.postUpdate(target.getDesktop().getId(), target.getUuid(), cmd, data);
+				cctrl.postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
 				
 			} catch (Exception e) {
 				throw new AgentException("value \"" + value
@@ -76,7 +76,7 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 			String cmd = Events.ON_CHANGING;
 			InputEvent event = new InputEvent(cmd, (Component) target.getDelegatee(), value, null);
 			Map<String, Object> data = EventDataManager.build(event);
-			((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
+			((ClientCtrl) target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
 		}
 
 		/* (non-Javadoc)
@@ -88,7 +88,7 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 			String selectedText = ((InputElement)target.getDelegatee()).getText().substring(start, end);
 			SelectionEvent event = new SelectionEvent(cmd, (Component) target.getDelegatee(), start, end,selectedText);
 			Map<String, Object> data = EventDataManager.build(event);
-			((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
+			((ClientCtrl) target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data,null);
 		}
 	}
 

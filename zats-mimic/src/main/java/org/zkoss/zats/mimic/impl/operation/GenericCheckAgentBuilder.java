@@ -39,7 +39,7 @@ public class GenericCheckAgentBuilder implements OperationAgentBuilder<Component
 			Map<String, Object> data = EventDataManager.build(new CheckEvent(Events.ON_CHECK, (Component)target.getDelegatee(),
 					checked));
 			ClientCtrl cctrl = (ClientCtrl) target.getClient();
-			cctrl.postUpdate(desktopId, target.getUuid(), Events.ON_CHECK, data);
+			cctrl.postUpdate(desktopId, Events.ON_CHECK, target.getUuid(), data, null);
 		}
 	}
 }
