@@ -37,6 +37,7 @@ import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.CloseAgent;
 import org.zkoss.zats.mimic.operation.DragAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
+import org.zkoss.zats.mimic.operation.GroupAgent;
 import org.zkoss.zats.mimic.operation.HoverAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
@@ -1343,30 +1344,48 @@ public class BasicAgentTest {
 		}
 	}
 
-		@Test
-		public void testPaging(){
+	@Test
+	public void testPaging(){
 		DesktopAgent desktop = Zats.newClient().connect("/~./basic/paging.zul");
 		ComponentAgent paging = desktop.query("listbox > paging");
 		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
-		
+
 		paging.as(PagingAgent.class).goTo(1);
 		Assert.assertEquals("1", desktop.query("#listboxPageIndex").as(Label.class).getValue());
-		
+
 		paging = desktop.query("#grid > paging");
 		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
-		
+
 		paging.as(PagingAgent.class).goTo(1);
 		Assert.assertEquals("1", desktop.query("#gridPageIndex").as(Label.class).getValue());
-		
+
 		paging = desktop.query("tree > paging");
 		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
-		
+
 		paging.as(PagingAgent.class).goTo(1);
 		Assert.assertEquals("1", desktop.query("#treePageIndex").as(Label.class).getValue());
-		
+
 		paging = desktop.query("#pg");
 		paging.as(PagingAgent.class).goTo(1);
 		Assert.assertEquals("1", desktop.query("#leftGridPageIndex").as(Label.class).getValue());
 		Assert.assertEquals("1", desktop.query("#rightGridPageIndex").as(Label.class).getValue());
+	}
+	
+	@Test
+	public void testGroup(){
+		final String COLUMN_AUTHOR = "Author";
+		final String COLUMN_TITLE = "Title";
+		
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/group.zul");
+		ComponentAgent groupingColumn = desktop.query("column[label='"+COLUMN_AUTHOR+"']");
+		groupingColumn.as(GroupAgent.class).group();
+		
+		Label groupingLabel = desktop.query("#groupingColumn").as(Label.class);
+		Assert.assertEquals(groupingLabel.getValue(), COLUMN_AUTHOR);
+		
+		groupingColumn = desktop.query("column[label='"+COLUMN_TITLE+"']");
+		groupingColumn.as(GroupAgent.class).group();
+		
+		Assert.assertEquals(groupingLabel.getValue(), COLUMN_TITLE);
 	}
 }
