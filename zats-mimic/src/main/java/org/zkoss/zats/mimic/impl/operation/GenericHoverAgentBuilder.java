@@ -18,7 +18,6 @@ import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.HoverAgent;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.DropEvent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.MouseEvent;
 

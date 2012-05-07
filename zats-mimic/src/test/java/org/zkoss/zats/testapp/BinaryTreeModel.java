@@ -14,14 +14,13 @@ package org.zkoss.zats.testapp;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.zkoss.zul.AbstractTreeModel;
-
 /**
  * @author dennis
  *
  */
 public class BinaryTreeModel extends org.zkoss.zul.AbstractTreeModel{
-private ArrayList _tree =null;
+	private static final long serialVersionUID = 1L;
+	private ArrayList _tree =null;
 	
 	/**
 	 * Constructor

@@ -14,7 +14,6 @@ package org.zkoss.zats.mimic;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
@@ -29,7 +28,7 @@ import org.zkoss.zats.mimic.impl.emulator.EmulatorBuilder;
  * @author Dennis
  */
 public class DefaultZatsEnvironment implements ZatsEnvironment{
-	private static Logger logger = Logger.getLogger(DefaultZatsEnvironment.class.getName());;
+//	private static Logger logger = Logger.getLogger(DefaultZatsEnvironment.class.getName());;
 	
 	
 	private List<Client> clients = new LinkedList<Client>();

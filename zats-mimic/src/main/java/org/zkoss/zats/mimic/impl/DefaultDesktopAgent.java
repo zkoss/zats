@@ -15,11 +15,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.zkoss.zats.mimic.AgentException;
-import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Client;
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.PageAgent;
 import org.zkoss.zk.ui.Desktop;

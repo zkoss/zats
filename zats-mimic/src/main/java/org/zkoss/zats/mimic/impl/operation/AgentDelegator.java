@@ -12,8 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.impl.operation;
 
 import org.zkoss.zats.mimic.Agent;
-import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Client;
+import org.zkoss.zats.mimic.ComponentAgent;
 
 /**
  * Simply wrap the component agent for component operation
