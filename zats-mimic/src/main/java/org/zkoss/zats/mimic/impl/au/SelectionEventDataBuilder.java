@@ -13,25 +13,22 @@ package org.zkoss.zats.mimic.impl.au;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.SelectionEvent;
 
 /**
  * @author Hawk
  *
  */
-public class SelectionEventDataBuilder implements EventDataBuilder{
+public class SelectionEventDataBuilder implements EventDataBuilder<SelectionEvent>{
 
-	/* (non-Javadoc)
-	 * @see org.zkoss.zats.mimic.impl.au.EventDataBuilder#build(org.zkoss.zk.ui.event.Event, java.util.Map)
-	 */
-	public Map<String, Object> build(Event event, Map<String, Object> data) {
-		SelectionEvent evt = (SelectionEvent) event;
+	public Map<String, Object> build(SelectionEvent evt, Map<String, Object> data) {
 
 		AuUtility.setEssential(data, "start", evt.getStart());
 		AuUtility.setEssential(data, "end", evt.getEnd());
 		AuUtility.setEssential(data, "selected", evt.getSelectedText());
 		return data;
 	}
-
+	public Class<SelectionEvent> getEventClass(){
+		return SelectionEvent.class;
+	}
 }

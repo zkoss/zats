@@ -20,8 +20,11 @@ import org.zkoss.zk.ui.event.Event;
  * 
  * @author pao
  */
-public class DefaultEventDataBuilder implements EventDataBuilder {
+public class DefaultEventDataBuilder implements EventDataBuilder<Event> {
 	public Map<String, Object> build(Event event, Map<String, Object> data) {
 		return data;
+	}
+	public Class<Event> getEventClass(){
+		return Event.class;
 	}
 }

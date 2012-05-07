@@ -42,45 +42,38 @@ import org.zkoss.zul.event.RenderEvent;
  */
 public class EventDataManager {
 
-	private static Map<Class<? extends Event>, EventDataBuilder> builders;
+	private static Map<Class<? extends Event>, EventDataBuilder<? extends Event>> builders;
 
 	static {
-		builders = new HashMap<Class<? extends Event>, EventDataBuilder>();
+		builders = new HashMap<Class<? extends Event>, EventDataBuilder<? extends Event>>();
 		
-		registerBuilder("5.0.0", "*", MouseEvent.class, new MouseEventDataBuilder());
-		registerBuilder("5.0.0", "*", InputEvent.class, new InputEventDataBuilder());
-		registerBuilder("5.0.0", "*", CheckEvent.class, new CheckEventDataBuilder());
-		registerBuilder("5.0.0", "*", Event.class, new DefaultEventDataBuilder());
-		registerBuilder("5.0.0", "*", OpenEvent.class, new OpenEventDataBuilder());
-		registerBuilder("5.0.0", "*", SelectEvent.class, new SelectEventDataBuilder());
-		registerBuilder("5.0.0", "*", KeyEvent.class, new KeyEventDataBuilder());
-		registerBuilder("5.0.0", "*", RenderEvent.class, new RenderEventDataBuilder());
-		registerBuilder("5.0.0", "*", MaximizeEvent.class, new MaximizeEventDataBuilder());
-		registerBuilder("5.0.0", "*", MinimizeEvent.class, new MinimizeEventDataBuilder());
-		registerBuilder("5.0.0", "*", DropEvent.class, new DropEventDataBuilder());
-		registerBuilder("5.0.0", "*", SelectionEvent.class, new SelectionEventDataBuilder());
-		registerBuilder("5.0.0", "*", SizeEvent.class, new SizeEventDataBuilder());
-		registerBuilder("5.0.0", "*", PagingEvent.class, new PagingEventDataBuilder());
-		registerBuilder("5.0.0", "*", BookmarkEvent.class, new BookmarkEventDataBuilder());
+		registerBuilder("5.0.0", "*", new MouseEventDataBuilder());
+		registerBuilder("5.0.0", "*", new InputEventDataBuilder());
+		registerBuilder("5.0.0", "*", new CheckEventDataBuilder());
+		registerBuilder("5.0.0", "*", new DefaultEventDataBuilder());
+		registerBuilder("5.0.0", "*", new OpenEventDataBuilder());
+		registerBuilder("5.0.0", "*", new SelectEventDataBuilder());
+		registerBuilder("5.0.0", "*", new KeyEventDataBuilder());
+		registerBuilder("5.0.0", "*", new RenderEventDataBuilder());
+		registerBuilder("5.0.0", "*", new MaximizeEventDataBuilder());
+		registerBuilder("5.0.0", "*", new MinimizeEventDataBuilder());
+		registerBuilder("5.0.0", "*", new DropEventDataBuilder());
+		registerBuilder("5.0.0", "*", new SelectionEventDataBuilder());
+		registerBuilder("5.0.0", "*", new SizeEventDataBuilder());
+		registerBuilder("5.0.0", "*", new PagingEventDataBuilder());
+		registerBuilder("5.0.0", "*", new BookmarkEventDataBuilder());
 		//TODO more
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static  
-		void registerBuilder(String startVersion, String endVersion, String eventClazz, String builderClazz) {
-		if (startVersion == null || endVersion == null || eventClazz == null || builderClazz == null)
+		void registerBuilder(String startVersion, String endVersion, String builderClazz) {
+		if (startVersion == null || endVersion == null || builderClazz == null)
 			throw new IllegalArgumentException();
 		
 		if(!Util.checkVersion(startVersion,endVersion)) return;
 		
-		Class clz = null;
-		try {
-			clz = Class.forName(eventClazz);
-		} catch (ClassNotFoundException e) {
-			throw new IllegalArgumentException("eventClazz "+eventClazz+" not found ", e);
-		}
 		EventDataBuilder builder = null;
-		
 		try{
 			Class buildClz = Class.forName(builderClazz);
 			builder = (EventDataBuilder)buildClz.newInstance();
@@ -88,23 +81,18 @@ public class EventDataManager {
 			throw new IllegalArgumentException(x.getMessage(),x);
 		}
 		
-		
-		if(Event.class.isAssignableFrom(clz)){
-			registerBuilder(startVersion,endVersion,clz,builder);
-		}else{
-			throw new IllegalArgumentException("eventClazz "+eventClazz+" is not a Event");
-		}
+		registerBuilder(startVersion,endVersion,builder);
 	}
 
 	
 	public static <T extends Event> 
-		void registerBuilder(String startVersion, String endVersion, Class<? extends Event> eventClass, EventDataBuilder builder) {
+		void registerBuilder(String startVersion, String endVersion, EventDataBuilder<? extends Event> builder) {
 		
-		if (startVersion == null || endVersion == null || eventClass==null || builder == null)
+		if (startVersion == null || endVersion == null || builder == null)
 			throw new IllegalArgumentException();
 
 		if(!Util.checkVersion(startVersion,endVersion)) return;
-		builders.put(eventClass, builder);
+		builders.put(builder.getEventClass(), builder);
 	}
 
 	public static Map<String, Object> build(Event evt) {

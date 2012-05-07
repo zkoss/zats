@@ -13,7 +13,6 @@ package org.zkoss.zats.mimic.impl.au;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.InputEvent;
 
 /**
@@ -21,12 +20,14 @@ import org.zkoss.zk.ui.event.InputEvent;
  * 
  * @author pao
  */
-public class InputEventDataBuilder implements EventDataBuilder {
-	public Map<String, Object> build(Event event, Map<String, Object> data) {
-		InputEvent evt = (InputEvent) event;
+public class InputEventDataBuilder implements EventDataBuilder<InputEvent> {
+	public Map<String, Object> build(InputEvent evt, Map<String, Object> data) {
 		AuUtility.setEssential(data, "value", evt.getValue());
 		AuUtility.setEssential(data, "start", evt.getStart());
 		AuUtility.setEssential(data, "bySelectBack", evt.isChangingBySelectBack());
 		return data;
+	}
+	public Class<InputEvent> getEventClass(){
+		return InputEvent.class;
 	}
 }
