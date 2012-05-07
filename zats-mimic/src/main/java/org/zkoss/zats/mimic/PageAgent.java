@@ -12,6 +12,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic;
 
 import java.util.List;
+
+import org.zkoss.zats.mimic.operation.OperationAgent;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
 /**
  * The page agent, represents a server-side zk page
  * 
@@ -47,6 +51,19 @@ public interface PageAgent extends Agent {
 	 * @return attribute value or null if not found or otherwise.
 	 */
 	Object getAttribute(String name);
+	
+	/**
+	 * try to transfer the page agent to the target class, the target class
+	 * is usually a {@link OperationAgent} or a native {@link Page} <br/>
+	 * 
+	 * if it cannot transfer to target class, it will throw
+	 * {@link AgentException}.
+	 * 
+	 * @param clazz
+	 *            class of specify operation.
+	 * @return operation object.
+	 */
+	<T> T as(Class<T> clazz);
 
 	/**
 	 * get desktop of this page

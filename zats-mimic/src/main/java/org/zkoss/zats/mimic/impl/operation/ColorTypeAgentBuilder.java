@@ -25,9 +25,13 @@ import org.zkoss.zk.ui.event.Events;
  * @author Hawk
  *
  */
-public class ColorTypeAgentBuilder implements OperationAgentBuilder<TypeAgent>{
+public class ColorTypeAgentBuilder implements OperationAgentBuilder<ComponentAgent,TypeAgent>{
 	public TypeAgent getOperation(final ComponentAgent target) {
 		return new TypeAgentImpl(target);
+	}
+	
+	public Class<TypeAgent> getOperationClass() {
+		return TypeAgent.class;
 	}
 
 	class TypeAgentImpl extends AgentDelegator implements TypeAgent{

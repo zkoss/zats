@@ -26,10 +26,14 @@ import org.zkoss.zk.ui.event.Events;
  * @author Hawk
  *
  */
-public class GenericDragAgentBuilder implements OperationAgentBuilder<DragAgent> {
+public class GenericDragAgentBuilder implements OperationAgentBuilder<ComponentAgent,DragAgent> {
 
 	public DragAgent getOperation(final ComponentAgent target) {
 		return new DragAgentImpl(target);
+	}
+	
+	public Class<DragAgent> getOperationClass() {
+		return DragAgent.class;
 	}
 	
 	class DragAgentImpl extends AgentDelegator implements DragAgent {

@@ -21,9 +21,12 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.MouseEvent;
 
-public class GenericClickAgentBuilder implements OperationAgentBuilder<ClickAgent> {
+public class GenericClickAgentBuilder implements OperationAgentBuilder<ComponentAgent,ClickAgent> {
 	public ClickAgent getOperation(final ComponentAgent target) {
 		return new ClickAgentImpl(target);
+	}
+	public Class<ClickAgent> getOperationClass() {
+		return ClickAgent.class;
 	}
 
 	class ClickAgentImpl extends AgentDelegator implements ClickAgent {

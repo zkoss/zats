@@ -37,13 +37,17 @@ import org.zkoss.zul.impl.InputElement;
  * 
  * @author dennis
  */
-public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<TypeAgent> {
+public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<ComponentAgent,TypeAgent> {
 
 	protected static final String DEFAULT_DATE_FORMAT = "yyyy/MM/dd"; // see datebox
 	protected static final String DEFAULT_TIME_FORMAT = "HH:mm"; // see timebox
 
 	public TypeAgent getOperation(final ComponentAgent target) {
 		return new TypeAgentImpl(target);
+	}
+	
+	public Class<TypeAgent> getOperationClass() {
+		return TypeAgent.class;
 	}
 	
 	class TypeAgentImpl extends AgentDelegator implements TypeAgent{

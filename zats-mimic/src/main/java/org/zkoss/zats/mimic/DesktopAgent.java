@@ -12,6 +12,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic;
 
 import java.util.List;
+
+import org.zkoss.zats.mimic.operation.OperationAgent;
+import org.zkoss.zk.ui.Desktop;
 /**
  * The desktop agent, represents a server-side zk desktop
  * 
@@ -56,6 +59,19 @@ public interface DesktopAgent extends Agent {
 	 */
 	List<ComponentAgent> queryAll(String selector);
 
+	
+	/**
+	 * try to transfer the desktop agent to the target class, the target class
+	 * is usually a {@link OperationAgent} or a native {@link Desktop} <br/>
+	 * 
+	 * if it cannot transfer to target class, it will throw
+	 * {@link AgentException}.
+	 * 
+	 * @param clazz
+	 *            class of specify operation.
+	 * @return operation object.
+	 */
+	<T> T as(Class<T> clazz);
 	
 	void destroy();
 }

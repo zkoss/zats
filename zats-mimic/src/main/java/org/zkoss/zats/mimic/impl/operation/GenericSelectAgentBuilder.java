@@ -29,12 +29,14 @@ import org.zkoss.zk.ui.event.SelectEvent;
  *  The builder for selection agent.
  * @author pao
  */
-public class GenericSelectAgentBuilder implements OperationAgentBuilder<SelectAgent> {
+public class GenericSelectAgentBuilder implements OperationAgentBuilder<ComponentAgent,SelectAgent> {
 
 	public SelectAgent getOperation(final ComponentAgent target) {
 		return new SingleSelectAgentImpl(target);
 	}
-
+	public Class<SelectAgent> getOperationClass() {
+		return SelectAgent.class;
+	}
 	static class SingleSelectAgentImpl extends AgentDelegator implements SelectAgent {
 		public SingleSelectAgentImpl(ComponentAgent target) {
 			super(target);

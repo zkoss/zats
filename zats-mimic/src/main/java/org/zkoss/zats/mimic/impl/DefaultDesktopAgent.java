@@ -17,6 +17,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -95,6 +96,12 @@ public class DefaultDesktopAgent implements DesktopAgent {
 	
 	public void destroy(){
 		((ClientCtrl)getClient()).destroy(this);
+	}
+	
+	public <T> T as(Class<T> clazz) {
+		T obj = ValueResolverManager.resolve(this, clazz);
+		if(obj!=null) return obj;
+		throw new AgentException("cannot resolve " + getType() + " to "+ clazz.getName());
 	}
 	
 }

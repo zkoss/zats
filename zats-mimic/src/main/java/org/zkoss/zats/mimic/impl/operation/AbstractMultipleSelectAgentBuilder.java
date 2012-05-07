@@ -83,7 +83,7 @@ public class AbstractMultipleSelectAgentBuilder {
 		abstract protected void putSelectedItems(Set<String> selected);
 	}
 
-	static class ListitemMultipleSelectAgentBuilder implements OperationAgentBuilder<MultipleSelectAgent> {
+	static class ListitemMultipleSelectAgentBuilder implements OperationAgentBuilder<ComponentAgent, MultipleSelectAgent> {
 		public MultipleSelectAgent getOperation(ComponentAgent target) {
 			return new MultipleSelectAgentImpl(target) {
 				@Override
@@ -105,9 +105,12 @@ public class AbstractMultipleSelectAgentBuilder {
 				}
 			};
 		}
+		public Class<MultipleSelectAgent> getOperationClass() {
+			return MultipleSelectAgent.class;
+		}
 	}
 
-	static class TreeitemMultipleSelectAgentBuilder implements OperationAgentBuilder<MultipleSelectAgent> {
+	static class TreeitemMultipleSelectAgentBuilder implements OperationAgentBuilder<ComponentAgent, MultipleSelectAgent> {
 		public MultipleSelectAgent getOperation(ComponentAgent target) {
 			return new MultipleSelectAgentImpl(target) {
 				@Override
@@ -128,6 +131,9 @@ public class AbstractMultipleSelectAgentBuilder {
 						selected.add(((Treeitem) item).getUuid());
 				}
 			};
+		}
+		public Class<MultipleSelectAgent> getOperationClass() {
+			return MultipleSelectAgent.class;
 		}
 	}
 }

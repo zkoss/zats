@@ -25,9 +25,12 @@ import org.zkoss.zk.ui.event.Events;
  * @author Hawk
  *
  */
-public class GenericCloseAgentBuilder implements OperationAgentBuilder<CloseAgent> {
+public class GenericCloseAgentBuilder implements OperationAgentBuilder<ComponentAgent,CloseAgent> {
 	public CloseAgent getOperation(final ComponentAgent target) {
 		return new CloseAgentImpl(target);
+	}
+	public Class<CloseAgent> getOperationClass() {
+		return CloseAgent.class;
 	}
 	class CloseAgentImpl extends AgentDelegator implements CloseAgent{
 		public CloseAgentImpl(ComponentAgent target) {

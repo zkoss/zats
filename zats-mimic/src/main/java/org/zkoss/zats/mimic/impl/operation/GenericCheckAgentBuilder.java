@@ -21,12 +21,14 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.CheckEvent;
 import org.zkoss.zk.ui.event.Events;
 
-public class GenericCheckAgentBuilder implements OperationAgentBuilder<CheckAgent> {
+public class GenericCheckAgentBuilder implements OperationAgentBuilder<ComponentAgent,CheckAgent> {
 
 	public CheckAgent getOperation(final ComponentAgent target) {
 		return new CheckAgentImpl(target);
 	}
-	
+	public Class<CheckAgent> getOperationClass() {
+		return CheckAgent.class;
+	}
 	class CheckAgentImpl extends AgentDelegator implements CheckAgent{
 		public CheckAgentImpl(ComponentAgent target) {
 			super(target);

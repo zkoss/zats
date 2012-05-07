@@ -28,14 +28,16 @@ import org.zkoss.zul.event.RenderEvent;
  * @author dennis
  *
  */
-public class ListboxRendererAgentBuilder implements OperationAgentBuilder<RenderAgent> {
+public class ListboxRendererAgentBuilder implements OperationAgentBuilder<ComponentAgent,RenderAgent> {
 	public RenderAgent getOperation(final ComponentAgent target) {
 		if(!target.is(Listbox.class)){
 			throw new RuntimeException("target "+target+" cannot transfer to Listbox");
 		}
 		return new RendererAgentImpl(target);
 	}
-	
+	public Class<RenderAgent> getOperationClass() {
+		return RenderAgent.class;
+	}
 	class RendererAgentImpl extends AgentDelegator implements RenderAgent{
 		public RendererAgentImpl(ComponentAgent target) {
 			super(target);

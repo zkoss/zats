@@ -26,11 +26,13 @@ import org.zkoss.zul.Textbox;
  * A implementation of open agent builder for sub-class of textbox. 
  * @author pao
  */
-public class TextboxOpenAgentBuilder implements OperationAgentBuilder<OpenAgent> {
+public class TextboxOpenAgentBuilder implements OperationAgentBuilder<ComponentAgent, OpenAgent> {
 	public OpenAgent getOperation(final ComponentAgent target) {
 		return new OpenAgentImpl(target);
 	}
-
+	public Class<OpenAgent> getOperationClass() {
+		return OpenAgent.class;
+	}
 	class OpenAgentImpl extends AgentDelegator implements OpenAgent {
 		public OpenAgentImpl(ComponentAgent target) {
 			super(target);

@@ -13,6 +13,7 @@ package org.zkoss.zats.mimic.impl;
 
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.impl.BinderImpl;
+import org.zkoss.zats.mimic.Agent;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.operation.DateTypeAgentBuilderZK6;
 import org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder;
@@ -20,10 +21,6 @@ import org.zkoss.zats.mimic.impl.operation.GenericOpenAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.OperationAgentManager;
 import org.zkoss.zats.mimic.impl.operation.SelectboxSelectByIndexAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.TimeTypeAgentBuilderZK6;
-import org.zkoss.zats.mimic.operation.CheckAgent;
-import org.zkoss.zats.mimic.operation.OpenAgent;
-import org.zkoss.zats.mimic.operation.SelectByIndexAgent;
-import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.util.WebAppInit;
 import org.zkoss.zul.Combobutton;
@@ -44,15 +41,15 @@ public class Ext6Initiator implements WebAppInit{
 		//so it is ok to register builder by webapp init
 		
 		// operation
-		OperationAgentManager.registerBuilder("6.0.0", "*", Toolbarbutton.class, CheckAgent.class,
+		OperationAgentManager.registerBuilder("6.0.0", "*", Toolbarbutton.class,
 				new GenericCheckAgentBuilder()); // toolbarbutton on check in zk6 only 
-		OperationAgentManager.registerBuilder("6.0.0", "*", Datebox.class, TypeAgent.class,
+		OperationAgentManager.registerBuilder("6.0.0", "*", Datebox.class,
 				new DateTypeAgentBuilderZK6()); // date format changed in zk6
-		OperationAgentManager.registerBuilder("6.0.0", "*", Timebox.class, TypeAgent.class,
+		OperationAgentManager.registerBuilder("6.0.0", "*", Timebox.class,
 				new TimeTypeAgentBuilderZK6()); // date format changed in zk6
-		OperationAgentManager.registerBuilder("6.0.0", "*", Combobutton.class, OpenAgent.class,
+		OperationAgentManager.registerBuilder("6.0.0", "*", Combobutton.class,
 				new GenericOpenAgentBuilder()); // combobutton introduced since zk6
-		OperationAgentManager.registerBuilder("6.0.0", "*", Selectbox.class, SelectByIndexAgent.class,
+		OperationAgentManager.registerBuilder("6.0.0", "*", Selectbox.class,
 				new SelectboxSelectByIndexAgentBuilder()); // selectbox introduced since zk6
 		
 		//event data
@@ -68,12 +65,14 @@ public class Ext6Initiator implements WebAppInit{
 		//resolve view model
 		ValueResolverManager.registerResolver("6.0.0","*",new ValueResolver(){
 			@SuppressWarnings("unchecked")
-			public <T> T resolve(ComponentAgent agent, Class<T> clazz) {
-				Object binder = agent.getAttribute(BinderImpl.BINDER);
-				if(binder != null && binder instanceof Binder){
-					Object vm = ((Binder)binder).getViewModel();
-					if (vm!=null && clazz.isInstance(vm)) {
-						return (T)vm;
+			public <T> T resolve(Agent agent, Class<T> clazz) {
+				if(agent instanceof ComponentAgent){
+					Object binder = ((ComponentAgent)agent).getAttribute(BinderImpl.BINDER);
+					if(binder != null && binder instanceof Binder){
+						Object vm = ((Binder)binder).getViewModel();
+						if (vm!=null && clazz.isInstance(vm)) {
+							return (T)vm;
+						}
 					}
 				}
 				return null;

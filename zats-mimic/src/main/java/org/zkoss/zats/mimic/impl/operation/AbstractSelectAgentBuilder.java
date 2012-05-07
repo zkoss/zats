@@ -61,7 +61,7 @@ public class AbstractSelectAgentBuilder {
 		}
 	}
 
-	static class ComboitemSelectAgentBuilder implements OperationAgentBuilder<SelectAgent> {
+	static class ComboitemSelectAgentBuilder implements OperationAgentBuilder<ComponentAgent,SelectAgent> {
 		public SelectAgent getOperation(ComponentAgent target) {
 			return new SingleSelectAgentImpl(target) {
 				@Override
@@ -70,9 +70,12 @@ public class AbstractSelectAgentBuilder {
 				}
 			};
 		}
+		public Class<SelectAgent> getOperationClass() {
+			return SelectAgent.class;
+		}
 	}
 
-	static class TabSelectAgentBuilder implements OperationAgentBuilder<SelectAgent> {
+	static class TabSelectAgentBuilder implements OperationAgentBuilder<ComponentAgent,SelectAgent> {
 		public SelectAgent getOperation(ComponentAgent target) {
 			return new SingleSelectAgentImpl(target) {
 				@Override
@@ -81,9 +84,12 @@ public class AbstractSelectAgentBuilder {
 				}
 			};
 		}
+		public Class<SelectAgent> getOperationClass() {
+			return SelectAgent.class;
+		}
 	}
 
-	static class LisitemSelectAgentBuilder implements OperationAgentBuilder<SelectAgent> {
+	static class LisitemSelectAgentBuilder implements OperationAgentBuilder<ComponentAgent,SelectAgent> {
 		public SelectAgent getOperation(ComponentAgent target) {
 			return new SingleSelectAgentImpl(target) {
 				@Override
@@ -97,9 +103,12 @@ public class AbstractSelectAgentBuilder {
 				}
 			};
 		}
+		public Class<SelectAgent> getOperationClass() {
+			return SelectAgent.class;
+		}
 	}
 
-	static class TreeSelectAgentBuilder implements OperationAgentBuilder<SelectAgent> {
+	static class TreeSelectAgentBuilder implements OperationAgentBuilder<ComponentAgent,SelectAgent> {
 		public SelectAgent getOperation(ComponentAgent target) {
 			return new SingleSelectAgentImpl(target) {
 				@Override
@@ -112,6 +121,9 @@ public class AbstractSelectAgentBuilder {
 					data.put("clearFirst", target.as(Treeitem.class).getTree().isMultiple());
 				}
 			};
+		}
+		public Class<SelectAgent> getOperationClass() {
+			return SelectAgent.class;
 		}
 	}
 }

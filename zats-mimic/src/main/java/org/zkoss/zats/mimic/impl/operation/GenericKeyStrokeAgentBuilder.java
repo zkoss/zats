@@ -27,13 +27,17 @@ import org.zkoss.zk.ui.event.KeyEvent;
  * @author dennis
  *
  */
-public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<KeyStrokeAgent> {
+public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<ComponentAgent,KeyStrokeAgent> {
 	
 	private static final int ENTER = 13;
 	private static final int ESC = 27;
 	
 	public KeyStrokeAgent getOperation(final ComponentAgent target) {
 		return new KeyStrokeAgentImpl(target);
+	}
+	
+	public Class<KeyStrokeAgent> getOperationClass() {
+		return KeyStrokeAgent.class;
 	}
 	
 	class KeyStrokeAgentImpl extends AgentDelegator implements KeyStrokeAgent{

@@ -30,12 +30,14 @@ import org.zkoss.zk.ui.event.SizeEvent;
  * The builder for size agent.
  * @author pao
  */
-public class GenericSizeAgentBuilder implements OperationAgentBuilder<SizeAgent> {
+public class GenericSizeAgentBuilder implements OperationAgentBuilder<ComponentAgent,SizeAgent> {
 
 	public SizeAgent getOperation(ComponentAgent target) {
 		return new SizeAgentImpl(target);
 	}
-
+	public Class<SizeAgent> getOperationClass() {
+		return SizeAgent.class;
+	}
 	private class SizeAgentImpl extends AgentDelegator implements SizeAgent {
 		public SizeAgentImpl(ComponentAgent target) {
 			super(target);

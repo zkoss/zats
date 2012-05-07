@@ -26,10 +26,14 @@ import org.zkoss.zk.ui.event.MouseEvent;
  * @author Hawk
  *
  */
-public class GenericHoverAgentBuilder implements OperationAgentBuilder<HoverAgent>{
+public class GenericHoverAgentBuilder implements OperationAgentBuilder<ComponentAgent,HoverAgent>{
 
 	public HoverAgent getOperation(final ComponentAgent target) {
 		return new HoverAgentImpl(target);
+	}
+	
+	public Class<HoverAgent> getOperationClass() {
+		return HoverAgent.class;
 	}
 	
 	class HoverAgentImpl extends AgentDelegator implements HoverAgent {

@@ -21,9 +21,13 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 
-public class GenericFocusAgentBuilder implements OperationAgentBuilder<FocusAgent> {
+public class GenericFocusAgentBuilder implements OperationAgentBuilder<ComponentAgent,FocusAgent> {
 	public FocusAgent getOperation(final ComponentAgent target) {
 		return new FocusAgentImpl(target);
+	}
+	
+	public Class<FocusAgent> getOperationClass() {
+		return FocusAgent.class;
 	}
 
 	class FocusAgentImpl extends AgentDelegator implements FocusAgent {

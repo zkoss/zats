@@ -25,12 +25,14 @@ import org.zkoss.zul.Selectbox;
  * A builder for selection by index agent at Selectbox component. 
  * @author pao
  */
-public class SelectboxSelectByIndexAgentBuilder implements OperationAgentBuilder<SelectByIndexAgent> {
+public class SelectboxSelectByIndexAgentBuilder implements OperationAgentBuilder<ComponentAgent,SelectByIndexAgent> {
 
 	public SelectByIndexAgent getOperation(final ComponentAgent target) {
 		return new SelectByIndexAgentImpl(target);
 	}
-
+	public Class<SelectByIndexAgent> getOperationClass() {
+		return SelectByIndexAgent.class;
+	}
 	class SelectByIndexAgentImpl extends AgentDelegator implements SelectByIndexAgent {
 
 		public SelectByIndexAgentImpl(ComponentAgent target) {

@@ -32,14 +32,16 @@ import org.zkoss.zul.impl.LoadStatus;
  * @author dennis
  *
  */
-public class GridRendererAgentBuilder implements OperationAgentBuilder<RenderAgent> {
+public class GridRendererAgentBuilder implements OperationAgentBuilder<ComponentAgent,RenderAgent> {
 	public RenderAgent getOperation(final ComponentAgent target) {
 		if(!target.is(Grid.class)){
 			throw new RuntimeException("target "+target+" cannot transfer to Grid");
 		}
 		return new RendererAgentImpl(target);
 	}
-	
+	public Class<RenderAgent> getOperationClass() {
+		return RenderAgent.class;
+	}
 	class RendererAgentImpl extends AgentDelegator implements RenderAgent{
 		public RendererAgentImpl(ComponentAgent target) {
 			super(target);

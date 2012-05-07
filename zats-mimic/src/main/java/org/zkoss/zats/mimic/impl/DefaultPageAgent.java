@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -95,5 +96,11 @@ public class DefaultPageAgent implements PageAgent {
 			.append("@").append(Integer.toHexString(System.identityHashCode(this)))
 			.append("[").append(page.toString()).append("]")
 			.toString();
+	}
+	
+	public <T> T as(Class<T> clazz) {
+		T obj = ValueResolverManager.resolve(this, clazz);
+		if(obj!=null) return obj;
+		throw new AgentException("cannot resolve " + getType() + " to "+ clazz.getName());
 	}
 }

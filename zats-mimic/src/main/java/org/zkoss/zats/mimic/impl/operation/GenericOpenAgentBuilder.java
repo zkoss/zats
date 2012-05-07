@@ -25,9 +25,12 @@ import org.zkoss.zk.ui.event.OpenEvent;
  * @author dennis
  *
  */
-public class GenericOpenAgentBuilder implements OperationAgentBuilder<OpenAgent> {
+public class GenericOpenAgentBuilder implements OperationAgentBuilder<ComponentAgent,OpenAgent> {
 	public OpenAgent getOperation(final ComponentAgent target) {
 		return new OpenAgentImpl(target);
+	}
+	public Class<OpenAgent> getOperationClass() {
+		return OpenAgent.class;
 	}
 	class OpenAgentImpl extends AgentDelegator implements OpenAgent{
 		public OpenAgentImpl(ComponentAgent target) {
