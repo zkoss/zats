@@ -22,12 +22,12 @@ import org.zkoss.zats.mimic.operation.DragAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.HoverAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
-import org.zkoss.zats.mimic.operation.MaximizeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
+import org.zkoss.zats.mimic.operation.SizeAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zhtml.Input;
 import org.zkoss.zk.ui.AbstractComponent;
@@ -151,8 +151,8 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", Grid.class, RenderAgent.class, new GridRendererAgentBuilder());
 
 		// the maximize
-		registerBuilder("5.0.0", "*", Window.class, MaximizeAgent.class, new GenericMaximizeAgentBuilder());
-		registerBuilder("5.0.0", "*", Panel.class, MaximizeAgent.class, new GenericMaximizeAgentBuilder());
+		registerBuilder("5.0.0", "*", Window.class, SizeAgent.class, new GenericSizeAgentBuilder());
+		registerBuilder("5.0.0", "*", Panel.class, SizeAgent.class, new GenericSizeAgentBuilder());
 		
 		//drag & drop
 		registerBuilder("5.0.0", "*", HtmlBasedComponent.class, DragAgent.class, new GenericDragAgentBuilder());

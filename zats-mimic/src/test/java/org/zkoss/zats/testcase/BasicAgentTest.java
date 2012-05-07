@@ -39,11 +39,11 @@ import org.zkoss.zats.mimic.operation.DragAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.HoverAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
-import org.zkoss.zats.mimic.operation.MaximizeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
+import org.zkoss.zats.mimic.operation.SizeAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
@@ -1177,47 +1177,47 @@ public class BasicAgentTest {
 		assertEquals("", flag.getValue());
 
 		String targetName = "window";
-		MaximizeAgent agent = desktop.query(targetName).as(MaximizeAgent.class);
+		SizeAgent agent = desktop.query(targetName).as(SizeAgent.class);
 
-		agent.setMaximized(true);
+		agent.maximize(true);
 		assertEquals("onMaximize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("true", flag.getValue());
 
-		agent.setMaximized(false);
+		agent.maximize(false);
 		assertEquals("onMaximize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("false", flag.getValue());
 
-		agent.setMinimized(true);
+		agent.minimize(true);
 		assertEquals("onMinimize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("true", flag.getValue());
 
-		agent.setMinimized(false);
+		agent.minimize(false);
 		assertEquals("onMinimize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("false", flag.getValue());
 
 		targetName = "panel";
-		agent = desktop.query(targetName).as(MaximizeAgent.class);
+		agent = desktop.query(targetName).as(SizeAgent.class);
 
-		agent.setMaximized(true);
+		agent.maximize(true);
 		assertEquals("onMaximize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("true", flag.getValue());
 
-		agent.setMaximized(false);
+		agent.maximize(false);
 		assertEquals("onMaximize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("false", flag.getValue());
 
-		agent.setMinimized(true);
+		agent.minimize(true);
 		assertEquals("onMinimize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("true", flag.getValue());
 
-		agent.setMinimized(false);
+		agent.minimize(false);
 		assertEquals("onMinimize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("false", flag.getValue());
@@ -1227,22 +1227,22 @@ public class BasicAgentTest {
 			ca.as(ClickAgent.class).click();
 
 		try {
-			desktop.query("window").as(MaximizeAgent.class).setMaximized(true);
+			desktop.query("window").as(SizeAgent.class).maximize(true);
 			fail();
 		} catch (AgentException e) {
 		}
 		try {
-			desktop.query("window").as(MaximizeAgent.class).setMinimized(true);
+			desktop.query("window").as(SizeAgent.class).minimize(true);
 			fail();
 		} catch (AgentException e) {
 		}
 		try {
-			desktop.query("panel").as(MaximizeAgent.class).setMaximized(true);
+			desktop.query("panel").as(SizeAgent.class).maximize(true);
 			fail();
 		} catch (AgentException e) {
 		}
 		try {
-			desktop.query("panel").as(MaximizeAgent.class).setMinimized(true);
+			desktop.query("panel").as(SizeAgent.class).minimize(true);
 			fail();
 		} catch (AgentException e) {
 		}
@@ -1272,5 +1272,72 @@ public class BasicAgentTest {
 		lowerItem.as(DragAgent.class).dropOn(upperItem);
 		Assert.assertEquals(2, upperItem.as(Listitem.class).getIndex());
 		Assert.assertEquals(1, lowerItem.as(Listitem.class).getIndex());
+	}
+	
+	@Test
+	public void testSizeOperation() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/size.zul");
+		Label eventName = desktop.query("#eventName").as(Label.class);
+		Label target = desktop.query("#target").as(Label.class);
+		Label width = desktop.query("#width").as(Label.class);
+		Label height = desktop.query("#height").as(Label.class);
+		assertEquals("", eventName.getValue());
+		assertEquals("", target.getValue());
+		assertEquals("", width.getValue());
+		assertEquals("", height.getValue());
+
+		String targetName = "window";
+		SizeAgent agent = desktop.query(targetName).as(SizeAgent.class);
+
+		agent.resize(-1, -1); // do nothing
+		assertEquals("", eventName.getValue());
+		assertEquals("", target.getValue());
+		assertEquals("", width.getValue());
+		assertEquals("", height.getValue());
+		
+		int[][] args = { 
+			{ 50, -1 }, 
+			{ -1, 50 }, 
+			{ 100, 100 }, 
+			{ -1, -1},
+		};
+		String[][] except = {
+			{ "50px", "100px" }, // default min-height 
+			{ "50px", "50px" }, 
+			{ "100px", "100px" }, 
+			{ "100px", "100px" }, // do nothing
+		};
+
+		for (int i = 0; i < args.length; ++i) {
+			agent.resize(args[i][0], args[i][1]);
+			assertEquals("onSize", eventName.getValue());
+			assertEquals(targetName, target.getValue());
+			assertEquals(except[i][0], width.getValue());
+			assertEquals(except[i][1], height.getValue());
+		}
+		
+		targetName = "panel";
+		agent = desktop.query(targetName).as(SizeAgent.class);
+
+		args = new int[][]{ 
+			{ -1, 50 }, 
+			{ 50, -1 }, 
+			{ 100, 100 }, 
+			{ -1, -1},
+		};
+		except = new String[][]{
+			{ "200px", "50px" }, // default min-width 
+			{ "50px", "50px" }, 
+			{ "100px", "100px" }, 
+			{ "100px", "100px" }, // do nothing
+		};
+
+		for (int i = 0; i < args.length; ++i) {
+			agent.resize(args[i][0], args[i][1]);
+			assertEquals("onSize", eventName.getValue());
+			assertEquals(targetName, target.getValue());
+			assertEquals(except[i][0], width.getValue());
+			assertEquals(except[i][1], height.getValue());
+		}
 	}
 }
