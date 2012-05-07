@@ -51,19 +51,19 @@
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
 			<artifactId>zats-common</artifactId>
-			<version>${version}</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
 			<artifactId>zats-mimic</artifactId>
-			<version>${version}</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
 			<artifactId>zats-mimic-ext6</artifactId>
-			<version>${version}</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
