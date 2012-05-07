@@ -1,0 +1,49 @@
+<zk>
+	<vbox width="500px">
+		<hbox>
+			<label id="eventName" />
+			<label id="target" />
+			<label id="index" />
+			<label id="width" />
+			<label id="previousWidth" />
+		</hbox>
+		<grid height="100px">
+			<columns id="gc" sizable="true">
+				<column id="gc0" label="gc0" />
+				<column id="gc1" label="gc1" />
+				<column id="gc2" label="gc2" />
+			</columns>
+			<rows></rows>
+		</grid>
+		<listbox height="100px">
+			<listhead id="lh" sizable="true">
+				<listheader id="lh0" label="lh0" />
+				<listheader id="lh1" label="lh1" />
+				<listheader id="lh2" label="lh2" />
+			</listhead>
+		</listbox>
+		<tree height="100px">
+			<treecols id="tc" sizable="true">
+				<treecol id="tc0" label="tc0" />
+				<treecol id="tc1" label="tc1" />
+				<treecol id="tc2" label="tc2" />
+			</treecols>
+		</tree>
+	</vbox>
+	<zscript><![CDATA[
+	org.zkoss.zk.ui.event.EventListener listener = new org.zkoss.zk.ui.event.EventListener() {
+		public void onEvent(Event event) throws Exception {
+			org.zkoss.zul.event.ColSizeEvent e = (org.zkoss.zul.event.ColSizeEvent)event;
+			target.setValue(e.getTarget().getDefinition().getName());
+			eventName.setValue(e.getName());
+			index.setValue(e.getColIndex() + "");
+			width.setValue(e.getWidth() + "");
+			previousWidth.setValue(e.getPreviousWidth() + "");
+		}
+	};
+	gc.addEventListener("onColSize", listener);
+	lh.addEventListener("onColSize", listener);
+	tc.addEventListener("onColSize", listener);
+]]>
+	</zscript>
+</zk>

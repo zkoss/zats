@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.event.SelectionEvent;
 import org.zkoss.zk.ui.event.SizeEvent;
+import org.zkoss.zul.event.ColSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.RenderEvent;
 
@@ -62,6 +63,7 @@ public class EventDataManager {
 		registerBuilder("5.0.0", "*", SizeEvent.class, new SizeEventDataBuilder());
 		registerBuilder("5.0.0", "*", PagingEvent.class, new PagingEventDataBuilder());
 		registerBuilder("5.0.0", "*", BookmarkEvent.class, new BookmarkEventDataBuilder());
+		registerBuilder("5.0.0", "*", ColSizeEvent.class, new ColSizeEventDataBuilder());
 		//TODO more
 	}
 	

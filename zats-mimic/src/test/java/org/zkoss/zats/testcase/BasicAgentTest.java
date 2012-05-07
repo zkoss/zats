@@ -1383,4 +1383,101 @@ public class BasicAgentTest {
 		desktopAgent.query("#btn").as(ClickAgent.class).click();
 		assertEquals("XYZ", desktopAgent.as(Desktop.class).getBookmark());
 	}
+	
+	
+	@Test
+	public void testColumnSizeOperation() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/size-column.zul");
+		Label eventName = desktop.query("#eventName").as(Label.class);
+		Label target = desktop.query("#target").as(Label.class);
+		Label index = desktop.query("#index").as(Label.class);
+		Label width = desktop.query("#width").as(Label.class);
+		Label previousWidth = desktop.query("#previousWidth").as(Label.class);
+		assertEquals("", eventName.getValue());
+		assertEquals("", target.getValue());
+		assertEquals("", index.getValue());
+		assertEquals("", width.getValue());
+		assertEquals("", previousWidth.getValue());
+		
+		String[][] args = new String[][] {
+				{"#gc0" , "-1" , "999"},
+				{"#gc0" , "100" , "-1"},
+				{"#gc0" , "110" , "-1"},
+				{"#gc2" , "120" , "-1"},
+				{"#gc1" , "130" , "-1"},
+				{"#gc1" , "130" , "-1"},
+		};
+		String[][] except = new String[][] {
+				{ "", "", "", "", "" },
+				{ "onColSize", "columns", "0", "100px", "null" },
+				{ "onColSize", "columns", "0", "110px", "100px" },
+				{ "onColSize", "columns", "2", "120px", "200px" },
+				{ "onColSize", "columns", "1", "130px", "200px" },
+				{ "onColSize", "columns", "1", "130px", "200px" },
+		};
+		for (int i = 0; i < args.length; ++i) {
+			String id = args[i][0];
+			int w = Integer.parseInt(args[i][1]), h = Integer.parseInt(args[i][2]);
+			desktop.query(id).as(SizeAgent.class).resize(w, h);
+			assertEquals(except[i][0], eventName.getValue());
+			assertEquals(except[i][1], target.getValue());
+			assertEquals(except[i][2], index.getValue());
+			assertEquals(except[i][3], width.getValue());
+			assertEquals(except[i][4], previousWidth.getValue());
+		}
+		
+		args = new String[][] {
+				{"#lh0" , "-1" , "999"},
+				{"#lh0" , "100" , "-1"},
+				{"#lh0" , "110" , "-1"},
+				{"#lh2" , "120" , "-1"},
+				{"#lh1" , "130" , "-1"},
+				{"#lh1" , "130" , "-1"},
+		};
+		except = new String[][] {
+				{ "onColSize", "columns", "1", "130px", "200px" },
+				{ "onColSize", "listhead", "0", "100px", "null" },
+				{ "onColSize", "listhead", "0", "110px", "100px" },
+				{ "onColSize", "listhead", "2", "120px", "200px" },
+				{ "onColSize", "listhead", "1", "130px", "200px" },
+				{ "onColSize", "listhead", "1", "130px", "200px" },
+		};
+		for (int i = 0; i < args.length; ++i) {
+			String id = args[i][0];
+			int w = Integer.parseInt(args[i][1]), h = Integer.parseInt(args[i][2]);
+			desktop.query(id).as(SizeAgent.class).resize(w, h);
+			assertEquals(except[i][0], eventName.getValue());
+			assertEquals(except[i][1], target.getValue());
+			assertEquals(except[i][2], index.getValue());
+			assertEquals(except[i][3], width.getValue());
+			assertEquals(except[i][4], previousWidth.getValue());
+		}
+		
+		args = new String[][] {
+				{"#tc0" , "-1" , "999"},
+				{"#tc0" , "100" , "-1"},
+				{"#tc0" , "110" , "-1"},
+				{"#tc2" , "120" , "-1"},
+				{"#tc1" , "130" , "-1"},
+				{"#tc1" , "130" , "-1"},
+		};
+		except = new String[][] {
+				{ "onColSize", "listhead", "1", "130px", "200px" },
+				{ "onColSize", "treecols", "0", "100px", "null" },
+				{ "onColSize", "treecols", "0", "110px", "100px" },
+				{ "onColSize", "treecols", "2", "120px", "200px" },
+				{ "onColSize", "treecols", "1", "130px", "200px" },
+				{ "onColSize", "treecols", "1", "130px", "200px" },
+		};
+		for (int i = 0; i < args.length; ++i) {
+			String id = args[i][0];
+			int w = Integer.parseInt(args[i][1]), h = Integer.parseInt(args[i][2]);
+			desktop.query(id).as(SizeAgent.class).resize(w, h);
+			assertEquals(except[i][0], eventName.getValue());
+			assertEquals(except[i][1], target.getValue());
+			assertEquals(except[i][2], index.getValue());
+			assertEquals(except[i][3], width.getValue());
+			assertEquals(except[i][4], previousWidth.getValue());
+		}
+	}
 }
