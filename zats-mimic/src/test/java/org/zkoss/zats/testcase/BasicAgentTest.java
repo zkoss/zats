@@ -39,7 +39,7 @@ import org.zkoss.zats.mimic.operation.DragAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.HoverAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
-import org.zkoss.zats.mimic.operation.MaximizeAgent;
+import org.zkoss.zats.mimic.operation.SizeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.RenderAgent;
@@ -1177,47 +1177,47 @@ public class BasicAgentTest {
 		assertEquals("", flag.getValue());
 
 		String targetName = "window";
-		MaximizeAgent agent = desktop.query(targetName).as(MaximizeAgent.class);
+		SizeAgent agent = desktop.query(targetName).as(SizeAgent.class);
 
-		agent.setMaximized(true);
+		agent.maximize(true);
 		assertEquals("onMaximize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("true", flag.getValue());
 
-		agent.setMaximized(false);
+		agent.maximize(false);
 		assertEquals("onMaximize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("false", flag.getValue());
 
-		agent.setMinimized(true);
+		agent.minimize(true);
 		assertEquals("onMinimize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("true", flag.getValue());
 
-		agent.setMinimized(false);
+		agent.minimize(false);
 		assertEquals("onMinimize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("false", flag.getValue());
 
 		targetName = "panel";
-		agent = desktop.query(targetName).as(MaximizeAgent.class);
+		agent = desktop.query(targetName).as(SizeAgent.class);
 
-		agent.setMaximized(true);
+		agent.maximize(true);
 		assertEquals("onMaximize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("true", flag.getValue());
 
-		agent.setMaximized(false);
+		agent.maximize(false);
 		assertEquals("onMaximize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("false", flag.getValue());
 
-		agent.setMinimized(true);
+		agent.minimize(true);
 		assertEquals("onMinimize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("true", flag.getValue());
 
-		agent.setMinimized(false);
+		agent.minimize(false);
 		assertEquals("onMinimize", eventName.getValue());
 		assertEquals(targetName, target.getValue());
 		assertEquals("false", flag.getValue());
@@ -1227,22 +1227,22 @@ public class BasicAgentTest {
 			ca.as(ClickAgent.class).click();
 
 		try {
-			desktop.query("window").as(MaximizeAgent.class).setMaximized(true);
+			desktop.query("window").as(SizeAgent.class).maximize(true);
 			fail();
 		} catch (AgentException e) {
 		}
 		try {
-			desktop.query("window").as(MaximizeAgent.class).setMinimized(true);
+			desktop.query("window").as(SizeAgent.class).minimize(true);
 			fail();
 		} catch (AgentException e) {
 		}
 		try {
-			desktop.query("panel").as(MaximizeAgent.class).setMaximized(true);
+			desktop.query("panel").as(SizeAgent.class).maximize(true);
 			fail();
 		} catch (AgentException e) {
 		}
 		try {
-			desktop.query("panel").as(MaximizeAgent.class).setMinimized(true);
+			desktop.query("panel").as(SizeAgent.class).minimize(true);
 			fail();
 		} catch (AgentException e) {
 		}
