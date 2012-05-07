@@ -24,6 +24,7 @@ import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.MaximizeEvent;
 import org.zkoss.zk.ui.event.MinimizeEvent;
+import org.zkoss.zk.ui.event.SizeEvent;
 
 /**
  * The builder for size agent.
@@ -58,6 +59,15 @@ public class GenericSizeAgentBuilder implements OperationAgentBuilder<SizeAgent>
 			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), target.getUuid(), cmd, data);
 		}
 
+		public void resize(int width, int height) {
+			check("Sizable");
+			HtmlBasedComponent comp = (HtmlBasedComponent) getDelegatee();
+			String cmd = Events.ON_SIZE;
+			SizeEvent event = new SizeEvent(cmd, comp, width + "px", height + "px", 0);
+			Map<String, Object> data = EventDataManager.build(event);
+			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), target.getUuid(), cmd, data);
+		}
+
 		/**
 		 * check enabled flag.
 		 */
@@ -73,11 +83,6 @@ public class GenericSizeAgentBuilder implements OperationAgentBuilder<SizeAgent>
 				throw new ZatsException(getDelegatee().getClass().getName() + " doesn't support "
 						+ property.toLowerCase() + " operation", e);
 			}
-		}
-
-		public void resize(int width, int height) {
-			// TODO Auto-generated method stub
-
 		}
 	}
 }
