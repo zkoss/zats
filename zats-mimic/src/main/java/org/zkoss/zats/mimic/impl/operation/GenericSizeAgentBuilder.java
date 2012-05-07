@@ -60,8 +60,35 @@ public class GenericSizeAgentBuilder implements OperationAgentBuilder<SizeAgent>
 		}
 
 		public void resize(int width, int height) {
-			check("Sizable");
+			if (width < 0 && height < 0)
+				return; // do nothing
+
+			// check flag
 			HtmlBasedComponent comp = (HtmlBasedComponent) getDelegatee();
+			check("Sizable");
+			// check arguments
+			try {
+				if (width < 0) {
+					String widthStr = comp.getWidth();
+					if (widthStr == null || widthStr.length() <= 0) {
+						Method method = getDelegatee().getClass().getMethod("getMinwidth");
+						widthStr = method.invoke(getDelegatee()).toString() + "px";
+					}
+					width = Integer.parseInt(widthStr.substring(0, widthStr.length() - 2));
+				}
+				if (height < 0) {
+					String heightStr = comp.getHeight();
+					if (heightStr == null || heightStr.length() <= 0) {
+						Method method = getDelegatee().getClass().getMethod("getMinheight");
+						heightStr = method.invoke(getDelegatee()).toString() + "px";
+					}
+					height = Integer.parseInt(heightStr.substring(0, heightStr.length() - 2));
+				}
+			} catch (Exception e) {
+				throw new ZatsException("", e);
+			}
+
+			// post AU
 			String cmd = Events.ON_SIZE;
 			SizeEvent event = new SizeEvent(cmd, comp, width + "px", height + "px", 0);
 			Map<String, Object> data = EventDataManager.build(event);
