@@ -35,7 +35,7 @@ public class GenericHoverAgentBuilder implements OperationAgentBuilder<Component
 		return HoverAgent.class;
 	}
 	
-	class HoverAgentImpl extends AgentDelegator implements HoverAgent {
+	class HoverAgentImpl extends AgentDelegator<ComponentAgent> implements HoverAgent {
 
 		/**
 		 * @param target

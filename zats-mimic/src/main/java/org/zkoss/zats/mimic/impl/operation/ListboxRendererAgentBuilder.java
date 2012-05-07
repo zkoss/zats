@@ -38,7 +38,7 @@ public class ListboxRendererAgentBuilder implements OperationAgentBuilder<Compon
 	public Class<RenderAgent> getOperationClass() {
 		return RenderAgent.class;
 	}
-	class RendererAgentImpl extends AgentDelegator implements RenderAgent{
+	class RendererAgentImpl extends AgentDelegator<ComponentAgent> implements RenderAgent{
 		public RendererAgentImpl(ComponentAgent target) {
 			super(target);
 		}

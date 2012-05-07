@@ -37,7 +37,7 @@ public class GenericSelectAgentBuilder implements OperationAgentBuilder<Componen
 	public Class<SelectAgent> getOperationClass() {
 		return SelectAgent.class;
 	}
-	static class SingleSelectAgentImpl extends AgentDelegator implements SelectAgent {
+	static class SingleSelectAgentImpl extends AgentDelegator<ComponentAgent> implements SelectAgent {
 		public SingleSelectAgentImpl(ComponentAgent target) {
 			super(target);
 		}

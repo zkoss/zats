@@ -33,7 +33,7 @@ import org.zkoss.zul.Treeitem;
  */
 public class AbstractSelectAgentBuilder {
 
-	static abstract class SingleSelectAgentImpl extends AgentDelegator implements SelectAgent {
+	static abstract class SingleSelectAgentImpl extends AgentDelegator<ComponentAgent> implements SelectAgent {
 		public SingleSelectAgentImpl(ComponentAgent target) {
 			super(target);
 		}

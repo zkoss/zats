@@ -33,7 +33,7 @@ import org.zkoss.zul.Treeitem;
  *
  */
 public class AbstractMultipleSelectAgentBuilder {
-	static abstract class MultipleSelectAgentImpl extends AgentDelegator implements MultipleSelectAgent {
+	static abstract class MultipleSelectAgentImpl extends AgentDelegator<ComponentAgent> implements MultipleSelectAgent {
 		public MultipleSelectAgentImpl(ComponentAgent target) {
 			super(target);
 		}

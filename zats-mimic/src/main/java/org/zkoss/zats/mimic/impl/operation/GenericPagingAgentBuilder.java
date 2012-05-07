@@ -37,7 +37,7 @@ public class GenericPagingAgentBuilder implements OperationAgentBuilder<Componen
 		return PagingAgent.class;
 	}
 	
-	class PagingAgentImpl extends AgentDelegator implements PagingAgent{
+	class PagingAgentImpl extends AgentDelegator<ComponentAgent> implements PagingAgent{
 		public PagingAgentImpl(ComponentAgent target) {
 			super(target);
 		}

@@ -20,10 +20,10 @@ import org.zkoss.zats.mimic.ComponentAgent;
  * @author dennis
  * 
  */
-public abstract class AgentDelegator implements Agent {
-	protected ComponentAgent target;
+public abstract class AgentDelegator<T extends Agent> implements Agent {
+	protected T target;
 
-	public AgentDelegator(ComponentAgent target) {
+	public AgentDelegator(T target) {
 		this.target = target;
 	}
 

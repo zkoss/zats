@@ -50,7 +50,7 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 		return TypeAgent.class;
 	}
 	
-	class TypeAgentImpl extends AgentDelegator implements TypeAgent{
+	class TypeAgentImpl extends AgentDelegator<ComponentAgent> implements TypeAgent{
 		public TypeAgentImpl(ComponentAgent target) {
 			super(target);
 		}

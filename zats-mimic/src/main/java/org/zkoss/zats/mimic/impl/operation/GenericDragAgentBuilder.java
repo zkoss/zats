@@ -36,7 +36,7 @@ public class GenericDragAgentBuilder implements OperationAgentBuilder<ComponentA
 		return DragAgent.class;
 	}
 	
-	class DragAgentImpl extends AgentDelegator implements DragAgent {
+	class DragAgentImpl extends AgentDelegator<ComponentAgent> implements DragAgent {
 		
 		public DragAgentImpl(ComponentAgent target) {
 			super(target);
