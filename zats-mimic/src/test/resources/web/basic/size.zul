@@ -1,0 +1,34 @@
+<zk>
+	<vbox>
+		<hbox>
+			<label id="eventName" />
+			<label id="target" />
+			<label id="width" />
+			<label id="height" />
+		</hbox>
+		<vbox id="layouts" width="600px" height="600px">
+			<window id="win" sizable="true" border="normal" title="window">
+				<label value="window content" />
+			</window>
+			<panel id="pane" sizable="true" border="normal" title="panel">
+				<panelchildren>
+					<label value="panel content" />
+				</panelchildren>
+			</panel>
+		</vbox>
+	</vbox>
+	<zscript><![CDATA[
+	org.zkoss.zk.ui.event.EventListener listener = new org.zkoss.zk.ui.event.EventListener() {
+		public void onEvent(Event event) throws Exception {
+			eventName.setValue(event.getName());
+			target.setValue(event.getTarget().getDefinition().getName());
+			width.setValue(((SizeEvent)event).getWidth());
+			height.setValue(((SizeEvent)event).getHeight());
+		}
+	};
+	for(Object comp : layouts.getChildren()) {
+		((Component)comp).addEventListener(Events.ON_SIZE, listener);
+	}
+]]>
+	</zscript>
+</zk>
