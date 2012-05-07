@@ -30,7 +30,7 @@ public class GenericFocusAgentBuilder implements OperationAgentBuilder<Component
 		return FocusAgent.class;
 	}
 
-	class FocusAgentImpl extends AgentDelegator implements FocusAgent {
+	class FocusAgentImpl extends AgentDelegator<ComponentAgent> implements FocusAgent {
 		public FocusAgentImpl(ComponentAgent target) {
 			super(target);
 		}

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div onBookmarkChange='msg.value = "Welcome "+event.bookmark' >
+	<button id="btn" label="set bookmark" onClick='desktop.setBookmark("XYZ")' />
+	<label id="msg" value="Hello World!" />
+</div>

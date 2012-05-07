@@ -33,7 +33,7 @@ public class TextboxOpenAgentBuilder implements OperationAgentBuilder<ComponentA
 	public Class<OpenAgent> getOperationClass() {
 		return OpenAgent.class;
 	}
-	class OpenAgentImpl extends AgentDelegator implements OpenAgent {
+	class OpenAgentImpl extends AgentDelegator<ComponentAgent> implements OpenAgent {
 		public OpenAgentImpl(ComponentAgent target) {
 			super(target);
 		}

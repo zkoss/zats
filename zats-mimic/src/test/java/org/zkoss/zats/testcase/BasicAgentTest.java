@@ -32,6 +32,7 @@ import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Zats;
+import org.zkoss.zats.mimic.operation.BookmarkAgent;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.CloseAgent;
@@ -47,6 +48,7 @@ import org.zkoss.zats.mimic.operation.SizeAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
@@ -1339,5 +1341,18 @@ public class BasicAgentTest {
 			assertEquals(except[i][0], width.getValue());
 			assertEquals(except[i][1], height.getValue());
 		}
+	}
+	
+	@Test
+	public void testBookmarkAgent() {
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/bookmark.zul");
+		assertEquals("Hello World!", desktopAgent.query("#msg").as(Label.class).getValue());
+		
+		desktopAgent.as(BookmarkAgent.class).bookmark("ABCD");
+		assertEquals("Welcome ABCD", desktopAgent.query("#msg").as(Label.class).getValue());
+		
+		desktopAgent.query("#btn").as(ClickAgent.class).click();
+		assertEquals("XYZ", desktopAgent.as(Desktop.class).getBookmark());
+		
 	}
 }

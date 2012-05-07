@@ -38,7 +38,7 @@ public class GenericSizeAgentBuilder implements OperationAgentBuilder<ComponentA
 	public Class<SizeAgent> getOperationClass() {
 		return SizeAgent.class;
 	}
-	private class SizeAgentImpl extends AgentDelegator implements SizeAgent {
+	private class SizeAgentImpl extends AgentDelegator<ComponentAgent> implements SizeAgent {
 		public SizeAgentImpl(ComponentAgent target) {
 			super(target);
 		}

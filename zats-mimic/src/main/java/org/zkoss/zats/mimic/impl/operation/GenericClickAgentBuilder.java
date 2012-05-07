@@ -29,7 +29,7 @@ public class GenericClickAgentBuilder implements OperationAgentBuilder<Component
 		return ClickAgent.class;
 	}
 
-	class ClickAgentImpl extends AgentDelegator implements ClickAgent {
+	class ClickAgentImpl extends AgentDelegator<ComponentAgent> implements ClickAgent {
 		public ClickAgentImpl(ComponentAgent target) {
 			super(target);
 		}

@@ -34,7 +34,7 @@ public class ColorTypeAgentBuilder implements OperationAgentBuilder<ComponentAge
 		return TypeAgent.class;
 	}
 
-	class TypeAgentImpl extends AgentDelegator implements TypeAgent{
+	class TypeAgentImpl extends AgentDelegator<ComponentAgent> implements TypeAgent{
 
 		/**
 		 * @param target

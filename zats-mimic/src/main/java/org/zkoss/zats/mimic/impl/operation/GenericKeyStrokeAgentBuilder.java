@@ -40,7 +40,7 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<Compo
 		return KeyStrokeAgent.class;
 	}
 	
-	class KeyStrokeAgentImpl extends AgentDelegator implements KeyStrokeAgent{
+	class KeyStrokeAgentImpl extends AgentDelegator<ComponentAgent> implements KeyStrokeAgent{
 		public KeyStrokeAgentImpl(ComponentAgent target) {
 			super(target);
 		}

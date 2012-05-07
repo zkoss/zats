@@ -29,7 +29,7 @@ public class GenericCheckAgentBuilder implements OperationAgentBuilder<Component
 	public Class<CheckAgent> getOperationClass() {
 		return CheckAgent.class;
 	}
-	class CheckAgentImpl extends AgentDelegator implements CheckAgent{
+	class CheckAgentImpl extends AgentDelegator<ComponentAgent> implements CheckAgent{
 		public CheckAgentImpl(ComponentAgent target) {
 			super(target);
 		}

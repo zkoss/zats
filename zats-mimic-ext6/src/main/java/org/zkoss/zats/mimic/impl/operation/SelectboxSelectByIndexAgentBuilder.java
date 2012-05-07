@@ -33,7 +33,7 @@ public class SelectboxSelectByIndexAgentBuilder implements OperationAgentBuilder
 	public Class<SelectByIndexAgent> getOperationClass() {
 		return SelectByIndexAgent.class;
 	}
-	class SelectByIndexAgentImpl extends AgentDelegator implements SelectByIndexAgent {
+	class SelectByIndexAgentImpl extends AgentDelegator<ComponentAgent> implements SelectByIndexAgent {
 
 		public SelectByIndexAgentImpl(ComponentAgent target) {
 			super(target);

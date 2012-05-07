@@ -32,7 +32,7 @@ public class GenericCloseAgentBuilder implements OperationAgentBuilder<Component
 	public Class<CloseAgent> getOperationClass() {
 		return CloseAgent.class;
 	}
-	class CloseAgentImpl extends AgentDelegator implements CloseAgent{
+	class CloseAgentImpl extends AgentDelegator<ComponentAgent> implements CloseAgent{
 		public CloseAgentImpl(ComponentAgent target) {
 			super(target);
 		}

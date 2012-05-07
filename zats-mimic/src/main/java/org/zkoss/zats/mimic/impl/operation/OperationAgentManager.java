@@ -18,6 +18,7 @@ import org.zkoss.zats.mimic.Agent;
 import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.Desktop;
 //import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zul.A;
@@ -55,7 +56,9 @@ public class OperationAgentManager {
 	static {
 		builders = new HashMap<OperationAgentManager.Key, OperationAgentBuilder<? extends Agent, ? extends OperationAgent>>();
 
-		// TODO load default implement
+		//most common agents
+		registerBuilder("5.0.0", "*", Desktop.class, new DesktopBookmarkAgentBuilder());
+
 		registerBuilder("5.0.0", "*", AbstractComponent.class, new GenericClickAgentBuilder());
 		registerBuilder("5.0.0", "*", AbstractComponent.class, new GenericKeyStrokeAgentBuilder());
 
@@ -190,7 +193,7 @@ public class OperationAgentManager {
 	 *            operation builder
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static <A extends Agent,O extends OperationAgent> void registerBuilder(String startVersion, String endVersion,
+	public static <O extends OperationAgent> void registerBuilder(String startVersion, String endVersion,
 			String delegateeClass, String builderClazz) {
 		if (startVersion == null || endVersion == null || delegateeClass == null || builderClazz == null)
 			throw new IllegalArgumentException();
@@ -204,10 +207,10 @@ public class OperationAgentManager {
 		} catch (ClassNotFoundException e) {
 			throw new IllegalArgumentException("delegateeClass " + delegateeClass + " not found ", e);
 		}
-		OperationAgentBuilder<A,O> builder = null;
+		OperationAgentBuilder<Agent,O> builder = null;
 		try {
 			Class buildClz = Class.forName(builderClazz);
-			builder = (OperationAgentBuilder) buildClz.newInstance();
+			builder = (OperationAgentBuilder<Agent,O>) buildClz.newInstance();
 		} catch (Exception x) {
 			throw new IllegalArgumentException(x.getMessage(), x);
 		}
@@ -256,6 +259,14 @@ public class OperationAgentManager {
 			OperationAgentBuilder<? extends Agent, ? extends OperationAgent> builder = builders.get(new Key(c, operation));
 			if (builder != null)
 				return (OperationAgentBuilder<Agent, O>) builder;
+			//check interface also
+			Class<?>[] ifs = c.getInterfaces();
+			for(Class<?> i:ifs){
+				builder = builders.get(new Key(i, operation));
+				if (builder != null)
+					return (OperationAgentBuilder<Agent, O>) builder;
+			}
+			//check super
 			c = c.getSuperclass();
 		}
 		return null; // not found
