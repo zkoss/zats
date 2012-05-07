@@ -18,7 +18,6 @@ import org.zkoss.zats.mimic.Agent;
 import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zk.ui.AbstractComponent;
-//import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zul.A;
 import org.zkoss.zul.Bandbox;
@@ -40,6 +39,7 @@ import org.zkoss.zul.Listgroup;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Longbox;
 import org.zkoss.zul.Menuitem;
+import org.zkoss.zul.Paging;
 import org.zkoss.zul.Panel;
 import org.zkoss.zul.Spinner;
 import org.zkoss.zul.Tab;
@@ -137,6 +137,9 @@ public class OperationAgentManager {
 		
 		//hover
 		registerBuilder("5.0.0", "*", HtmlBasedComponent.class, new GenericHoverAgentBuilder());
+		
+		//paging
+		registerBuilder("5.0.0", "*", Paging.class, new GenericPagingAgentBuilder());
 		
 		//----------special case ---
 		

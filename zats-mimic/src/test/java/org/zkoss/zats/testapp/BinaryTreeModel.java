@@ -20,7 +20,7 @@ import org.zkoss.zul.AbstractTreeModel;
  * @author dennis
  *
  */
-public class BinaryTreeModel extends AbstractTreeModel{
+public class BinaryTreeModel extends org.zkoss.zul.AbstractTreeModel{
 private ArrayList _tree =null;
 	
 	/**

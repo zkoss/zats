@@ -41,6 +41,7 @@ import org.zkoss.zats.mimic.operation.HoverAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
+import org.zkoss.zats.mimic.operation.PagingAgent;
 import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.SizeAgent;
@@ -51,6 +52,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Paging;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treeitem;
 
@@ -1339,5 +1341,32 @@ public class BasicAgentTest {
 			assertEquals(except[i][0], width.getValue());
 			assertEquals(except[i][1], height.getValue());
 		}
+	}
+
+		@Test
+		public void testPaging(){
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/paging.zul");
+		ComponentAgent paging = desktop.query("listbox > paging");
+		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
+		
+		paging.as(PagingAgent.class).goTo(1);
+		Assert.assertEquals("1", desktop.query("#listboxPageIndex").as(Label.class).getValue());
+		
+		paging = desktop.query("#grid > paging");
+		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
+		
+		paging.as(PagingAgent.class).goTo(1);
+		Assert.assertEquals("1", desktop.query("#gridPageIndex").as(Label.class).getValue());
+		
+		paging = desktop.query("tree > paging");
+		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
+		
+		paging.as(PagingAgent.class).goTo(1);
+		Assert.assertEquals("1", desktop.query("#treePageIndex").as(Label.class).getValue());
+		
+		paging = desktop.query("#pg");
+		paging.as(PagingAgent.class).goTo(1);
+		Assert.assertEquals("1", desktop.query("#leftGridPageIndex").as(Label.class).getValue());
+		Assert.assertEquals("1", desktop.query("#rightGridPageIndex").as(Label.class).getValue());
 	}
 }
