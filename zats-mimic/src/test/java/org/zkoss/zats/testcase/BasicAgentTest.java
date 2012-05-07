@@ -1366,7 +1366,7 @@ public class BasicAgentTest {
 		String[][] except = new String[][] {
 				{ "", "", "", "", "" },
 				{ "onColSize", "columns", "0", "100px", "null" },
-				{ "onColSize", "columns", "0", "110px", "50px" },
+				{ "onColSize", "columns", "0", "110px", "100px" },
 				{ "onColSize", "columns", "2", "120px", "200px" },
 				{ "onColSize", "columns", "1", "130px", "200px" },
 				{ "onColSize", "columns", "1", "130px", "200px" },
@@ -1391,9 +1391,9 @@ public class BasicAgentTest {
 				{"#lh1" , "130" , "-1"},
 		};
 		except = new String[][] {
-				{ "", "", "", "", "" },
+				{ "onColSize", "columns", "1", "130px", "200px" },
 				{ "onColSize", "listhead", "0", "100px", "null" },
-				{ "onColSize", "listhead", "0", "110px", "50px" },
+				{ "onColSize", "listhead", "0", "110px", "100px" },
 				{ "onColSize", "listhead", "2", "120px", "200px" },
 				{ "onColSize", "listhead", "1", "130px", "200px" },
 				{ "onColSize", "listhead", "1", "130px", "200px" },
@@ -1418,9 +1418,9 @@ public class BasicAgentTest {
 				{"#tc1" , "130" , "-1"},
 		};
 		except = new String[][] {
-				{ "", "", "", "", "" },
+				{ "onColSize", "listhead", "1", "130px", "200px" },
 				{ "onColSize", "treecols", "0", "100px", "null" },
-				{ "onColSize", "treecols", "0", "110px", "50px" },
+				{ "onColSize", "treecols", "0", "110px", "100px" },
 				{ "onColSize", "treecols", "2", "120px", "200px" },
 				{ "onColSize", "treecols", "1", "130px", "200px" },
 				{ "onColSize", "treecols", "1", "130px", "200px" },

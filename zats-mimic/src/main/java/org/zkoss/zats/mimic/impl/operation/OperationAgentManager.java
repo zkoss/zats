@@ -36,6 +36,7 @@ import org.zkoss.zul.A;
 import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Column;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Datebox;
@@ -49,6 +50,7 @@ import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listgroup;
+import org.zkoss.zul.Listheader;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Longbox;
 import org.zkoss.zul.Menuitem;
@@ -57,6 +59,7 @@ import org.zkoss.zul.Spinner;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Timebox;
 import org.zkoss.zul.Tree;
+import org.zkoss.zul.Treecol;
 import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.Window;
 import org.zkoss.zul.impl.InputElement;
@@ -140,9 +143,12 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", Listbox.class, RenderAgent.class, new ListboxRendererAgentBuilder());
 		registerBuilder("5.0.0", "*", Grid.class, RenderAgent.class, new GridRendererAgentBuilder());
 
-		// the maximize
+		// the resize
 		registerBuilder("5.0.0", "*", Window.class, SizeAgent.class, new GenericSizeAgentBuilder());
 		registerBuilder("5.0.0", "*", Panel.class, SizeAgent.class, new GenericSizeAgentBuilder());
+		registerBuilder("5.0.0", "*", Column.class, SizeAgent.class, new HeaderSizeAgentBuilder());
+		registerBuilder("5.0.0", "*", Listheader.class, SizeAgent.class, new HeaderSizeAgentBuilder());
+		registerBuilder("5.0.0", "*", Treecol.class, SizeAgent.class, new HeaderSizeAgentBuilder());
 		
 		//drag & drop
 		registerBuilder("5.0.0", "*", HtmlBasedComponent.class, DragAgent.class, new GenericDragAgentBuilder());
