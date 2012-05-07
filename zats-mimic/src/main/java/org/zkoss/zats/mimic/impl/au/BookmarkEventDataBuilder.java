@@ -14,18 +14,20 @@ package org.zkoss.zats.mimic.impl.au;
 import java.util.Map;
 
 import org.zkoss.zk.ui.event.BookmarkEvent;
-import org.zkoss.zk.ui.event.Event;
 
 /**
  * @author dennis
  *
  */
-public class BookmarkEventDataBuilder implements EventDataBuilder {
+public class BookmarkEventDataBuilder implements EventDataBuilder<BookmarkEvent> {
 
-	public Map<String, Object> build(Event event, Map<String, Object> data) {
-		BookmarkEvent evt = (BookmarkEvent) event;
+	public Map<String, Object> build(BookmarkEvent evt, Map<String, Object> data) {
 		AuUtility.setEssential(data, "", evt.getBookmark());
 		return data;
+	}
+	
+	public Class<BookmarkEvent> getEventClass(){
+		return BookmarkEvent.class;
 	}
 
 }

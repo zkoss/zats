@@ -19,7 +19,9 @@ import org.zkoss.zk.ui.event.Event;
  * @author dennis
  *
  */
-public interface EventDataBuilder {
+public interface EventDataBuilder<E extends Event> {
 
-	Map<String,Object> build(Event event,Map<String,Object> data);
+	Map<String,Object> build(E event,Map<String,Object> data);
+	
+	Class<E> getEventClass();
 }
