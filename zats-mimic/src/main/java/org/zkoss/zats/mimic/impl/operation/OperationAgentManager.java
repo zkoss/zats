@@ -29,7 +29,6 @@ import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.SizeAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
-import org.zkoss.zhtml.Input;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
@@ -101,20 +100,11 @@ public class OperationAgentManager {
 				new AbstractTypeAgentBuilder.DateTypeAgentBuilder());
 		registerBuilder("5.0.0", "*", Timebox.class, TypeAgent.class,
 				new AbstractTypeAgentBuilder.TimeTypeAgentBuilder());
-		//colorbox in zkex.jar which is optional
-		try{
-			registerBuilder("5.0.0", "*", "org.zkoss.zkex.zul.Colorbox", TypeAgent.class,
-					"org.zkoss.zats.mimic.impl.operation.ColorTypeAgentBuilder");
-		}catch (Exception e) {
-			// doesn't exist
-		}
 
 		// the check
 		registerBuilder("5.0.0", "*", Menuitem.class, CheckAgent.class, new GenericCheckAgentBuilder());
 		// the check of check box and radio button
 		registerBuilder("5.0.0", "*", Checkbox.class, CheckAgent.class, new GenericCheckAgentBuilder());
-		// the check of zhtml
-		registerBuilder("5.0.0", "*", Input.class, CheckAgent.class, new GenericCheckAgentBuilder());
 		
 		// the single select
 		registerBuilder("5.0.0", "*", Comboitem.class, SelectAgent.class,
@@ -162,6 +152,14 @@ public class OperationAgentManager {
 		
 		//----------special case ---
 		
+		//colorbox in zkex.jar which is optional
+		try {
+			registerBuilder("5.0.0", "*", "org.zkoss.zkex.zul.Colorbox", TypeAgent.class,
+					"org.zkoss.zats.mimic.impl.operation.ColorTypeAgentBuilder");
+		} catch (Exception e) {
+			// doesn't exist
+		}
+		
 		// the ckeditor (optional)
 		try {
 			registerBuilder("5.0.0", "*", "org.zkforge.ckez.CKeditor", TypeAgent.class,
@@ -170,6 +168,13 @@ public class OperationAgentManager {
 			// ckeditor doesn't exist
 		}
 		
+		// the check of zhtml (optional)
+		try {
+			registerBuilder("5.0.0", "*", "org.zkoss.zhtml.Input", CheckAgent.class,
+					"org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder");
+		} catch (Exception e) {
+			// no zhtml
+		}
 	}
 
 	/**
