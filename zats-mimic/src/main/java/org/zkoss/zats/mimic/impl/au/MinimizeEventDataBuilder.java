@@ -13,23 +13,23 @@ package org.zkoss.zats.mimic.impl.au;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.MinimizeEvent;
 
 /**
  * The data builder of minimize event.
  * @author pao
  */
-public class MinimizeEventDataBuilder implements EventDataBuilder {
+public class MinimizeEventDataBuilder implements EventDataBuilder<MinimizeEvent> {
 
-	public Map<String, Object> build(Event event, Map<String, Object> data) {
-		MinimizeEvent e = (MinimizeEvent) event;
-		AuUtility.setOptional(data, "width", e.getWidth());
-		AuUtility.setOptional(data, "height", e.getHeight());
-		AuUtility.setOptional(data, "left", e.getLeft());
-		AuUtility.setOptional(data, "top", e.getTop());
-		AuUtility.setEssential(data, "minimized", e.isMinimized());
+	public Map<String, Object> build(MinimizeEvent evt, Map<String, Object> data) {
+		AuUtility.setOptional(data, "width", evt.getWidth());
+		AuUtility.setOptional(data, "height", evt.getHeight());
+		AuUtility.setOptional(data, "left", evt.getLeft());
+		AuUtility.setOptional(data, "top", evt.getTop());
+		AuUtility.setEssential(data, "minimized", evt.isMinimized());
 		return data;
 	}
-
+	public Class<MinimizeEvent> getEventClass(){
+		return MinimizeEvent.class;
+	}
 }

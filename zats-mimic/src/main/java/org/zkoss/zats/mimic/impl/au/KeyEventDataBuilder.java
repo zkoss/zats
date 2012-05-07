@@ -13,7 +13,6 @@ package org.zkoss.zats.mimic.impl.au;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.KeyEvent;
 
 /**
@@ -22,9 +21,8 @@ import org.zkoss.zk.ui.event.KeyEvent;
  * @author pao
  * 
  */
-public class KeyEventDataBuilder implements EventDataBuilder {
-	public Map<String, Object> build(Event event, Map<String, Object> data) {
-		KeyEvent evt = (KeyEvent) event;
+public class KeyEventDataBuilder implements EventDataBuilder<KeyEvent> {
+	public Map<String, Object> build(KeyEvent evt, Map<String, Object> data) {
 
 		AuUtility.setEssential(data, "keyCode", evt.getKeyCode());
 		AuUtility.setEssential(data, "ctrlKey", evt.isCtrlKey());
@@ -32,5 +30,8 @@ public class KeyEventDataBuilder implements EventDataBuilder {
 		AuUtility.setEssential(data, "altKey", evt.isAltKey());
 		AuUtility.setReference(data, evt.getReference());
 		return data;
+	}
+	public Class<KeyEvent> getEventClass(){
+		return KeyEvent.class;
 	}
 }
