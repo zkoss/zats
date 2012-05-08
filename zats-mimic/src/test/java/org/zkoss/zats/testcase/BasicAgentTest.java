@@ -17,6 +17,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +41,7 @@ import org.zkoss.zats.mimic.operation.DragAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.GroupAgent;
 import org.zkoss.zats.mimic.operation.HoverAgent;
+import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
@@ -1499,5 +1501,108 @@ public class BasicAgentTest {
 		
 		Assert.assertEquals(groupingLabel.getValue(), COLUMN_TITLE);
 	}	
+	
+	@Test
+	public void testScroll() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/scroll.zul");
+		Label msg1 = desktop.query("#msg1").as(Label.class);
+		Assert.assertEquals("", msg1.getValue());
+
+		// slider 1; 0 to 100
+		Integer[] args = new Integer[] { 0, 50, 100 };
+		String[] expected = new String[] {
+				"s1,onScroll,0",
+				"s1,onScroll,50", 
+				"s1,onScroll,100", 
+		};
+		InputAgent slider = desktop.query("#s1").as(InputAgent.class);
+		for (int i = 0; i < args.length; ++i) {
+			slider.input(args[i]);
+			assertEquals(expected[i], msg1.getValue());
+		}
+
+		// slider 2; 0 to 200
+		args = new Integer[] { 0, 199 , 200 };
+		expected = new String[] {
+				"s2,onScroll,0",
+				"s2,onScroll,199", 
+				"s2,onScroll,200", 
+		};
+		slider = desktop.query("#s1").as(InputAgent.class);
+		for (int i = 0; i < args.length; ++i) {
+			slider.input(args[i]);
+			assertEquals(expected[i], msg1.getValue());
+		}
+
+		// compatibility
+		slider.input(1);
+		assertEquals("s2,onScroll,1", msg1.getValue());
+		slider.input(2L);
+		assertEquals("s2,onScroll,2", msg1.getValue());
+		slider.input((short) 3);
+		assertEquals("s2,onScroll,3", msg1.getValue());
+		slider.input((byte) 4);
+		assertEquals("s2,onScroll,4", msg1.getValue());
+		slider.input(BigInteger.valueOf(5L));
+		assertEquals("s2,onScroll,5", msg1.getValue());
+		slider.input("6");
+		assertEquals("s2,onScroll,6", msg1.getValue());
+		slider.input("   7   ");
+		assertEquals("s2,onScroll,7", msg1.getValue());
+
+		// out of bounds
+		slider.input(200);
+		assertEquals("s2,onScroll,200", msg1.getValue());
+		try {
+			slider.input(-1);
+			fail();
+		} catch (AgentException e) {
+			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+		try {
+			slider.input(201);
+			fail();
+		} catch (AgentException e) {
+			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+
+		// wrong value, type or syntax
+		try {
+			slider.input(null);
+			fail();
+		} catch (AgentException e) {
+			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+		try {
+			slider.input("");
+			fail();
+		} catch (AgentException e) {
+			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+		try {
+			slider.input("   ");
+			fail();
+		} catch (AgentException e) {
+			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+		try {
+			slider.input("100px");
+			fail();
+		} catch (AgentException e) {
+			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+		try {
+			slider.input(100.0);
+			fail();
+		} catch (AgentException e) {
+			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+		try {
+			slider.input("100.0");
+			fail();
+		} catch (AgentException e) {
+			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+	}
 }
 
