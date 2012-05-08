@@ -15,7 +15,7 @@ package org.zkoss.zats.mimic.operation;
  * The agent for moving operation.
  * @author pao
  */
-public interface MoveAgent {
+public interface MoveAgent extends OperationAgent {
 
 	/**
 	 * To move a component.
