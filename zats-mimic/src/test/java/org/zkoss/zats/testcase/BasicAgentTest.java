@@ -38,6 +38,7 @@ import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.CloseAgent;
 import org.zkoss.zats.mimic.operation.DragAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
+import org.zkoss.zats.mimic.operation.GroupAgent;
 import org.zkoss.zats.mimic.operation.HoverAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
@@ -46,6 +47,7 @@ import org.zkoss.zats.mimic.operation.PagingAgent;
 import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.SizeAgent;
+import org.zkoss.zats.mimic.operation.SortAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
@@ -1385,7 +1387,142 @@ public class BasicAgentTest {
 	}
 	
 	@Test
-	public void testSort(){
+	public void testColumnSizeOperation() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/size-column.zul");
+		Label eventName = desktop.query("#eventName").as(Label.class);
+		Label target = desktop.query("#target").as(Label.class);
+		Label index = desktop.query("#index").as(Label.class);
+		Label width = desktop.query("#width").as(Label.class);
+		Label previousWidth = desktop.query("#previousWidth").as(Label.class);
+		assertEquals("", eventName.getValue());
+		assertEquals("", target.getValue());
+		assertEquals("", index.getValue());
+		assertEquals("", width.getValue());
+		assertEquals("", previousWidth.getValue());
 		
+		String[][] args = new String[][] {
+				{"#gc0" , "-1" , "999"},
+				{"#gc0" , "100" , "-1"},
+				{"#gc0" , "110" , "-1"},
+				{"#gc2" , "120" , "-1"},
+				{"#gc1" , "130" , "-1"},
+				{"#gc1" , "130" , "-1"},
+		};
+		String[][] except = new String[][] {
+				{ "", "", "", "", "" },
+				{ "onColSize", "columns", "0", "100px", "null" },
+				{ "onColSize", "columns", "0", "110px", "100px" },
+				{ "onColSize", "columns", "2", "120px", "200px" },
+				{ "onColSize", "columns", "1", "130px", "200px" },
+				{ "onColSize", "columns", "1", "130px", "200px" },
+		};
+		for (int i = 0; i < args.length; ++i) {
+			String id = args[i][0];
+			int w = Integer.parseInt(args[i][1]), h = Integer.parseInt(args[i][2]);
+			desktop.query(id).as(SizeAgent.class).resize(w, h);
+			assertEquals(except[i][0], eventName.getValue());
+			assertEquals(except[i][1], target.getValue());
+			assertEquals(except[i][2], index.getValue());
+			assertEquals(except[i][3], width.getValue());
+			assertEquals(except[i][4], previousWidth.getValue());
+		}
+		
+		args = new String[][] {
+				{"#lh0" , "-1" , "999"},
+				{"#lh0" , "100" , "-1"},
+				{"#lh0" , "110" , "-1"},
+				{"#lh2" , "120" , "-1"},
+				{"#lh1" , "130" , "-1"},
+				{"#lh1" , "130" , "-1"},
+		};
+		except = new String[][] {
+				{ "onColSize", "columns", "1", "130px", "200px" },
+				{ "onColSize", "listhead", "0", "100px", "null" },
+				{ "onColSize", "listhead", "0", "110px", "100px" },
+				{ "onColSize", "listhead", "2", "120px", "200px" },
+				{ "onColSize", "listhead", "1", "130px", "200px" },
+				{ "onColSize", "listhead", "1", "130px", "200px" },
+		};
+		for (int i = 0; i < args.length; ++i) {
+			String id = args[i][0];
+			int w = Integer.parseInt(args[i][1]), h = Integer.parseInt(args[i][2]);
+			desktop.query(id).as(SizeAgent.class).resize(w, h);
+			assertEquals(except[i][0], eventName.getValue());
+			assertEquals(except[i][1], target.getValue());
+			assertEquals(except[i][2], index.getValue());
+			assertEquals(except[i][3], width.getValue());
+			assertEquals(except[i][4], previousWidth.getValue());
+		}
+		
+		args = new String[][] {
+				{"#tc0" , "-1" , "999"},
+				{"#tc0" , "100" , "-1"},
+				{"#tc0" , "110" , "-1"},
+				{"#tc2" , "120" , "-1"},
+				{"#tc1" , "130" , "-1"},
+				{"#tc1" , "130" , "-1"},
+		};
+		except = new String[][] {
+				{ "onColSize", "listhead", "1", "130px", "200px" },
+				{ "onColSize", "treecols", "0", "100px", "null" },
+				{ "onColSize", "treecols", "0", "110px", "100px" },
+				{ "onColSize", "treecols", "2", "120px", "200px" },
+				{ "onColSize", "treecols", "1", "130px", "200px" },
+				{ "onColSize", "treecols", "1", "130px", "200px" },
+		};
+		for (int i = 0; i < args.length; ++i) {
+			String id = args[i][0];
+			int w = Integer.parseInt(args[i][1]), h = Integer.parseInt(args[i][2]);
+			desktop.query(id).as(SizeAgent.class).resize(w, h);
+			assertEquals(except[i][0], eventName.getValue());
+			assertEquals(except[i][1], target.getValue());
+			assertEquals(except[i][2], index.getValue());
+			assertEquals(except[i][3], width.getValue());
+			assertEquals(except[i][4], previousWidth.getValue());
+		}
+	}
+	
+	//column's label in group.zul
+	final private String COLUMN_AUTHOR = "Author";
+	final private String COLUMN_TITLE = "Title";
+	
+	@Test
+	public void testGroup(){
+		
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/group-sort.zul");
+		ComponentAgent groupingColumn = desktop.query("column[label='"+COLUMN_AUTHOR+"']");
+		groupingColumn.as(GroupAgent.class).group();
+		
+		Label groupingLabel = desktop.query("#groupingColumn").as(Label.class);
+		Assert.assertEquals(COLUMN_AUTHOR, groupingLabel.getValue());
+		
+		groupingColumn = desktop.query("column[label='"+COLUMN_TITLE+"']");
+		groupingColumn.as(GroupAgent.class).group();
+		
+		Assert.assertEquals(COLUMN_TITLE, groupingLabel.getValue());
+	}	
+
+	/*
+	 * Sort grid's column and verify its ascending order.
+	 */
+	@Test
+	public void testSort(){
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/group-sort.zul");
+		ComponentAgent sortingColumn = desktop.query("column[label='"+COLUMN_AUTHOR+"']");
+		Label sortStatus = desktop.query("#sortStatus").as(Label.class);
+		
+		sortingColumn.as(SortAgent.class).sort(true);
+		Assert.assertEquals(COLUMN_AUTHOR+",true", sortStatus.getValue());
+		sortingColumn.as(SortAgent.class).sort(false);
+		Assert.assertEquals(COLUMN_AUTHOR+",false", sortStatus.getValue());
+		
+		sortingColumn = desktop.query("column[label='"+COLUMN_TITLE+"']");
+		
+		sortingColumn.as(SortAgent.class).sort(true);
+		Assert.assertEquals(COLUMN_TITLE+",true", sortStatus.getValue());
+		sortingColumn.as(SortAgent.class).sort(false);
+		Assert.assertEquals(COLUMN_TITLE+",false", sortStatus.getValue());
 	}
 }
+
+

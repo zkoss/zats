@@ -20,12 +20,15 @@ import org.zkoss.zk.ui.event.SortEvent;
  * @author Hawk
  *
  */
-public class SortEventDataBuilder implements EventDataBuilder {
+public class SortEventDataBuilder implements EventDataBuilder<SortEvent> {
 
-	public Map<String, Object> build(Event event, Map<String, Object> data) {
-		SortEvent evt = (SortEvent) event;
-		AuUtility.setEssential(data, "", evt.isAscending());
+	public Map<String, Object> build(SortEvent event, Map<String, Object> data) {
+		AuUtility.setEssential(data, "", event.isAscending());
 		return data;
+	}
+
+	public Class<SortEvent> getEventClass() {
+		return SortEvent.class;
 	}
 
 }

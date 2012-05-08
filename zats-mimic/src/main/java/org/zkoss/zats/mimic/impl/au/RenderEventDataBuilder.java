@@ -13,7 +13,6 @@ package org.zkoss.zats.mimic.impl.au;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zul.event.RenderEvent;
 
 /**
@@ -21,11 +20,13 @@ import org.zkoss.zul.event.RenderEvent;
  * 
  * @author pao
  */
-public class RenderEventDataBuilder implements EventDataBuilder {
-	public Map<String, Object> build(Event event,Map<String,Object> data) {
-		RenderEvent evt = (RenderEvent)event;
+public class RenderEventDataBuilder implements EventDataBuilder<RenderEvent> {
+	public Map<String, Object> build(RenderEvent evt,Map<String,Object> data) {
 		
 		AuUtility.setEssential(data,"items",evt.getItems());//id set of items
 		return data;
+	}
+	public Class<RenderEvent> getEventClass(){
+		return RenderEvent.class;
 	}
 }

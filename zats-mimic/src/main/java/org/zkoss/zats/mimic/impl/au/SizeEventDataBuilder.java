@@ -14,29 +14,29 @@ package org.zkoss.zats.mimic.impl.au;
 import java.util.Map;
 
 import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.SizeEvent;
 
 /**
  * The data builder of size event. 
  * @author pao
  */
-public class SizeEventDataBuilder implements EventDataBuilder {
+public class SizeEventDataBuilder implements EventDataBuilder<SizeEvent>{
 
-	public Map<String, Object> build(Event event, Map<String, Object> data) {
-		SizeEvent e = (SizeEvent) event;
+	public Map<String, Object> build(SizeEvent evt, Map<String, Object> data) {
 		String left = "0px";
 		String top = "0px";
-		if (e.getTarget() instanceof HtmlBasedComponent) {
-			HtmlBasedComponent target = (HtmlBasedComponent) e.getTarget();
+		if (evt.getTarget() instanceof HtmlBasedComponent) {
+			HtmlBasedComponent target = (HtmlBasedComponent) evt.getTarget();
 			left = target.getLeft();
 			top = target.getTop();
 		}
 		AuUtility.setOptional(data, "left", left);
 		AuUtility.setOptional(data, "top", top);
-		AuUtility.setEssential(data, "width", e.getWidth());
-		AuUtility.setEssential(data, "height", e.getHeight());
+		AuUtility.setEssential(data, "width", evt.getWidth());
+		AuUtility.setEssential(data, "height", evt.getHeight());
 		return data;
 	}
-
+	public Class<SizeEvent> getEventClass(){
+		return SizeEvent.class;
+	}
 }

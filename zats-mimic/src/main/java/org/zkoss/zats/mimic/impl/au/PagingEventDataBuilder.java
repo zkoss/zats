@@ -13,19 +13,19 @@ package org.zkoss.zats.mimic.impl.au;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zul.event.PagingEvent;
 
 /**
  * @author Hawk
  *
  */
-public class PagingEventDataBuilder implements EventDataBuilder {
+public class PagingEventDataBuilder implements EventDataBuilder<PagingEvent> {
 
-	public Map<String, Object> build(Event event, Map<String, Object> data) {
-		PagingEvent evt = (PagingEvent) event;
+	public Map<String, Object> build(PagingEvent evt, Map<String, Object> data) {
 		AuUtility.setEssential(data, "", evt.getActivePage());
 		return data;
 	}
-
+	public Class<PagingEvent> getEventClass(){
+		return PagingEvent.class;
+	}
 }
