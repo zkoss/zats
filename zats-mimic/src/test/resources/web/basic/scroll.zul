@@ -1,0 +1,31 @@
+<zk>
+	<vbox>
+		<label id="msg1" />
+		<!-- 
+			<label id="msg2" />
+		-->
+		<vbox id="comps">
+			<slider id="s1" />
+			<slider id="s2" curpos="100" maxpos="200" />
+		</vbox>
+	</vbox>
+	<zscript>
+	<![CDATA[
+	org.zkoss.zk.ui.event.EventListener listener = new org.zkoss.zk.ui.event.EventListener() {
+		public void onEvent(Event event) throws java.lang.Exception {
+			ScrollEvent e = (ScrollEvent)event;
+			String msg = e.getTarget().getId() + "," + e.getName() + "," + e.getPos();
+			if(Events.ON_SCROLL.equals(e.getName()))
+				msg1.setValue(msg);
+			//			else
+			//				msg2.setValue(msg);
+		}
+	};
+	for(Object obj : comps.getChildren()) {
+		Component comp = (Component)obj;
+		comp.addEventListener(Events.ON_SCROLL, listener);
+		//		comp.addEventListener(Events.ON_SCROLLING, listener);
+	}
+]]>
+	</zscript>
+</zk>
