@@ -52,6 +52,7 @@ public class EventDataManager {
 		registerBuilder("5.0.0", "*", new ColSizeEventDataBuilder());
 		registerBuilder("5.0.0", "*", new SortEventDataBuilder());
 		registerBuilder("5.0.0", "*", new ScrollEventDataBuilder());
+		registerBuilder("5.0.0", "*", new MoveEventDataBuilder());
 		//TODO more
 	}
 	
