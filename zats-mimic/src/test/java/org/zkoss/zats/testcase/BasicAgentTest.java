@@ -47,6 +47,7 @@ import org.zkoss.zats.mimic.operation.PagingAgent;
 import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.SizeAgent;
+import org.zkoss.zats.mimic.operation.SortAgent;
 import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
@@ -1385,7 +1386,6 @@ public class BasicAgentTest {
 		assertEquals("XYZ", desktopAgent.as(Desktop.class).getBookmark());
 	}
 	
-	
 	@Test
 	public void testColumnSizeOperation() {
 		DesktopAgent desktop = Zats.newClient().connect("/~./basic/size-column.zul");
@@ -1482,22 +1482,47 @@ public class BasicAgentTest {
 		}
 	}
 	
+	//column's label in group.zul
+	final private String COLUMN_AUTHOR = "Author";
+	final private String COLUMN_TITLE = "Title";
+	
 	@Test
 	public void testGroup(){
-		final String COLUMN_AUTHOR = "Author";
-		final String COLUMN_TITLE = "Title";
 		
-		DesktopAgent desktop = Zats.newClient().connect("/~./basic/group.zul");
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/group-sort.zul");
 		ComponentAgent groupingColumn = desktop.query("column[label='"+COLUMN_AUTHOR+"']");
 		groupingColumn.as(GroupAgent.class).group();
 		
 		Label groupingLabel = desktop.query("#groupingColumn").as(Label.class);
-		Assert.assertEquals(groupingLabel.getValue(), COLUMN_AUTHOR);
+		Assert.assertEquals(COLUMN_AUTHOR, groupingLabel.getValue());
 		
 		groupingColumn = desktop.query("column[label='"+COLUMN_TITLE+"']");
 		groupingColumn.as(GroupAgent.class).group();
 		
-		Assert.assertEquals(groupingLabel.getValue(), COLUMN_TITLE);
+		Assert.assertEquals(COLUMN_TITLE, groupingLabel.getValue());
 	}	
+
+	/*
+	 * Sort grid's column and verify its ascending order.
+	 */
+	@Test
+	public void testSort(){
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/group-sort.zul");
+		ComponentAgent sortingColumn = desktop.query("column[label='"+COLUMN_AUTHOR+"']");
+		Label sortStatus = desktop.query("#sortStatus").as(Label.class);
+		
+		sortingColumn.as(SortAgent.class).sort(true);
+		Assert.assertEquals(COLUMN_AUTHOR+",true", sortStatus.getValue());
+		sortingColumn.as(SortAgent.class).sort(false);
+		Assert.assertEquals(COLUMN_AUTHOR+",false", sortStatus.getValue());
+		
+		sortingColumn = desktop.query("column[label='"+COLUMN_TITLE+"']");
+		
+		sortingColumn.as(SortAgent.class).sort(true);
+		Assert.assertEquals(COLUMN_TITLE+",true", sortStatus.getValue());
+		sortingColumn.as(SortAgent.class).sort(false);
+		Assert.assertEquals(COLUMN_TITLE+",false", sortStatus.getValue());
+	}
 }
+
 

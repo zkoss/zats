@@ -5,14 +5,18 @@
 	public void showGroupingColumn(Event e){
 		groupingColumn.setValue(((Column)e.getTarget()).getLabel());
 	}
+	
+	public void showSortingColumn(SortEvent e){
+		sortStatus.setValue(((Column)e.getTarget()).getLabel()+","+e.isAscending());
+	}
 ]]>
 </zscript>
 	<grid>
 		<columns menupopup="auto">
-			<column label="Author" sort="auto" onGroup="showGroupingColumn(event)"/>
-			<column label="Title" sort="auto" onGroup="showGroupingColumn(event)"/>
-			<column label="Publisher" sort="auto" onGroup="showGroupingColumn(event)"/>
-			<column label="Hardcover" sort="auto" onGroup="showGroupingColumn(event)"/>
+			<column label="Author" sort="auto" onGroup="showGroupingColumn(event)" onSort="showSortingColumn(event)"/>
+			<column label="Title" sort="auto" onGroup="showGroupingColumn(event)" onSort="showSortingColumn(event)"/>
+			<column label="Publisher" sort="auto" onGroup="showGroupingColumn(event)" onSort="showSortingColumn(event)"/>
+			<column label="Hardcover" sort="auto" onGroup="showGroupingColumn(event)" onSort="showSortingColumn(event)"/>
 		</columns>
 		<rows>
 			<row>
@@ -60,5 +64,6 @@
 		</rows>
 	</grid>
 	<label id="groupingColumn" />
+	<label id="sortStatus"/>
 </zk>
 			

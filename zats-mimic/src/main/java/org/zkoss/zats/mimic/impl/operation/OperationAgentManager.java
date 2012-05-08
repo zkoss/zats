@@ -152,6 +152,9 @@ public class OperationAgentManager {
 		
 		//group
 		registerBuilder("5.0.0", "*", Column.class, new GenericGroupAgentBuilder());
+
+		//sort
+		registerBuilder("5.0.0", "*", Column.class, new GenericSortAgentBuilder());
 		
 		//----------special case ---
 		

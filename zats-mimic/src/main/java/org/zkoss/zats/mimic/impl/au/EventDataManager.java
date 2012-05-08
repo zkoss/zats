@@ -33,6 +33,7 @@ public class EventDataManager {
 	static {
 		builders = new HashMap<Class<? extends Event>, EventDataBuilder<? extends Event>>();
 		
+
 		registerBuilder("5.0.0", "*", new MouseEventDataBuilder());
 		registerBuilder("5.0.0", "*", new InputEventDataBuilder());
 		registerBuilder("5.0.0", "*", new CheckEventDataBuilder());
@@ -49,6 +50,7 @@ public class EventDataManager {
 		registerBuilder("5.0.0", "*", new PagingEventDataBuilder());
 		registerBuilder("5.0.0", "*", new BookmarkEventDataBuilder());
 		registerBuilder("5.0.0", "*", new ColSizeEventDataBuilder());
+		registerBuilder("5.0.0", "*", new SortEventDataBuilder());
 		//TODO more
 	}
 	
