@@ -43,6 +43,7 @@ import org.zkoss.zats.mimic.operation.GroupAgent;
 import org.zkoss.zats.mimic.operation.HoverAgent;
 import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
+import org.zkoss.zats.mimic.operation.MoveAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.PagingAgent;
@@ -54,6 +55,7 @@ import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
@@ -1626,6 +1628,70 @@ public class BasicAgentTest {
 			fail();
 		} catch (AgentException e) {
 			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+	}
+	
+	
+	@Test
+	public void testMoveAgent() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/move.zul");
+		Label target = desktop.query("#target").as(Label.class);
+		Label eventName = desktop.query("#eventName").as(Label.class);
+		Label left = desktop.query("#left").as(Label.class);
+		Label top = desktop.query("#top").as(Label.class);
+		Assert.assertEquals("", target.getValue());
+		Assert.assertEquals("", eventName.getValue());
+		Assert.assertEquals("", left.getValue());
+		Assert.assertEquals("", top.getValue());
+		
+		String id = "win";
+		int[][] args = new int[][]{
+				{-100, -100},	
+				{-100, 100},	
+				{100, -100},	
+				{100, 100},	
+		};
+		String[][] expected = new String[][]{
+				{id , "onMove" , "-100px" , "-100px"},	
+				{id , "onMove" , "-100px" , "100px"},	
+				{id , "onMove" , "100px" , "-100px"},	
+				{id , "onMove" , "100px" , "100px"},	
+		};
+		ComponentAgent comp = desktop.query(id);
+		MoveAgent moveAgent = comp.as(MoveAgent.class);
+		for (int i = 0; i < args.length; --i) {
+			moveAgent.moveTo(args[i][0], args[i][1]);
+			Assert.assertEquals(expected[i][0], target.getValue());
+			Assert.assertEquals(expected[i][1], eventName.getValue());
+			Assert.assertEquals(expected[i][2], left.getValue());
+			Assert.assertEquals(expected[i][3], top.getValue());
+			Assert.assertEquals(left.getValue(), comp.as(HtmlBasedComponent.class).getLeft());
+			Assert.assertEquals(top.getValue(), comp.as(HtmlBasedComponent.class).getTop());
+		}
+		
+		id = "pane";
+		args = new int[][]{
+				{-100, -100},	
+				{-100, 100},	
+				{100, -100},	
+				{100, 100},	
+		};
+		expected = new String[][]{
+				{id , "onMove" , "-100px" , "-100px"},	
+				{id , "onMove" , "-100px" , "100px"},	
+				{id , "onMove" , "100px" , "-100px"},	
+				{id , "onMove" , "100px" , "100px"},	
+		};
+		comp = desktop.query(id);
+		moveAgent = comp.as(MoveAgent.class);
+		for (int i = 0; i < args.length; --i) {
+			moveAgent.moveTo(args[i][0], args[i][1]);
+			Assert.assertEquals(expected[i][0], target.getValue());
+			Assert.assertEquals(expected[i][1], eventName.getValue());
+			Assert.assertEquals(expected[i][2], left.getValue());
+			Assert.assertEquals(expected[i][3], top.getValue());
+			Assert.assertEquals(left.getValue(), comp.as(HtmlBasedComponent.class).getLeft());
+			Assert.assertEquals(top.getValue(), comp.as(HtmlBasedComponent.class).getTop());
 		}
 	}
 }
