@@ -1528,7 +1528,7 @@ public class BasicAgentTest {
 				"s2,onScroll,199", 
 				"s2,onScroll,200", 
 		};
-		slider = desktop.query("#s1").as(InputAgent.class);
+		slider = desktop.query("#s2").as(InputAgent.class);
 		for (int i = 0; i < args.length; ++i) {
 			slider.input(args[i]);
 			assertEquals(expected[i], msg1.getValue());

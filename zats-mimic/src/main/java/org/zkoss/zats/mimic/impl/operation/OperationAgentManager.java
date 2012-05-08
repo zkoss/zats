@@ -44,6 +44,7 @@ import org.zkoss.zul.Longbox;
 import org.zkoss.zul.Menuitem;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Panel;
+import org.zkoss.zul.Slider;
 import org.zkoss.zul.Spinner;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Timebox;
@@ -152,6 +153,9 @@ public class OperationAgentManager {
 		
 		//group
 		registerBuilder("5.0.0", "*", Column.class, new GenericGroupAgentBuilder());
+		
+		// the scroll
+		registerBuilder("5.0.0", "*", Slider.class, new SliderInputAgentBuilder());
 		
 		//----------special case ---
 		
