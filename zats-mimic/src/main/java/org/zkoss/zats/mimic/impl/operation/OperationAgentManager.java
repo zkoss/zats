@@ -24,6 +24,7 @@ import org.zkoss.zul.A;
 import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Column;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Datebox;
@@ -143,6 +144,9 @@ public class OperationAgentManager {
 		
 		//paging
 		registerBuilder("5.0.0", "*", Paging.class, new GenericPagingAgentBuilder());
+		
+		//sort
+		registerBuilder("5.0.0", "*", Column.class, new GenericSortAgentBuilder());
 		
 		//----------special case ---
 		

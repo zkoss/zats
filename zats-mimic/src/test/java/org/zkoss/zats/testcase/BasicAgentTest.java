@@ -1383,4 +1383,9 @@ public class BasicAgentTest {
 		desktopAgent.query("#btn").as(ClickAgent.class).click();
 		assertEquals("XYZ", desktopAgent.as(Desktop.class).getBookmark());
 	}
+	
+	@Test
+	public void testSort(){
+		
+	}
 }
