@@ -1,0 +1,64 @@
+
+<zk>
+<zscript>
+<![CDATA[
+	public void showGroupingColumn(Event e){
+		groupingColumn.setValue(((Column)e.getTarget()).getLabel());
+	}
+]]>
+</zscript>
+	<grid>
+		<columns menupopup="auto">
+			<column label="Author" sort="auto" onGroup="showGroupingColumn(event)"/>
+			<column label="Title" sort="auto" onGroup="showGroupingColumn(event)"/>
+			<column label="Publisher" sort="auto" onGroup="showGroupingColumn(event)"/>
+			<column label="Hardcover" sort="auto" onGroup="showGroupingColumn(event)"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="Philip Hensher"/>
+				<label value="The Northern Clemency"/>
+				<label value="Knopf (October 30, 2008)"/>
+				<label value="608 pages"/>
+			</row>
+			<row>
+				<label value="Philip Hensher"/>
+				<label value="The Fit"/>
+				<label value="HarperPerennial (April 4, 2005)"/>
+				<label value="240 pages"/>
+			</row>
+			<row>
+				<label value="Philip Hensher"/>
+				<label value="Kitchen Venom"/>
+				<label value="Flamingo (May 19, 2003)"/>
+				<label value="336 pages"/>
+			</row>
+			<row>
+				<label value="Michael Greenberg"/>
+				<label value="Hurry Down Sunshine"/>
+				<label value="Other Press (September 9, 2008)"/>
+				<label value="240 pages"/>
+			</row>
+			<row>
+				<label value="Michael Greenberg"/>
+				<label value="Painless Vocabulary (Painless)"/>
+				<label value="Barron's Educational Series (September 1, 2001)"/>
+				<label value="292 pages"/>
+			</row>
+			<row>
+				<label value="Rick Perlstein"/>
+				<label value="Nixonland: The Rise of a President and the Fracturing of America"/>
+				<label value="Scribner; 1st Scribner Hardcover Ed edition (May 13, 2008)"/>
+				<label value="896 pages"/>
+			</row>
+			<row>
+				<label value="Rick Perlstein"/>
+				<label value="Nixonland"/>
+				<label value="Simon &amp; Schuster (May 13, 2008)"/>
+				<label value="100 pages"/>
+			</row>
+		</rows>
+	</grid>
+	<label id="groupingColumn" />
+</zk>
+			

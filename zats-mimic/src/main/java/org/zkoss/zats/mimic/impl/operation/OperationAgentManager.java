@@ -150,6 +150,9 @@ public class OperationAgentManager {
 		//paging
 		registerBuilder("5.0.0", "*", Paging.class, new GenericPagingAgentBuilder());
 		
+		//group
+		registerBuilder("5.0.0", "*", Column.class, new GenericGroupAgentBuilder());
+		
 		//----------special case ---
 		
 		//colorbox in zkex.jar which is optional

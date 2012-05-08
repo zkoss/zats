@@ -38,6 +38,7 @@ import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.CloseAgent;
 import org.zkoss.zats.mimic.operation.DragAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
+import org.zkoss.zats.mimic.operation.GroupAgent;
 import org.zkoss.zats.mimic.operation.HoverAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
@@ -1480,4 +1481,23 @@ public class BasicAgentTest {
 			assertEquals(except[i][4], previousWidth.getValue());
 		}
 	}
+	
+	@Test
+	public void testGroup(){
+		final String COLUMN_AUTHOR = "Author";
+		final String COLUMN_TITLE = "Title";
+		
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/group.zul");
+		ComponentAgent groupingColumn = desktop.query("column[label='"+COLUMN_AUTHOR+"']");
+		groupingColumn.as(GroupAgent.class).group();
+		
+		Label groupingLabel = desktop.query("#groupingColumn").as(Label.class);
+		Assert.assertEquals(groupingLabel.getValue(), COLUMN_AUTHOR);
+		
+		groupingColumn = desktop.query("column[label='"+COLUMN_TITLE+"']");
+		groupingColumn.as(GroupAgent.class).group();
+		
+		Assert.assertEquals(groupingLabel.getValue(), COLUMN_TITLE);
+	}	
 }
+

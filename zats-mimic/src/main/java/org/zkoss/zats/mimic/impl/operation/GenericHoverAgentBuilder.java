@@ -48,7 +48,6 @@ public class GenericHoverAgentBuilder implements OperationAgentBuilder<Component
 		 * @see org.zkoss.zats.mimic.operation.HoverAgent#moveOver()
 		 */
 		public void moveOver() {
-			// TODO Auto-generated method stub
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_MOUSE_OVER;
 			Map<String, Object> data = EventDataManager.build(new MouseEvent(cmd, (Component)target.getDelegatee()));
@@ -59,7 +58,6 @@ public class GenericHoverAgentBuilder implements OperationAgentBuilder<Component
 		 * @see org.zkoss.zats.mimic.operation.HoverAgent#moveOut()
 		 */
 		public void moveOut() {
-			// TODO Auto-generated method stub
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_MOUSE_OUT;
 			Map<String, Object> data = EventDataManager.build(new MouseEvent(cmd, (Component)target.getDelegatee()));
