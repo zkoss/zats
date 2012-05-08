@@ -49,6 +49,7 @@ public class EventDataManager {
 		registerBuilder("5.0.0", "*", new PagingEventDataBuilder());
 		registerBuilder("5.0.0", "*", new BookmarkEventDataBuilder());
 		registerBuilder("5.0.0", "*", new ColSizeEventDataBuilder());
+		registerBuilder("5.0.0", "*", new ScrollEventDataBuilder());
 		//TODO more
 	}
 	
