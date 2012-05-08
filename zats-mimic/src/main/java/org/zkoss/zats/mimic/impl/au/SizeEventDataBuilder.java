@@ -13,7 +13,6 @@ package org.zkoss.zats.mimic.impl.au;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.SizeEvent;
 
 /**
@@ -23,17 +22,9 @@ import org.zkoss.zk.ui.event.SizeEvent;
 public class SizeEventDataBuilder implements EventDataBuilder<SizeEvent>{
 
 	public Map<String, Object> build(SizeEvent evt, Map<String, Object> data) {
-		String left = "0px";
-		String top = "0px";
-		if (evt.getTarget() instanceof HtmlBasedComponent) {
-			HtmlBasedComponent target = (HtmlBasedComponent) evt.getTarget();
-			left = target.getLeft();
-			top = target.getTop();
-		}
-		AuUtility.setOptional(data, "left", left);
-		AuUtility.setOptional(data, "top", top);
 		AuUtility.setEssential(data, "width", evt.getWidth());
 		AuUtility.setEssential(data, "height", evt.getHeight());
+		AuUtility.setEssential(data, "which", evt.getKeys());
 		return data;
 	}
 	public Class<SizeEvent> getEventClass(){
