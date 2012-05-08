@@ -160,6 +160,10 @@ public class OperationAgentManager {
 		// the scroll
 		registerBuilder("5.0.0", "*", Slider.class, new SliderInputAgentBuilder());
 		
+		// the move
+		registerBuilder("5.0.0", "*", Window.class, new GenericMoveAgentBuilder());
+		registerBuilder("5.0.0", "*", Panel.class, new GenericMoveAgentBuilder());
+		
 		//----------special case ---
 		
 		//colorbox in zkex.jar which is optional

@@ -7,10 +7,10 @@
 			<label id="top" />
 		</hbox>
 		<vbox id="comps">
-			<window title="win" border="normal" mode="overlapped" width="300px" height="200px"
+			<window title="window" border="normal" mode="overlapped" width="300px" height="200px"
 				left="0px" top="50px">
 			</window>
-			<panel title="pane" border="normal" floatable="true" movable="true" width="300px"
+			<panel title="panel" border="normal" floatable="true" movable="true" width="300px"
 				height="200px" left="350px" top="50px">
 			</panel>
 		</vbox>

@@ -1644,7 +1644,7 @@ public class BasicAgentTest {
 		Assert.assertEquals("", left.getValue());
 		Assert.assertEquals("", top.getValue());
 		
-		String id = "win";
+		String name = "window";
 		int[][] args = new int[][]{
 				{-100, -100},	
 				{-100, 100},	
@@ -1652,14 +1652,14 @@ public class BasicAgentTest {
 				{100, 100},	
 		};
 		String[][] expected = new String[][]{
-				{id , "onMove" , "-100px" , "-100px"},	
-				{id , "onMove" , "-100px" , "100px"},	
-				{id , "onMove" , "100px" , "-100px"},	
-				{id , "onMove" , "100px" , "100px"},	
+				{name , "onMove" , "-100px" , "-100px"},	
+				{name , "onMove" , "-100px" , "100px"},	
+				{name , "onMove" , "100px" , "-100px"},	
+				{name , "onMove" , "100px" , "100px"},	
 		};
-		ComponentAgent comp = desktop.query(id);
+		ComponentAgent comp = desktop.query(name);
 		MoveAgent moveAgent = comp.as(MoveAgent.class);
-		for (int i = 0; i < args.length; --i) {
+		for (int i = 0; i < args.length; ++i) {
 			moveAgent.moveTo(args[i][0], args[i][1]);
 			Assert.assertEquals(expected[i][0], target.getValue());
 			Assert.assertEquals(expected[i][1], eventName.getValue());
@@ -1669,7 +1669,7 @@ public class BasicAgentTest {
 			Assert.assertEquals(top.getValue(), comp.as(HtmlBasedComponent.class).getTop());
 		}
 		
-		id = "pane";
+		name = "panel";
 		args = new int[][]{
 				{-100, -100},	
 				{-100, 100},	
@@ -1677,14 +1677,14 @@ public class BasicAgentTest {
 				{100, 100},	
 		};
 		expected = new String[][]{
-				{id , "onMove" , "-100px" , "-100px"},	
-				{id , "onMove" , "-100px" , "100px"},	
-				{id , "onMove" , "100px" , "-100px"},	
-				{id , "onMove" , "100px" , "100px"},	
+				{name , "onMove" , "-100px" , "-100px"},	
+				{name , "onMove" , "-100px" , "100px"},	
+				{name , "onMove" , "100px" , "-100px"},	
+				{name , "onMove" , "100px" , "100px"},	
 		};
-		comp = desktop.query(id);
+		comp = desktop.query(name);
 		moveAgent = comp.as(MoveAgent.class);
-		for (int i = 0; i < args.length; --i) {
+		for (int i = 0; i < args.length; ++i) {
 			moveAgent.moveTo(args[i][0], args[i][1]);
 			Assert.assertEquals(expected[i][0], target.getValue());
 			Assert.assertEquals(expected[i][1], eventName.getValue());
