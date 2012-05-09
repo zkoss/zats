@@ -1116,6 +1116,13 @@ public class BasicAgentTest {
 		assertEquals(id, open.getValue());
 		desktop.query(id).as(OpenAgent.class).open(false);
 		assertEquals(id, close.getValue());
+		
+		//splitter
+		id="splitter";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
 	}
 	
 	@Test
