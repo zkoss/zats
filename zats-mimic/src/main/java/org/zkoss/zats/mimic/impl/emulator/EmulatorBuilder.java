@@ -84,7 +84,7 @@ public class EmulatorBuilder {
 		try {
 			return Resource.newResource(pathOrUrl);
 		} catch (Exception x) {
-			throw new RuntimeException(x.getMessage(),x);
+			throw new EmulatorException(x.getMessage(),x);
 		}
 	}
 	
@@ -92,7 +92,7 @@ public class EmulatorBuilder {
 		try {
 			return Resource.newResource(url);
 		} catch (Exception x) {
-			throw new RuntimeException(x.getMessage(),x);
+			throw new EmulatorException(x.getMessage(),x);
 		}
 	}
 
@@ -263,7 +263,7 @@ public class EmulatorBuilder {
 				return new FileResource(new File(tmpDir,"zats/non_exist/"+path).toURL());
 			} catch (Exception x) {
 				logger.warning(x.getMessage());
-				throw new RuntimeException(x.getMessage(),x);
+				throw new EmulatorException(x.getMessage(),x);
 			}
 		}
 		

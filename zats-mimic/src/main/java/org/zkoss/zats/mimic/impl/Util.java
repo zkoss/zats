@@ -17,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.zkoss.Version;
+import org.zkoss.zats.ZatsException;
 
 /**
  * Utilities for implementation.
@@ -32,7 +33,7 @@ public class Util {
 		try {
 			zkVersion = Util.parseVersion(Version.class.getField("UID").get(null).toString());
 		} catch (Throwable e) {
-			throw new RuntimeException("cannot load zk", e);
+			throw new ZatsException("cannot load zk", e);
 		}
 	}
 	
