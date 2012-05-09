@@ -111,6 +111,8 @@
 			<east id="east" onOpen="show(event)"></east>
 			<south id="south" onOpen="show(event)"></south>
 		</borderlayout>
+		<splitter id="splitter" onOpen="show(event)"></splitter>
+		<popup id="popup" onOpen="show(event)"></popup>
 		
 	</vbox>
 </zk>
