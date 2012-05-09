@@ -24,12 +24,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -61,9 +63,11 @@ import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listheader;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Tree;
+import org.zkoss.zul.Treecol;
 import org.zkoss.zul.Treeitem;
 
 /**
@@ -71,6 +75,8 @@ import org.zkoss.zul.Treeitem;
  *
  */
 public class BasicAgentTest {
+
+	private static Logger logger = Logger.getLogger(BasicAgentTest.class.getName());
 	
 	private static final String[] componentNames = { "a", "applet", "button", "captcha", "fileupload", "fisheye", "fisheyebar", "html",
 			"include", "image", "imagemap", "label", "menu", "menubar", "menuitem", "menupopup", "menuseparator",
@@ -1584,28 +1590,47 @@ public class BasicAgentTest {
 	@Test
 	public void testPaging(){
 		DesktopAgent desktop = Zats.newClient().connect("/~./basic/paging.zul");
+		
+		//listbox's paging
 		ComponentAgent paging = desktop.query("listbox > paging");
 		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
 		
-		paging.as(PagingAgent.class).goTo(1);
+		paging.as(PagingAgent.class).moveTo(1);
 		Assert.assertEquals("1", desktop.query("#listboxPageIndex").as(Label.class).getValue());
 		
+		//grid's paging
 		paging = desktop.query("#grid > paging");
 		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
 		
-		paging.as(PagingAgent.class).goTo(1);
+		paging.as(PagingAgent.class).moveTo(1);
 		Assert.assertEquals("1", desktop.query("#gridPageIndex").as(Label.class).getValue());
 		
+		//tree's paging
 		paging = desktop.query("tree > paging");
 		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
 		
-		paging.as(PagingAgent.class).goTo(1);
+		paging.as(PagingAgent.class).moveTo(1);
 		Assert.assertEquals("1", desktop.query("#treePageIndex").as(Label.class).getValue());
 		
+		//paging itself
 		paging = desktop.query("#pg");
-		paging.as(PagingAgent.class).goTo(1);
+		paging.as(PagingAgent.class).moveTo(1);
 		Assert.assertEquals("1", desktop.query("#leftGridPageIndex").as(Label.class).getValue());
 		Assert.assertEquals("1", desktop.query("#rightGridPageIndex").as(Label.class).getValue());
+		
+		//move out of page bound
+		try{
+			paging.as(PagingAgent.class).moveTo(-1);
+			fail();
+		}catch(ZatsException e){
+			logger.fine("expected exception: "+e.getMessage());
+		}
+		try{
+			paging.as(PagingAgent.class).moveTo(paging.as(Paging.class).getPageCount());
+			fail();
+		}catch(ZatsException e){
+			logger.fine("expected exception: "+e.getMessage());
+		}
 	}
 	
 	@Test
@@ -1736,27 +1761,6 @@ public class BasicAgentTest {
 		Assert.assertEquals(COLUMN_TITLE, groupingLabel.getValue());
 	}	
 
-	/*
-	 * Sort grid's column and verify its ascending order.
-	 */
-	@Test
-	public void testSort(){
-		DesktopAgent desktop = Zats.newClient().connect("/~./basic/group-sort.zul");
-		ComponentAgent sortingColumn = desktop.query("column[label='"+COLUMN_AUTHOR+"']");
-		Label sortStatus = desktop.query("#sortStatus").as(Label.class);
-		
-		sortingColumn.as(SortAgent.class).sort(true);
-		Assert.assertEquals(COLUMN_AUTHOR+",true", sortStatus.getValue());
-		sortingColumn.as(SortAgent.class).sort(false);
-		Assert.assertEquals(COLUMN_AUTHOR+",false", sortStatus.getValue());
-		
-		sortingColumn = desktop.query("column[label='"+COLUMN_TITLE+"']");
-		
-		sortingColumn.as(SortAgent.class).sort(true);
-		Assert.assertEquals(COLUMN_TITLE+",true", sortStatus.getValue());
-		sortingColumn.as(SortAgent.class).sort(false);
-		Assert.assertEquals(COLUMN_TITLE+",false", sortStatus.getValue());
-	}
 	
 	@Test
 	public void testScroll() {
@@ -1924,6 +1928,62 @@ public class BasicAgentTest {
 			Assert.assertEquals(top.getValue(), comp.as(HtmlBasedComponent.class).getTop());
 		}
 	}
+
+		/*
+		 * Sort grid's column and verify its ascending order.
+		 */
+		@Test
+		public void testSort(){
+			DesktopAgent desktop = Zats.newClient().connect("/~./basic/group-sort.zul");
+
+			//column
+			ComponentAgent sortingColumn = desktop.query("column[label='"+COLUMN_AUTHOR+"']");
+			Label sortStatus = desktop.query("#sortStatus").as(Label.class);
+
+			sortingColumn.as(SortAgent.class).sort(true);
+			Assert.assertEquals(COLUMN_AUTHOR+",true", sortStatus.getValue());
+			sortingColumn.as(SortAgent.class).sort(false);
+			Assert.assertEquals(COLUMN_AUTHOR+",false", sortStatus.getValue());
+
+			sortingColumn = desktop.query("column[label='"+COLUMN_TITLE+"']");
+
+			sortingColumn.as(SortAgent.class).sort(true);
+			Assert.assertEquals(COLUMN_TITLE+",true", sortStatus.getValue());
+			sortingColumn.as(SortAgent.class).sort(false);
+			Assert.assertEquals(COLUMN_TITLE+",false", sortStatus.getValue());
+
+			//listheader
+			ComponentAgent sortingHeader =  desktop.query("listheader[label='Name']");
+			Assert.assertEquals(SortAgent.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			//can sort in specified order in spite of its original sorting order
+			sortingHeader.as(SortAgent.class).sort(true);
+			Assert.assertEquals("Name", sortStatus.getValue());
+			Assert.assertEquals(SortAgent.ASCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			sortingHeader.as(SortAgent.class).sort(false);
+			Assert.assertEquals(SortAgent.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			//repeat sorting in the same order works correctly 
+			sortingHeader.as(SortAgent.class).sort(false);
+			Assert.assertEquals(SortAgent.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+
+			sortingHeader =  desktop.query("listheader[label='Gender']");
+			sortingHeader.as(SortAgent.class).sort(false);
+			Assert.assertEquals(SortAgent.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			Assert.assertEquals("Gender", sortStatus.getValue());
+
+			//treecol
+			sortingColumn = desktop.query("treecol[label='Description']");
+
+			//can sort in specified order in spite of its original sorting order
+			sortingColumn.as(SortAgent.class).sort(false);
+			Assert.assertEquals("Description", sortStatus.getValue());
+			Assert.assertEquals(SortAgent.DESCENDING, sortingColumn.as(Treecol.class).getSortDirection());
+			sortingColumn.as(SortAgent.class).sort(true);
+			Assert.assertEquals(SortAgent.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
+			//repeat sorting in the same order works correctly 
+			sortingHeader.as(SortAgent.class).sort(true);
+			Assert.assertEquals(SortAgent.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
+
+		}
 }
 
 

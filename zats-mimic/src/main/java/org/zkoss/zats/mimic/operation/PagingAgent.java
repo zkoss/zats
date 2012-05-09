@@ -19,8 +19,8 @@ package org.zkoss.zats.mimic.operation;
 public interface PagingAgent extends OperationAgent {
 
 	/**
-	 * To switch to specify page.
-	 * @param page index of page.
+	 * Move to specified page.
+	 * @param pageIndex index of page, starts from 0 (1st page)
 	 */
-	public void goTo(int page);
+	public void moveTo(int pageIndex);
 }

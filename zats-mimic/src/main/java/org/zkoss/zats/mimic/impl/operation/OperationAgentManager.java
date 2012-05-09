@@ -156,6 +156,8 @@ public class OperationAgentManager {
 
 		//sort
 		registerBuilder("5.0.0", "*", Column.class, new GenericSortAgentBuilder());
+		registerBuilder("5.0.0", "*", Listheader.class, new GenericSortAgentBuilder());
+		registerBuilder("5.0.0", "*", Treecol.class, new GenericSortAgentBuilder());
 		
 		// the scroll
 		registerBuilder("5.0.0", "*", Slider.class, new SliderInputAgentBuilder());
