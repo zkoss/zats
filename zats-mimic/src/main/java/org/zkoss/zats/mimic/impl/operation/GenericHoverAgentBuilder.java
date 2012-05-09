@@ -44,9 +44,6 @@ public class GenericHoverAgentBuilder implements OperationAgentBuilder<Component
 			super(target);
 		}
 
-		/* (non-Javadoc)
-		 * @see org.zkoss.zats.mimic.operation.HoverAgent#moveOver()
-		 */
 		public void moveOver() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_MOUSE_OVER;
@@ -54,9 +51,6 @@ public class GenericHoverAgentBuilder implements OperationAgentBuilder<Component
 			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
 		}
 
-		/* (non-Javadoc)
-		 * @see org.zkoss.zats.mimic.operation.HoverAgent#moveOut()
-		 */
 		public void moveOut() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_MOUSE_OUT;

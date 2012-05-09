@@ -13,7 +13,7 @@ package org.zkoss.zats.mimic.impl.operation;
 
 import java.util.Map;
 
-import org.zkoss.zats.ZatsException;
+import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
@@ -27,7 +27,7 @@ import org.zkoss.zul.event.ZulEvents;
  * @author Hawk
  *
  */
-public class GenericPagingAgentBuilder implements OperationAgentBuilder<ComponentAgent,PagingAgent>{
+public class PagingAgentBuilder implements OperationAgentBuilder<ComponentAgent,PagingAgent>{
 	public PagingAgent getOperation(final ComponentAgent target) {
 		return new PagingAgentImpl(target);
 	}
@@ -49,7 +49,7 @@ public class GenericPagingAgentBuilder implements OperationAgentBuilder<Componen
 			Paging paging= ((Paging)target.getDelegatee());
 
 			if (pageIndex<0 || pageIndex>paging.getPageCount()-1){
-				throw new ZatsException("Page index out of bound (0-"+(paging.getPageCount()-1)+") : "+pageIndex);
+				throw new AgentException("Page index out of bound (0-"+(paging.getPageCount()-1)+") : "+pageIndex);
 			}
 			
 			String desktopId = target.getDesktop().getId();

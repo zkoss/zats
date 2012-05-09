@@ -15,7 +15,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
-import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
@@ -24,6 +23,7 @@ import org.zkoss.zats.mimic.operation.SizeAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zul.event.ColSizeEvent;
+import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.impl.HeaderElement;
 import org.zkoss.zul.impl.HeadersElement;
 
@@ -92,7 +92,7 @@ public class HeaderSizeAgentBuilder implements OperationAgentBuilder<ComponentAg
 				Method method = container.getClass().getMethod("getInnerWidth");
 				innerWidth = method.invoke(container).toString();
 			} catch (Exception e) {
-				new ZatsException("unexceptional exception", e);
+				new AgentException("unexpected exception", e);
 			}
 
 			// post onInnerWidth event from container
@@ -104,7 +104,7 @@ public class HeaderSizeAgentBuilder implements OperationAgentBuilder<ComponentAg
 			cc.postUpdate(desktopId, cmd, container.getUuid(), data, null);
 
 			// post column resize event
-			cmd = "onColSize";
+			cmd = ZulEvents.ON_COL_SIZE;
 			ColSizeEvent event = new ColSizeEvent(cmd, head, index, column, widths, 0);
 			data = EventDataManager.build(event);
 			data.put("widths", widths);

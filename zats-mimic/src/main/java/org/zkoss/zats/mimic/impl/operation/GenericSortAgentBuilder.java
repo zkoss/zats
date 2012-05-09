@@ -14,7 +14,7 @@ package org.zkoss.zats.mimic.impl.operation;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import org.zkoss.zats.ZatsException;
+import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
@@ -96,7 +96,7 @@ public class GenericSortAgentBuilder implements OperationAgentBuilder<ComponentA
 						}
 					}
 				}catch(Exception e){
-					throw new ZatsException("", e);
+					throw new AgentException(e.getMessage(), e);
 				}
 				
 			}

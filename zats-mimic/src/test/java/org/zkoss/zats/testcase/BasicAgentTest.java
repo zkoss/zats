@@ -31,7 +31,6 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -1565,6 +1564,7 @@ public class BasicAgentTest {
 		
 		ComponentAgent rightBox = desktop.query("#right");
 		Assert.assertEquals(2, rightBox.queryAll("listitem").size());
+		Assert.assertNull(rightBox.query("listcell[label='ZK Forge']"));
 		
 		//move 1 item from left to right
 		ComponentAgent draggedItem = leftBox.query("listcell[label='ZK Forge']").getParent();
@@ -1685,13 +1685,13 @@ public class BasicAgentTest {
 		try{
 			paging.as(PagingAgent.class).moveTo(-1);
 			fail();
-		}catch(ZatsException e){
+		}catch(AgentException e){
 			logger.fine("expected exception: "+e.getMessage());
 		}
 		try{
 			paging.as(PagingAgent.class).moveTo(paging.as(Paging.class).getPageCount());
 			fail();
-		}catch(ZatsException e){
+		}catch(AgentException e){
 			logger.fine("expected exception: "+e.getMessage());
 		}
 	}
