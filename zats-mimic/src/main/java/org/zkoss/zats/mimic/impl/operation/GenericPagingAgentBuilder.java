@@ -13,15 +13,17 @@ package org.zkoss.zats.mimic.impl.operation;
 
 import java.util.Map;
 
+import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.PagingAgent;
-import org.zkoss.zk.ui.Component;
+import org.zkoss.zul.Paging;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.ZulEvents;
 
 /**
+ * Agent builder for Paging.
  * @author Hawk
  *
  */
@@ -30,9 +32,6 @@ public class GenericPagingAgentBuilder implements OperationAgentBuilder<Componen
 		return new PagingAgentImpl(target);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.zkoss.zats.mimic.impl.operation.OperationAgentBuilder#getOperationClass()
-	 */
 	public Class<PagingAgent> getOperationClass() {
 		return PagingAgent.class;
 	}
@@ -43,15 +42,19 @@ public class GenericPagingAgentBuilder implements OperationAgentBuilder<Componen
 		}
 
 		
-		/* (non-Javadoc)
-		 * @see org.zkoss.zats.mimic.operation.PagingAgent#goTo(int)
+		/* 
+		 * Validate page index range first.
 		 */
-		public void goTo(int page) {
+		public void moveTo(int pageIndex) {
+			Paging paging= ((Paging)target.getDelegatee());
+
+			if (pageIndex<0 || pageIndex>paging.getPageCount()-1){
+				throw new ZatsException("Page index out of bound (0-"+(paging.getPageCount()-1)+") : "+pageIndex);
+			}
 			
 			String desktopId = target.getDesktop().getId();
 			String cmd = ZulEvents.ON_PAGING;
-			Component paging= ((Component)target.getDelegatee());
-			Map<String, Object> data = EventDataManager.build(new PagingEvent(cmd, paging, page));
+			Map<String, Object> data = EventDataManager.build(new PagingEvent(cmd, paging, pageIndex));
 			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, paging.getUuid(), data,null);
 			
 		}

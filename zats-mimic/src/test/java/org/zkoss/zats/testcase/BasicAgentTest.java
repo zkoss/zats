@@ -23,12 +23,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -71,6 +73,8 @@ import org.zkoss.zul.Treeitem;
  *
  */
 public class BasicAgentTest {
+
+	private static Logger logger = Logger.getLogger(BasicAgentTest.class.getName());
 	
 	private static final String[] componentNames = { "a", "applet", "button", "captcha", "fileupload", "fisheye", "fisheyebar", "html",
 			"include", "image", "imagemap", "label", "menu", "menubar", "menuitem", "menupopup", "menuseparator",
@@ -1356,28 +1360,47 @@ public class BasicAgentTest {
 	@Test
 	public void testPaging(){
 		DesktopAgent desktop = Zats.newClient().connect("/~./basic/paging.zul");
+		
+		//listbox's paging
 		ComponentAgent paging = desktop.query("listbox > paging");
 		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
 		
-		paging.as(PagingAgent.class).goTo(1);
+		paging.as(PagingAgent.class).moveTo(1);
 		Assert.assertEquals("1", desktop.query("#listboxPageIndex").as(Label.class).getValue());
 		
+		//grid's paging
 		paging = desktop.query("#grid > paging");
 		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
 		
-		paging.as(PagingAgent.class).goTo(1);
+		paging.as(PagingAgent.class).moveTo(1);
 		Assert.assertEquals("1", desktop.query("#gridPageIndex").as(Label.class).getValue());
 		
+		//tree's paging
 		paging = desktop.query("tree > paging");
 		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
 		
-		paging.as(PagingAgent.class).goTo(1);
+		paging.as(PagingAgent.class).moveTo(1);
 		Assert.assertEquals("1", desktop.query("#treePageIndex").as(Label.class).getValue());
 		
+		//paging itself
 		paging = desktop.query("#pg");
-		paging.as(PagingAgent.class).goTo(1);
+		paging.as(PagingAgent.class).moveTo(1);
 		Assert.assertEquals("1", desktop.query("#leftGridPageIndex").as(Label.class).getValue());
 		Assert.assertEquals("1", desktop.query("#rightGridPageIndex").as(Label.class).getValue());
+		
+		//move out of page bound
+		try{
+			paging.as(PagingAgent.class).moveTo(-1);
+			fail();
+		}catch(ZatsException e){
+			logger.fine("expected exception: "+e.getMessage());
+		}
+		try{
+			paging.as(PagingAgent.class).moveTo(paging.as(Paging.class).getPageCount());
+			fail();
+		}catch(ZatsException e){
+			logger.fine("expected exception: "+e.getMessage());
+		}
 	}
 	
 	@Test
