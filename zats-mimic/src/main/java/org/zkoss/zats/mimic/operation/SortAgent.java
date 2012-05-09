@@ -17,8 +17,6 @@ package org.zkoss.zats.mimic.operation;
  */
 public interface SortAgent extends OperationAgent {
 
-	final String ASCENDING = "ascending";
-	final String DESCENDING = "descending";
 	/**
 	 * To sort column.
 	 * @param ascending true indicates ascending; false indicates descending.

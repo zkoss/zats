@@ -24,15 +24,16 @@ import org.zkoss.zul.impl.FormatInputElement;
  * 
  * @author pao
  */
-public class DateTypeAgentBuilderZK6 extends AbstractTypeAgentBuilder {
+public class DateTypeAgentBuilderZK6 extends AbstractTypeAgentBuilder.DateTypeAgentBuilder {
 	@Override
 	protected void putValue(ComponentAgent target, String raw, Map<String, Object> data) {
-		if (Strings.isBlank(raw))
-			return;
-
-		Object comp = target.getDelegatee();
-		String f = ((FormatInputElement) comp).getFormat();
-		Date date = parseDate(f == null ? DEFAULT_DATE_FORMAT : f, raw.trim());
-		data.put("value", "$z!t#d:" + JSONs.d2j(date));
+		if(Strings.isBlank(raw)) {
+			data.put("value", null);
+		}else{
+			Object comp = target.getDelegatee();
+			String f = ((FormatInputElement) comp).getFormat();
+			Date date = parseDate(f == null ? DEFAULT_DATE_FORMAT : f, raw.trim());
+			data.put("value", "$z!t#d:" + JSONs.d2j(date));
+		}
 	}
 }

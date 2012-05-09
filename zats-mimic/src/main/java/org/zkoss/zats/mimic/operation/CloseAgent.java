@@ -12,8 +12,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.operation;
 
 /**
+ * To cloase a component, ex, a windows.
  * When closing a closable component, you cannot re-open it. Because it's detached from desktop.
- * Handle the onClose of component.
+ * 
  * 
  * @author Hawk
  *

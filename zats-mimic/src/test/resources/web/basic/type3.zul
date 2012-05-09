@@ -1,0 +1,118 @@
+<zk>
+	<window>
+Test nullable value
+		<hbox>
+			<zscript><![CDATA[
+	java.text.SimpleDateFormat f1 = new java.text.SimpleDateFormat("yyyyMMdd");
+	java.text.SimpleDateFormat f2 = new java.text.SimpleDateFormat("HH:mm");
+	String format(java.text.SimpleDateFormat f, java.util.Date d){
+		if(d==null) return "null";
+		return f.format(d);
+	}
+]]></zscript>
+ 
+			<vbox>
+				<hbox>
+					bandbox
+					<bandbox id="inp1" width="100px"
+						onChange='l1.setValue(self.getValue())'/>
+				</hbox>
+				<hbox>
+					combobox
+					<combobox id="inp2" width="100px"
+						onChange='l2.setValue(self.getValue())'/>
+				</hbox>
+				<hbox>
+					datebox
+					<datebox id="inp3" width="100px"
+						onChange='l3.setValue(format(f1,self.getValue()))'
+						format="yyyyMMdd"/>
+				</hbox>
+				<hbox>
+					decimalbox
+					<decimalbox id="inp4" width="100px"
+						onChange='l4.setValue(""+(self.getValue()==null?"null":self.getValue().doubleValue()))'/>
+				</hbox>
+				<hbox>
+					doublebox
+					<doublebox id="inp5" width="100px"
+						onChange='l5.setValue(""+self.getValue())' />
+				</hbox>
+				<hbox>
+					doublespinner
+					<doublespinner id="inp6" width="100px"
+						onChange='l6.setValue(""+self.getValue())'/>
+				</hbox>
+				<hbox>
+					intbox
+					<intbox id="inp7" width="100px"
+						onChange='l7.setValue(""+self.getValue())'/>
+				</hbox>
+				<hbox>
+					longbox
+					<longbox id="inp8" width="100px"
+						onChange='l8.setValue(""+self.getValue())'/>
+				</hbox>
+				<hbox>
+					spinner
+					<spinner id="inp9" width="100px"
+						onChange='l9.setValue(""+self.getValue())' />
+				</hbox>
+				<hbox>
+					textbox
+					<textbox id="inp10" width="100px"
+						onChange='l10.setValue(self.getValue())' />
+				</hbox>
+				<hbox>
+					timebox
+					<timebox id="inp11" width="100px"
+						onChange='l11.setValue(format(f2,self.getValue()))'
+						format="HH:mm" />
+				</hbox>
+				<hbox>
+					colorbox
+					<colorbox onChange="l12.setValue(self.getValue())" />
+				</hbox>
+			</vbox>
+
+			<vbox>
+				<hbox>
+					<label id="l1" />
+				</hbox>
+				<hbox>
+					<label id="l2" />
+				</hbox>
+				<hbox>
+					<label id="l3" />
+				</hbox><!-- value="@bind(vm.dateboxVal) @converter('formatedDate',format='yyyyMMdd')"/> -->
+				<hbox>
+					<label id="l4" />
+				</hbox>
+				<hbox>
+					<label id="l5" />
+				</hbox>
+				<hbox>
+					<label id="l6" />
+				</hbox>
+				<hbox>
+					<label id="l7" />
+				</hbox>
+				<hbox>
+					<label id="l8" />
+				</hbox>
+				<hbox>
+					<label id="l9" />
+				</hbox>
+				<hbox>
+					<label id="l10" />
+				</hbox>
+				<hbox>
+					<label id="l11" />
+				</hbox><!-- value="@bind(vm.timeboxVal) @converter('formatedDate',format='HH:mm')" -->
+				<hbox>
+					<label id="l12" />
+				</hbox>
+			</vbox>
+		</hbox>
+	</window>
+</zk>

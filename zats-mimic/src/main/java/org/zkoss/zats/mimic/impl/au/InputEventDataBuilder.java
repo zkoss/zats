@@ -22,7 +22,7 @@ import org.zkoss.zk.ui.event.InputEvent;
  */
 public class InputEventDataBuilder implements EventDataBuilder<InputEvent> {
 	public Map<String, Object> build(InputEvent evt, Map<String, Object> data) {
-		AuUtility.setEssential(data, "value", evt.getValue());
+		AuUtility.setEssential(data, "value", evt.getValue(), true);
 		AuUtility.setEssential(data, "start", evt.getStart());
 		AuUtility.setEssential(data, "bySelectBack", evt.isChangingBySelectBack());
 		return data;

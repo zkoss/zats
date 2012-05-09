@@ -32,6 +32,8 @@ import org.zkoss.zul.Column;
  */
 public class GenericSortAgentBuilder implements OperationAgentBuilder<ComponentAgent,SortAgent> {
 	
+	public static final String ASCENDING = "ascending";
+	public static final String DESCENDING = "descending";
 	
 	public SortAgent getOperation(ComponentAgent target) {
 		return new SortAgentImpl(target);

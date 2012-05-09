@@ -25,15 +25,16 @@ import org.zkoss.zul.impl.FormatInputElement;
  * 
  * @author pao
  */
-public class TimeTypeAgentBuilderZK6 extends AbstractTypeAgentBuilder {
+public class TimeTypeAgentBuilderZK6 extends AbstractTypeAgentBuilder.TimeTypeAgentBuilder {
 	@Override
 	protected void putValue(ComponentAgent target, String raw, Map<String, Object> data) {
-		if (Strings.isBlank(raw))
-			return;
-
-		Object comp = target.getDelegatee();
-		String f = ((FormatInputElement) comp).getFormat();
-		Date time = parseDate(f == null ? DEFAULT_TIME_FORMAT : f, raw.trim());
-		data.put("value", "$z!t#d:" + JSONs.d2j(time));
+		if(Strings.isBlank(raw)) {
+			data.put("value", null);
+		}else{
+			Object comp = target.getDelegatee();
+			String f = ((FormatInputElement) comp).getFormat();
+			Date time = parseDate(f == null ? DEFAULT_TIME_FORMAT : f, raw.trim());
+			data.put("value", "$z!t#d:" + JSONs.d2j(time));
+		}
 	}
 }

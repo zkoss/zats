@@ -18,6 +18,14 @@ package org.zkoss.zats.mimic.operation;
 
 public interface TypeAgent extends OperationAgent {
 
+	
+	/**
+	 * To input value into component. 
+	 * You can use the Integer or Double directly for a intbox or doublebox, use Date for a datebox.
+	 * @param value the input value
+	 */
+	void input(Object value);
+	
 	/**
 	 * To type data into a component. The value should be valid for target
 	 * component. e.g. Intbox only accepts integer. If the target is Datebox or Timebox,

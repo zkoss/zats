@@ -54,6 +54,10 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 		public TypeAgentImpl(ComponentAgent target) {
 			super(target);
 		}
+		
+		public void input(Object value){
+			type(toRawString(target,value));
+		}
 
 		public void type(String value) {
 			try {
@@ -95,11 +99,23 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 	/**
 	 * extender should put parsed value(s) into data map 
 	 */
-	protected abstract void putValue(ComponentAgent target, String raw, Map<String, Object> data);	
+	protected abstract void putValue(ComponentAgent target, String raw, Map<String, Object> data);
+	/**
+	 * extender converter value to raw string to set to {@link TypeAgent#type(String)}
+	 */
+	protected abstract String toRawString(ComponentAgent target, Object value);
 
 	static Date parseDate(String format, String value) {
 		try {
 			return new SimpleDateFormat(format).parse(value);
+		} catch (Exception e) {
+			throw new AgentException(e.getMessage(),e);
+		}
+	}
+	
+	static String formatDate(String format, Date value) {
+		try {
+			return new SimpleDateFormat(format).format(value);
 		} catch (Exception e) {
 			throw new AgentException(e.getMessage(),e);
 		}
@@ -113,92 +129,196 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 		}
 	}
 	
+	static String formatNumber(String format,Number number){
+		try {
+			return new DecimalFormat(format).format(number);
+		} catch (Exception e) {
+			throw new AgentException(e.getMessage(),e);
+		}
+	}
+	
 	static public class TextTypeAgentBuilder extends AbstractTypeAgentBuilder {
 		@Override
 		protected void putValue(ComponentAgent target, String raw, Map<String, Object> data) {
 			data.put("value", raw);
+		}
+		
+		@Override
+		protected String toRawString(ComponentAgent target, Object value){
+			return value==null?"":value.toString();
 		}
 	}
 	
 	static public class IntegerTypeAgentBuilder extends AbstractTypeAgentBuilder {
 		@Override
 		protected void putValue(ComponentAgent target, String raw, Map<String, Object> data) {
-			if(Strings.isBlank(raw)) return;
-			
-			Object comp = target.getDelegatee();
-			String f = ((FormatInputElement) comp).getFormat();
-			if (f != null)
-				data.put("value", parseNumber(f, raw.trim()));
-			else
-				data.put("value", new BigInteger(raw.trim()));
+			if(Strings.isBlank(raw)) {
+				data.put("value", null);
+			}else{
+				Object comp = target.getDelegatee();
+				String f = ((FormatInputElement) comp).getFormat();
+				if (f != null)
+					data.put("value", parseNumber(f, raw.trim()));
+				else
+					data.put("value", new BigInteger(raw.trim()));
+			}
+		}
+		@Override
+		protected String toRawString(ComponentAgent target, Object value){
+			if(value==null)
+				return null;
+			if(value instanceof Number){
+				Object comp = target.getDelegatee();
+				String f = ((FormatInputElement) comp).getFormat();
+				if (f != null)
+					return formatNumber(f, (Number)value);
+				return value.toString();
+			}
+			throw new IllegalArgumentException("unsupported value type "+value.getClass());
 		}
 	}
 	
 	static public class IntegerStringTypeAgentBuilder extends AbstractTypeAgentBuilder {
 		@Override
 		protected void putValue(ComponentAgent target, String raw, Map<String, Object> data) {
-			if(Strings.isBlank(raw)) return;
-			
-			Object comp = target.getDelegatee();
-			String f = ((FormatInputElement) comp).getFormat();
-			if (f != null)
-				data.put("value", parseNumber(f, raw.trim()).toString());
-			else
-				data.put("value", new BigInteger(raw.trim()).toString());//longbox
+			if(Strings.isBlank(raw)) {
+				data.put("value", null);
+			}else{
+				Object comp = target.getDelegatee();
+				String f = ((FormatInputElement) comp).getFormat();
+				if (f != null)
+					data.put("value", parseNumber(f, raw.trim()).toString());
+				else
+					data.put("value", new BigInteger(raw.trim()).toString());//longbox
+			}
+		}
+
+		@Override
+		protected String toRawString(ComponentAgent target, Object value){
+			if(value==null)
+				return null;
+			if(value instanceof Number){
+				Object comp = target.getDelegatee();
+				String f = ((FormatInputElement) comp).getFormat();
+				if (f != null)
+					return formatNumber(f, (Number)value);
+				return value.toString();
+			}
+			throw new IllegalArgumentException("unsupported value type "+value.getClass());
 		}
 	}
 	
 	static public class DecimalTypeAgentBuilder extends AbstractTypeAgentBuilder {
 		@Override
 		protected void putValue(ComponentAgent target, String raw, Map<String, Object> data) {
-			if(Strings.isBlank(raw)) return;
-			
-			Object comp = target.getDelegatee();
-			String f = ((FormatInputElement) comp).getFormat();
-			if (f != null)
-				data.put("value", parseNumber(f, raw.trim()));
-			else
-				data.put("value", new BigDecimal(raw.trim()));
+			if(Strings.isBlank(raw)) {
+				data.put("value", null);
+			}else{
+				Object comp = target.getDelegatee();
+				String f = ((FormatInputElement) comp).getFormat();
+				if (f != null)
+					data.put("value", parseNumber(f, raw.trim()));
+				else
+					data.put("value", new BigDecimal(raw.trim()));
+			}
+		}
+		
+		@Override
+		protected String toRawString(ComponentAgent target, Object value){
+			if(value==null)
+				return null;
+			if(value instanceof Number){
+				Object comp = target.getDelegatee();
+				String f = ((FormatInputElement) comp).getFormat();
+				if (f != null)
+					return formatNumber(f, (Number)value);
+				return value.toString();
+			}
+			throw new IllegalArgumentException("unsupported value type "+value.getClass());
 		}
 	}
 	
 	static public class DecimalStringTypeAgentBuilder extends AbstractTypeAgentBuilder {
 		@Override
 		protected void putValue(ComponentAgent target, String raw, Map<String, Object> data) {
-			if(Strings.isBlank(raw)) return;
-			
-			Object comp = target.getDelegatee();
-			String f = ((FormatInputElement) comp).getFormat();
-			if (f != null)
-				data.put("value", parseNumber(f, raw.trim()).toString());
-			else
-				data.put("value", new BigDecimal(raw.trim()).toString()); // decimalbox
+			if(Strings.isBlank(raw)) {
+				data.put("value", null);
+			}else{
+				Object comp = target.getDelegatee();
+				String f = ((FormatInputElement) comp).getFormat();
+				if (f != null)
+					data.put("value", parseNumber(f, raw.trim()).toString());
+				else
+					data.put("value", new BigDecimal(raw.trim()).toString()); // decimalbox
+			}
+		}
+		
+		@Override
+		protected String toRawString(ComponentAgent target, Object value){
+			if(value==null)
+				return null;
+			if(value instanceof Number){
+				Object comp = target.getDelegatee();
+				String f = ((FormatInputElement) comp).getFormat();
+				if (f != null)
+					return formatNumber(f, (Number)value);
+				return value.toString();
+			}
+			throw new IllegalArgumentException("unsupported value type "+value.getClass());
 		}
 	}
 	
 	static public class DateTypeAgentBuilder extends AbstractTypeAgentBuilder {
 		@Override
 		protected void putValue(ComponentAgent target,String raw,Map<String , Object> data){
-			if(Strings.isBlank(raw)) return;
-			
-			Object comp = target.getDelegatee();
-			String f = ((FormatInputElement) comp).getFormat();
-			Date date = parseDate(f == null ? DEFAULT_DATE_FORMAT : f, raw.trim());
-			data.put("value", JSONs.d2j(date));
-			data.put("z_type_value", "Date");
+			if(Strings.isBlank(raw)) {
+				data.put("value", null);
+			}else{
+				Object comp = target.getDelegatee();
+				String f = ((FormatInputElement) comp).getFormat();
+				Date date = parseDate(f == null ? DEFAULT_DATE_FORMAT : f, raw.trim());
+				data.put("value", JSONs.d2j(date));
+				data.put("z_type_value", "Date");
+			}
+		}
+		
+		@Override
+		protected String toRawString(ComponentAgent target, Object value){
+			if(value==null)
+				return null;
+			if(value instanceof Date){
+				Object comp = target.getDelegatee();
+				String f = ((FormatInputElement) comp).getFormat();
+				return formatDate(f == null ? DEFAULT_DATE_FORMAT : f, ((Date)value));
+			}
+			throw new IllegalArgumentException("unsupported value type "+value.getClass());
 		}
 	}
 	
 	static public class TimeTypeAgentBuilder extends AbstractTypeAgentBuilder {
 		@Override
 		protected void putValue(ComponentAgent target, String raw, Map<String, Object> data) {
-			if(Strings.isBlank(raw)) return;
-			
-			Object comp = target.getDelegatee();
-			String f = ((FormatInputElement) comp).getFormat();
-			Date time = parseDate(f == null ? DEFAULT_TIME_FORMAT : f, raw.trim());
-			data.put("value", JSONs.d2j(time));
-			data.put("z_type_value", "Date");
+			if(Strings.isBlank(raw)) {
+				data.put("value", null);
+			}else{
+				Object comp = target.getDelegatee();
+				String f = ((FormatInputElement) comp).getFormat();
+				Date time = parseDate(f == null ? DEFAULT_TIME_FORMAT : f, raw.trim());
+				data.put("value", JSONs.d2j(time));
+				data.put("z_type_value", "Date");
+			}
+		}
+		
+		@Override
+		protected String toRawString(ComponentAgent target, Object value){
+			if(value==null)
+				return null;
+			if(value instanceof Date){
+				Object comp = target.getDelegatee();
+				String f = ((FormatInputElement) comp).getFormat();
+				return formatDate(f == null ? DEFAULT_DATE_FORMAT : f, ((Date)value));
+			}
+			throw new IllegalArgumentException("unsupported value type "+value.getClass());
 		}
 	}
 }

@@ -40,6 +40,14 @@ public class Util {
 		return zkVersion;
 	}
 	
+	public static boolean isZKVersion(int primaryVer){
+		byte[] ver = zkVersion.toByteArray();
+		if(ver!=null && ver.length>=3){
+			return ver[0]==primaryVer;
+		}
+		return false;
+	}
+	
 	
 	public static boolean checkVersion(String startVersion, String endVersion){
 		// check version
