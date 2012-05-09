@@ -16,6 +16,13 @@ import java.util.Map;
 
 import org.zkoss.zats.mimic.Agent;
 import org.zkoss.zats.mimic.impl.Util;
+import org.zkoss.zats.mimic.impl.operation.input.DateInputAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.input.DecimalInputAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.input.DecimalStringInputAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.input.IntegerInputAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.input.IntegerStringInputAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.input.TextInputAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.input.TimeInputAgentBuilder;
 import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Desktop;
@@ -82,26 +89,17 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", Tree.class,new GenericFocusAgentBuilder());
 		
 		// the inputs
-		registerBuilder("5.0.0", "*", InputElement.class,
-				new AbstractInputAgentBuilder.TextInputAgentBuilder());
-		registerBuilder("5.0.0", "*", Intbox.class,
-				new AbstractInputAgentBuilder.IntegerInputAgentBuilder());
-		registerBuilder("5.0.0", "*", Longbox.class,
-				new AbstractInputAgentBuilder.IntegerStringInputAgentBuilder());
-		registerBuilder("5.0.0", "*", Spinner.class,
-				new AbstractInputAgentBuilder.IntegerInputAgentBuilder());
+		registerBuilder("5.0.0", "*", InputElement.class, new TextInputAgentBuilder());
+		registerBuilder("5.0.0", "*", Intbox.class, new IntegerInputAgentBuilder());
+		registerBuilder("5.0.0", "*", Longbox.class, new IntegerStringInputAgentBuilder());
+		registerBuilder("5.0.0", "*", Spinner.class, new IntegerInputAgentBuilder());
 
-		registerBuilder("5.0.0", "*", Decimalbox.class,
-				new AbstractInputAgentBuilder.DecimalStringInputAgentBuilder());
-		registerBuilder("5.0.0", "*", Doublebox.class,
-				new AbstractInputAgentBuilder.DecimalInputAgentBuilder());
-		registerBuilder("5.0.0", "*", Doublespinner.class,
-				new AbstractInputAgentBuilder.DecimalInputAgentBuilder());
+		registerBuilder("5.0.0", "*", Decimalbox.class, new DecimalStringInputAgentBuilder());
+		registerBuilder("5.0.0", "*", Doublebox.class, new DecimalInputAgentBuilder());
+		registerBuilder("5.0.0", "*", Doublespinner.class, new DecimalInputAgentBuilder());
 
-		registerBuilder("5.0.0", "*", Datebox.class, 
-				new AbstractInputAgentBuilder.DateInputAgentBuilder());
-		registerBuilder("5.0.0", "*", Timebox.class,
-				new AbstractInputAgentBuilder.TimeInputAgentBuilder());
+		registerBuilder("5.0.0", "*", Datebox.class, new DateInputAgentBuilder());
+		registerBuilder("5.0.0", "*", Timebox.class, new TimeInputAgentBuilder());
 
 		// the check
 		registerBuilder("5.0.0", "*", Menuitem.class,new GenericCheckAgentBuilder());
@@ -188,7 +186,7 @@ public class OperationAgentManager {
 		//colorbox in zkex.jar which is optional
 		try {
 			registerBuilder("5.0.0", "*", "org.zkoss.zkex.zul.Colorbox",
-					"org.zkoss.zats.mimic.impl.operation.ColorboxInputAgentBuilder");
+					"org.zkoss.zats.mimic.impl.operation.input.ColorboxInputAgentBuilder");
 		} catch (Exception e) {
 			// doesn't exist
 		}
@@ -196,7 +194,7 @@ public class OperationAgentManager {
 		// the ckeditor (optional)
 		try {
 			registerBuilder("5.0.0", "*", "org.zkforge.ckez.CKeditor",
-					"org.zkoss.zats.mimic.impl.operation.AbstractInputAgentBuilder$TextInputAgentBuilder");
+					"org.zkoss.zats.mimic.impl.operation.input.TextInputAgentBuilder");
 		} catch (Exception e) {
 			// ckeditor doesn't exist
 		}
