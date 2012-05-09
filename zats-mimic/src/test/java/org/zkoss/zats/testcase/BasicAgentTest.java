@@ -59,9 +59,11 @@ import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listheader;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Tree;
+import org.zkoss.zul.Treecol;
 import org.zkoss.zul.Treeitem;
 
 /**
@@ -1506,27 +1508,6 @@ public class BasicAgentTest {
 		Assert.assertEquals(COLUMN_TITLE, groupingLabel.getValue());
 	}	
 
-	/*
-	 * Sort grid's column and verify its ascending order.
-	 */
-	@Test
-	public void testSort(){
-		DesktopAgent desktop = Zats.newClient().connect("/~./basic/group-sort.zul");
-		ComponentAgent sortingColumn = desktop.query("column[label='"+COLUMN_AUTHOR+"']");
-		Label sortStatus = desktop.query("#sortStatus").as(Label.class);
-		
-		sortingColumn.as(SortAgent.class).sort(true);
-		Assert.assertEquals(COLUMN_AUTHOR+",true", sortStatus.getValue());
-		sortingColumn.as(SortAgent.class).sort(false);
-		Assert.assertEquals(COLUMN_AUTHOR+",false", sortStatus.getValue());
-		
-		sortingColumn = desktop.query("column[label='"+COLUMN_TITLE+"']");
-		
-		sortingColumn.as(SortAgent.class).sort(true);
-		Assert.assertEquals(COLUMN_TITLE+",true", sortStatus.getValue());
-		sortingColumn.as(SortAgent.class).sort(false);
-		Assert.assertEquals(COLUMN_TITLE+",false", sortStatus.getValue());
-	}
 	
 	@Test
 	public void testScroll() {
@@ -1694,6 +1675,62 @@ public class BasicAgentTest {
 			Assert.assertEquals(top.getValue(), comp.as(HtmlBasedComponent.class).getTop());
 		}
 	}
+
+		/*
+		 * Sort grid's column and verify its ascending order.
+		 */
+		@Test
+		public void testSort(){
+			DesktopAgent desktop = Zats.newClient().connect("/~./basic/group-sort.zul");
+
+			//column
+			ComponentAgent sortingColumn = desktop.query("column[label='"+COLUMN_AUTHOR+"']");
+			Label sortStatus = desktop.query("#sortStatus").as(Label.class);
+
+			sortingColumn.as(SortAgent.class).sort(true);
+			Assert.assertEquals(COLUMN_AUTHOR+",true", sortStatus.getValue());
+			sortingColumn.as(SortAgent.class).sort(false);
+			Assert.assertEquals(COLUMN_AUTHOR+",false", sortStatus.getValue());
+
+			sortingColumn = desktop.query("column[label='"+COLUMN_TITLE+"']");
+
+			sortingColumn.as(SortAgent.class).sort(true);
+			Assert.assertEquals(COLUMN_TITLE+",true", sortStatus.getValue());
+			sortingColumn.as(SortAgent.class).sort(false);
+			Assert.assertEquals(COLUMN_TITLE+",false", sortStatus.getValue());
+
+			//listheader
+			ComponentAgent sortingHeader =  desktop.query("listheader[label='Name']");
+			Assert.assertEquals(SortAgent.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			//can sort in specified order in spite of its original sorting order
+			sortingHeader.as(SortAgent.class).sort(true);
+			Assert.assertEquals("Name", sortStatus.getValue());
+			Assert.assertEquals(SortAgent.ASCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			sortingHeader.as(SortAgent.class).sort(false);
+			Assert.assertEquals(SortAgent.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			//repeat sorting in the same order works correctly 
+			sortingHeader.as(SortAgent.class).sort(false);
+			Assert.assertEquals(SortAgent.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+
+			sortingHeader =  desktop.query("listheader[label='Gender']");
+			sortingHeader.as(SortAgent.class).sort(false);
+			Assert.assertEquals(SortAgent.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			Assert.assertEquals("Gender", sortStatus.getValue());
+
+			//treecol
+			sortingColumn = desktop.query("treecol[label='Description']");
+
+			//can sort in specified order in spite of its original sorting order
+			sortingColumn.as(SortAgent.class).sort(false);
+			Assert.assertEquals("Description", sortStatus.getValue());
+			Assert.assertEquals(SortAgent.DESCENDING, sortingColumn.as(Treecol.class).getSortDirection());
+			sortingColumn.as(SortAgent.class).sort(true);
+			Assert.assertEquals(SortAgent.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
+			//repeat sorting in the same order works correctly 
+			sortingHeader.as(SortAgent.class).sort(true);
+			Assert.assertEquals(SortAgent.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
+
+		}
 }
 
 
