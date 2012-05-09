@@ -23,6 +23,14 @@ import org.zkoss.zats.mimic.impl.operation.input.IntegerInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.IntegerStringInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.TextInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.TimeInputAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.select.AbstractMultipleSelectAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.select.AbstractSelectAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.select.ComboitemSelectAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.select.LisitemSelectAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.select.ListitemMultipleSelectAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.select.TabSelectAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.select.TreeSelectAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.select.TreeitemMultipleSelectAgentBuilder;
 import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Desktop;
@@ -107,20 +115,14 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", Checkbox.class, new GenericCheckAgentBuilder());
 		
 		// the single select
-		registerBuilder("5.0.0", "*", Comboitem.class, 
-				new AbstractSelectAgentBuilder.ComboitemSelectAgentBuilder());
-		registerBuilder("5.0.0", "*", Tab.class,
-				new AbstractSelectAgentBuilder.TabSelectAgentBuilder());
-		registerBuilder("5.0.0", "*", Listitem.class, 
-				new AbstractSelectAgentBuilder.LisitemSelectAgentBuilder());
-		registerBuilder("5.0.0", "*", Treeitem.class, 
-				new AbstractSelectAgentBuilder.TreeSelectAgentBuilder());
+		registerBuilder("5.0.0", "*", Comboitem.class, new ComboitemSelectAgentBuilder());
+		registerBuilder("5.0.0", "*", Tab.class, new TabSelectAgentBuilder());
+		registerBuilder("5.0.0", "*", Listitem.class, new LisitemSelectAgentBuilder());
+		registerBuilder("5.0.0", "*", Treeitem.class, new TreeSelectAgentBuilder());
 		
 		// the multiple select
-		registerBuilder("5.0.0", "*", Listitem.class, 
-				new AbstractMultipleSelectAgentBuilder.ListitemMultipleSelectAgentBuilder());
-		registerBuilder("5.0.0", "*", Treeitem.class, 
-				new AbstractMultipleSelectAgentBuilder.TreeitemMultipleSelectAgentBuilder());
+		registerBuilder("5.0.0", "*", Listitem.class, new ListitemMultipleSelectAgentBuilder());
+		registerBuilder("5.0.0", "*", Treeitem.class, new TreeitemMultipleSelectAgentBuilder());
 		
 		// the open
 		registerBuilder("5.0.0", "*", Groupbox.class, new GenericOpenAgentBuilder());

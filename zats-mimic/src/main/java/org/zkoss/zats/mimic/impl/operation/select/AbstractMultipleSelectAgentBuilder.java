@@ -9,7 +9,7 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
-package org.zkoss.zats.mimic.impl.operation;
+package org.zkoss.zats.mimic.impl.operation.select;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -19,23 +19,27 @@ import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
+import org.zkoss.zats.mimic.impl.operation.AgentDelegator;
+import org.zkoss.zats.mimic.impl.operation.OperationAgentBuilder;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.Tree;
-import org.zkoss.zul.Treeitem;
 
 /**
  * @author pao
  *
  */
-public class AbstractMultipleSelectAgentBuilder {
-	static abstract class MultipleSelectAgentImpl extends AgentDelegator<ComponentAgent> implements MultipleSelectAgent {
-		public MultipleSelectAgentImpl(ComponentAgent target) {
+public abstract class AbstractMultipleSelectAgentBuilder implements OperationAgentBuilder<ComponentAgent, MultipleSelectAgent>{
+	
+	
+	public Class<MultipleSelectAgent> getOperationClass() {
+		return MultipleSelectAgent.class;
+	}
+	
+	static public abstract class AbstractMultipleSelectAgentImpl extends AgentDelegator<ComponentAgent> implements MultipleSelectAgent {
+		public AbstractMultipleSelectAgentImpl(ComponentAgent target) {
 			super(target);
 		}
 
@@ -82,55 +86,5 @@ public class AbstractMultipleSelectAgentBuilder {
 		abstract protected boolean isMultiple();
 
 		abstract protected void collectSelectedItems(Set<String> selected);
-	}
-
-	static class ListitemMultipleSelectAgentBuilder implements OperationAgentBuilder<ComponentAgent, MultipleSelectAgent> {
-		public MultipleSelectAgent getOperation(ComponentAgent target) {
-			return new MultipleSelectAgentImpl(target) {
-				@Override
-				protected Listbox getEventTarget() {
-					return target.as(Listitem.class).getListbox();
-				}
-
-				@Override
-				protected boolean isMultiple() {
-					return getEventTarget().isMultiple();
-				}
-
-				@Override
-				protected void collectSelectedItems(Set<String> selected) {
-					for (Object item : getEventTarget().getSelectedItems())
-						selected.add(((Listitem) item).getUuid());
-				}
-			};
-		}
-		public Class<MultipleSelectAgent> getOperationClass() {
-			return MultipleSelectAgent.class;
-		}
-	}
-
-	static class TreeitemMultipleSelectAgentBuilder implements OperationAgentBuilder<ComponentAgent, MultipleSelectAgent> {
-		public MultipleSelectAgent getOperation(ComponentAgent target) {
-			return new MultipleSelectAgentImpl(target) {
-				@Override
-				protected Tree getEventTarget() {
-					return target.as(Treeitem.class).getTree();
-				}
-
-				@Override
-				protected boolean isMultiple() {
-					return getEventTarget().isMultiple();
-				}
-
-				@Override
-				protected void collectSelectedItems(Set<String> selected) {
-					for (Object item : getEventTarget().getSelectedItems())
-						selected.add(((Treeitem) item).getUuid());
-				}
-			};
-		}
-		public Class<MultipleSelectAgent> getOperationClass() {
-			return MultipleSelectAgent.class;
-		}
 	}
 }
