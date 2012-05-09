@@ -39,20 +39,19 @@ public class AbstractSelectAgentBuilder {
 			super(target);
 		}
 
-		abstract protected Component getTargetForPosting();
+		abstract protected Component getEventTarget();
 
-		protected void postprocess(Map<String, Object> data) {
-			// override by child class
-		}
+		//subclass contribute extra info to do postUpdate
+		abstract protected void contributeExtraInfo(Map<String, Object> data);
 
 		public void select() {
 			Set<String> items = new HashSet<String>();
 			items.add(target.getUuid());
 
-			Component ancestry = getTargetForPosting();
+			Component ancestry = getEventTarget();
 			Event event = new SelectEvent(Events.ON_SELECT, ancestry, items, (Component)target.getDelegatee());
 			Map<String, Object> data = EventDataManager.build(event);
-			postprocess(data);
+			contributeExtraInfo(data);
 			((ClientCtrl) target.getClient()).postUpdate(target.getDesktop().getId(), event.getName(), ancestry.getUuid(),
 					data, null);
 		}
@@ -66,8 +65,11 @@ public class AbstractSelectAgentBuilder {
 		public SelectAgent getOperation(ComponentAgent target) {
 			return new SingleSelectAgentImpl(target) {
 				@Override
-				protected Component getTargetForPosting() {
+				protected Component getEventTarget() {
 					return target.as(Comboitem.class).getParent(); // combobox
+				}
+				@Override
+				protected void contributeExtraInfo(Map<String, Object> data) {
 				}
 			};
 		}
@@ -80,8 +82,11 @@ public class AbstractSelectAgentBuilder {
 		public SelectAgent getOperation(ComponentAgent target) {
 			return new SingleSelectAgentImpl(target) {
 				@Override
-				protected Component getTargetForPosting() {
+				protected Component getEventTarget() {
 					return (Component)target.getDelegatee();
+				}
+				@Override
+				protected void contributeExtraInfo(Map<String, Object> data) {
 				}
 			};
 		}
@@ -94,12 +99,12 @@ public class AbstractSelectAgentBuilder {
 		public SelectAgent getOperation(ComponentAgent target) {
 			return new SingleSelectAgentImpl(target) {
 				@Override
-				protected Component getTargetForPosting() {
+				protected Component getEventTarget() {
 					return target.as(Listitem.class).getListbox();
 				}
 
 				@Override
-				protected void postprocess(Map<String, Object> data) {
+				protected void contributeExtraInfo(Map<String, Object> data) {
 					data.put("clearFirst", target.as(Listitem.class).getListbox().isMultiple());
 				}
 			};
@@ -113,12 +118,12 @@ public class AbstractSelectAgentBuilder {
 		public SelectAgent getOperation(ComponentAgent target) {
 			return new SingleSelectAgentImpl(target) {
 				@Override
-				protected Component getTargetForPosting() {
+				protected Component getEventTarget() {
 					return target.as(Treeitem.class).getTree();
 				}
 
 				@Override
-				protected void postprocess(Map<String, Object> data) {
+				protected void contributeExtraInfo(Map<String, Object> data) {
 					data.put("clearFirst", target.as(Treeitem.class).getTree().isMultiple());
 				}
 			};

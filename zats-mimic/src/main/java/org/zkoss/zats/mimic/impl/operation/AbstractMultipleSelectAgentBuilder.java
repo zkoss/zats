@@ -43,10 +43,10 @@ public class AbstractMultipleSelectAgentBuilder {
 			// check if parent component is at multiple selection mode
 			if (isMultiple()) {
 				Set<String> selected = new HashSet<String>();
-				putSelectedItems(selected);
+				collectSelectedItems(selected);
 				if (!selected.contains(target.getUuid())) {
 					selected.add(target.getUuid());
-					post(getTargetForPosting(), selected);
+					postUpdate(getEventTarget(), selected);
 				} else
 					return; // skip, target was already selected.
 			} else {
@@ -58,10 +58,10 @@ public class AbstractMultipleSelectAgentBuilder {
 			// check if parent component is at multiple selection mode
 			if (isMultiple()) {
 				Set<String> selected = new HashSet<String>();
-				putSelectedItems(selected);
+				collectSelectedItems(selected);
 				if (selected.contains(target.getUuid())) {
 					selected.remove(target.getUuid());
-					post(getTargetForPosting(), selected);
+					postUpdate(getEventTarget(), selected);
 				} else
 					return; // skip, target wasn't selected.
 			} else {
@@ -69,7 +69,7 @@ public class AbstractMultipleSelectAgentBuilder {
 			}
 		}
 
-		private void post(Component component, Set<String> selected) {
+		private void postUpdate(Component component, Set<String> selected) {
 			String desktopId = target.getDesktop().getId();
 			Event event = new SelectEvent(Events.ON_SELECT, component, selected, (Component)target.getDelegatee());
 			Map<String, Object> data = EventDataManager.build(event);
@@ -77,31 +77,29 @@ public class AbstractMultipleSelectAgentBuilder {
 			ctrl.postUpdate(desktopId, event.getName(), component.getUuid(), data, null);
 		}
 
-		abstract protected Component getTargetForPosting();
+		abstract protected Component getEventTarget();
 
 		abstract protected boolean isMultiple();
 
-		abstract protected void putSelectedItems(Set<String> selected);
+		abstract protected void collectSelectedItems(Set<String> selected);
 	}
 
 	static class ListitemMultipleSelectAgentBuilder implements OperationAgentBuilder<ComponentAgent, MultipleSelectAgent> {
 		public MultipleSelectAgent getOperation(ComponentAgent target) {
 			return new MultipleSelectAgentImpl(target) {
 				@Override
-				protected Listbox getTargetForPosting() {
-					if (!target.is(Listitem.class))
-						throw new AgentException(target + " can't select");
+				protected Listbox getEventTarget() {
 					return target.as(Listitem.class).getListbox();
 				}
 
 				@Override
 				protected boolean isMultiple() {
-					return getTargetForPosting().isMultiple();
+					return getEventTarget().isMultiple();
 				}
 
 				@Override
-				protected void putSelectedItems(Set<String> selected) {
-					for (Object item : getTargetForPosting().getSelectedItems())
+				protected void collectSelectedItems(Set<String> selected) {
+					for (Object item : getEventTarget().getSelectedItems())
 						selected.add(((Listitem) item).getUuid());
 				}
 			};
@@ -115,20 +113,18 @@ public class AbstractMultipleSelectAgentBuilder {
 		public MultipleSelectAgent getOperation(ComponentAgent target) {
 			return new MultipleSelectAgentImpl(target) {
 				@Override
-				protected Tree getTargetForPosting() {
-					if (!target.is(Treeitem.class))
-						throw new AgentException(target + " can't select");
+				protected Tree getEventTarget() {
 					return target.as(Treeitem.class).getTree();
 				}
 
 				@Override
 				protected boolean isMultiple() {
-					return getTargetForPosting().isMultiple();
+					return getEventTarget().isMultiple();
 				}
 
 				@Override
-				protected void putSelectedItems(Set<String> selected) {
-					for (Object item : getTargetForPosting().getSelectedItems())
+				protected void collectSelectedItems(Set<String> selected) {
+					for (Object item : getEventTarget().getSelectedItems())
 						selected.add(((Treeitem) item).getUuid());
 				}
 			};
