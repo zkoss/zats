@@ -42,6 +42,14 @@ public class ColorTypeAgentBuilder implements OperationAgentBuilder<ComponentAge
 		public TypeAgentImpl(ComponentAgent target) {
 			super(target);
 		}
+		
+		public void input(Object value){
+			type(toRawString(target,value));
+		}
+		
+		protected String toRawString(ComponentAgent target, Object value){
+			return value==null?"":value.toString();
+		}
 
 		/* (non-Javadoc)
 		 * @see org.zkoss.zats.mimic.operation.TypeAgent#type(java.lang.String)

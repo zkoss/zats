@@ -19,6 +19,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.zkoss.zats.mimic.impl.Util;
 
@@ -30,6 +33,11 @@ public class UtilTest {
 		Util.close(new ByteArrayOutputStream());
 	}
 
+	@Test
+	public void testVersion() {
+		Assert.assertTrue(Util.isZKVersion(5));
+		Assert.assertFalse(Util.isZKVersion(6));
+	}
 	@Test
 	public void testParseVersion() {
 		String[] versions = new String[] { "5.0.0", "5.0.1", "5.0.1.1",
