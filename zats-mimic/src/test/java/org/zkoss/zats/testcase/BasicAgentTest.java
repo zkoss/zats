@@ -37,6 +37,7 @@ import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.impl.Util;
+import org.zkoss.zats.mimic.impl.operation.GenericSortAgentBuilder;
 import org.zkoss.zats.mimic.operation.BookmarkAgent;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
@@ -2003,20 +2004,20 @@ public class BasicAgentTest {
 
 			//listheader
 			ComponentAgent sortingHeader =  desktop.query("listheader[label='Name']");
-			Assert.assertEquals(SortAgent.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			Assert.assertEquals(GenericSortAgentBuilder.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
 			//can sort in specified order in spite of its original sorting order
 			sortingHeader.as(SortAgent.class).sort(true);
 			Assert.assertEquals("Name", sortStatus.getValue());
-			Assert.assertEquals(SortAgent.ASCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			Assert.assertEquals(GenericSortAgentBuilder.ASCENDING, sortingHeader.as(Listheader.class).getSortDirection());
 			sortingHeader.as(SortAgent.class).sort(false);
-			Assert.assertEquals(SortAgent.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			Assert.assertEquals(GenericSortAgentBuilder.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
 			//repeat sorting in the same order works correctly 
 			sortingHeader.as(SortAgent.class).sort(false);
-			Assert.assertEquals(SortAgent.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			Assert.assertEquals(GenericSortAgentBuilder.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
 
 			sortingHeader =  desktop.query("listheader[label='Gender']");
 			sortingHeader.as(SortAgent.class).sort(false);
-			Assert.assertEquals(SortAgent.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			Assert.assertEquals(GenericSortAgentBuilder.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
 			Assert.assertEquals("Gender", sortStatus.getValue());
 
 			//treecol
@@ -2025,12 +2026,12 @@ public class BasicAgentTest {
 			//can sort in specified order in spite of its original sorting order
 			sortingColumn.as(SortAgent.class).sort(false);
 			Assert.assertEquals("Description", sortStatus.getValue());
-			Assert.assertEquals(SortAgent.DESCENDING, sortingColumn.as(Treecol.class).getSortDirection());
+			Assert.assertEquals(GenericSortAgentBuilder.DESCENDING, sortingColumn.as(Treecol.class).getSortDirection());
 			sortingColumn.as(SortAgent.class).sort(true);
-			Assert.assertEquals(SortAgent.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
+			Assert.assertEquals(GenericSortAgentBuilder.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
 			//repeat sorting in the same order works correctly 
 			sortingHeader.as(SortAgent.class).sort(true);
-			Assert.assertEquals(SortAgent.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
+			Assert.assertEquals(GenericSortAgentBuilder.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
 
 		}
 }
