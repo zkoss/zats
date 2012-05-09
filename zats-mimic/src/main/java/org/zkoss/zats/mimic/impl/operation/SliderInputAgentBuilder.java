@@ -76,5 +76,17 @@ public class SliderInputAgentBuilder implements OperationAgentBuilder<ComponentA
 			Map<String, Object> data = EventDataManager.build(event);
 			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
 		}
+
+		public void type(String value) {
+			throw new AgentException(target + " doesn't support type operation");
+		}
+
+		public void typing(String value) {
+			throw new AgentException(target + " doesn't support typing operation");
+		}
+
+		public void select(int start, int end) {
+			throw new AgentException(target + " doesn't support select operation");
+		}
 	}
 }

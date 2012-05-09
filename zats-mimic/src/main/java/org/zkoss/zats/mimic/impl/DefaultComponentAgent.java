@@ -24,7 +24,8 @@ import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
-import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zats.mimic.operation.InputAgent;
+import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -189,12 +190,17 @@ public class DefaultComponentAgent implements ComponentAgent {
 	}
 
 	public void type(String value) {
-		as(TypeAgent.class).type(value);
+		as(InputAgent.class).type(value);
+	}
+	
+	public void input(Object value) {
+		as(InputAgent.class).input(value);
 	}
 
 	public void focus() {
 		as(FocusAgent.class).focus();
 	}
+	
 	public void blur() {
 		as(FocusAgent.class).blur();
 	}
@@ -205,5 +211,9 @@ public class DefaultComponentAgent implements ComponentAgent {
 
 	public void stroke(String key) {
 		as(KeyStrokeAgent.class).stroke(key);		
+	}
+	
+	public void select() {
+		as(SelectAgent.class).select();
 	}
 }

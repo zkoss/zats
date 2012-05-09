@@ -24,7 +24,7 @@ import org.zkoss.zul.impl.FormatInputElement;
  * 
  * @author pao
  */
-public class DateTypeAgentBuilderZK6 extends AbstractTypeAgentBuilder.DateTypeAgentBuilder {
+public class DateTypeAgentBuilderZK6 extends AbstractInputAgentBuilder.DateInputAgentBuilder {
 	@Override
 	protected void putValue(ComponentAgent target, String raw, Map<String, Object> data) {
 		if(Strings.isBlank(raw)) {

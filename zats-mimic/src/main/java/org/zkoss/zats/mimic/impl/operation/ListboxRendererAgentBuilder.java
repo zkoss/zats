@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
@@ -31,7 +32,7 @@ import org.zkoss.zul.event.RenderEvent;
 public class ListboxRendererAgentBuilder implements OperationAgentBuilder<ComponentAgent,RenderAgent> {
 	public RenderAgent getOperation(final ComponentAgent target) {
 		if(!target.is(Listbox.class)){
-			throw new RuntimeException("target "+target+" cannot transfer to Listbox");
+			throw new AgentException("target "+target+" cannot transfer to Listbox");
 		}
 		return new RendererAgentImpl(target);
 	}

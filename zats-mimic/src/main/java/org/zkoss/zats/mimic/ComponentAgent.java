@@ -18,7 +18,8 @@ import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
-import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zats.mimic.operation.InputAgent;
+import org.zkoss.zats.mimic.operation.SelectAgent;
 
 /**
  * The component agent, wraps a server-side zk component.
@@ -123,43 +124,65 @@ public interface ComponentAgent extends Agent{
 	
 	/**
 	 * Click on this component, A short cut of {@link ClickAgent#click()} <p/>
-	 * If this component doesn't has {@link ClickAgent}, it will throw exception.
+	 * If this component doesn't support {@link ClickAgent}, it will throw exception.
 	 * @see #as(Class)
+	 * @see ClickAgent
 	 */
 	void click();
 	
 	/**
-	 * type on this component, it is a short cut of {@link TypeAgent#type(String)} <p/>
-	 * If this component doesn't has {@link TypeAgent}, it will throw exception.
+	 * type on this component, it is a short cut of {@link InputAgent#type(String)} <p/>
+	 * If this component doesn't support {@link InputAgent}, it will throw exception.
 	 * @see #as(Class)
+	 * @see InputAgent
 	 */
 	void type(String value);
 	
 	/**
-	 * Focus on this component, it is a short cut of {@link FocusAgent#focus()} <p/>
-	 * If this component doesn't has {@link FocusAgent}, it will throw exception.
+	 * input to this component, it is a short cut of {@link InputAgent#input(String)} <p/>
+	 * If this component doesn't support {@link InputAgent}, it will throw exception.
 	 * @see #as(Class)
+	 * @see InputAgent
+	 */
+	void input(Object value);
+	
+	/**
+	 * Focus on this component, it is a short cut of {@link FocusAgent#focus()} <p/>
+	 * If this component doesn't support {@link FocusAgent}, it will throw exception.
+	 * @see #as(Class)
+	 * @see FocusAgent
 	 */
 	void focus();
 	
 	/**
 	 * Blur on this component, it is a short cut of {@link FocusAgent#blur()} <p/>
-	 * If this component doesn't has {@link FocusAgent}, it will throw exception.
+	 * If this component doesn't support {@link FocusAgent}, it will throw exception.
 	 * @see #as(Class)
+	 * @see FocusAgent
 	 */
 	void blur();
 	
 	/**
 	 * Check on this component, it is a short cut of {@link CheckAgent#check(boolean)}<p/>
-	 * If this component doesn't has {@link CheckAgent}, it will throw exception.
+	 * If this component doesn't support {@link CheckAgent}, it will throw exception.
 	 * @see #as(Class)
+	 * @see CheckAgent
 	 */
 	void check(boolean checked);
 	
 	/**
 	 * stroke a key on this component, it is a short cut of {@link KeyStrokeAgent#stroke(String)}<p/>
-	 * If this component doesn't has {@link KeyStrokeAgent}, it will throw exception.
+	 * If this component doesn't support {@link KeyStrokeAgent}, it will throw exception.
 	 * @see #as(Class)
+	 * @see KeyStrokeAgent
 	 */
 	void stroke(String key);
+	
+	/**
+	 * to select this component, it is a short cut of {@link SelectAgent#select()}<p/>
+	 * If this component doesn't support {@link SelectAgent}, it will throw exception.
+	 * @see #as(Class)
+	 * @see SelectAgent
+	 */
+	void select();
 }

@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
@@ -49,7 +50,7 @@ public class AbstractMultipleSelectAgentBuilder {
 				} else
 					return; // skip, target was already selected.
 			} else {
-				throw new RuntimeException(target + " isn't multiple selection mode");
+				throw new AgentException(target + " isn't multiple selection mode");
 			}
 		}
 
@@ -64,7 +65,7 @@ public class AbstractMultipleSelectAgentBuilder {
 				} else
 					return; // skip, target wasn't selected.
 			} else {
-				throw new RuntimeException(target + " isn't multiple selection mode");
+				throw new AgentException(target + " isn't multiple selection mode");
 			}
 		}
 
@@ -89,7 +90,7 @@ public class AbstractMultipleSelectAgentBuilder {
 				@Override
 				protected Listbox getTargetForPosting() {
 					if (!target.is(Listitem.class))
-						throw new RuntimeException(target + " can't select");
+						throw new AgentException(target + " can't select");
 					return target.as(Listitem.class).getListbox();
 				}
 
@@ -116,7 +117,7 @@ public class AbstractMultipleSelectAgentBuilder {
 				@Override
 				protected Tree getTargetForPosting() {
 					if (!target.is(Treeitem.class))
-						throw new RuntimeException(target + " can't select");
+						throw new AgentException(target + " can't select");
 					return target.as(Treeitem.class).getTree();
 				}
 

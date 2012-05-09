@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
@@ -57,7 +58,7 @@ public class AbstractSelectAgentBuilder {
 		}
 
 		public void deselect() {
-			throw new RuntimeException(target + " can't deselect");
+			throw new AgentException(target + " can't deselect");
 		}
 	}
 

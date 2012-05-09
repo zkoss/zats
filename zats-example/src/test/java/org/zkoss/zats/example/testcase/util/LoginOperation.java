@@ -7,7 +7,7 @@ import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
-import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zk.ui.Desktop;
 
 /**
@@ -23,8 +23,8 @@ public class LoginOperation {
 		ComponentAgent login = desktop.query("button");
 		
 		//login failed
-		accountBox.as(TypeAgent.class).type(account);
-		passwordBox.as(TypeAgent.class).type(password);
+		accountBox.as(InputAgent.class).type(account);
+		passwordBox.as(InputAgent.class).type(password);
 		login.as(ClickAgent.class).click();
 		
 		HttpSession session = (HttpSession)((Desktop)desktop.getDelegatee()).getSession().getNativeSession();

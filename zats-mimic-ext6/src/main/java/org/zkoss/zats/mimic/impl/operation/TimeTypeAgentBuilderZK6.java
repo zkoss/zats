@@ -17,7 +17,7 @@ import java.util.Map;
 import org.zkoss.json.JSONs;
 import org.zkoss.lang.Strings;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.impl.operation.AbstractTypeAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.AbstractInputAgentBuilder;
 import org.zkoss.zul.impl.FormatInputElement;
 
 /**
@@ -25,7 +25,7 @@ import org.zkoss.zul.impl.FormatInputElement;
  * 
  * @author pao
  */
-public class TimeTypeAgentBuilderZK6 extends AbstractTypeAgentBuilder.TimeTypeAgentBuilder {
+public class TimeTypeAgentBuilderZK6 extends AbstractInputAgentBuilder.TimeInputAgentBuilder {
 	@Override
 	protected void putValue(ComponentAgent target, String raw, Map<String, Object> data) {
 		if(Strings.isBlank(raw)) {

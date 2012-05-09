@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
@@ -35,7 +36,7 @@ import org.zkoss.zul.impl.LoadStatus;
 public class GridRendererAgentBuilder implements OperationAgentBuilder<ComponentAgent,RenderAgent> {
 	public RenderAgent getOperation(final ComponentAgent target) {
 		if(!target.is(Grid.class)){
-			throw new RuntimeException("target "+target+" cannot transfer to Grid");
+			throw new AgentException("target "+target+" cannot transfer to Grid");
 		}
 		return new RendererAgentImpl(target);
 	}

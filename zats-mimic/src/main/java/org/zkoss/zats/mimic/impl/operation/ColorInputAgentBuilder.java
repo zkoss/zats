@@ -1,4 +1,4 @@
-/* ColorTypeAgentBuilder.java
+/* ColorInputAgentBuilder.java
 
 	Purpose:
 
@@ -17,24 +17,24 @@ import java.util.Map;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
-import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zk.ui.event.Events;
 
 /**
- * A specific TypeAgent implementation for colorbox, because its AU data only contains 1 key-value pair, {"color":"#333366"}
+ * A specific {@link InputAgent} implementation for colorbox, because its AU data only contains 1 key-value pair, {"color":"#333366"}
  * @author Hawk
  *
  */
-public class ColorTypeAgentBuilder implements OperationAgentBuilder<ComponentAgent,TypeAgent>{
-	public TypeAgent getOperation(final ComponentAgent target) {
+public class ColorInputAgentBuilder implements OperationAgentBuilder<ComponentAgent,InputAgent>{
+	public InputAgent getOperation(final ComponentAgent target) {
 		return new TypeAgentImpl(target);
 	}
 	
-	public Class<TypeAgent> getOperationClass() {
-		return TypeAgent.class;
+	public Class<InputAgent> getOperationClass() {
+		return InputAgent.class;
 	}
 
-	class TypeAgentImpl extends AgentDelegator<ComponentAgent> implements TypeAgent{
+	class TypeAgentImpl extends AgentDelegator<ComponentAgent> implements InputAgent{
 
 		/**
 		 * @param target
