@@ -1,4 +1,4 @@
-/* TypeAgent.java
+/* InputAgent.java
 
 	Purpose:
 		
@@ -12,11 +12,13 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.operation;
 
 /**
- * The type operation.
+ * To operate user input.
+ * You can input data either by {@link #type(String)} or {@link #input(Object)}
  * @author pao
+ * @author dennis
  */
 
-public interface TypeAgent extends OperationAgent {
+public interface InputAgent extends OperationAgent {
 
 	
 	/**

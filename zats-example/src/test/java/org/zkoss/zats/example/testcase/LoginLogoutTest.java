@@ -13,7 +13,7 @@ import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
-import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
@@ -45,13 +45,13 @@ public class LoginLogoutTest {
 		ComponentAgent msg = desktop.query("div > label");
 		
 		//login failed
-		account.as(TypeAgent.class).type("hawk");
-		password.as(TypeAgent.class).type("1111");
+		account.as(InputAgent.class).type("hawk");
+		password.as(InputAgent.class).type("1111");
 		login.as(ClickAgent.class).click();
 		assertEquals("Login Failed", msg.as(Label.class).getValue());
 		
 		//login success
-		password.as(TypeAgent.class).type("1234");
+		password.as(InputAgent.class).type("1234");
 		login.as(ClickAgent.class).click();
 		HttpSession session = (HttpSession)((Desktop)desktop.getDelegatee()).getSession().getNativeSession();
 		assertEquals(account.as(Textbox.class).getValue(), session.getAttribute("user"));

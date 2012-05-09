@@ -55,7 +55,7 @@ import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.SizeAgent;
 import org.zkoss.zats.mimic.operation.SortAgent;
-import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -149,7 +149,7 @@ public class BasicAgentTest {
 	}
 	
 	@Test
-	public void testTypeAgent1(){
+	public void testInputAgent1(){
 		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/type1.zul");
 		
 		ComponentAgent l = desktopAgent.query("#l1");
@@ -168,7 +168,7 @@ public class BasicAgentTest {
 		inp.type(TEXT_4_SELECTION);
 		Assert.assertEquals(TEXT_4_SELECTION,l.as(Label.class).getValue());
 		
-		inp.as(TypeAgent.class).select(1, 2);
+		inp.as(InputAgent.class).select(1, 2);
 		Assert.assertEquals(TEXT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		//combobox
@@ -182,7 +182,7 @@ public class BasicAgentTest {
 		inp.type(TEXT_4_SELECTION);
 		Assert.assertEquals(TEXT_4_SELECTION,l.as(Label.class).getValue());
 		
-		inp.as(TypeAgent.class).select(1, 2);
+		inp.as(InputAgent.class).select(1, 2);
 		Assert.assertEquals(TEXT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		//textbox
@@ -196,7 +196,7 @@ public class BasicAgentTest {
 		inp.type(TEXT_4_SELECTION);
 		Assert.assertEquals(TEXT_4_SELECTION,l.as(Label.class).getValue());
 		
-		inp.as(TypeAgent.class).select(1, 2);
+		inp.as(InputAgent.class).select(1, 2);
 		Assert.assertEquals(TEXT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		final String DIGIT_4_SELECTION="12345";
@@ -214,7 +214,7 @@ public class BasicAgentTest {
 		Assert.assertEquals("2.33",l.as(Label.class).getValue());
 		
 		inp.type(DIGIT_4_SELECTION);
-		inp.as(TypeAgent.class).select(1, 2);
+		inp.as(InputAgent.class).select(1, 2);
 		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		//doublebox
@@ -230,7 +230,7 @@ public class BasicAgentTest {
 		Assert.assertEquals("4.33",l.as(Label.class).getValue());
 		
 		inp.type(DIGIT_4_SELECTION);
-		inp.as(TypeAgent.class).select(1, 2);
+		inp.as(InputAgent.class).select(1, 2);
 		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		//doublespinner
@@ -246,7 +246,7 @@ public class BasicAgentTest {
 		Assert.assertEquals("6.33",l.as(Label.class).getValue());
 		
 		inp.type(DIGIT_4_SELECTION);
-		inp.as(TypeAgent.class).select(1, 2);
+		inp.as(InputAgent.class).select(1, 2);
 		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		//intbox
@@ -261,7 +261,7 @@ public class BasicAgentTest {
 		Assert.assertEquals("8",l.as(Label.class).getValue());
 		
 		inp.type(DIGIT_4_SELECTION);
-		inp.as(TypeAgent.class).select(1, 2);
+		inp.as(InputAgent.class).select(1, 2);
 		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		
@@ -278,7 +278,7 @@ public class BasicAgentTest {
 		Assert.assertEquals("10",l.as(Label.class).getValue());
 		
 		inp.type(DIGIT_4_SELECTION);
-		inp.as(TypeAgent.class).select(1, 2);
+		inp.as(InputAgent.class).select(1, 2);
 		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		
@@ -294,7 +294,7 @@ public class BasicAgentTest {
 		Assert.assertEquals("12",l.as(Label.class).getValue());
 		
 		inp.type(DIGIT_4_SELECTION);
-		inp.as(TypeAgent.class).select(1, 2);
+		inp.as(InputAgent.class).select(1, 2);
 		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		//datebox
@@ -308,7 +308,7 @@ public class BasicAgentTest {
 		inp.type("20120320");
 		Assert.assertEquals("20120320",l.as(Label.class).getValue());
 		
-		inp.as(TypeAgent.class).select(1, 2);
+		inp.as(InputAgent.class).select(1, 2);
 		Assert.assertEquals("20120320".substring(1, 2),l.as(Label.class).getValue());
 		
 		
@@ -323,7 +323,7 @@ public class BasicAgentTest {
 		inp.type("14:02");
 		Assert.assertEquals("14:02",l.as(Label.class).getValue());
 		
-		inp.as(TypeAgent.class).select(1, 2);
+		inp.as(InputAgent.class).select(1, 2);
 		Assert.assertEquals("14:02".substring(1, 2),l.as(Label.class).getValue());
 		
 		//colorbox
@@ -339,7 +339,7 @@ public class BasicAgentTest {
 			Assert.assertEquals("#0000ff",l.as(Label.class).getValue());
 		}
 		try{
-			inp.as(TypeAgent.class).typing("invalid value");
+			inp.as(InputAgent.class).typing("invalid value");
 			fail("Colorbox does not support typing");
 		}catch(AgentException ae){
 			Assert.assertEquals("#0000ff",l.as(Label.class).getValue());
@@ -347,7 +347,7 @@ public class BasicAgentTest {
 	}
 	
 	@Test
-	public void testTypeAgent2(){
+	public void testInputAgent2(){
 		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/type2.zul");
 		
 		ComponentAgent l = desktopAgent.query("#l1");
@@ -489,7 +489,7 @@ public class BasicAgentTest {
 	
 	
 	@Test
-	public void testTypeAgent3(){
+	public void testInputAgent3(){
 		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/type3.zul");
 		
 		ComponentAgent l = desktopAgent.query("#l1");
@@ -510,9 +510,9 @@ public class BasicAgentTest {
 		inp.type("");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
-		inp.as(TypeAgent.class).input("A2");
+		inp.as(InputAgent.class).input("A2");
 		Assert.assertEquals("A2",l.as(Label.class).getValue());
-		inp.as(TypeAgent.class).input(null);
+		inp.as(InputAgent.class).input(null);
 		Assert.assertEquals("",l.as(Label.class).getValue());
 
 		
@@ -529,9 +529,9 @@ public class BasicAgentTest {
 		inp.type("");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
-		inp.as(TypeAgent.class).input("C2");
+		inp.as(InputAgent.class).input("C2");
 		Assert.assertEquals("C2",l.as(Label.class).getValue());
-		inp.as(TypeAgent.class).input(null);
+		inp.as(InputAgent.class).input(null);
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 
@@ -549,9 +549,9 @@ public class BasicAgentTest {
 		inp.type("");
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
-		inp.as(TypeAgent.class).input("E2");
+		inp.as(InputAgent.class).input("E2");
 		Assert.assertEquals("E2",l.as(Label.class).getValue());
-		inp.as(TypeAgent.class).input(null);
+		inp.as(InputAgent.class).input(null);
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
 		//decimalbox
@@ -567,9 +567,9 @@ public class BasicAgentTest {
 		inp.type("");
 		Assert.assertEquals("null",l.as(Label.class).getValue());
 		
-		inp.as(TypeAgent.class).input(11);
+		inp.as(InputAgent.class).input(11);
 		Assert.assertEquals("11.0",l.as(Label.class).getValue());
-		inp.as(TypeAgent.class).input(null);
+		inp.as(InputAgent.class).input(null);
 		Assert.assertEquals("null",l.as(Label.class).getValue());
 		
 		//doublebox
@@ -586,9 +586,9 @@ public class BasicAgentTest {
 		inp.type("");
 		Assert.assertEquals("null",l.as(Label.class).getValue());
 		
-		inp.as(TypeAgent.class).input(33.0);
+		inp.as(InputAgent.class).input(33.0);
 		Assert.assertEquals("33.0",l.as(Label.class).getValue());
-		inp.as(TypeAgent.class).input(null);
+		inp.as(InputAgent.class).input(null);
 		Assert.assertEquals("null",l.as(Label.class).getValue());
 		
 		//doublespinner
@@ -605,9 +605,9 @@ public class BasicAgentTest {
 		inp.type("");
 		Assert.assertEquals("null",l.as(Label.class).getValue());
 		
-		inp.as(TypeAgent.class).input(55D);
+		inp.as(InputAgent.class).input(55D);
 		Assert.assertEquals("55.0",l.as(Label.class).getValue());
-		inp.as(TypeAgent.class).input(null);
+		inp.as(InputAgent.class).input(null);
 		Assert.assertEquals("null",l.as(Label.class).getValue());
 		
 		//intbox
@@ -623,9 +623,9 @@ public class BasicAgentTest {
 		inp.type("");
 		Assert.assertEquals("null",l.as(Label.class).getValue());
 		
-		inp.as(TypeAgent.class).input(77);
+		inp.as(InputAgent.class).input(77);
 		Assert.assertEquals("77",l.as(Label.class).getValue());
-		inp.as(TypeAgent.class).input(null);
+		inp.as(InputAgent.class).input(null);
 		Assert.assertEquals("null",l.as(Label.class).getValue());
 		
 		//longbox
@@ -642,9 +642,9 @@ public class BasicAgentTest {
 		inp.type("");
 		Assert.assertEquals("null",l.as(Label.class).getValue());
 		
-		inp.as(TypeAgent.class).input(99L);
+		inp.as(InputAgent.class).input(99L);
 		Assert.assertEquals("99",l.as(Label.class).getValue());
-		inp.as(TypeAgent.class).input(null);
+		inp.as(InputAgent.class).input(null);
 		Assert.assertEquals("null",l.as(Label.class).getValue());
 		
 		//spinner
@@ -667,10 +667,10 @@ public class BasicAgentTest {
 			Assert.assertEquals("null",l.as(Label.class).getValue());
 		}
 		
-		inp.as(TypeAgent.class).input(111);
+		inp.as(InputAgent.class).input(111);
 		Assert.assertEquals("111",l.as(Label.class).getValue());
 		if(Util.isZKVersion(5)){
-			inp.as(TypeAgent.class).input(null);
+			inp.as(InputAgent.class).input(null);
 			Assert.assertEquals("null",l.as(Label.class).getValue());
 		}
 		
@@ -689,9 +689,9 @@ public class BasicAgentTest {
 		
 		Date d = new Date(2012-1900,0,1);
 		
-		inp.as(TypeAgent.class).input(d);
+		inp.as(InputAgent.class).input(d);
 		Assert.assertEquals("20120101",l.as(Label.class).getValue());
-		inp.as(TypeAgent.class).input(null);
+		inp.as(InputAgent.class).input(null);
 		Assert.assertEquals("null",l.as(Label.class).getValue());
 		
 		//timebox
@@ -709,9 +709,9 @@ public class BasicAgentTest {
 		
 		d = new Date(2012-1900,0,1,3,44);
 		
-		inp.as(TypeAgent.class).input(d);
+		inp.as(InputAgent.class).input(d);
 		Assert.assertEquals("03:44",l.as(Label.class).getValue());
-		inp.as(TypeAgent.class).input(null);
+		inp.as(InputAgent.class).input(null);
 		Assert.assertEquals("null",l.as(Label.class).getValue());
 	}
 	
@@ -1118,7 +1118,7 @@ public class BasicAgentTest {
 	}
 	
 	@Test
-	public void testCKEditorTypeAgent() {
+	public void testCKEditorInputAgent() {
 		DesktopAgent desktop = Zats.newClient().connect("/~./basic/type-ckeditor.zul");
 
 		Label eventName = desktop.query("#eventName").as(Label.class);
@@ -1128,12 +1128,12 @@ public class BasicAgentTest {
 		assertEquals("", change.getValue());
 		assertEquals("", changing.getValue());
 
-		desktop.query("#ck").as(TypeAgent.class).typing("Hello");
+		desktop.query("#ck").as(InputAgent.class).typing("Hello");
 		assertEquals("onChanging", eventName.getValue());
 		assertEquals("", change.getValue());
 		assertEquals("Hello", changing.getValue());
 
-		desktop.query("#ck").as(TypeAgent.class).type("Hello world");
+		desktop.query("#ck").as(InputAgent.class).type("Hello world");
 		assertEquals("onChange", eventName.getValue());
 		assertEquals("Hello world", change.getValue());
 		assertEquals("Hello", changing.getValue());
@@ -1453,7 +1453,7 @@ public class BasicAgentTest {
 			// typing
 			String text = "type " + i;
 			ComponentAgent comp = comps.get(i);
-			comp.as(TypeAgent.class).typing(text);
+			comp.as(InputAgent.class).typing(text);
 			// validate
 			assertEquals("onChanging", event.getValue());
 			assertEquals(((Component) comp.getDelegatee()).getDefinition().getName(), target.getValue());
@@ -1824,7 +1824,7 @@ public class BasicAgentTest {
 				"s1,onScroll,50", 
 				"s1,onScroll,100", 
 		};
-		TypeAgent slider = desktop.query("#s1").as(TypeAgent.class);
+		InputAgent slider = desktop.query("#s1").as(InputAgent.class);
 		for (int i = 0; i < args.length; ++i) {
 			slider.input(args[i]);
 			assertEquals(expected[i], msg1.getValue());
@@ -1837,7 +1837,7 @@ public class BasicAgentTest {
 				"s2,onScroll,199", 
 				"s2,onScroll,200", 
 		};
-		slider = desktop.query("#s2").as(TypeAgent.class);
+		slider = desktop.query("#s2").as(InputAgent.class);
 		for (int i = 0; i < args.length; ++i) {
 			slider.input(args[i]);
 			assertEquals(expected[i], msg1.getValue());

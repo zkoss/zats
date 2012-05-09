@@ -15,7 +15,7 @@ import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
-import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zul.Caption;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Label;
@@ -72,7 +72,7 @@ public class SearchTest {
 		ComponentAgent filterBox = desktop.query("#filterBox");
 		ComponentAgent searchButton = desktop.query("#searchButton");
 		final String KEYWORD = "A";
-		filterBox.as(TypeAgent.class).type(KEYWORD);
+		filterBox.as(InputAgent.class).type(KEYWORD);
 		searchButton.as(ClickAgent.class).click();
 		List<ComponentAgent> nodes = listbox.getChildren();
 		//skip listheader

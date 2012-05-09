@@ -81,25 +81,25 @@ public class OperationAgentManager {
 		
 		// the inputs
 		registerBuilder("5.0.0", "*", InputElement.class,
-				new AbstractTypeAgentBuilder.TextTypeAgentBuilder());
+				new AbstractInputAgentBuilder.TextInputAgentBuilder());
 		registerBuilder("5.0.0", "*", Intbox.class,
-				new AbstractTypeAgentBuilder.IntegerTypeAgentBuilder());
+				new AbstractInputAgentBuilder.IntegerInputAgentBuilder());
 		registerBuilder("5.0.0", "*", Longbox.class,
-				new AbstractTypeAgentBuilder.IntegerStringTypeAgentBuilder());
+				new AbstractInputAgentBuilder.IntegerStringInputAgentBuilder());
 		registerBuilder("5.0.0", "*", Spinner.class,
-				new AbstractTypeAgentBuilder.IntegerTypeAgentBuilder());
+				new AbstractInputAgentBuilder.IntegerInputAgentBuilder());
 
 		registerBuilder("5.0.0", "*", Decimalbox.class,
-				new AbstractTypeAgentBuilder.DecimalStringTypeAgentBuilder());
+				new AbstractInputAgentBuilder.DecimalStringInputAgentBuilder());
 		registerBuilder("5.0.0", "*", Doublebox.class,
-				new AbstractTypeAgentBuilder.DecimalTypeAgentBuilder());
+				new AbstractInputAgentBuilder.DecimalInputAgentBuilder());
 		registerBuilder("5.0.0", "*", Doublespinner.class,
-				new AbstractTypeAgentBuilder.DecimalTypeAgentBuilder());
+				new AbstractInputAgentBuilder.DecimalInputAgentBuilder());
 
 		registerBuilder("5.0.0", "*", Datebox.class, 
-				new AbstractTypeAgentBuilder.DateTypeAgentBuilder());
+				new AbstractInputAgentBuilder.DateInputAgentBuilder());
 		registerBuilder("5.0.0", "*", Timebox.class,
-				new AbstractTypeAgentBuilder.TimeTypeAgentBuilder());
+				new AbstractInputAgentBuilder.TimeInputAgentBuilder());
 
 		// the check
 		registerBuilder("5.0.0", "*", Menuitem.class,new GenericCheckAgentBuilder());
@@ -184,7 +184,7 @@ public class OperationAgentManager {
 		//colorbox in zkex.jar which is optional
 		try {
 			registerBuilder("5.0.0", "*", "org.zkoss.zkex.zul.Colorbox",
-					"org.zkoss.zats.mimic.impl.operation.ColorTypeAgentBuilder");
+					"org.zkoss.zats.mimic.impl.operation.ColorInputAgentBuilder");
 		} catch (Exception e) {
 			// doesn't exist
 		}
@@ -192,7 +192,7 @@ public class OperationAgentManager {
 		// the ckeditor (optional)
 		try {
 			registerBuilder("5.0.0", "*", "org.zkforge.ckez.CKeditor",
-					"org.zkoss.zats.mimic.impl.operation.AbstractTypeAgentBuilder$TextTypeAgentBuilder");
+					"org.zkoss.zats.mimic.impl.operation.AbstractInputAgentBuilder$TextInputAgentBuilder");
 		} catch (Exception e) {
 			// ckeditor doesn't exist
 		}

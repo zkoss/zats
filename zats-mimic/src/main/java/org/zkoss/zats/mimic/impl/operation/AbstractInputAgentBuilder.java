@@ -1,4 +1,4 @@
-/* AbstractTypeAgentBuilder.java
+/* AbstractInputAgentBuilder.java
 
 	Purpose:
 		
@@ -24,7 +24,7 @@ import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
-import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
@@ -37,21 +37,21 @@ import org.zkoss.zul.impl.InputElement;
  * 
  * @author dennis
  */
-public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<ComponentAgent,TypeAgent> {
+public abstract class AbstractInputAgentBuilder implements OperationAgentBuilder<ComponentAgent,InputAgent> {
 
 	protected static final String DEFAULT_DATE_FORMAT = "yyyy/MM/dd"; // see datebox
 	protected static final String DEFAULT_TIME_FORMAT = "HH:mm"; // see timebox
 
-	public TypeAgent getOperation(final ComponentAgent target) {
-		return new TypeAgentImpl(target);
+	public InputAgent getOperation(final ComponentAgent target) {
+		return new InputAgentImpl(target);
 	}
 	
-	public Class<TypeAgent> getOperationClass() {
-		return TypeAgent.class;
+	public Class<InputAgent> getOperationClass() {
+		return InputAgent.class;
 	}
 	
-	class TypeAgentImpl extends AgentDelegator<ComponentAgent> implements TypeAgent{
-		public TypeAgentImpl(ComponentAgent target) {
+	class InputAgentImpl extends AgentDelegator<ComponentAgent> implements InputAgent{
+		public InputAgentImpl(ComponentAgent target) {
 			super(target);
 		}
 		
@@ -83,9 +83,6 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 			((ClientCtrl) target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
 		}
 
-		/* (non-Javadoc)
-		 * @see org.zkoss.zats.mimic.operation.TypeAgent#select(int, int)
-		 */
 		public void select(int start, int end) {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_SELECTION;
@@ -101,7 +98,7 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 	 */
 	protected abstract void putValue(ComponentAgent target, String raw, Map<String, Object> data);
 	/**
-	 * extender converter value to raw string to set to {@link TypeAgent#type(String)}
+	 * extender converter value to raw string to set to {@link InputAgent#type(String)}
 	 */
 	protected abstract String toRawString(ComponentAgent target, Object value);
 
@@ -137,7 +134,7 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 		}
 	}
 	
-	static public class TextTypeAgentBuilder extends AbstractTypeAgentBuilder {
+	static public class TextInputAgentBuilder extends AbstractInputAgentBuilder {
 		@Override
 		protected void putValue(ComponentAgent target, String raw, Map<String, Object> data) {
 			data.put("value", raw);
@@ -149,7 +146,7 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 		}
 	}
 	
-	static public class IntegerTypeAgentBuilder extends AbstractTypeAgentBuilder {
+	static public class IntegerInputAgentBuilder extends AbstractInputAgentBuilder {
 		@Override
 		protected void putValue(ComponentAgent target, String raw, Map<String, Object> data) {
 			if(Strings.isBlank(raw)) {
@@ -178,7 +175,7 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 		}
 	}
 	
-	static public class IntegerStringTypeAgentBuilder extends AbstractTypeAgentBuilder {
+	static public class IntegerStringInputAgentBuilder extends AbstractInputAgentBuilder {
 		@Override
 		protected void putValue(ComponentAgent target, String raw, Map<String, Object> data) {
 			if(Strings.isBlank(raw)) {
@@ -208,7 +205,7 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 		}
 	}
 	
-	static public class DecimalTypeAgentBuilder extends AbstractTypeAgentBuilder {
+	static public class DecimalInputAgentBuilder extends AbstractInputAgentBuilder {
 		@Override
 		protected void putValue(ComponentAgent target, String raw, Map<String, Object> data) {
 			if(Strings.isBlank(raw)) {
@@ -238,7 +235,7 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 		}
 	}
 	
-	static public class DecimalStringTypeAgentBuilder extends AbstractTypeAgentBuilder {
+	static public class DecimalStringInputAgentBuilder extends AbstractInputAgentBuilder {
 		@Override
 		protected void putValue(ComponentAgent target, String raw, Map<String, Object> data) {
 			if(Strings.isBlank(raw)) {
@@ -268,7 +265,7 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 		}
 	}
 	
-	static public class DateTypeAgentBuilder extends AbstractTypeAgentBuilder {
+	static public class DateInputAgentBuilder extends AbstractInputAgentBuilder {
 		@Override
 		protected void putValue(ComponentAgent target,String raw,Map<String , Object> data){
 			if(Strings.isBlank(raw)) {
@@ -295,7 +292,7 @@ public abstract class AbstractTypeAgentBuilder implements OperationAgentBuilder<
 		}
 	}
 	
-	static public class TimeTypeAgentBuilder extends AbstractTypeAgentBuilder {
+	static public class TimeInputAgentBuilder extends AbstractInputAgentBuilder {
 		@Override
 		protected void putValue(ComponentAgent target, String raw, Map<String, Object> data) {
 			if(Strings.isBlank(raw)) {

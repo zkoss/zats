@@ -18,7 +18,7 @@ import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
-import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ScrollEvent;
@@ -29,17 +29,17 @@ import org.zkoss.zul.Slider;
  * This agent only performs onScroll event.
  * @author pao
  */
-public class SliderInputAgentBuilder implements OperationAgentBuilder<ComponentAgent, TypeAgent> {
+public class SliderInputAgentBuilder implements OperationAgentBuilder<ComponentAgent, InputAgent> {
 
-	public Class<TypeAgent> getOperationClass() {
-		return TypeAgent.class;
+	public Class<InputAgent> getOperationClass() {
+		return InputAgent.class;
 	}
 
-	public TypeAgent getOperation(ComponentAgent agent) {
+	public InputAgent getOperation(ComponentAgent agent) {
 		return new InputAgentImpl(agent);
 	}
 
-	private class InputAgentImpl extends AgentDelegator<ComponentAgent> implements TypeAgent {
+	private class InputAgentImpl extends AgentDelegator<ComponentAgent> implements InputAgent {
 
 		public InputAgentImpl(ComponentAgent target) {
 			super(target);
