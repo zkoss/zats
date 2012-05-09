@@ -16,6 +16,7 @@ import java.util.Map;
 import org.zkoss.zk.ui.event.BookmarkEvent;
 
 /**
+ * A data builder for bookmark change operation.
  * @author dennis
  *
  */
