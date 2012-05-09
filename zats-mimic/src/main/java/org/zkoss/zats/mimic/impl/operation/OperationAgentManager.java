@@ -149,8 +149,8 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", Tab.class,new GenericCloseAgentBuilder());
 
 		// the render
-		registerBuilder("5.0.0", "*", Listbox.class, new ListboxRendererAgentBuilder());
-		registerBuilder("5.0.0", "*", Grid.class, new GridRendererAgentBuilder());
+		registerBuilder("5.0.0", "*", Listbox.class, new ListboxRenderAgentBuilder());
+		registerBuilder("5.0.0", "*", Grid.class, new GridRenderAgentBuilder());
 
 		// the resize
 		registerBuilder("5.0.0", "*", Window.class, new WindowSizeAgentBuilder());

@@ -1,4 +1,4 @@
-/* GridRendererAgentBuilder.java
+/* ListboxRendererAgentBuilder.java
 
 	Purpose:
 		
@@ -13,7 +13,6 @@ package org.zkoss.zats.mimic.impl.operation;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.AgentException;
@@ -21,22 +20,19 @@ import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.RenderAgent;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Grid;
-import org.zkoss.zul.Row;
-import org.zkoss.zul.Rows;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.event.RenderEvent;
-import org.zkoss.zul.impl.LoadStatus;
 /**
  * 
  * @author dennis
  *
  */
-public class GridRendererAgentBuilder implements OperationAgentBuilder<ComponentAgent,RenderAgent> {
+public class ListboxRenderAgentBuilder implements OperationAgentBuilder<ComponentAgent,RenderAgent> {
 	public RenderAgent getOperation(final ComponentAgent target) {
-		if(!target.is(Grid.class)){
-			throw new AgentException("target "+target+" cannot transfer to Grid");
+		if(!target.is(Listbox.class)){
+			throw new AgentException("target "+target+" cannot transfer to Listbox");
 		}
 		return new RendererAgentImpl(target);
 	}
@@ -49,20 +45,17 @@ public class GridRendererAgentBuilder implements OperationAgentBuilder<Component
 		}
 
 		public void render(int x, int y) {
-			Grid grid = target.as(Grid.class);
-			Rows rows = grid.getRows();
-			if(rows==null) return;
-			
-			List<Component> children = rows.getChildren();
+			Listbox listbox = target.as(Listbox.class);
 			if(x==-1) x = 0;
-			if(y==-1) y = rows.getChildren().size()-1;
+			if(y==-1) y = listbox.getItemCount()-1;
 			ArrayList<String> ids = new ArrayList<String>();
 			while(true){
 				if(x > y) break;
-				Row r = (Row)children.get(x++);
-				if(r!=null && !isLoaded(r)){//damn, isLoaded is not open in row
-					ids.add(r.getUuid());
+				Listitem item = listbox.getItemAtIndex(x++);
+				if(item!=null && !item.isLoaded()){
+					ids.add(item.getUuid());
 				}
+				
 			}
 			if(ids.size()==0) return;
 			
@@ -71,15 +64,5 @@ public class GridRendererAgentBuilder implements OperationAgentBuilder<Component
 			Map<String, Object> data = EventDataManager.build(new RenderEvent(cmd, new HashSet(ids)));
 			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
 		};
-	}
-	
-	static boolean ignoreIsLoaded = false;
-	
-	private static boolean isLoaded(Row r){
-		Object ctrl = r.getExtraCtrl();
-		if(ctrl instanceof LoadStatus){
-			return ((LoadStatus)ctrl).isLoaded();
-		}
-		return false;
 	}
 }
