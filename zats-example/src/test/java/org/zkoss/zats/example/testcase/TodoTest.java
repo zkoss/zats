@@ -46,7 +46,7 @@ public class TodoTest {
 		ComponentAgent date = desktop.query("datebox");
 
 		//add
-		//itemName.as(TypeAgent.class).type("one-item");
+		//itemName.as(InputAgent.class).type("one-item");
 		itemName.type("one-item");
 		priority.type("3");
 		date.type("2012-03-16");

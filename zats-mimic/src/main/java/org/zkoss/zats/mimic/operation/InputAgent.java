@@ -12,7 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.operation;
 
 /**
- * To operate user input.
+ * To perform input to a component.
  * You can input data either by {@link #type(String)} or {@link #input(Object)}
  * @author pao
  * @author dennis
