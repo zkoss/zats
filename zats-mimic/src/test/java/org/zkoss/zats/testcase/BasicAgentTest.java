@@ -46,7 +46,6 @@ import org.zkoss.zats.mimic.operation.DragAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.GroupAgent;
 import org.zkoss.zats.mimic.operation.HoverAgent;
-import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MoveAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
@@ -1825,7 +1824,7 @@ public class BasicAgentTest {
 				"s1,onScroll,50", 
 				"s1,onScroll,100", 
 		};
-		InputAgent slider = desktop.query("#s1").as(InputAgent.class);
+		TypeAgent slider = desktop.query("#s1").as(TypeAgent.class);
 		for (int i = 0; i < args.length; ++i) {
 			slider.input(args[i]);
 			assertEquals(expected[i], msg1.getValue());
@@ -1838,7 +1837,7 @@ public class BasicAgentTest {
 				"s2,onScroll,199", 
 				"s2,onScroll,200", 
 		};
-		slider = desktop.query("#s2").as(InputAgent.class);
+		slider = desktop.query("#s2").as(TypeAgent.class);
 		for (int i = 0; i < args.length; ++i) {
 			slider.input(args[i]);
 			assertEquals(expected[i], msg1.getValue());

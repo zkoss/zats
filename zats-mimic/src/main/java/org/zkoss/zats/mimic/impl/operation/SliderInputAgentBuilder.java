@@ -18,7 +18,7 @@ import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
-import org.zkoss.zats.mimic.operation.InputAgent;
+import org.zkoss.zats.mimic.operation.TypeAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ScrollEvent;
@@ -29,17 +29,17 @@ import org.zkoss.zul.Slider;
  * This agent only performs onScroll event.
  * @author pao
  */
-public class SliderInputAgentBuilder implements OperationAgentBuilder<ComponentAgent, InputAgent> {
+public class SliderInputAgentBuilder implements OperationAgentBuilder<ComponentAgent, TypeAgent> {
 
-	public Class<InputAgent> getOperationClass() {
-		return InputAgent.class;
+	public Class<TypeAgent> getOperationClass() {
+		return TypeAgent.class;
 	}
 
-	public InputAgent getOperation(ComponentAgent agent) {
+	public TypeAgent getOperation(ComponentAgent agent) {
 		return new InputAgentImpl(agent);
 	}
 
-	private class InputAgentImpl extends AgentDelegator<ComponentAgent> implements InputAgent {
+	private class InputAgentImpl extends AgentDelegator<ComponentAgent> implements TypeAgent {
 
 		public InputAgentImpl(ComponentAgent target) {
 			super(target);
@@ -75,6 +75,18 @@ public class SliderInputAgentBuilder implements OperationAgentBuilder<ComponentA
 			ScrollEvent event = new ScrollEvent(cmd, (Component) getDelegatee(), value);
 			Map<String, Object> data = EventDataManager.build(event);
 			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
+		}
+
+		public void type(String value) {
+			throw new AgentException(target + " doesn't support type operation");
+		}
+
+		public void typing(String value) {
+			throw new AgentException(target + " doesn't support typing operation");
+		}
+
+		public void select(int start, int end) {
+			throw new AgentException(target + " doesn't support select operation");
 		}
 	}
 }
