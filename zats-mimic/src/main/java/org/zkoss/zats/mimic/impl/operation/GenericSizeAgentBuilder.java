@@ -14,7 +14,6 @@ package org.zkoss.zats.mimic.impl.operation;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
@@ -73,8 +72,8 @@ public class GenericSizeAgentBuilder implements OperationAgentBuilder<ComponentA
 				if (width < 0) {
 					String widthStr = comp.getWidth();
 					if (widthStr == null || widthStr.length() <= 0) {
-						Method method = getDelegatee().getClass().getMethod("getMinwidth");
-						widthStr = method.invoke(getDelegatee()).toString() + "px";
+						Method method = comp.getClass().getMethod("getMinwidth");
+						widthStr = method.invoke(comp).toString() + "px";
 					}
 					width = Integer.parseInt(widthStr.substring(0, widthStr.length() - 2));
 				}
@@ -87,7 +86,7 @@ public class GenericSizeAgentBuilder implements OperationAgentBuilder<ComponentA
 					height = Integer.parseInt(heightStr.substring(0, heightStr.length() - 2));
 				}
 			} catch (Exception e) {
-				throw new ZatsException("", e);
+				throw new AgentException(e.getMessage(), e);
 			}
 
 			// post AU
@@ -109,7 +108,7 @@ public class GenericSizeAgentBuilder implements OperationAgentBuilder<ComponentA
 			} catch (AgentException e) {
 				throw e;
 			} catch (Exception e) {
-				throw new ZatsException(getDelegatee().getClass().getName() + " doesn't support "
+				throw new AgentException(getDelegatee().getClass().getName() + " doesn't support "
 						+ property.toLowerCase() + " operation", e);
 			}
 		}

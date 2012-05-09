@@ -20,7 +20,11 @@ import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
-
+/**
+ * The builder for focus agent
+ * @author pao
+ *
+ */
 public class GenericFocusAgentBuilder implements OperationAgentBuilder<ComponentAgent,FocusAgent> {
 	public FocusAgent getOperation(final ComponentAgent target) {
 		return new FocusAgentImpl(target);

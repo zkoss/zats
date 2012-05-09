@@ -166,7 +166,7 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", HtmlBasedComponent.class, new GenericHoverAgentBuilder());
 		
 		//paging
-		registerBuilder("5.0.0", "*", Paging.class, new GenericPagingAgentBuilder());
+		registerBuilder("5.0.0", "*", Paging.class, new PagingAgentBuilder());
 		
 		//group
 		registerBuilder("5.0.0", "*", Column.class, new GenericGroupAgentBuilder());
@@ -188,7 +188,7 @@ public class OperationAgentManager {
 		//colorbox in zkex.jar which is optional
 		try {
 			registerBuilder("5.0.0", "*", "org.zkoss.zkex.zul.Colorbox",
-					"org.zkoss.zats.mimic.impl.operation.ColorInputAgentBuilder");
+					"org.zkoss.zats.mimic.impl.operation.ColorboxInputAgentBuilder");
 		} catch (Exception e) {
 			// doesn't exist
 		}

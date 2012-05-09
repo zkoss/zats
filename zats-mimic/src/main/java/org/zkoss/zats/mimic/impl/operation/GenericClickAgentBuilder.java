@@ -20,7 +20,11 @@ import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.MouseEvent;
-
+/**
+ * 
+ * @author pao
+ *
+ */
 public class GenericClickAgentBuilder implements OperationAgentBuilder<ComponentAgent,ClickAgent> {
 	public ClickAgent getOperation(final ComponentAgent target) {
 		return new ClickAgentImpl(target);

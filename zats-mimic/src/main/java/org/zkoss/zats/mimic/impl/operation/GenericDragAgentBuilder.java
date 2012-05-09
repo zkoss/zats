@@ -42,9 +42,6 @@ public class GenericDragAgentBuilder implements OperationAgentBuilder<ComponentA
 			super(target);
 		}
 
-		/* (non-Javadoc)
-		 * @see org.zkoss.zats.mimic.operation.DragAgent#drop(org.zkoss.zats.mimic.ComponentAgent)
-		 */
 		public void dropOn(ComponentAgent dropTarget) {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_DROP;

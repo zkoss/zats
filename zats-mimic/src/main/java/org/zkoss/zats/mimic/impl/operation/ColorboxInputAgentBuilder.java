@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.event.Events;
  * @author Hawk
  *
  */
-public class ColorInputAgentBuilder implements OperationAgentBuilder<ComponentAgent,InputAgent>{
+public class ColorboxInputAgentBuilder implements OperationAgentBuilder<ComponentAgent,InputAgent>{
 	public InputAgent getOperation(final ComponentAgent target) {
 		return new TypeAgentImpl(target);
 	}
