@@ -47,6 +47,7 @@ import org.zkoss.zul.Menuitem;
 import org.zkoss.zul.North;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Panel;
+import org.zkoss.zul.Popup;
 import org.zkoss.zul.Slider;
 import org.zkoss.zul.South;
 import org.zkoss.zul.Spinner;
@@ -137,6 +138,7 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", West.class, new GenericOpenAgentBuilder());
 		registerBuilder("5.0.0", "*", South.class, new GenericOpenAgentBuilder());
 		registerBuilder("5.0.0", "*", Splitter.class, new GenericOpenAgentBuilder());
+		registerBuilder("5.0.0", "*", Popup.class, new GenericOpenAgentBuilder());
 		
 		registerBuilder("5.0.0", "*", Bandbox.class, new TextboxOpenAgentBuilder());
 		registerBuilder("5.0.0", "*", Combobox.class, new TextboxOpenAgentBuilder());
