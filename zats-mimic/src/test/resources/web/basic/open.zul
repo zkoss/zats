@@ -102,5 +102,15 @@
 				</treeitem>
 			</treechildren>
 		</tree>
+		<window id="window" onOpen="show(event)"/>
+		<panel id="panel" onOpen="show(event)"/>
+		<borderlayout>
+			<north id="north" onOpen="show(event)"></north>
+			<west id="west" onOpen="show(event)"></west>
+			<center id="center" onOpen="show(event)"></center>
+			<east id="east" onOpen="show(event)"></east>
+			<south id="south" onOpen="show(event)"></south>
+		</borderlayout>
+		
 	</vbox>
 </zk>

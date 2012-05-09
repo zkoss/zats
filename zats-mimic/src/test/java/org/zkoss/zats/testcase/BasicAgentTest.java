@@ -750,92 +750,141 @@ public class BasicAgentTest {
 		assertEquals("", open.getValue());
 		assertEquals("", close.getValue());
 
-		String values[] = { "", "" };
+		String status[] = { "", "" };
 		// bandbox
 		String id = "#aBandbox";
-		values[0] = id.substring(1);
+		status[0] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(true);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
-		values[1] = id.substring(1);
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		status[1] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(false);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
 
 		// combobox
 		id = "#aCombobox";
-		values[0] = id.substring(1);
+		status[0] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(true);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
-		values[1] = id.substring(1);
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		status[1] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(false);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
 
 		// groupbox
 		id = "#aGroupbox";
-		values[0] = id.substring(1);
+		status[0] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(true);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
-		values[1] = id.substring(1);
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		status[1] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(false);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
 
 		// detail
 		id = "#aDetail";
-		values[0] = id.substring(1);
+		status[0] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(true);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
-		values[1] = id.substring(1);
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		status[1] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(false);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
 
 		// group
 		id = "#aGroup";
-		values[0] = id.substring(1);
+		status[0] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(true);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
-		values[1] = id.substring(1);
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		status[1] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(false);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
 
 		// listgroup
 		id = "#aListgroup";
-		values[0] = id.substring(1);
+		status[0] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(true);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
-		values[1] = id.substring(1);
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		status[1] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(false);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
 
 		// treeitem
 		id = "#treeitem1";
-		values[0] = id.substring(1);
+		status[0] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(true);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
-		values[1] = id.substring(1);
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		status[1] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(false);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
 		id = "#treeitem1-2";
-		values[0] = id.substring(1);
+		status[0] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(true);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
-		values[1] = id.substring(1);
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		status[1] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(false);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		
+		//panel
+		id="panel";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
+		
+		//window
+		id="window";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
+		
+		//Center    
+		id="center";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
+		
+		//East    
+		id="east";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
+		
+		//North
+		id="north";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
+		
+		//South
+		id="south";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
+		
+		//West
+		id="west";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
 	}
 	
 	@Test
