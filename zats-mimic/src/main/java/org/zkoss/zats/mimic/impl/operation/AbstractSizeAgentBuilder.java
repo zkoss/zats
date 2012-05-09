@@ -28,23 +28,30 @@ import org.zkoss.zk.ui.event.SizeEvent;
 /**
  * The builder for size agent.
  * @author pao
+ * @authro dennis
  */
-public class GenericSizeAgentBuilder implements OperationAgentBuilder<ComponentAgent,SizeAgent> {
+public abstract class AbstractSizeAgentBuilder implements OperationAgentBuilder<ComponentAgent,SizeAgent> {
 
-	public SizeAgent getOperation(ComponentAgent target) {
-		return new SizeAgentImpl(target);
-	}
 	public Class<SizeAgent> getOperationClass() {
 		return SizeAgent.class;
 	}
-	private class SizeAgentImpl extends AgentDelegator<ComponentAgent> implements SizeAgent {
-		public SizeAgentImpl(ComponentAgent target) {
+	abstract static class AbstractSizeAgentImpl extends AgentDelegator<ComponentAgent> implements SizeAgent {
+		public AbstractSizeAgentImpl(ComponentAgent target) {
 			super(target);
 		}
+		
+		abstract protected boolean isMaximizable();
+		abstract protected boolean isMinimizable();
+		abstract protected boolean isSizable();
+		abstract protected int getMinwidth();
+		abstract protected int getMinheight();
+		
 
 		public void maximize(boolean maximized) {
-			check("Maximizable");
-			HtmlBasedComponent comp = (HtmlBasedComponent) getDelegatee();
+			if(!isMaximizable()){
+				throw new AgentException(target + " is not maximizable");
+			}
+			HtmlBasedComponent comp = target.as(HtmlBasedComponent.class);
 			String cmd = Events.ON_MAXIMIZE;
 			MaximizeEvent event = new MaximizeEvent(cmd, comp, "", "", comp.getWidth(), comp.getHeight(), maximized);
 			Map<String, Object> data = EventDataManager.build(event);
@@ -52,8 +59,10 @@ public class GenericSizeAgentBuilder implements OperationAgentBuilder<ComponentA
 		}
 
 		public void minimize(boolean minimized) {
-			check("Minimizable");
-			HtmlBasedComponent comp = (HtmlBasedComponent) getDelegatee();
+			if(!isMinimizable()){
+				throw new AgentException(target + " is not minimizable");
+			}
+			HtmlBasedComponent comp = target.as(HtmlBasedComponent.class);
 			String cmd = Events.ON_MINIMIZE;
 			MinimizeEvent event = new MinimizeEvent(cmd, comp, "", "", comp.getWidth(), comp.getHeight(), minimized);
 			Map<String, Object> data = EventDataManager.build(event);
@@ -61,27 +70,28 @@ public class GenericSizeAgentBuilder implements OperationAgentBuilder<ComponentA
 		}
 
 		public void resize(int width, int height) {
+			if(!isSizable()){
+				throw new AgentException(target + " is not sizable");
+			}
+			
 			if (width < 0 && height < 0)
 				return; // do nothing
 
 			// check flag
-			HtmlBasedComponent comp = (HtmlBasedComponent) getDelegatee();
-			check("Sizable");
+			HtmlBasedComponent comp = target.as(HtmlBasedComponent.class);
 			// check arguments
 			try {
 				if (width < 0) {
 					String widthStr = comp.getWidth();
 					if (widthStr == null || widthStr.length() <= 0) {
-						Method method = comp.getClass().getMethod("getMinwidth");
-						widthStr = method.invoke(comp).toString() + "px";
+						widthStr = getMinwidth() + "px";
 					}
 					width = Integer.parseInt(widthStr.substring(0, widthStr.length() - 2));
 				}
 				if (height < 0) {
 					String heightStr = comp.getHeight();
 					if (heightStr == null || heightStr.length() <= 0) {
-						Method method = getDelegatee().getClass().getMethod("getMinheight");
-						heightStr = method.invoke(getDelegatee()).toString() + "px";
+						heightStr = getMinheight() + "px";
 					}
 					height = Integer.parseInt(heightStr.substring(0, heightStr.length() - 2));
 				}
@@ -94,23 +104,6 @@ public class GenericSizeAgentBuilder implements OperationAgentBuilder<ComponentA
 			SizeEvent event = new SizeEvent(cmd, comp, width + "px", height + "px", 0);
 			Map<String, Object> data = EventDataManager.build(event);
 			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
-		}
-
-		/**
-		 * check enabled flag.
-		 */
-		private void check(String property) {
-			try {
-				Method method = getDelegatee().getClass().getMethod("is" + property);
-				boolean maximizable = (Boolean) method.invoke(getDelegatee());
-				if (!maximizable)
-					throw new AgentException("component isn't " + property.toLowerCase());
-			} catch (AgentException e) {
-				throw e;
-			} catch (Exception e) {
-				throw new AgentException(getDelegatee().getClass().getName() + " doesn't support "
-						+ property.toLowerCase() + " operation", e);
-			}
 		}
 	}
 }

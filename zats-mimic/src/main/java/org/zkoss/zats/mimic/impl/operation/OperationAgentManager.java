@@ -153,8 +153,8 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", Grid.class, new GridRendererAgentBuilder());
 
 		// the resize
-		registerBuilder("5.0.0", "*", Window.class, new GenericSizeAgentBuilder());
-		registerBuilder("5.0.0", "*", Panel.class, new GenericSizeAgentBuilder());
+		registerBuilder("5.0.0", "*", Window.class, new WindowSizeAgentBuilder());
+		registerBuilder("5.0.0", "*", Panel.class, new PanelSizeAgentBuilder());
 		registerBuilder("5.0.0", "*", Column.class, new HeaderSizeAgentBuilder());
 		registerBuilder("5.0.0", "*", Listheader.class, new HeaderSizeAgentBuilder());
 		registerBuilder("5.0.0", "*", Treecol.class, new HeaderSizeAgentBuilder());
