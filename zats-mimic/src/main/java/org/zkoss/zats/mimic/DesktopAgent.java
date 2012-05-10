@@ -16,7 +16,7 @@ import java.util.List;
 import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zk.ui.Desktop;
 /**
- * The desktop agent, represents a server-side zk desktop
+ * The desktop agent, represents a server-side ZK desktop
  * 
  * @author pao
  * @author Dennis

@@ -17,7 +17,7 @@ import org.zkoss.zats.mimic.impl.EventDataBuilder;
 import org.zkoss.zk.ui.event.SelectEvent;
 
 /**
- * A data builder for select event.
+ * AU data builder for SelectEvent.
  * 
  * @author pao
  */

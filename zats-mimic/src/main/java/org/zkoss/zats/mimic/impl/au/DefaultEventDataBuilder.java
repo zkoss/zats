@@ -17,7 +17,7 @@ import org.zkoss.zats.mimic.impl.EventDataBuilder;
 import org.zkoss.zk.ui.event.Event;
 
 /**
- * A data builder for default event.
+ * Default builder puts nothing into AU data.
  * 
  * @author pao
  */

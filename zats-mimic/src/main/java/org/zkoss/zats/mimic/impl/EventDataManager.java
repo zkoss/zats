@@ -38,10 +38,13 @@ import org.zkoss.zk.ui.event.Event;
 
 /**
  * The manager of event data builder. <br/>
- * 
- * To deal with the issue that different version might contains different data content for the same event,
- *  we design registration mechanism. We can register different Event Data Builder for the same event 
- *  in different version.
+ * <p>
+ * To deal with the issue that different version might sends different AU data for the same event,
+ *  we design registration mechanism which is similar with the one for component agent builder. 
+ *  We can register different EventDataBuilder for the same event in different version.
+ *  </p>
+ *  This class maintains a collection of key-value pairs, the key is ZK event, and the value is EventDataBuilder.
+ *  EventDataBuilder is responsible for construct AU data content. 
  * @author dennis
  */
 public class EventDataManager {

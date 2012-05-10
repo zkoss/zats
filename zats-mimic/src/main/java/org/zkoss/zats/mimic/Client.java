@@ -13,7 +13,7 @@ package org.zkoss.zats.mimic;
 
 
 /**
- * Represent a client that can connect to zul files
+ * Represent a client that can connect to zul files. It plays a role like a browser but without rendering anything.
  * @author Hawk
  * @author Dennis
  *

@@ -17,7 +17,7 @@ import org.zkoss.zats.mimic.impl.EventDataBuilder;
 import org.zkoss.zul.event.RenderEvent;
 
 /**
- * A data builder for render event.
+ * AU data builder for RenderEvent.
  * 
  * @author pao
  */
