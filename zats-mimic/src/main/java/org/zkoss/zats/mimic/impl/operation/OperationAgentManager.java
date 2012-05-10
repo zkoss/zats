@@ -23,8 +23,6 @@ import org.zkoss.zats.mimic.impl.operation.input.IntegerInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.IntegerStringInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.TextInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.TimeInputAgentBuilder;
-import org.zkoss.zats.mimic.impl.operation.select.AbstractMultipleSelectAgentBuilder;
-import org.zkoss.zats.mimic.impl.operation.select.AbstractSelectAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.select.ComboitemSelectAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.select.LisitemSelectAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.select.ListitemMultipleSelectAgentBuilder;
@@ -185,29 +183,29 @@ public class OperationAgentManager {
 		
 		//----------special case ---
 		
+		
+		String extClz; 
+		
 		//colorbox in zkex.jar which is optional
-		try {
-			registerBuilder("5.0.0", "*", "org.zkoss.zkex.zul.Colorbox",
+		extClz = "org.zkoss.zkex.zul.Colorbox";
+		if(Util.hasClass(extClz)){
+			registerBuilder("5.0.0", "*", extClz,
 					"org.zkoss.zats.mimic.impl.operation.input.ColorboxInputAgentBuilder");
-		} catch (Exception e) {
-			// doesn't exist
 		}
 		
 		// the ckeditor (optional)
-		try {
-			registerBuilder("5.0.0", "*", "org.zkforge.ckez.CKeditor",
+		extClz = "org.zkforge.ckez.CKeditor";
+		if(Util.hasClass(extClz)){
+			registerBuilder("5.0.0", "*", extClz,
 					"org.zkoss.zats.mimic.impl.operation.input.TextInputAgentBuilder");
-		} catch (Exception e) {
-			// ckeditor doesn't exist
-		}
+		} 
 		
 		// the check of zhtml (optional)
-		try {
-			registerBuilder("5.0.0", "*", "org.zkoss.zhtml.Input",
+		extClz = "org.zkoss.zhtml.Input";
+		if(Util.hasClass(extClz)){
+			registerBuilder("5.0.0", "*", extClz,
 					"org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder");
-		} catch (Exception e) {
-			// no zhtml
-		}
+		} 
 	}
 
 	/**
@@ -229,8 +227,6 @@ public class OperationAgentManager {
 	 * @param delegateeClass
 	 *            the component class that builder maps to ( *notice: it should
 	 *            not specify interface)
-	 * @param opClass
-	 *            the operation class that builder maps to
 	 * @param builder
 	 *            operation builder
 	 */
@@ -274,8 +270,6 @@ public class OperationAgentManager {
 	 * @param delegateeClass
 	 *            the component class that builder maps to ( *notice: it should
 	 *            not specify interface)
-	 * @param opClass
-	 *            the operation class that builder maps to
 	 * @param builder
 	 *            operation builder
 	 */
