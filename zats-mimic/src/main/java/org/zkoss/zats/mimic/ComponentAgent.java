@@ -88,10 +88,10 @@ public interface ComponentAgent extends Agent{
 	PageAgent getPage();
 
 	/**
-	 * try to transfer the component agent to the target class, the target class
+	 * Try to get a instance of target class for this component agent, the target class
 	 * is usually a {@link OperationAgent} or a native {@link Component} <br/>
 	 * 
-	 * if it cannot transfer to target class, it will throw
+	 * if it cannot get a instance of target class, it will throw
 	 * {@link AgentException}.
 	 * 
 	 * @param clazz
@@ -101,7 +101,7 @@ public interface ComponentAgent extends Agent{
 	<T> T as(Class<T> clazz);
 
 	/**
-	 * check the component agent can transfer to the target class or not
+	 * Check can get a instance of target class for this component
 	 * 
 	 * @param clazz
 	 *            the class cast to.
@@ -110,13 +110,13 @@ public interface ComponentAgent extends Agent{
 	<T> boolean is(Class<T> clazz);
 	
 	/**
-	 * find components matched specify selector base on this component agent.
+	 * Find components matched specify selector base on this component agent.
 	 * @param selector
 	 */
 	ComponentAgent query(String selector);
 	
 	/**
-	 * find components matched specify selector base on this component agent.
+	 * Find components matched specify selector base on this component agent.
 	 * @param selector
 	 */
 	List<ComponentAgent> queryAll(String selector);
@@ -131,7 +131,7 @@ public interface ComponentAgent extends Agent{
 	void click();
 	
 	/**
-	 * type on this component, it is a short cut of {@link InputAgent#type(String)} <p/>
+	 * Type on this component, it is a short cut of {@link InputAgent#type(String)} <p/>
 	 * If this component doesn't support {@link InputAgent}, it will throw exception.
 	 * @see #as(Class)
 	 * @see InputAgent
@@ -139,7 +139,7 @@ public interface ComponentAgent extends Agent{
 	void type(String value);
 	
 	/**
-	 * input to this component, it is a short cut of {@link InputAgent#input(String)} <p/>
+	 * Input to this component, it is a short cut of {@link InputAgent#input(Object)} <p/>
 	 * If this component doesn't support {@link InputAgent}, it will throw exception.
 	 * @see #as(Class)
 	 * @see InputAgent
@@ -147,7 +147,7 @@ public interface ComponentAgent extends Agent{
 	void input(Object value);
 	
 	/**
-	 * Focus on this component, it is a short cut of {@link FocusAgent#focus()} <p/>
+	 * Focus this component, it is a short cut of {@link FocusAgent#focus()} <p/>
 	 * If this component doesn't support {@link FocusAgent}, it will throw exception.
 	 * @see #as(Class)
 	 * @see FocusAgent
@@ -155,7 +155,7 @@ public interface ComponentAgent extends Agent{
 	void focus();
 	
 	/**
-	 * Blur on this component, it is a short cut of {@link FocusAgent#blur()} <p/>
+	 * Blur this component, it is a short cut of {@link FocusAgent#blur()} <p/>
 	 * If this component doesn't support {@link FocusAgent}, it will throw exception.
 	 * @see #as(Class)
 	 * @see FocusAgent
@@ -163,7 +163,7 @@ public interface ComponentAgent extends Agent{
 	void blur();
 	
 	/**
-	 * Check on this component, it is a short cut of {@link CheckAgent#check(boolean)}<p/>
+	 * Check this component, it is a short cut of {@link CheckAgent#check(boolean)}<p/>
 	 * If this component doesn't support {@link CheckAgent}, it will throw exception.
 	 * @see #as(Class)
 	 * @see CheckAgent
@@ -171,7 +171,7 @@ public interface ComponentAgent extends Agent{
 	void check(boolean checked);
 	
 	/**
-	 * stroke a key on this component, it is a short cut of {@link KeyStrokeAgent#stroke(String)}<p/>
+	 * Stroke a key on this component, it is a short cut of {@link KeyStrokeAgent#stroke(String)}<p/>
 	 * If this component doesn't support {@link KeyStrokeAgent}, it will throw exception.
 	 * @see #as(Class)
 	 * @see KeyStrokeAgent
@@ -179,7 +179,7 @@ public interface ComponentAgent extends Agent{
 	void stroke(String key);
 	
 	/**
-	 * to select this component, it is a short cut of {@link SelectAgent#select()}<p/>
+	 * Select this component, it is a short cut of {@link SelectAgent#select()}<p/>
 	 * If this component doesn't support {@link SelectAgent}, it will throw exception.
 	 * @see #as(Class)
 	 * @see SelectAgent

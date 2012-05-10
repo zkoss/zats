@@ -11,7 +11,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zats.mimic.impl.operation;
 
-import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.AgentException;
@@ -28,7 +27,7 @@ import org.zkoss.zk.ui.event.SizeEvent;
 /**
  * The builder for size agent.
  * @author pao
- * @authro dennis
+ * @author dennis
  */
 public abstract class AbstractSizeAgentBuilder implements OperationAgentBuilder<ComponentAgent,SizeAgent> {
 

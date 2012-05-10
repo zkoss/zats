@@ -21,6 +21,9 @@
 		<name>Potix Corporation</name>
 		<url>http://www.zkoss.org</url>
 	</organization>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<developers>
 		<developer>
 			<id>zkteam</id>

@@ -227,7 +227,7 @@ public class OperationAgentManager {
 	 * @param delegateeClass
 	 *            the component class that builder maps to ( *notice: it should
 	 *            not specify interface)
-	 * @param builder
+	 * @param builderClazz
 	 *            operation builder
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })

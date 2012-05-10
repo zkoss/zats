@@ -39,12 +39,6 @@ public class EmulatorBuilder {
 	private Resource webWebInf;//the first resource that contains WEB-INF
 	private List<Resource> contentRoots;//the paths of content root
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param contentFolder
-	 *            the web application root path.
-	 */
 	public EmulatorBuilder() {
 		this.contentRoots = new ArrayList<Resource>();
 	}
@@ -99,8 +93,7 @@ public class EmulatorBuilder {
 	/**
 	 * specify the path of web.xml. default value is "./WEB-INF/web.xml".
 	 * 
-	 * @param path
-	 *            specify path.
+	 * @param descriptor path of web.xml
 	 * @return self reference.
 	 */
 	public EmulatorBuilder setDescriptor(String descriptor) {

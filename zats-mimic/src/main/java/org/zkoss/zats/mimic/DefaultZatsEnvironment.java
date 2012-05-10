@@ -47,7 +47,7 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 	/**
 	 * Create a zats Environment. <br/>
 	 * The webInfPathOrUrl is the folder of the WEB-INF to start the zats environment.  <br/>
-	 * @param webInfFolder the folder of WEB-INF, a null value means use built-in WEB-INF folder.
+	 * @param webInfPathOrUrl the folder of WEB-INF, a null value means use built-in WEB-INF folder.
 	 */
 	public DefaultZatsEnvironment(String webInfPathOrUrl){
 		this.webInfPathOrUrl = webInfPathOrUrl;
@@ -57,7 +57,7 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 	 * Create a zats Environment. <br/>
 	 * The webInfPathOrUrl is the folder of the WEB-INF to start the zats environment, for example "./src/test/resources/web/WEB-INF". <br/>
 	 * The contextPath is the path of the application context, for example "/" or "/myapp". <br/>
-	 * @param webInfFolder the folder of WEB-INF, a null value means suing built-in WEB-INF folder.
+	 * @param webInfPathOrUrl the folder of WEB-INF, a null value means suing built-in WEB-INF folder.
 	 * @param contextPath the name of the application, a null value means using "/"
 	 */
 	public DefaultZatsEnvironment(String webInfPathOrUrl,String contextPath){
@@ -97,7 +97,7 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 
 	/**
 	 * create a client.
-	 * @return
+	 * @return a new client
 	 */
 	public Client newClient(){
 		if(emulator==null){

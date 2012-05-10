@@ -9,7 +9,7 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
-package org.zkoss.zats.mimic.impl.operation;
+package org.zkoss.zats.mimic.impl.operation.select;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +17,8 @@ import java.util.Map;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.operation.AgentDelegator;
+import org.zkoss.zats.mimic.impl.operation.OperationAgentBuilder;
 import org.zkoss.zats.mimic.operation.SelectByIndexAgent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Selectbox;
