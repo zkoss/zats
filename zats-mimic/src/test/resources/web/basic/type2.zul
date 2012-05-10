@@ -1,4 +1,5 @@
 <zk>
+<!-- The purpose of the page is to test input components with different "format" attribute. -->
 	<window >
 		<hbox>
 		<zscript><![CDATA[//@DECLARATION 

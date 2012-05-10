@@ -21,6 +21,7 @@ package org.zkoss.zats.testapp;
  *
  * @author tomyeh
  */
+@SuppressWarnings("rawtypes")
 public class BigList extends java.util.AbstractList {
 	private int _sz;
 	public BigList(int sz) {

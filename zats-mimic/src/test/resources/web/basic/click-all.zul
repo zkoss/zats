@@ -139,6 +139,8 @@
 			comp.addEventListener(Events.ON_CLICK, listener);
 			comp.addEventListener(Events.ON_DOUBLE_CLICK, listener);
 			comp.addEventListener(Events.ON_RIGHT_CLICK, listener);
+			comp.addEventListener(Events.ON_MOUSE_OVER, listener);
+			comp.addEventListener(Events.ON_MOUSE_OUT, listener);
 		}
 	}
 	listen(essential);

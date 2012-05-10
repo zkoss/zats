@@ -1,0 +1,171 @@
+
+<zk>
+<zscript>
+<![CDATA[
+	public void showGroupingColumn(Event e){
+		groupingColumn.setValue(((Column)e.getTarget()).getLabel());
+	}
+	
+	public void showSortingColumn(SortEvent e){
+		sortStatus.setValue(((Column)e.getTarget()).getLabel()+","+e.isAscending());
+	}
+]]>
+</zscript>
+	<grid>
+		<columns menupopup="auto">
+			<column label="Author" sort="auto" onGroup="showGroupingColumn(event)" onSort="showSortingColumn(event)"/>
+			<column label="Title" sort="auto" onGroup="showGroupingColumn(event)" onSort="showSortingColumn(event)"/>
+			<column label="Publisher" sort="auto" onGroup="showGroupingColumn(event)" onSort="showSortingColumn(event)"/>
+			<column label="Hardcover" sort="auto" onGroup="showGroupingColumn(event)" onSort="showSortingColumn(event)"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="Philip Hensher"/>
+				<label value="The Northern Clemency"/>
+				<label value="Knopf (October 30, 2008)"/>
+				<label value="608 pages"/>
+			</row>
+			<row>
+				<label value="Philip Hensher"/>
+				<label value="The Fit"/>
+				<label value="HarperPerennial (April 4, 2005)"/>
+				<label value="240 pages"/>
+			</row>
+			<row>
+				<label value="Philip Hensher"/>
+				<label value="Kitchen Venom"/>
+				<label value="Flamingo (May 19, 2003)"/>
+				<label value="336 pages"/>
+			</row>
+			<row>
+				<label value="Michael Greenberg"/>
+				<label value="Hurry Down Sunshine"/>
+				<label value="Other Press (September 9, 2008)"/>
+				<label value="240 pages"/>
+			</row>
+			<row>
+				<label value="Michael Greenberg"/>
+				<label value="Painless Vocabulary (Painless)"/>
+				<label value="Barron's Educational Series (September 1, 2001)"/>
+				<label value="292 pages"/>
+			</row>
+			<row>
+				<label value="Rick Perlstein"/>
+				<label value="Nixonland: The Rise of a President and the Fracturing of America"/>
+				<label value="Scribner; 1st Scribner Hardcover Ed edition (May 13, 2008)"/>
+				<label value="896 pages"/>
+			</row>
+			<row>
+				<label value="Rick Perlstein"/>
+				<label value="Nixonland"/>
+				<label value="Simon &amp; Schuster (May 13, 2008)"/>
+				<label value="100 pages"/>
+			</row>
+		</rows>
+	</grid>
+	<label id="groupingColumn" />
+	<label id="sortStatus"/>
+	<separator height="40px" />	
+<zscript>
+<![CDATA[
+	
+	public void showSortingHeader(Event e){
+		sortStatus.setValue(((Listheader)e.getTarget()).getLabel());
+	}
+]]>
+</zscript>
+	<listbox id="box">
+		<listhead>
+			<listheader label="Name" sort="auto" onSort="showSortingHeader(event)" sortDirection="descending" />
+			<listheader label="Gender" sort="auto" onSort="showSortingHeader(event)" />
+			<listheader label="Age" sort="auto" />
+			<listheader label="Description" sort="auto" />
+		</listhead>
+		<listitem>
+			<listcell label="Mary" />
+			<listcell label="FEMALE" />
+			<listcell label="18" />
+			<listcell label="A young lady." />
+		</listitem>
+		<listitem>
+			<listcell label="John" />
+			<listcell label="MALE" />
+			<listcell label="20" />
+			<listcell label="A college student." />
+		</listitem>
+		<listitem>
+			<listcell label="Jane" />
+			<listcell label="FEMALE" />
+			<listcell label="32" />
+			<listcell label="A remarkable artist." />
+		</listitem>
+		<listitem>
+			<listcell label="Henry" />
+			<listcell label="MALE" />
+			<listcell label="29" />
+			<listcell label="A graduate." />
+		</listitem>
+	</listbox>
+
+	<separator height="40px"/>
+<zscript>
+<![CDATA[
+	public void showSortingTreecol(Event e) {
+		sortStatus.setValue(((Treecol) e.getTarget()).getLabel());
+	}
+]]>
+</zscript>
+	<tree id="tree" width="400px" rows="8">
+		<treecols sizable="true">
+			<treecol label="Name" sort="auto" onSort="showSortingTreecol(event)"/>
+			<treecol label="Description" sort="auto" onSort="showSortingTreecol(event)"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1" />
+					<treecell label="Item 1 description" />
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 2" />
+					<treecell label="Item 2 description" />
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.1" />
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.1" />
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.2" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.2" />
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.2.1" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Item 3" />
+		</treechildren>
+	</tree>
+</zk>
+			

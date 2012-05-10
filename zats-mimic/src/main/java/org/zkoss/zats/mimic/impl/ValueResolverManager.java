@@ -14,12 +14,8 @@ package org.zkoss.zats.mimic.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.impl.au.EventDataBuilder;
-import org.zkoss.zats.mimic.impl.operation.OperationAgentBuilder;
-import org.zkoss.zats.mimic.impl.operation.OperationAgentManager;
+import org.zkoss.zats.mimic.Agent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 
 /**
@@ -27,18 +23,25 @@ import org.zkoss.zk.ui.event.Event;
  *
  */
 public class ValueResolverManager {
+	private static ValueResolverManager instance;
+	
+	public static synchronized ValueResolverManager getInstance(){
+		if(instance==null){
+			instance = new ValueResolverManager(); 
+		}
+		return instance;
+	}
+	private List<ValueResolver> resolvers = new ArrayList<ValueResolver>();
 
-	private static List<ValueResolver> resolvers = new ArrayList<ValueResolver>();
-
-	static {
+	public ValueResolverManager() {
 		//resolve agent
 		registerResolver("5.0.0","*",new ValueResolver(){
 			@SuppressWarnings("unchecked")
-			public <T> T resolve(ComponentAgent agent, Class<T> clazz) {
+			public <T> T resolve(Agent agent, Class<T> clazz) {
 				if (OperationAgent.class.isAssignableFrom(clazz)) {
 					Class<OperationAgent> opc = (Class<OperationAgent>) clazz;
-					OperationAgentBuilder<OperationAgent> builder = OperationAgentManager.getBuilder(
-							(Component)agent.getDelegatee(), opc);
+					OperationAgentBuilder<Agent, OperationAgent> builder = OperationAgentManager.getInstance().getBuilder(
+							agent.getDelegatee(), opc);
 					if (builder != null)
 						return (T) builder.getOperation(agent);
 				}
@@ -48,8 +51,8 @@ public class ValueResolverManager {
 		//resolver comp
 		registerResolver("5.0.0","*",new ValueResolver(){
 			@SuppressWarnings("unchecked")
-			public <T> T resolve(ComponentAgent agent, Class<T> clazz) {
-				if (clazz.isInstance((Component)agent.getDelegatee())) {
+			public <T> T resolve(Agent agent, Class<T> clazz) {
+				if (clazz.isInstance(agent.getDelegatee())) {
 					return (T) agent.getDelegatee();
 				}
 				return null;
@@ -58,8 +61,7 @@ public class ValueResolverManager {
 	}
 	
 	@SuppressWarnings({ "rawtypes"})
-	public static  
-		void registerResolver(String startVersion, String endVersion, String resolverClazz) {
+	public void registerResolver(String startVersion, String endVersion, String resolverClazz) {
 		if (startVersion == null || endVersion == null || resolverClazz == null)
 			throw new IllegalArgumentException();
 		
@@ -76,7 +78,7 @@ public class ValueResolverManager {
 	}
 
 	
-	public static <T extends Event> 
+	public <T extends Event> 
 		void registerResolver(String startVersion, String endVersion, ValueResolver resolver) {
 		
 		if (startVersion == null || endVersion == null || resolver==null)
@@ -89,7 +91,7 @@ public class ValueResolverManager {
 	/**
 	 * resolve the component agent to a object by registered value resolver
 	 */
-	public static <T> T resolve(ComponentAgent agent, Class<T> clazz){
+	public <T> T resolve(Agent agent, Class<T> clazz){
 		for(ValueResolver r:resolvers){
 			T obj = r.resolve(agent, clazz);
 			if(obj!=null) return obj;

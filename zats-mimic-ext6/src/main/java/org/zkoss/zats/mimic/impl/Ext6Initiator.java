@@ -11,19 +11,13 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zats.mimic.impl;
 
-import org.zkoss.bind.Binder;
-import org.zkoss.bind.impl.BinderImpl;
+import org.zkoss.zats.mimic.Agent;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.impl.operation.DateTypeAgentBuilderZK6;
 import org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericOpenAgentBuilder;
-import org.zkoss.zats.mimic.impl.operation.OperationAgentManager;
-import org.zkoss.zats.mimic.impl.operation.SelectboxSelectByIndexAgentBuilder;
-import org.zkoss.zats.mimic.impl.operation.TimeTypeAgentBuilderZK6;
-import org.zkoss.zats.mimic.operation.CheckAgent;
-import org.zkoss.zats.mimic.operation.OpenAgent;
-import org.zkoss.zats.mimic.operation.SelectByIndexAgent;
-import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zats.mimic.impl.operation.input.DateTypeAgentBuilderZK6;
+import org.zkoss.zats.mimic.impl.operation.input.TimeTypeAgentBuilderZK6;
+import org.zkoss.zats.mimic.impl.operation.select.SelectboxSelectByIndexAgentBuilder;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.util.WebAppInit;
 import org.zkoss.zul.Combobutton;
@@ -44,68 +38,25 @@ public class Ext6Initiator implements WebAppInit{
 		//so it is ok to register builder by webapp init
 		
 		// operation
-		OperationAgentManager.registerBuilder("6.0.0", "*", Toolbarbutton.class, CheckAgent.class,
+		OperationAgentManager.getInstance().registerBuilder("6.0.0", "*", Toolbarbutton.class,
 				new GenericCheckAgentBuilder()); // toolbarbutton on check in zk6 only 
-		OperationAgentManager.registerBuilder("6.0.0", "*", Datebox.class, TypeAgent.class,
+		OperationAgentManager.getInstance().registerBuilder("6.0.0", "*", Datebox.class,
 				new DateTypeAgentBuilderZK6()); // date format changed in zk6
-		OperationAgentManager.registerBuilder("6.0.0", "*", Timebox.class, TypeAgent.class,
+		OperationAgentManager.getInstance().registerBuilder("6.0.0", "*", Timebox.class,
 				new TimeTypeAgentBuilderZK6()); // date format changed in zk6
-		OperationAgentManager.registerBuilder("6.0.0", "*", Combobutton.class, OpenAgent.class,
+		OperationAgentManager.getInstance().registerBuilder("6.0.0", "*", Combobutton.class,
 				new GenericOpenAgentBuilder()); // combobutton introduced since zk6
-		OperationAgentManager.registerBuilder("6.0.0", "*", Selectbox.class, SelectByIndexAgent.class,
+		OperationAgentManager.getInstance().registerBuilder("6.0.0", "*", Selectbox.class,
 				new SelectboxSelectByIndexAgentBuilder()); // selectbox introduced since zk6
 		
 		//event data
-//		EventDataManager.registerBuilder("6.0.0","*", RenderEvent.class, new EventDataBuilder(){
-//			public Map<String, Object> build(Event event,Map<String,Object> data) {
-//				RenderEvent evt = (RenderEvent)event;
-//				setEssential(data,"items",evt.getItems());//id set of items
-//				return data;
-//			}});
 		
 		
 		// resolvers
 		//resolve view model
-		ValueResolverManager.registerResolver("6.0.0","*",new ValueResolver(){
-			@SuppressWarnings("unchecked")
-			public <T> T resolve(ComponentAgent agent, Class<T> clazz) {
-				Object binder = agent.getAttribute(BinderImpl.BINDER);
-				if(binder != null && binder instanceof Binder){
-					Object vm = ((Binder)binder).getViewModel();
-					if (vm!=null && clazz.isInstance(vm)) {
-						return (T)vm;
-					}
-				}
-				return null;
-			}
-		});
+		if(Util.hasClass("org.zkoss.bind.Binder")){
+			ValueResolverManager.getInstance().registerResolver("6.0.0","*","org.zkoss.zats.mimic.impl.BindValueResolver");
+		}
 	}
-//	
-//	@SuppressWarnings("unchecked")
-//	static private Object toSafeJsonObject(Object obj){
-//		if(obj instanceof Set){
-//			//exception if data is Set
-//			//>>Unexpected character (n) at position 10.
-//			//>>	at org.zkoss.json.parser.Yylex.yylex(Yylex.java:610)
-//			//>>	at org.zkoss.json.parser.JSONParser.nextToken(JSONParser.java:270)
-//			return new ArrayList((Set)obj);
-//		}
-//		return obj;
-//	}
-//	
-//	static private void setEssential(Map<String,Object> data,String key, Object obj){
-//		if(obj==null) throw new ConversationException("data of "+key+" is null");
-//		data.put(key, toSafeJsonObject(obj));
-//	}
-//	
-//	static private void setOptional(Map<String,Object> data,String key, Object obj){
-//		if(obj==null) return;
-//		data.put(key, toSafeJsonObject(obj));
-//	}
-//
-//	static private void setReference(Map<String,Object> data,Component comp){
-//		if(comp==null) return;
-//		data.put("reference", comp.getUuid());
-//	}
 
 }

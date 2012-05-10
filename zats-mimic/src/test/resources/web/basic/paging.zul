@@ -1,0 +1,151 @@
+<zk>
+	<zscript>
+    <![CDATA[
+    import org.zkoss.zul.event.*;
+	List items = new org.zkoss.zats.testapp.BigList(50);
+	//a big list of Integer
+	
+	public void showActivePage(PagingEvent e, Label showingLabel){
+		showingLabel.setValue(""+event.getActivePage());
+	}
+]]></zscript>
+	<listbox id="listbox" mold="paging" pageSize="10" onPaging="showActivePage(event, listboxPageIndex)">
+		<listitem forEach="${items}">
+			<listcell label="${each}-1" />
+			<listcell label="${each}-2" />
+			<listcell label="${each}-3" />
+			<listcell label="${each}-4" />
+		</listitem>
+	</listbox>
+	current page index:<label id="listboxPageIndex" value="0"/>
+	<separator height="20px" />
+	<grid id="grid" mold="paging" pageSize="10" onPaging="showActivePage(event, gridPageIndex)">
+		<rows>
+			<row forEach="${items}">
+				<label value="${each}" />
+			</row>
+		</rows>
+	</grid>
+	current page index:<label id="gridPageIndex" value="0"/>
+	<separator height="20px" />
+	<zscript><![CDATA[
+	public class BinaryTreeModel extends org.zkoss.zul.AbstractTreeModel {
+
+		private ArrayList _tree = null;
+
+		public BinaryTreeModel(List tree) {
+			super(tree.get(0));
+			_tree = (ArrayList) tree;
+		}
+
+		public Object getChild(Object parent, int index) {
+			int i = _tree.indexOf(parent) * 2 + 1 + index;
+			if (i >= _tree.size())
+				return null;
+			else
+				return _tree.get(i);
+		}
+
+		public int getChildCount(Object parent) {
+			int count = 0;
+			if (getChild(parent, 0) != null)
+				count++;
+			if (getChild(parent, 1) != null)
+				count++;
+			return count;
+		}
+
+		public boolean isLeaf(Object node) {
+			return (getChildCount(node) == 0);
+		}
+
+	}
+	BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(
+			new org.zkoss.zats.testapp.BigList(50)));
+]]>
+	</zscript>
+	<tree id="tree" mold="paging" pageSize="10" model="${btm}" onPaging="showActivePage(event, treePageIndex)">
+		<attribute name="onCreate">
+	tree.renderItemByPath(new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 });
+	tree.renderItemByPath(new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+</attribute>
+	</tree>
+	current page index:<label id="treePageIndex" value="0"/>
+	<separator height="40px" />
+
+	<vbox>
+		<paging id="pg" pageSize="4" />
+		<hbox>
+			<grid id="paginalGridLeft" width="300px" mold="paging" paginal="${pg}" onPaging="showActivePage(event, leftGridPageIndex)">
+				<columns>
+					<column label="Left" />
+					<column label="Right" />
+				</columns>
+				<rows>
+					<row>
+						<label value="Item 1.1" />
+						<label value="Item 1.2" />
+					</row>
+					<row>
+						<label value="Item 2.1" />
+						<label value="Item 2.2" />
+					</row>
+					<row>
+						<label value="Item 3.1" />
+						<label value="Item 3.2" />
+					</row>
+					<row>
+						<label value="Item 4.1" />
+						<label value="Item 4.2" />
+					</row>
+					<row>
+						<label value="Item 5.1" />
+						<label value="Item 5.2" />
+					</row>
+					<row>
+						<label value="Item 6.1" />
+						<label value="Item 6.2" />
+					</row>
+					<row>
+						<label value="Item 7.1" />
+						<label value="Item 7.2" />
+					</row>
+				</rows>
+			</grid>
+			<grid width="300px" mold="paging" paginal="${pg}" onPaging="showActivePage(event, rightGridPageIndex)">
+				<columns>
+					<column label="Left" />
+					<column label="Right" />
+				</columns>
+				<rows>
+					<row>
+						<label value="Item A.1" />
+						<label value="Item A.2" />
+					</row>
+					<row>
+						<label value="Item B.1" />
+						<label value="Item B.2" />
+					</row>
+					<row>
+						<label value="Item C.1" />
+						<label value="Item C.2" />
+					</row>
+					<row>
+						<label value="Item D.1" />
+						<label value="Item D.2" />
+					</row>
+					<row>
+						<label value="Item E.1" />
+						<label value="Item E.2" />
+					</row>
+					<row>
+						<label value="Item F.1" />
+						<label value="Item F.2" />
+					</row>
+				</rows>
+			</grid>
+		</hbox>
+	</vbox>
+		(left)current page index:<label id="leftGridPageIndex" />
+		(right)current page index:<label id="rightGridPageIndex" />
+</zk>

@@ -13,10 +13,12 @@ package org.zkoss.zats.mimic.impl;
 
 import java.io.Closeable;
 import java.math.BigInteger;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.zkoss.Version;
+import org.zkoss.zats.ZatsException;
 
 /**
  * Utilities for implementation.
@@ -24,7 +26,7 @@ import org.zkoss.Version;
  * @author pao
  */
 public class Util {
-	
+	private static Logger logger = Logger.getLogger(Util.class.getName());
 	private static BigInteger zkVersion; // current zk version
 	
 	static {
@@ -32,12 +34,34 @@ public class Util {
 		try {
 			zkVersion = Util.parseVersion(Version.class.getField("UID").get(null).toString());
 		} catch (Throwable e) {
-			throw new RuntimeException("cannot load zk", e);
+			throw new ZatsException("cannot load zk", e);
 		}
 	}
 	
 	public static BigInteger getZKVersion() {
 		return zkVersion;
+	}
+	
+	public static boolean isZKVersion(int primaryVer){
+		byte[] ver = zkVersion.toByteArray();
+		if(ver!=null && ver.length>=3){
+			return ver[0]==primaryVer;
+		}
+		return false;
+	}
+	
+	public static boolean hasClass(String className){
+		try{
+			try{
+				Util.class.getClassLoader().loadClass(className);
+				return true;
+			}catch(ClassNotFoundException x){
+				return false;
+			}
+		}catch(Throwable x){
+			logger.warning(x.getMessage());
+		}
+		return false;
 	}
 	
 	

@@ -18,7 +18,8 @@ import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
-import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zats.mimic.operation.InputAgent;
+import org.zkoss.zats.mimic.operation.SelectAgent;
 
 /**
  * The component agent, wraps a server-side zk component.
@@ -87,10 +88,10 @@ public interface ComponentAgent extends Agent{
 	PageAgent getPage();
 
 	/**
-	 * try to transfer the component agent to the target class, the target class
+	 * Try to get a instance of target class for this component agent, the target class
 	 * is usually a {@link OperationAgent} or a native {@link Component} <br/>
 	 * 
-	 * if it cannot transfer to target class, it will throw
+	 * if it cannot get a instance of target class, it will throw
 	 * {@link AgentException}.
 	 * 
 	 * @param clazz
@@ -100,22 +101,22 @@ public interface ComponentAgent extends Agent{
 	<T> T as(Class<T> clazz);
 
 	/**
-	 * check the component agent can transfer to the target class or not
+	 * Can get a instance of target class for this component
 	 * 
 	 * @param clazz
 	 *            the class cast to.
-	 * @return true if the component can cast to another class
+	 * @return true if can get a instance of target class
 	 */
 	<T> boolean is(Class<T> clazz);
 	
 	/**
-	 * find components matched specify selector base on this component agent.
+	 * Find components matched specify selector base on this component agent.
 	 * @param selector
 	 */
 	ComponentAgent query(String selector);
 	
 	/**
-	 * find components matched specify selector base on this component agent.
+	 * Find components matched specify selector base on this component agent.
 	 * @param selector
 	 */
 	List<ComponentAgent> queryAll(String selector);
@@ -123,43 +124,65 @@ public interface ComponentAgent extends Agent{
 	
 	/**
 	 * Click on this component, A short cut of {@link ClickAgent#click()} <p/>
-	 * If this component doesn't has {@link ClickAgent}, it will throw exception.
+	 * If this component doesn't support {@link ClickAgent}, it will throw exception.
 	 * @see #as(Class)
+	 * @see ClickAgent
 	 */
 	void click();
 	
 	/**
-	 * type on this component, it is a short cut of {@link TypeAgent#type(String)} <p/>
-	 * If this component doesn't has {@link TypeAgent}, it will throw exception.
+	 * Type on this component, it is a short cut of {@link InputAgent#type(String)} <p/>
+	 * If this component doesn't support {@link InputAgent}, it will throw exception.
 	 * @see #as(Class)
+	 * @see InputAgent
 	 */
 	void type(String value);
 	
 	/**
-	 * Focus on this component, it is a short cut of {@link FocusAgent#focus()} <p/>
-	 * If this component doesn't has {@link FocusAgent}, it will throw exception.
+	 * Input to this component, it is a short cut of {@link InputAgent#input(Object)} <p/>
+	 * If this component doesn't support {@link InputAgent}, it will throw exception.
 	 * @see #as(Class)
+	 * @see InputAgent
+	 */
+	void input(Object value);
+	
+	/**
+	 * Focus this component, it is a short cut of {@link FocusAgent#focus()} <p/>
+	 * If this component doesn't support {@link FocusAgent}, it will throw exception.
+	 * @see #as(Class)
+	 * @see FocusAgent
 	 */
 	void focus();
 	
 	/**
-	 * Blur on this component, it is a short cut of {@link FocusAgent#blur()} <p/>
-	 * If this component doesn't has {@link FocusAgent}, it will throw exception.
+	 * Blur this component, it is a short cut of {@link FocusAgent#blur()} <p/>
+	 * If this component doesn't support {@link FocusAgent}, it will throw exception.
 	 * @see #as(Class)
+	 * @see FocusAgent
 	 */
 	void blur();
 	
 	/**
-	 * Check on this component, it is a short cut of {@link CheckAgent#check(boolean)}<p/>
-	 * If this component doesn't has {@link CheckAgent}, it will throw exception.
+	 * Check this component, it is a short cut of {@link CheckAgent#check(boolean)}<p/>
+	 * If this component doesn't support {@link CheckAgent}, it will throw exception.
 	 * @see #as(Class)
+	 * @see CheckAgent
 	 */
 	void check(boolean checked);
 	
 	/**
-	 * stroke a key on this component, it is a short cut of {@link KeyStrokeAgent#stroke(String)}<p/>
-	 * If this component doesn't has {@link KeyStrokeAgent}, it will throw exception.
+	 * Stroke a key on this component, it is a short cut of {@link KeyStrokeAgent#stroke(String)}<p/>
+	 * If this component doesn't support {@link KeyStrokeAgent}, it will throw exception.
 	 * @see #as(Class)
+	 * @see KeyStrokeAgent
 	 */
 	void stroke(String key);
+	
+	/**
+	 * Select this component, it is a short cut of {@link SelectAgent#select()}<p/>
+	 * If this component doesn't support {@link SelectAgent}, it will throw exception.
+	 * @see #as(Class)
+	 * @see SelectAgent
+	 */
+	void select();
 }

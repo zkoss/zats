@@ -15,7 +15,8 @@ import java.util.Map;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
-import org.zkoss.zats.mimic.impl.au.EventDataManager;
+import org.zkoss.zats.mimic.impl.EventDataManager;
+import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
@@ -26,12 +27,14 @@ import org.zkoss.zul.Textbox;
  * A implementation of open agent builder for sub-class of textbox. 
  * @author pao
  */
-public class TextboxOpenAgentBuilder implements OperationAgentBuilder<OpenAgent> {
+public class TextboxOpenAgentBuilder implements OperationAgentBuilder<ComponentAgent, OpenAgent> {
 	public OpenAgent getOperation(final ComponentAgent target) {
 		return new OpenAgentImpl(target);
 	}
-
-	class OpenAgentImpl extends AgentDelegator implements OpenAgent {
+	public Class<OpenAgent> getOperationClass() {
+		return OpenAgent.class;
+	}
+	class OpenAgentImpl extends AgentDelegator<ComponentAgent> implements OpenAgent {
 		public OpenAgentImpl(ComponentAgent target) {
 			super(target);
 		}
@@ -42,8 +45,8 @@ public class TextboxOpenAgentBuilder implements OperationAgentBuilder<OpenAgent>
 
 			String value = target.as(Textbox.class).getValue();
 			OpenEvent event = new OpenEvent(cmd, (Component)target.getDelegatee(), open, null, value);
-			Map<String, Object> data = EventDataManager.build(event);
-			((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
+			Map<String, Object> data = EventDataManager.getInstance().build(event);
+			((ClientCtrl) target.getClient()).postUpdate(desktopId,cmd, target.getUuid(), data, null);
 		}
 	}
 

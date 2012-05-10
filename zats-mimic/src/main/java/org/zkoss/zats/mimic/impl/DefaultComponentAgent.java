@@ -15,16 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.zkoss.zats.mimic.AgentException;
-import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Client;
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.PageAgent;
-import org.zkoss.zats.mimic.impl.operation.OperationAgentManager;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
-import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zats.mimic.operation.InputAgent;
+import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -93,13 +93,13 @@ public class DefaultComponentAgent implements ComponentAgent {
 	}
 
 	public <T> T as(Class<T> clazz) {
-		T obj = ValueResolverManager.resolve(this, clazz);
+		T obj = ValueResolverManager.getInstance().resolve(this, clazz);
 		if(obj!=null) return obj;
-		throw new AgentException("cannot resolve " + getType() + " to "+ clazz.getName());
+		throw new AgentException("cannot resolve " + clazz.getName() +" for "+ getType());
 	}
 
 	public <T> boolean is(Class<T> clazz) {
-		T obj = ValueResolverManager.resolve(this, clazz);
+		T obj = ValueResolverManager.getInstance().resolve(this, clazz);
 		return obj!=null;
 	}
 
@@ -189,12 +189,17 @@ public class DefaultComponentAgent implements ComponentAgent {
 	}
 
 	public void type(String value) {
-		as(TypeAgent.class).type(value);
+		as(InputAgent.class).type(value);
+	}
+	
+	public void input(Object value) {
+		as(InputAgent.class).input(value);
 	}
 
 	public void focus() {
 		as(FocusAgent.class).focus();
 	}
+	
 	public void blur() {
 		as(FocusAgent.class).blur();
 	}
@@ -205,5 +210,9 @@ public class DefaultComponentAgent implements ComponentAgent {
 
 	public void stroke(String key) {
 		as(KeyStrokeAgent.class).stroke(key);		
+	}
+	
+	public void select() {
+		as(SelectAgent.class).select();
 	}
 }

@@ -15,7 +15,8 @@ import java.util.Map;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
-import org.zkoss.zats.mimic.impl.au.EventDataManager;
+import org.zkoss.zats.mimic.impl.EventDataManager;
+import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
 import org.zkoss.zats.mimic.operation.CloseAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
@@ -25,11 +26,14 @@ import org.zkoss.zk.ui.event.Events;
  * @author Hawk
  *
  */
-public class GenericCloseAgentBuilder implements OperationAgentBuilder<CloseAgent> {
+public class GenericCloseAgentBuilder implements OperationAgentBuilder<ComponentAgent,CloseAgent> {
 	public CloseAgent getOperation(final ComponentAgent target) {
 		return new CloseAgentImpl(target);
 	}
-	class CloseAgentImpl extends AgentDelegator implements CloseAgent{
+	public Class<CloseAgent> getOperationClass() {
+		return CloseAgent.class;
+	}
+	class CloseAgentImpl extends AgentDelegator<ComponentAgent> implements CloseAgent{
 		public CloseAgentImpl(ComponentAgent target) {
 			super(target);
 		}
@@ -37,8 +41,8 @@ public class GenericCloseAgentBuilder implements OperationAgentBuilder<CloseAgen
 		public void close() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_CLOSE;
-			Map<String, Object> data = EventDataManager.build(new Event(cmd, (Component)target.getDelegatee()));
-			((ClientCtrl)target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data);
+			Map<String, Object> data = EventDataManager.getInstance().build(new Event(cmd, (Component)target.getDelegatee()));
+			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
 		}
 	}
 

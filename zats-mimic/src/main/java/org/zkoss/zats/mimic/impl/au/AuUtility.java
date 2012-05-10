@@ -46,7 +46,10 @@ public class AuUtility {
 	}
 
 	static void setEssential(Map<String,Object> data,String key, Object obj){
-		if(obj==null) throw new AgentException("data of "+key+" is null");
+		setEssential(data,key,obj,false);
+	}
+	static void setEssential(Map<String,Object> data,String key, Object obj, boolean nullable){
+		if(obj==null&&!nullable) throw new AgentException("data of "+key+" is null");
 		data.put(key, toSafeJsonObject(obj));
 	}
 

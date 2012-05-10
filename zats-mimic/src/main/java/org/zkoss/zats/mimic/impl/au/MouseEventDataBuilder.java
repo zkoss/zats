@@ -13,7 +13,7 @@ package org.zkoss.zats.mimic.impl.au;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zats.mimic.impl.EventDataBuilder;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.MouseEvent;
 
@@ -22,9 +22,8 @@ import org.zkoss.zk.ui.event.MouseEvent;
  * 
  * @author pao
  */
-public class MouseEventDataBuilder implements EventDataBuilder {
-	public Map<String, Object> build(Event event, Map<String, Object> data) {
-		MouseEvent evt = (MouseEvent) event;
+public class MouseEventDataBuilder implements EventDataBuilder<MouseEvent> {
+	public Map<String, Object> build(MouseEvent evt, Map<String, Object> data) {
 		AuUtility.setEssential(data, "pageX", evt.getPageX());
 		AuUtility.setEssential(data, "pageY", evt.getPageY());
 		AuUtility.setEssential(data, "x", evt.getX());
@@ -34,7 +33,7 @@ public class MouseEventDataBuilder implements EventDataBuilder {
 		int keys = evt.getKeys();
 		if (keys == 0) {
 			// generate data by command name
-			String cmd = event.getName();
+			String cmd = evt.getName();
 			if (Events.ON_CLICK.equals(cmd) || Events.ON_DOUBLE_CLICK.equals(cmd))
 				AuUtility.setEssential(data, "which", 1); // left button
 			else if (Events.ON_RIGHT_CLICK.equals(cmd))
@@ -55,5 +54,8 @@ public class MouseEventDataBuilder implements EventDataBuilder {
 				AuUtility.setEssential(data, "shiftKey", true);
 		}
 		return data;
+	}
+	public Class<MouseEvent> getEventClass(){
+		return MouseEvent.class;
 	}
 }

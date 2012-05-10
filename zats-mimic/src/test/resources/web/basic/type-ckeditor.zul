@@ -1,18 +1,10 @@
 <zk>
 	<vbox>
-		<hbox>
-			<label>content:</label>
-			<label id="content" />
-		</hbox>
-		<ckeditor id="ck" onChange="show();" onChanging="dummy();">
+		<label id="eventName" />
+		<label id="change" />
+		<label id="changing" />
+		<ckeditor id="ck" onChange="change.value = ck.value;eventName.value = event.name;" onChanging="changing.value = event.value;eventName.value = event.name">
 			<attribute name="value"><![CDATA[<b>Hello</b>]]></attribute>
 		</ckeditor>
 	</vbox>
-	<zscript><![CDATA[
-	void show() {
-		content.setValue(ck.getValue());
-	}
-	void dummy() {
-	}
-]]></zscript>
 </zk>

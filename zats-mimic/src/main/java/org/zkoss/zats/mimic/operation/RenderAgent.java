@@ -13,10 +13,13 @@ package org.zkoss.zats.mimic.operation;
 
 /**
  * <p>
- * To render sub-items of a component that is not rendered yet. The sub-item is the component that is rendered by a component renderer. </p>
+ * To render a child components of a data component that is not rendered yet. 
+ * Listbox and Grid supports this operation.</p>
  * <p>
- * You have to render child components of component that supports model first, for example the listitem of listbox, 
- * to prevent that sub-items are not rendered yet. You will get an invalid child component if it's not rendered.</p>
+ * Because of ZK will not render all sub-items at first,  it just pre-loads first few items. 
+ * Until a user scrolls the scroll bar down, it loads and renders subsequent items.
+ * You will retrieve an invalid child component before it's rendered. Hence if you want to manipulate a not-rendered child component, 
+ * you have to render it first.</p>
  * 
  * @author dennis
  *
@@ -24,9 +27,9 @@ package org.zkoss.zats.mimic.operation;
 public interface RenderAgent extends OperationAgent{
 
 	/**
-	 * render the sub-item from index "start" to "end". both "start" and "end" are included.
+	 * Render the sub-item from index "start" to "end".
 	 * @param start the start index(zero-base, included) of sub-item to render, -1 means from 0 
-	 * @param end the end index(zero-base, included) of sub-item to render, -1 means to end of the sub-items
+	 * @param end the end index(zero-base, exclusive) of sub-item to render, -1 means to end of the sub-items
 	 */
 	public void render(int start, int end);
 	

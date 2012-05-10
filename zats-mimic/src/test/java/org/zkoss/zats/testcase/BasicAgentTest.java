@@ -17,11 +17,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -32,22 +35,38 @@ import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Zats;
+import org.zkoss.zats.mimic.impl.Util;
+import org.zkoss.zats.mimic.impl.operation.SwitchedSortAgentImpl;
+import org.zkoss.zats.mimic.operation.BookmarkAgent;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.CloseAgent;
+import org.zkoss.zats.mimic.operation.DragAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
+import org.zkoss.zats.mimic.operation.GroupAgent;
+import org.zkoss.zats.mimic.operation.HoverAgent;
+import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
+import org.zkoss.zats.mimic.operation.MoveAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
+import org.zkoss.zats.mimic.operation.PagingAgent;
 import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
-import org.zkoss.zats.mimic.operation.TypeAgent;
+import org.zkoss.zats.mimic.operation.SizeAgent;
+import org.zkoss.zats.mimic.operation.SortAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listheader;
+import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Paging;
 import org.zkoss.zul.Tree;
+import org.zkoss.zul.Treecol;
 import org.zkoss.zul.Treeitem;
 
 /**
@@ -55,6 +74,16 @@ import org.zkoss.zul.Treeitem;
  *
  */
 public class BasicAgentTest {
+
+	private static Logger logger = Logger.getLogger(BasicAgentTest.class.getName());
+	
+	private static final String[] componentNames = { "a", "applet", "button", "captcha", "fileupload", "fisheye", "fisheyebar", "html",
+			"include", "image", "imagemap", "label", "menu", "menubar", "menuitem", "menupopup", "menuseparator",
+			"popup", "progressmeter", "separator", "space", "toolbar", "toolbarbutton", "bandbox", "colorbox",
+			"combobox", "comboitem", "datebox", "decimalbox", "doublebox", "doublespinner", "intbox", "longbox",
+			"spinner", "textbox", "timebox", "checkbox", "radio", "radiogroup", "slider", "caption", "div",
+			"groupbox", "panel", "span", "tabbox", "tab", "window", "grid", "detail", "group", "listbox",
+			"listitem", "listgroup", "tree", "treeitem" };
 	@BeforeClass
 	public static void init()
 	{
@@ -119,11 +148,13 @@ public class BasicAgentTest {
 	}
 	
 	@Test
-	public void testTypeAgent1(){
+	public void testInputAgent1(){
 		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/type1.zul");
 		
 		ComponentAgent l = desktopAgent.query("#l1");
 		ComponentAgent inp = desktopAgent.query("#inp1");
+		
+		final String TEXT_4_SELECTION="ABCDE";
 		//bandbox
 		Assert.assertEquals("",l.as(Label.class).getValue());
 		
@@ -133,8 +164,11 @@ public class BasicAgentTest {
 		inp.type("");
 		Assert.assertEquals("A",l.as(Label.class).getValue());
 		
-		inp.type("B");
-		Assert.assertEquals("B",l.as(Label.class).getValue());
+		inp.type(TEXT_4_SELECTION);
+		Assert.assertEquals(TEXT_4_SELECTION,l.as(Label.class).getValue());
+		
+		inp.as(InputAgent.class).select(1, 2);
+		Assert.assertEquals(TEXT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		//combobox
 		l = desktopAgent.query("#l2");
@@ -144,9 +178,11 @@ public class BasicAgentTest {
 		Assert.assertEquals("C",l.as(Label.class).getValue());
 		inp.type("");
 		Assert.assertEquals("C",l.as(Label.class).getValue());
-		inp.type("D");
-		Assert.assertEquals("D",l.as(Label.class).getValue());
+		inp.type(TEXT_4_SELECTION);
+		Assert.assertEquals(TEXT_4_SELECTION,l.as(Label.class).getValue());
 		
+		inp.as(InputAgent.class).select(1, 2);
+		Assert.assertEquals(TEXT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		//textbox
 		l = desktopAgent.query("#l10");
@@ -156,8 +192,13 @@ public class BasicAgentTest {
 		Assert.assertEquals("E",l.as(Label.class).getValue());
 		inp.type("");
 		Assert.assertEquals("E",l.as(Label.class).getValue());
-		inp.type("F");
-		Assert.assertEquals("F",l.as(Label.class).getValue());
+		inp.type(TEXT_4_SELECTION);
+		Assert.assertEquals(TEXT_4_SELECTION,l.as(Label.class).getValue());
+		
+		inp.as(InputAgent.class).select(1, 2);
+		Assert.assertEquals(TEXT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
+		
+		final String DIGIT_4_SELECTION="12345";
 		
 		//decimalbox
 		l = desktopAgent.query("#l4");
@@ -171,6 +212,10 @@ public class BasicAgentTest {
 		inp.type("2.33");
 		Assert.assertEquals("2.33",l.as(Label.class).getValue());
 		
+		inp.type(DIGIT_4_SELECTION);
+		inp.as(InputAgent.class).select(1, 2);
+		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
+		
 		//doublebox
 		l = desktopAgent.query("#l5");
 		inp = desktopAgent.query("#inp5");
@@ -183,6 +228,10 @@ public class BasicAgentTest {
 		inp.type("4.33");
 		Assert.assertEquals("4.33",l.as(Label.class).getValue());
 		
+		inp.type(DIGIT_4_SELECTION);
+		inp.as(InputAgent.class).select(1, 2);
+		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
+		
 		//doublespinner
 		l = desktopAgent.query("#l6");
 		inp = desktopAgent.query("#inp6");
@@ -190,12 +239,14 @@ public class BasicAgentTest {
 		
 		inp.type("5");
 		Assert.assertEquals("5.0",l.as(Label.class).getValue());
-
 		inp.type("-5");
 		Assert.assertEquals("5.0",l.as(Label.class).getValue());
-
 		inp.type("6.33");
 		Assert.assertEquals("6.33",l.as(Label.class).getValue());
+		
+		inp.type(DIGIT_4_SELECTION);
+		inp.as(InputAgent.class).select(1, 2);
+		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		//intbox
 		l = desktopAgent.query("#l7");
@@ -208,7 +259,9 @@ public class BasicAgentTest {
 		inp.type("8");
 		Assert.assertEquals("8",l.as(Label.class).getValue());
 		
-		
+		inp.type(DIGIT_4_SELECTION);
+		inp.as(InputAgent.class).select(1, 2);
+		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		
 		//longbox
@@ -223,6 +276,9 @@ public class BasicAgentTest {
 		inp.type("10");
 		Assert.assertEquals("10",l.as(Label.class).getValue());
 		
+		inp.type(DIGIT_4_SELECTION);
+		inp.as(InputAgent.class).select(1, 2);
+		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
 		
 		
 		//spinner
@@ -236,6 +292,10 @@ public class BasicAgentTest {
 		inp.type("12");
 		Assert.assertEquals("12",l.as(Label.class).getValue());
 		
+		inp.type(DIGIT_4_SELECTION);
+		inp.as(InputAgent.class).select(1, 2);
+		Assert.assertEquals(DIGIT_4_SELECTION.substring(1, 2),l.as(Label.class).getValue());
+		
 		//datebox
 		l = desktopAgent.query("#l3");
 		inp = desktopAgent.query("#inp3");
@@ -247,6 +307,10 @@ public class BasicAgentTest {
 		inp.type("20120320");
 		Assert.assertEquals("20120320",l.as(Label.class).getValue());
 		
+		inp.as(InputAgent.class).select(1, 2);
+		Assert.assertEquals("20120320".substring(1, 2),l.as(Label.class).getValue());
+		
+		
 		//timebox
 		l = desktopAgent.query("#l11");
 		inp = desktopAgent.query("#inp11");
@@ -257,10 +321,32 @@ public class BasicAgentTest {
 		Assert.assertEquals("13:00",l.as(Label.class).getValue());
 		inp.type("14:02");
 		Assert.assertEquals("14:02",l.as(Label.class).getValue());
+		
+		inp.as(InputAgent.class).select(1, 2);
+		Assert.assertEquals("14:02".substring(1, 2),l.as(Label.class).getValue());
+		
+		//colorbox
+		l = desktopAgent.query("#l12");
+		inp = desktopAgent.query("colorbox");
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		inp.type("#0000ff");
+		Assert.assertEquals("#0000ff",l.as(Label.class).getValue());
+		try{
+			inp.type("invalid value");
+			fail("Cannot accept invalid input");
+		}catch(AgentException ae){
+			Assert.assertEquals("#0000ff",l.as(Label.class).getValue());
+		}
+		try{
+			inp.as(InputAgent.class).typing("invalid value");
+			fail("Colorbox does not support typing");
+		}catch(AgentException ae){
+			Assert.assertEquals("#0000ff",l.as(Label.class).getValue());
+		}
 	}
 	
 	@Test
-	public void testTypeAgent2(){
+	public void testInputAgent2(){
 		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/type2.zul");
 		
 		ComponentAgent l = desktopAgent.query("#l1");
@@ -398,6 +484,234 @@ public class BasicAgentTest {
 		Assert.assertEquals("13:00",l.as(Label.class).getValue());
 		inp.type("02:14");
 		Assert.assertEquals("14:02",l.as(Label.class).getValue());
+	}
+	
+	
+	@Test
+	public void testInputAgent3(){
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/type3.zul");
+		
+		ComponentAgent l = desktopAgent.query("#l1");
+		ComponentAgent inp = desktopAgent.query("#inp1");
+		
+		//bandbox
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		
+		inp.type("A");
+		Assert.assertEquals("A",l.as(Label.class).getValue());
+		
+		inp.type(null);
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		
+		inp.type("A1");
+		Assert.assertEquals("A1",l.as(Label.class).getValue());
+		
+		inp.type("");
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		
+		inp.as(InputAgent.class).input("A2");
+		Assert.assertEquals("A2",l.as(Label.class).getValue());
+		inp.as(InputAgent.class).input(null);
+		Assert.assertEquals("",l.as(Label.class).getValue());
+
+		
+		//combobox
+		l = desktopAgent.query("#l2");
+		inp = desktopAgent.query("#inp2");
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		inp.type("C");
+		Assert.assertEquals("C",l.as(Label.class).getValue());
+		inp.type(null);
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		inp.type("C1");
+		Assert.assertEquals("C1",l.as(Label.class).getValue());
+		inp.type("");
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		
+		inp.as(InputAgent.class).input("C2");
+		Assert.assertEquals("C2",l.as(Label.class).getValue());
+		inp.as(InputAgent.class).input(null);
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		
+
+		
+		//textbox
+		l = desktopAgent.query("#l10");
+		inp = desktopAgent.query("#inp10");
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		inp.type("E");
+		Assert.assertEquals("E",l.as(Label.class).getValue());
+		inp.type(null);
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		inp.type("E1");
+		Assert.assertEquals("E1",l.as(Label.class).getValue());
+		inp.type("");
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		
+		inp.as(InputAgent.class).input("E2");
+		Assert.assertEquals("E2",l.as(Label.class).getValue());
+		inp.as(InputAgent.class).input(null);
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		
+		//decimalbox
+		l = desktopAgent.query("#l4");
+		inp = desktopAgent.query("#inp4");
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		inp.type("1");
+		Assert.assertEquals("1.0",l.as(Label.class).getValue());
+		inp.type(null);
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		inp.type("-1");
+		Assert.assertEquals("-1.0",l.as(Label.class).getValue());
+		inp.type("");
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		
+		inp.as(InputAgent.class).input(11);
+		Assert.assertEquals("11.0",l.as(Label.class).getValue());
+		inp.as(InputAgent.class).input(null);
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		
+		//doublebox
+		l = desktopAgent.query("#l5");
+		inp = desktopAgent.query("#inp5");
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		
+		inp.type("3");
+		Assert.assertEquals("3.0",l.as(Label.class).getValue());
+		inp.type(null);
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		inp.type("-3");
+		Assert.assertEquals("-3.0",l.as(Label.class).getValue());
+		inp.type("");
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		
+		inp.as(InputAgent.class).input(33.0);
+		Assert.assertEquals("33.0",l.as(Label.class).getValue());
+		inp.as(InputAgent.class).input(null);
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		
+		//doublespinner
+		l = desktopAgent.query("#l6");
+		inp = desktopAgent.query("#inp6");
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		
+		inp.type("5");
+		Assert.assertEquals("5.0",l.as(Label.class).getValue());
+		inp.type(null);
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		inp.type("-5");
+		Assert.assertEquals("-5.0",l.as(Label.class).getValue());
+		inp.type("");
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		
+		inp.as(InputAgent.class).input(55D);
+		Assert.assertEquals("55.0",l.as(Label.class).getValue());
+		inp.as(InputAgent.class).input(null);
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		
+		//intbox
+		l = desktopAgent.query("#l7");
+		inp = desktopAgent.query("#inp7");
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		inp.type("7");
+		Assert.assertEquals("7",l.as(Label.class).getValue());
+		inp.type(null);
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		inp.type("-7");
+		Assert.assertEquals("-7",l.as(Label.class).getValue());
+		inp.type("");
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		
+		inp.as(InputAgent.class).input(77);
+		Assert.assertEquals("77",l.as(Label.class).getValue());
+		inp.as(InputAgent.class).input(null);
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		
+		//longbox
+		l = desktopAgent.query("#l8");
+		inp = desktopAgent.query("#inp8");
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		
+		inp.type("9");
+		Assert.assertEquals("9",l.as(Label.class).getValue());
+		inp.type(null);
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		inp.type("-9");
+		Assert.assertEquals("-9",l.as(Label.class).getValue());
+		inp.type("");
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		
+		inp.as(InputAgent.class).input(99L);
+		Assert.assertEquals("99",l.as(Label.class).getValue());
+		inp.as(InputAgent.class).input(null);
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		
+		//spinner
+		l = desktopAgent.query("#l9");
+		inp = desktopAgent.query("#inp9");
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		inp.type("11");
+		Assert.assertEquals("11",l.as(Label.class).getValue());
+		
+		//zk 6 has bug, I comment it out untile bug fixed
+		//http://tracker.zkoss.org/browse/ZK-1117
+		if(Util.isZKVersion(5)){
+			inp.type(null);
+			Assert.assertEquals("null",l.as(Label.class).getValue());
+		}
+		inp.type("-11");
+		Assert.assertEquals("-11",l.as(Label.class).getValue());
+		if(Util.isZKVersion(5)){
+			inp.type("");
+			Assert.assertEquals("null",l.as(Label.class).getValue());
+		}
+		
+		inp.as(InputAgent.class).input(111);
+		Assert.assertEquals("111",l.as(Label.class).getValue());
+		if(Util.isZKVersion(5)){
+			inp.as(InputAgent.class).input(null);
+			Assert.assertEquals("null",l.as(Label.class).getValue());
+		}
+		
+		//datebox
+		l = desktopAgent.query("#l3");
+		inp = desktopAgent.query("#inp3");
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		inp.type("20120223");
+		Assert.assertEquals("20120223",l.as(Label.class).getValue());
+		inp.type(null);
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		inp.type("20110101");
+		Assert.assertEquals("20110101",l.as(Label.class).getValue());
+		inp.type("");
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		
+		Date d = new Date(2012-1900,0,1);
+		
+		inp.as(InputAgent.class).input(d);
+		Assert.assertEquals("20120101",l.as(Label.class).getValue());
+		inp.as(InputAgent.class).input(null);
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		
+		//timebox
+		l = desktopAgent.query("#l11");
+		inp = desktopAgent.query("#inp11");
+		Assert.assertEquals("",l.as(Label.class).getValue());
+		inp.type("13:00");
+		Assert.assertEquals("13:00",l.as(Label.class).getValue());
+		inp.type(null);
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		inp.type("10:00");
+		Assert.assertEquals("10:00",l.as(Label.class).getValue());
+		inp.type("");
+		Assert.assertEquals("null",l.as(Label.class).getValue());
+		
+		d = new Date(2012-1900,0,1,3,44);
+		
+		inp.as(InputAgent.class).input(d);
+		Assert.assertEquals("03:44",l.as(Label.class).getValue());
+		inp.as(InputAgent.class).input(null);
+		Assert.assertEquals("null",l.as(Label.class).getValue());
 	}
 	
 	@Test
@@ -665,105 +979,180 @@ public class BasicAgentTest {
 		assertEquals("", open.getValue());
 		assertEquals("", close.getValue());
 
-		String values[] = { "", "" };
+		String status[] = { "", "" };
 		// bandbox
 		String id = "#aBandbox";
-		values[0] = id.substring(1);
+		status[0] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(true);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
-		values[1] = id.substring(1);
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		status[1] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(false);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
 
 		// combobox
 		id = "#aCombobox";
-		values[0] = id.substring(1);
+		status[0] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(true);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
-		values[1] = id.substring(1);
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		status[1] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(false);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
 
 		// groupbox
 		id = "#aGroupbox";
-		values[0] = id.substring(1);
+		status[0] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(true);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
-		values[1] = id.substring(1);
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		status[1] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(false);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
 
 		// detail
 		id = "#aDetail";
-		values[0] = id.substring(1);
+		status[0] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(true);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
-		values[1] = id.substring(1);
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		status[1] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(false);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
 
 		// group
 		id = "#aGroup";
-		values[0] = id.substring(1);
+		status[0] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(true);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
-		values[1] = id.substring(1);
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		status[1] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(false);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
 
 		// listgroup
 		id = "#aListgroup";
-		values[0] = id.substring(1);
+		status[0] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(true);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
-		values[1] = id.substring(1);
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		status[1] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(false);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
 
 		// treeitem
 		id = "#treeitem1";
-		values[0] = id.substring(1);
+		status[0] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(true);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
-		values[1] = id.substring(1);
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		status[1] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(false);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
 		id = "#treeitem1-2";
-		values[0] = id.substring(1);
+		status[0] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(true);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
-		values[1] = id.substring(1);
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		status[1] = id.substring(1);
 		desktop.query(id).as(OpenAgent.class).open(false);
-		assertEquals(values[0], open.getValue());
-		assertEquals(values[1], close.getValue());
+		assertEquals(status[0], open.getValue());
+		assertEquals(status[1], close.getValue());
+		
+		//panel
+		id="panel";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
+		
+		//window
+		id="window";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
+		
+		//Center    
+		id="center";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
+		
+		//East    
+		id="east";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
+		
+		//North
+		id="north";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
+		
+		//South
+		id="south";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
+		
+		//West
+		id="west";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
+		
+		//splitter
+		id="splitter";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
+		
+		//popup
+		id="popup";
+		desktop.query(id).as(OpenAgent.class).open(true);
+		assertEquals(id, open.getValue());
+		desktop.query(id).as(OpenAgent.class).open(false);
+		assertEquals(id, close.getValue());
 	}
 	
 	@Test
-	public void testCKEditorTypeAgent() {
+	public void testCKEditorInputAgent() {
 		DesktopAgent desktop = Zats.newClient().connect("/~./basic/type-ckeditor.zul");
 
-		Label content = desktop.query("#content").as(Label.class);
-		assertEquals("", content.getValue());
+		Label eventName = desktop.query("#eventName").as(Label.class);
+		Label change = desktop.query("#change").as(Label.class);
+		Label changing = desktop.query("#changing").as(Label.class);
+		assertEquals("", eventName.getValue());
+		assertEquals("", change.getValue());
+		assertEquals("", changing.getValue());
 
-		desktop.query("#ck").as(TypeAgent.class).type("Hello world");
-		assertEquals("Hello world", content.getValue());
+		desktop.query("#ck").as(InputAgent.class).typing("Hello");
+		assertEquals("onChanging", eventName.getValue());
+		assertEquals("", change.getValue());
+		assertEquals("Hello", changing.getValue());
+
+		desktop.query("#ck").as(InputAgent.class).type("Hello world");
+		assertEquals("onChange", eventName.getValue());
+		assertEquals("Hello world", change.getValue());
+		assertEquals("Hello", changing.getValue());
 	}
 	
+		
 	@Test
 	public void testClickAll() {
 		DesktopAgent desktop = Zats.newClient().connect("/~./basic/click-all.zul");
@@ -776,14 +1165,8 @@ public class BasicAgentTest {
 		ComponentAgent comps = desktop.query("#comps");
 		assertNotNull(comps);
 		
-		String[] names = { "a", "applet", "button", "captcha", "fileupload", "fisheye", "fisheyebar", "html",
-				"include", "image", "imagemap", "label", "menu", "menubar", "menuitem", "menupopup", "menuseparator",
-				"popup", "progressmeter", "separator", "space", "toolbar", "toolbarbutton", "bandbox", "colorbox",
-				"combobox", "comboitem", "datebox", "decimalbox", "doublebox", "doublespinner", "intbox", "longbox",
-				"spinner", "textbox", "timebox", "checkbox", "radio", "radiogroup", "slider", "caption", "div",
-				"groupbox", "panel", "span", "tabbox", "tab", "window", "grid", "detail", "group", "listbox",
-				"listitem", "listgroup", "tree", "treeitem" };
-		for (String name : names) {
+		
+		for (String name : componentNames) {
 			ClickAgent agent = comps.query(name).as(ClickAgent.class);
 			agent.click();
 			assertEquals(name, target.getValue());
@@ -794,6 +1177,30 @@ public class BasicAgentTest {
 			agent.rightClick();
 			assertEquals(name, target.getValue());
 			assertEquals(Events.ON_RIGHT_CLICK, event.getValue());
+		}
+	}
+	
+	@Test
+	public void testHover() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/click-all.zul");
+
+		Label target = desktop.query("#target").as(Label.class);
+		Label event = desktop.query("#eventName").as(Label.class);
+		assertEquals("", target.getValue());
+		assertEquals("", event.getValue());
+		
+		ComponentAgent comps = desktop.query("#comps");
+		assertNotNull(comps);
+		
+		
+		for (String name : componentNames) {
+			HoverAgent agent = comps.query(name).as(HoverAgent.class);
+			agent.moveOver();
+			assertEquals(name, target.getValue());
+			assertEquals(Events.ON_MOUSE_OVER, event.getValue());
+			agent.moveOut();
+			assertEquals(name, target.getValue());
+			assertEquals(Events.ON_MOUSE_OUT, event.getValue());
 		}
 	}
 	
@@ -1038,4 +1445,608 @@ public class BasicAgentTest {
 			}
 		}
 	}
+	
+	@Test
+	public void testTypingAgent() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/typing.zul");
+
+		// labels for validation
+		Label event = desktop.query("#eventName").as(Label.class);
+		Label target = desktop.query("#target").as(Label.class);
+		Label value = desktop.query("#value").as(Label.class);
+		assertEquals("", event.getValue());
+		assertEquals("", target.getValue());
+		assertEquals("", value.getValue());
+
+		// components handle event
+		List<ComponentAgent> comps = desktop.query("#inputs").getChildren();
+		assertEquals(11, comps.size());
+
+		for (int i = 0; i < comps.size(); ++i) {
+			// typing
+			String text = "type " + i;
+			ComponentAgent comp = comps.get(i);
+			comp.as(InputAgent.class).typing(text);
+			// validate
+			assertEquals("onChanging", event.getValue());
+			assertEquals(((Component) comp.getDelegatee()).getDefinition().getName(), target.getValue());
+			assertEquals(text, value.getValue());
+		}
+	}
+	
+	@Test
+	public void testMaxMinAgent() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/max-min.zul");
+		Label eventName = desktop.query("#eventName").as(Label.class);
+		Label target = desktop.query("#target").as(Label.class);
+		Label flag = desktop.query("#flag").as(Label.class);
+		assertEquals("", eventName.getValue());
+		assertEquals("", target.getValue());
+		assertEquals("", flag.getValue());
+
+		String targetName = "window";
+		SizeAgent agent = desktop.query(targetName).as(SizeAgent.class);
+
+		agent.maximize(true);
+		assertEquals("onMaximize", eventName.getValue());
+		assertEquals(targetName, target.getValue());
+		assertEquals("true", flag.getValue());
+
+		agent.maximize(false);
+		assertEquals("onMaximize", eventName.getValue());
+		assertEquals(targetName, target.getValue());
+		assertEquals("false", flag.getValue());
+
+		agent.minimize(true);
+		assertEquals("onMinimize", eventName.getValue());
+		assertEquals(targetName, target.getValue());
+		assertEquals("true", flag.getValue());
+
+		agent.minimize(false);
+		assertEquals("onMinimize", eventName.getValue());
+		assertEquals(targetName, target.getValue());
+		assertEquals("false", flag.getValue());
+
+		targetName = "panel";
+		agent = desktop.query(targetName).as(SizeAgent.class);
+
+		agent.maximize(true);
+		assertEquals("onMaximize", eventName.getValue());
+		assertEquals(targetName, target.getValue());
+		assertEquals("true", flag.getValue());
+
+		agent.maximize(false);
+		assertEquals("onMaximize", eventName.getValue());
+		assertEquals(targetName, target.getValue());
+		assertEquals("false", flag.getValue());
+
+		agent.minimize(true);
+		assertEquals("onMinimize", eventName.getValue());
+		assertEquals(targetName, target.getValue());
+		assertEquals("true", flag.getValue());
+
+		agent.minimize(false);
+		assertEquals("onMinimize", eventName.getValue());
+		assertEquals(targetName, target.getValue());
+		assertEquals("false", flag.getValue());
+
+		// test disabled
+		for (ComponentAgent ca : desktop.queryAll("#switches button"))
+			ca.as(ClickAgent.class).click();
+
+		try {
+			desktop.query("window").as(SizeAgent.class).maximize(true);
+			fail();
+		} catch (AgentException e) {
+		}
+		try {
+			desktop.query("window").as(SizeAgent.class).minimize(true);
+			fail();
+		} catch (AgentException e) {
+		}
+		try {
+			desktop.query("panel").as(SizeAgent.class).maximize(true);
+			fail();
+		} catch (AgentException e) {
+		}
+		try {
+			desktop.query("panel").as(SizeAgent.class).minimize(true);
+			fail();
+		} catch (AgentException e) {
+		}
+	}
+	
+	@Test
+	public void testDragDrop(){
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/drag.zul");
+		ComponentAgent leftBox = desktop.query("#left");
+		Assert.assertEquals(6, leftBox.queryAll("listitem").size());
+		
+		ComponentAgent rightBox = desktop.query("#right");
+		Assert.assertEquals(2, rightBox.queryAll("listitem").size());
+		Assert.assertNull(rightBox.query("listcell[label='ZK Forge']"));
+		
+		//move 1 item from left to right
+		ComponentAgent draggedItem = leftBox.query("listcell[label='ZK Forge']").getParent();
+		draggedItem.as(DragAgent.class).dropOn(rightBox);
+		Assert.assertEquals(5, leftBox.queryAll("listitem").size());
+		Assert.assertEquals(3, rightBox.queryAll("listitem").size());
+		Assert.assertNotNull(rightBox.query("listcell[label='ZK Forge']"));
+		
+		//move lower item before upper item
+		ComponentAgent upperItem = rightBox.query("listcell[label='ZK Studio']").getParent();
+		ComponentAgent lowerItem = rightBox.query("listcell[label='ZK Forge']").getParent();
+		Assert.assertEquals(1, upperItem.as(Listitem.class).getIndex());
+		Assert.assertEquals(2, lowerItem.as(Listitem.class).getIndex());
+		lowerItem.as(DragAgent.class).dropOn(upperItem);
+		Assert.assertEquals(2, upperItem.as(Listitem.class).getIndex());
+		Assert.assertEquals(1, lowerItem.as(Listitem.class).getIndex());
+	}
+	
+	@Test
+	public void testSizeOperation() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/size.zul");
+		Label eventName = desktop.query("#eventName").as(Label.class);
+		Label target = desktop.query("#target").as(Label.class);
+		Label width = desktop.query("#width").as(Label.class);
+		Label height = desktop.query("#height").as(Label.class);
+		assertEquals("", eventName.getValue());
+		assertEquals("", target.getValue());
+		assertEquals("", width.getValue());
+		assertEquals("", height.getValue());
+
+		String targetName = "window";
+		SizeAgent agent = desktop.query(targetName).as(SizeAgent.class);
+
+		agent.resize(-1, -1); // do nothing
+		assertEquals("", eventName.getValue());
+		assertEquals("", target.getValue());
+		assertEquals("", width.getValue());
+		assertEquals("", height.getValue());
+		
+		int[][] args = { 
+			{ 50, -1 }, 
+			{ -1, 50 }, 
+			{ 100, 100 }, 
+			{ -1, -1},
+		};
+		String[][] except = {
+			{ "50px", "100px" }, // default min-height 
+			{ "50px", "50px" }, 
+			{ "100px", "100px" }, 
+			{ "100px", "100px" }, // do nothing
+		};
+
+		for (int i = 0; i < args.length; ++i) {
+			agent.resize(args[i][0], args[i][1]);
+			assertEquals("onSize", eventName.getValue());
+			assertEquals(targetName, target.getValue());
+			assertEquals(except[i][0], width.getValue());
+			assertEquals(except[i][1], height.getValue());
+		}
+		
+		targetName = "panel";
+		agent = desktop.query(targetName).as(SizeAgent.class);
+
+		args = new int[][]{ 
+			{ -1, 50 }, 
+			{ 50, -1 }, 
+			{ 100, 100 }, 
+			{ -1, -1},
+		};
+		except = new String[][]{
+			{ "200px", "50px" }, // default min-width 
+			{ "50px", "50px" }, 
+			{ "100px", "100px" }, 
+			{ "100px", "100px" }, // do nothing
+		};
+
+		for (int i = 0; i < args.length; ++i) {
+			agent.resize(args[i][0], args[i][1]);
+			assertEquals("onSize", eventName.getValue());
+			assertEquals(targetName, target.getValue());
+			assertEquals(except[i][0], width.getValue());
+			assertEquals(except[i][1], height.getValue());
+		}
+	}
+
+	@Test
+	public void testPaging(){
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/paging.zul");
+		
+		//listbox's paging
+		ComponentAgent paging = desktop.query("listbox > paging");
+		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
+		
+		paging.as(PagingAgent.class).moveTo(1);
+		Assert.assertEquals("1", desktop.query("#listboxPageIndex").as(Label.class).getValue());
+		
+		//grid's paging
+		paging = desktop.query("#grid > paging");
+		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
+		
+		paging.as(PagingAgent.class).moveTo(1);
+		Assert.assertEquals("1", desktop.query("#gridPageIndex").as(Label.class).getValue());
+		
+		//tree's paging
+		paging = desktop.query("tree > paging");
+		Assert.assertEquals(0, paging.as(Paging.class).getActivePage());
+		
+		paging.as(PagingAgent.class).moveTo(1);
+		Assert.assertEquals("1", desktop.query("#treePageIndex").as(Label.class).getValue());
+		
+		//paging itself
+		paging = desktop.query("#pg");
+		paging.as(PagingAgent.class).moveTo(1);
+		Assert.assertEquals("1", desktop.query("#leftGridPageIndex").as(Label.class).getValue());
+		Assert.assertEquals("1", desktop.query("#rightGridPageIndex").as(Label.class).getValue());
+		
+		//move out of page bound
+		try{
+			paging.as(PagingAgent.class).moveTo(-1);
+			fail();
+		}catch(AgentException e){
+			logger.fine("expected exception: "+e.getMessage());
+		}
+		try{
+			paging.as(PagingAgent.class).moveTo(paging.as(Paging.class).getPageCount());
+			fail();
+		}catch(AgentException e){
+			logger.fine("expected exception: "+e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testBookmarkAgent() {
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/bookmark.zul");
+		assertEquals("Hello World!", desktopAgent.query("#msg").as(Label.class).getValue());
+		
+		desktopAgent.as(BookmarkAgent.class).bookmark("ABCD");
+		assertEquals("Welcome ABCD", desktopAgent.query("#msg").as(Label.class).getValue());
+		
+		desktopAgent.query("#btn").as(ClickAgent.class).click();
+		assertEquals("XYZ", desktopAgent.as(Desktop.class).getBookmark());
+	}
+	
+	@Test
+	public void testColumnSizeOperation() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/size-column.zul");
+		Label eventName = desktop.query("#eventName").as(Label.class);
+		Label target = desktop.query("#target").as(Label.class);
+		Label index = desktop.query("#index").as(Label.class);
+		Label width = desktop.query("#width").as(Label.class);
+		Label previousWidth = desktop.query("#previousWidth").as(Label.class);
+		assertEquals("", eventName.getValue());
+		assertEquals("", target.getValue());
+		assertEquals("", index.getValue());
+		assertEquals("", width.getValue());
+		assertEquals("", previousWidth.getValue());
+		
+		String[][] args = new String[][] {
+				{"#gc0" , "-1" , "999"},
+				{"#gc0" , "100" , "-1"},
+				{"#gc0" , "110" , "-1"},
+				{"#gc2" , "120" , "-1"},
+				{"#gc1" , "130" , "-1"},
+				{"#gc1" , "130" , "-1"},
+		};
+		String[][] except = new String[][] {
+				{ "", "", "", "", "" },
+				{ "onColSize", "columns", "0", "100px", "null" },
+				{ "onColSize", "columns", "0", "110px", "100px" },
+				{ "onColSize", "columns", "2", "120px", "200px" },
+				{ "onColSize", "columns", "1", "130px", "200px" },
+				{ "onColSize", "columns", "1", "130px", "200px" },
+		};
+		for (int i = 0; i < args.length; ++i) {
+			String id = args[i][0];
+			int w = Integer.parseInt(args[i][1]), h = Integer.parseInt(args[i][2]);
+			desktop.query(id).as(SizeAgent.class).resize(w, h);
+			assertEquals(except[i][0], eventName.getValue());
+			assertEquals(except[i][1], target.getValue());
+			assertEquals(except[i][2], index.getValue());
+			assertEquals(except[i][3], width.getValue());
+			assertEquals(except[i][4], previousWidth.getValue());
+		}
+		
+		args = new String[][] {
+				{"#lh0" , "-1" , "999"},
+				{"#lh0" , "100" , "-1"},
+				{"#lh0" , "110" , "-1"},
+				{"#lh2" , "120" , "-1"},
+				{"#lh1" , "130" , "-1"},
+				{"#lh1" , "130" , "-1"},
+		};
+		except = new String[][] {
+				{ "onColSize", "columns", "1", "130px", "200px" },
+				{ "onColSize", "listhead", "0", "100px", "null" },
+				{ "onColSize", "listhead", "0", "110px", "100px" },
+				{ "onColSize", "listhead", "2", "120px", "200px" },
+				{ "onColSize", "listhead", "1", "130px", "200px" },
+				{ "onColSize", "listhead", "1", "130px", "200px" },
+		};
+		for (int i = 0; i < args.length; ++i) {
+			String id = args[i][0];
+			int w = Integer.parseInt(args[i][1]), h = Integer.parseInt(args[i][2]);
+			desktop.query(id).as(SizeAgent.class).resize(w, h);
+			assertEquals(except[i][0], eventName.getValue());
+			assertEquals(except[i][1], target.getValue());
+			assertEquals(except[i][2], index.getValue());
+			assertEquals(except[i][3], width.getValue());
+			assertEquals(except[i][4], previousWidth.getValue());
+		}
+		
+		args = new String[][] {
+				{"#tc0" , "-1" , "999"},
+				{"#tc0" , "100" , "-1"},
+				{"#tc0" , "110" , "-1"},
+				{"#tc2" , "120" , "-1"},
+				{"#tc1" , "130" , "-1"},
+				{"#tc1" , "130" , "-1"},
+		};
+		except = new String[][] {
+				{ "onColSize", "listhead", "1", "130px", "200px" },
+				{ "onColSize", "treecols", "0", "100px", "null" },
+				{ "onColSize", "treecols", "0", "110px", "100px" },
+				{ "onColSize", "treecols", "2", "120px", "200px" },
+				{ "onColSize", "treecols", "1", "130px", "200px" },
+				{ "onColSize", "treecols", "1", "130px", "200px" },
+		};
+		for (int i = 0; i < args.length; ++i) {
+			String id = args[i][0];
+			int w = Integer.parseInt(args[i][1]), h = Integer.parseInt(args[i][2]);
+			desktop.query(id).as(SizeAgent.class).resize(w, h);
+			assertEquals(except[i][0], eventName.getValue());
+			assertEquals(except[i][1], target.getValue());
+			assertEquals(except[i][2], index.getValue());
+			assertEquals(except[i][3], width.getValue());
+			assertEquals(except[i][4], previousWidth.getValue());
+		}
+	}
+	
+	//column's label in group.zul
+	final private String COLUMN_AUTHOR = "Author";
+	final private String COLUMN_TITLE = "Title";
+	
+	@Test
+	public void testGroup(){
+		
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/group-sort.zul");
+		ComponentAgent groupingColumn = desktop.query("column[label='"+COLUMN_AUTHOR+"']");
+		groupingColumn.as(GroupAgent.class).group();
+		
+		Label groupingLabel = desktop.query("#groupingColumn").as(Label.class);
+		Assert.assertEquals(COLUMN_AUTHOR, groupingLabel.getValue());
+		
+		groupingColumn = desktop.query("column[label='"+COLUMN_TITLE+"']");
+		groupingColumn.as(GroupAgent.class).group();
+		
+		Assert.assertEquals(COLUMN_TITLE, groupingLabel.getValue());
+	}	
+
+	
+	@Test
+	public void testScroll() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/scroll.zul");
+		Label msg1 = desktop.query("#msg1").as(Label.class);
+		Assert.assertEquals("", msg1.getValue());
+
+		// slider 1; 0 to 100
+		Integer[] args = new Integer[] { 0, 50, 100 };
+		String[] expected = new String[] {
+				"s1,onScroll,0",
+				"s1,onScroll,50", 
+				"s1,onScroll,100", 
+		};
+		InputAgent slider = desktop.query("#s1").as(InputAgent.class);
+		for (int i = 0; i < args.length; ++i) {
+			slider.input(args[i]);
+			assertEquals(expected[i], msg1.getValue());
+		}
+
+		// slider 2; 0 to 200
+		args = new Integer[] { 0, 199 , 200 };
+		expected = new String[] {
+				"s2,onScroll,0",
+				"s2,onScroll,199", 
+				"s2,onScroll,200", 
+		};
+		slider = desktop.query("#s2").as(InputAgent.class);
+		for (int i = 0; i < args.length; ++i) {
+			slider.input(args[i]);
+			assertEquals(expected[i], msg1.getValue());
+		}
+
+		// compatibility
+		slider.input(1);
+		assertEquals("s2,onScroll,1", msg1.getValue());
+		slider.input(2L);
+		assertEquals("s2,onScroll,2", msg1.getValue());
+		slider.input((short) 3);
+		assertEquals("s2,onScroll,3", msg1.getValue());
+		slider.input((byte) 4);
+		assertEquals("s2,onScroll,4", msg1.getValue());
+		slider.input(BigInteger.valueOf(5L));
+		assertEquals("s2,onScroll,5", msg1.getValue());
+		slider.input("6");
+		assertEquals("s2,onScroll,6", msg1.getValue());
+		slider.input("   7   ");
+		assertEquals("s2,onScroll,7", msg1.getValue());
+
+		// out of bounds
+		slider.input(200);
+		assertEquals("s2,onScroll,200", msg1.getValue());
+		try {
+			slider.input(-1);
+			fail();
+		} catch (AgentException e) {
+			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+		try {
+			slider.input(201);
+			fail();
+		} catch (AgentException e) {
+			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+
+		// wrong value, type or syntax
+		try {
+			slider.input(null);
+			fail();
+		} catch (AgentException e) {
+			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+		try {
+			slider.input("");
+			fail();
+		} catch (AgentException e) {
+			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+		try {
+			slider.input("   ");
+			fail();
+		} catch (AgentException e) {
+			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+		try {
+			slider.input("100px");
+			fail();
+		} catch (AgentException e) {
+			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+		try {
+			slider.input(100.0);
+			fail();
+		} catch (AgentException e) {
+			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+		try {
+			slider.input("100.0");
+			fail();
+		} catch (AgentException e) {
+			assertEquals("s2,onScroll,200", msg1.getValue());
+		}
+	}
+	
+	
+	@Test
+	public void testMoveAgent() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/move.zul");
+		Label target = desktop.query("#target").as(Label.class);
+		Label eventName = desktop.query("#eventName").as(Label.class);
+		Label left = desktop.query("#left").as(Label.class);
+		Label top = desktop.query("#top").as(Label.class);
+		Assert.assertEquals("", target.getValue());
+		Assert.assertEquals("", eventName.getValue());
+		Assert.assertEquals("", left.getValue());
+		Assert.assertEquals("", top.getValue());
+		
+		String name = "window";
+		int[][] args = new int[][]{
+				{-100, -100},	
+				{-100, 100},	
+				{100, -100},	
+				{100, 100},	
+		};
+		String[][] expected = new String[][]{
+				{name , "onMove" , "-100px" , "-100px"},	
+				{name , "onMove" , "-100px" , "100px"},	
+				{name , "onMove" , "100px" , "-100px"},	
+				{name , "onMove" , "100px" , "100px"},	
+		};
+		ComponentAgent comp = desktop.query(name);
+		MoveAgent moveAgent = comp.as(MoveAgent.class);
+		for (int i = 0; i < args.length; ++i) {
+			moveAgent.moveTo(args[i][0], args[i][1]);
+			Assert.assertEquals(expected[i][0], target.getValue());
+			Assert.assertEquals(expected[i][1], eventName.getValue());
+			Assert.assertEquals(expected[i][2], left.getValue());
+			Assert.assertEquals(expected[i][3], top.getValue());
+			Assert.assertEquals(left.getValue(), comp.as(HtmlBasedComponent.class).getLeft());
+			Assert.assertEquals(top.getValue(), comp.as(HtmlBasedComponent.class).getTop());
+		}
+		
+		name = "panel";
+		args = new int[][]{
+				{-100, -100},	
+				{-100, 100},	
+				{100, -100},	
+				{100, 100},	
+		};
+		expected = new String[][]{
+				{name , "onMove" , "-100px" , "-100px"},	
+				{name , "onMove" , "-100px" , "100px"},	
+				{name , "onMove" , "100px" , "-100px"},	
+				{name , "onMove" , "100px" , "100px"},	
+		};
+		comp = desktop.query(name);
+		moveAgent = comp.as(MoveAgent.class);
+		for (int i = 0; i < args.length; ++i) {
+			moveAgent.moveTo(args[i][0], args[i][1]);
+			Assert.assertEquals(expected[i][0], target.getValue());
+			Assert.assertEquals(expected[i][1], eventName.getValue());
+			Assert.assertEquals(expected[i][2], left.getValue());
+			Assert.assertEquals(expected[i][3], top.getValue());
+			Assert.assertEquals(left.getValue(), comp.as(HtmlBasedComponent.class).getLeft());
+			Assert.assertEquals(top.getValue(), comp.as(HtmlBasedComponent.class).getTop());
+		}
+	}
+
+		/*
+		 * Sort grid's column and verify its ascending order.
+		 */
+		@Test
+		public void testSort(){
+			DesktopAgent desktop = Zats.newClient().connect("/~./basic/group-sort.zul");
+
+			//column
+			ComponentAgent sortingColumn = desktop.query("column[label='"+COLUMN_AUTHOR+"']");
+			Label sortStatus = desktop.query("#sortStatus").as(Label.class);
+
+			sortingColumn.as(SortAgent.class).sort(true);
+			Assert.assertEquals(COLUMN_AUTHOR+",true", sortStatus.getValue());
+			sortingColumn.as(SortAgent.class).sort(false);
+			Assert.assertEquals(COLUMN_AUTHOR+",false", sortStatus.getValue());
+
+			sortingColumn = desktop.query("column[label='"+COLUMN_TITLE+"']");
+
+			sortingColumn.as(SortAgent.class).sort(true);
+			Assert.assertEquals(COLUMN_TITLE+",true", sortStatus.getValue());
+			sortingColumn.as(SortAgent.class).sort(false);
+			Assert.assertEquals(COLUMN_TITLE+",false", sortStatus.getValue());
+
+			//listheader
+			ComponentAgent sortingHeader =  desktop.query("listheader[label='Name']");
+			Assert.assertEquals(SwitchedSortAgentImpl.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			//can sort in specified order in spite of its original sorting order
+			sortingHeader.as(SortAgent.class).sort(true);
+			Assert.assertEquals("Name", sortStatus.getValue());
+			Assert.assertEquals(SwitchedSortAgentImpl.ASCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			sortingHeader.as(SortAgent.class).sort(false);
+			Assert.assertEquals(SwitchedSortAgentImpl.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			//repeat sorting in the same order works correctly 
+			sortingHeader.as(SortAgent.class).sort(false);
+			Assert.assertEquals(SwitchedSortAgentImpl.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+
+			sortingHeader =  desktop.query("listheader[label='Gender']");
+			sortingHeader.as(SortAgent.class).sort(false);
+			Assert.assertEquals(SwitchedSortAgentImpl.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			Assert.assertEquals("Gender", sortStatus.getValue());
+
+			//treecol
+			sortingColumn = desktop.query("treecol[label='Description']");
+
+			//can sort in specified order in spite of its original sorting order
+			sortingColumn.as(SortAgent.class).sort(false);
+			Assert.assertEquals("Description", sortStatus.getValue());
+			Assert.assertEquals(SwitchedSortAgentImpl.DESCENDING, sortingColumn.as(Treecol.class).getSortDirection());
+			sortingColumn.as(SortAgent.class).sort(true);
+			Assert.assertEquals(SwitchedSortAgentImpl.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
+			//repeat sorting in the same order works correctly 
+			sortingHeader.as(SortAgent.class).sort(true);
+			Assert.assertEquals(SwitchedSortAgentImpl.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
+
+		}
 }
+
+

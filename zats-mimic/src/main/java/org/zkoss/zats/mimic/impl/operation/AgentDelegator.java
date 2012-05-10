@@ -12,7 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.impl.operation;
 
 import org.zkoss.zats.mimic.Agent;
-import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Client;
 
 /**
@@ -20,10 +19,10 @@ import org.zkoss.zats.mimic.Client;
  * @author dennis
  * 
  */
-public abstract class AgentDelegator implements Agent {
-	protected ComponentAgent target;
+public abstract class AgentDelegator<T extends Agent> implements Agent {
+	protected T target;
 
-	public AgentDelegator(ComponentAgent target) {
+	public AgentDelegator(T target) {
 		this.target = target;
 	}
 

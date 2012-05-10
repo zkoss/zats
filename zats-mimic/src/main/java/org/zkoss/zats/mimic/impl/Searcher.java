@@ -104,7 +104,7 @@ import org.zkoss.zk.ui.Page;
 			}
 			return foundAgents;
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new ZatsException(e.getMessage(),e);
 		}
 	}
 

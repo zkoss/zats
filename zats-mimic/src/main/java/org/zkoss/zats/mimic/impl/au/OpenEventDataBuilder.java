@@ -13,7 +13,7 @@ package org.zkoss.zats.mimic.impl.au;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zats.mimic.impl.EventDataBuilder;
 import org.zkoss.zk.ui.event.OpenEvent;
 
 /**
@@ -21,12 +21,14 @@ import org.zkoss.zk.ui.event.OpenEvent;
  * 
  * @author pao
  */
-public class OpenEventDataBuilder implements EventDataBuilder {
-	public Map<String, Object> build(Event event, Map<String, Object> data) {
-		OpenEvent evt = (OpenEvent) event;
+public class OpenEventDataBuilder implements EventDataBuilder<OpenEvent> {
+	public Map<String, Object> build(OpenEvent evt, Map<String, Object> data) {
 		AuUtility.setEssential(data, "open", evt.isOpen());
 		AuUtility.setOptional(data, "value", evt.getValue());
 		AuUtility.setReference(data, evt.getReference());
 		return data;
+	}
+	public Class<OpenEvent> getEventClass(){
+		return OpenEvent.class;
 	}
 }

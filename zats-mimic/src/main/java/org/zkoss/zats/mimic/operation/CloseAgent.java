@@ -12,8 +12,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.operation;
 
 /**
- * When closing a closable component, you cannot re-open it. Because it's detached from desktop.
- * Handle the onClose of component.
+ * To close a component including Window, Panel, and Tab.
+ * When closing a closable component, it's detached from desktop by default behavior.
+ * 
  * 
  * @author Hawk
  *

@@ -1,0 +1,46 @@
+<zk>
+	<vbox>
+		<hbox>
+			<label id="eventName" />
+			<label id="target" />
+			<label id="value" />
+		</hbox>
+		<hbox>
+			<vbox id="inputs">
+				<bandbox></bandbox>
+				<combobox>
+					<comboitem label="comboitem"></comboitem>
+				</combobox>
+				<datebox></datebox>
+				<decimalbox></decimalbox>
+				<doublebox></doublebox>
+				<doublespinner></doublespinner>
+				<intbox></intbox>
+				<longbox></longbox>
+				<spinner></spinner>
+				<textbox></textbox>
+				<timebox></timebox>
+			</vbox>
+		</hbox>
+	</vbox>
+	<zscript><![CDATA[
+	org.zkoss.zk.ui.event.EventListener listener = new org.zkoss.zk.ui.event.EventListener() {
+		public void onEvent(Event event) {
+			InputEvent e = (InputEvent)event;
+			eventName.setValue(e.getName());
+			target.setValue(e.getTarget().getDefinition().getName());
+			value.setValue(e.getValue());
+		}
+	};
+	void listenAll(Component container) {
+		LinkedList queue = new LinkedList(container.getChildren());
+		while(!queue.isEmpty()) {
+			org.zkoss.zul.impl.XulElement comp = (org.zkoss.zul.impl.XulElement)queue.remove();
+			comp.setWidth("200px");
+			comp.addEventListener(Events.ON_CHANGING, listener);
+		}
+	}
+	listenAll(inputs);
+]]>
+</zscript>
+</zk>

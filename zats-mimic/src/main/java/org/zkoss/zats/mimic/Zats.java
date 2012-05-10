@@ -55,7 +55,7 @@ public class Zats {
 
 	/**
 	 * to create a new client
-	 * @return
+	 * @return a new client
 	 */
 	public static Client newClient(){
 		return getInstance(false).newClient();

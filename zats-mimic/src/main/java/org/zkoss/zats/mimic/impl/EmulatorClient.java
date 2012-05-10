@@ -20,7 +20,6 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -91,45 +90,40 @@ public class EmulatorClient implements Client, ClientCtrl {
 	}
 
 	public void destroy(DesktopAgent desktopAgent) {
-		InputStream is = null;
-		try {
-			if (desktopAgent != null) {
-				// use au to remove a desktop
-				logger.config("destory desktop:" + desktopAgent.getId());
-				String url = MessageFormat.format("/zkau?dtid={0}&cmd_0=rmDesktop&opt_0=i", desktopAgent.getId());
-				HttpURLConnection connection = getConnection(url, "GET");
-				for (String cookie : cookies) {
-					connection.addRequestProperty("Cookie", cookie.split(";", 2)[0]);
-				}
-				connection.connect();
-				is = connection.getInputStream();
-				logger.config(getReplyString(is, "utf-8"));
-
-			}
-		} catch (Exception e) {
-			logger.log(Level.WARNING, "", e);
-		} finally {
-			Util.close(is);
-			desktopAgent = null;
-			cookies = new LinkedList<String>();
-		}
+		postUpdate(desktopAgent.getId(),"rmDesktop",null,null,"i");
 	}
-
-	public void postUpdate(String desktopId, String targetUUID, String cmd, Map<String, Object> data) {
-
+	
+	public void postUpdate(String desktopId, String command, String targetUUID, Map<String, Object> data,String option) {
+		if(desktopId==null){
+			throw new IllegalArgumentException("desktop id is null");
+		}else if(command == null){
+			throw new IllegalArgumentException("command is null");
+		}
+		
 		// prepare au data
-		String dtid = UrlEncoded.encodeString(desktopId);
-		cmd = UrlEncoded.encodeString(cmd);
-		String uuid = UrlEncoded.encodeString(targetUUID);
-		String param;
-		if (data != null && data.size() > 0) {
+		final String dtid = UrlEncoded.encodeString(desktopId);
+		final String cmd = command = UrlEncoded.encodeString(command);
+		final StringBuilder param = new StringBuilder();
+		
+		param.append("dtid=").append(dtid).append("&cmd_0=").append(cmd);
+		
+		if(targetUUID!=null){
+			String uuid = UrlEncoded.encodeString(targetUUID);
+			param.append("&uuid_0=").append(uuid);
+		}
+		if(data != null && data.size() > 0){
 			String jsonData = UrlEncoded.encodeString(JSONValue.toJSONString(data));
-			param = MessageFormat.format("dtid={0}&cmd_0={1}&uuid_0={2}&data_0={3}", dtid, cmd, uuid, jsonData);
-		} else
-			param = MessageFormat.format("dtid={0}&cmd_0={1}&uuid_0={2}", dtid, cmd, uuid);
+			param.append("&data_0=").append(jsonData);
+		}
+		if(option!=null && option.length()>0){
+			option = UrlEncoded.encodeString(option);
+			param.append("&opt_0=").append(option);
+		}
 
+		final String content = param.toString();
+		
 		if (logger.isLoggable(Level.FINEST)) {
-			logger.finest(targetUUID + " perform AU: " + UrlEncoded.decodeString(param, 0, param.length(), "utf-8"));
+			logger.finest(targetUUID + " perform AU: " + UrlEncoded.decodeString(content, 0, content.length(), "utf-8"));
 		}
 
 		OutputStream os = null;
@@ -146,7 +140,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 			c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 			c.connect();
 			os = c.getOutputStream();
-			os.write(param.getBytes("utf-8"));
+			os.write(content.getBytes("utf-8"));
 			close(os);
 			// TODO, read response, handle redirect.
 			// read response

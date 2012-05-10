@@ -21,6 +21,9 @@
 		<name>Potix Corporation</name>
 		<url>http://www.zkoss.org</url>
 	</organization>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<developers>
 		<developer>
 			<id>zkteam</id>
@@ -51,19 +54,19 @@
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
 			<artifactId>zats-common</artifactId>
-			<version>${version}</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
 			<artifactId>zats-mimic</artifactId>
-			<version>${version}</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
 			<artifactId>zats-mimic-ext6</artifactId>
-			<version>${version}</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

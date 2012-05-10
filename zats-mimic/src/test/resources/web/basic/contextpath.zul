@@ -1,0 +1,9 @@
+<zk>
+	<window id="win">
+		<label id="msg"/>
+	<zscript><![CDATA[
+	String cp = Executions.getCurrent().getContextPath();
+	msg.setValue(cp);
+]]></zscript>
+	</window>
+</zk>

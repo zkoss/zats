@@ -1,0 +1,48 @@
+<zk>
+	<vbox>
+		<hbox>
+			<label id="eventName" />
+			<label id="target" />
+			<label id="flag" />
+		</hbox>
+		<hbox>
+			<button label="restore window" onClick="win.minimized = false; win.maximized = false" />
+			<button label="restore panel" onClick="pane.minimized = false; pane.maximized = false" />
+		</hbox>
+		<hbox id="switches">
+			<button label="switch window maximizable" onClick="win.maximizable = !win.maximizable" />
+			<button label="switch window minimizable" onClick="win.minimizable = !win.minimizable" />
+			<button label="switch panel maximizable" onClick="pane.maximizable = !pane.maximizable" />
+			<button label="switch panel minimizable" onClick="pane.minimizable = !pane.minimizable" />
+		</hbox>
+		<vbox id="layouts" width="600px" height="600px">
+			<window id="win" maximizable="true" minimizable="true" border="normal" title="window"
+				height="200px" width="200px">
+				<label value="window content" />
+			</window>
+			<panel id="pane" maximizable="true" minimizable="true" border="normal" title="panel"
+				height="200px" width="200px">
+				<panelchildren>
+					<label value="panel content" />
+				</panelchildren>
+			</panel>
+		</vbox>
+	</vbox>
+	<zscript><![CDATA[
+	org.zkoss.zk.ui.event.EventListener listener = new org.zkoss.zk.ui.event.EventListener() {
+		public void onEvent(Event event) throws Exception {
+			eventName.setValue(event.getName());
+			target.setValue(event.getTarget().getDefinition().getName());
+			if(event instanceof MaximizeEvent)
+				flag.setValue("" + ((MaximizeEvent)event).isMaximized());
+			else
+				flag.setValue("" + ((MinimizeEvent)event).isMinimized());
+		}
+	};
+	for(Object comp : layouts.getChildren()) {
+		((Component)comp).addEventListener(Events.ON_MAXIMIZE, listener);
+		((Component)comp).addEventListener(Events.ON_MINIMIZE, listener);
+	}
+]]>
+	</zscript>
+</zk>

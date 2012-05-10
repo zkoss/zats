@@ -17,8 +17,9 @@ import java.util.Set;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.EventDataManager;
+import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
 import org.zkoss.zats.mimic.impl.au.AuUtility;
-import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
@@ -29,13 +30,15 @@ import org.zkoss.zk.ui.event.SelectEvent;
  *  The builder for selection agent.
  * @author pao
  */
-public class GenericSelectAgentBuilder implements OperationAgentBuilder<SelectAgent> {
+public class GenericSelectAgentBuilder implements OperationAgentBuilder<ComponentAgent,SelectAgent> {
 
 	public SelectAgent getOperation(final ComponentAgent target) {
 		return new SingleSelectAgentImpl(target);
 	}
-
-	static class SingleSelectAgentImpl extends AgentDelegator implements SelectAgent {
+	public Class<SelectAgent> getOperationClass() {
+		return SelectAgent.class;
+	}
+	static class SingleSelectAgentImpl extends AgentDelegator<ComponentAgent> implements SelectAgent {
 		public SingleSelectAgentImpl(ComponentAgent target) {
 			super(target);
 		}
@@ -47,8 +50,8 @@ public class GenericSelectAgentBuilder implements OperationAgentBuilder<SelectAg
 
 			String desktopId = target.getDesktop().getId();
 			Event event = new SelectEvent(Events.ON_SELECT, (Component)parent.getDelegatee(), items, (Component)target.getDelegatee());
-			Map<String, Object> data = EventDataManager.build(event);
-			((ClientCtrl) target.getClient()).postUpdate(desktopId, parent.getUuid(), event.getName(), data);
+			Map<String, Object> data = EventDataManager.getInstance().build(event);
+			((ClientCtrl) target.getClient()).postUpdate(desktopId, event.getName(), parent.getUuid(), data, null);
 		}
 	}
 }
