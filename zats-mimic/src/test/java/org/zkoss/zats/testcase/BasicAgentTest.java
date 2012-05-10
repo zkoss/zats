@@ -36,7 +36,7 @@ import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.impl.Util;
-import org.zkoss.zats.mimic.impl.operation.GenericSortAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.SwitchedSortAgentImpl;
 import org.zkoss.zats.mimic.operation.BookmarkAgent;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
@@ -45,6 +45,7 @@ import org.zkoss.zats.mimic.operation.DragAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.GroupAgent;
 import org.zkoss.zats.mimic.operation.HoverAgent;
+import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
 import org.zkoss.zats.mimic.operation.MoveAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
@@ -54,7 +55,6 @@ import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.SizeAgent;
 import org.zkoss.zats.mimic.operation.SortAgent;
-import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -2017,20 +2017,20 @@ public class BasicAgentTest {
 
 			//listheader
 			ComponentAgent sortingHeader =  desktop.query("listheader[label='Name']");
-			Assert.assertEquals(GenericSortAgentBuilder.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			Assert.assertEquals(SwitchedSortAgentImpl.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
 			//can sort in specified order in spite of its original sorting order
 			sortingHeader.as(SortAgent.class).sort(true);
 			Assert.assertEquals("Name", sortStatus.getValue());
-			Assert.assertEquals(GenericSortAgentBuilder.ASCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			Assert.assertEquals(SwitchedSortAgentImpl.ASCENDING, sortingHeader.as(Listheader.class).getSortDirection());
 			sortingHeader.as(SortAgent.class).sort(false);
-			Assert.assertEquals(GenericSortAgentBuilder.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			Assert.assertEquals(SwitchedSortAgentImpl.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
 			//repeat sorting in the same order works correctly 
 			sortingHeader.as(SortAgent.class).sort(false);
-			Assert.assertEquals(GenericSortAgentBuilder.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			Assert.assertEquals(SwitchedSortAgentImpl.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
 
 			sortingHeader =  desktop.query("listheader[label='Gender']");
 			sortingHeader.as(SortAgent.class).sort(false);
-			Assert.assertEquals(GenericSortAgentBuilder.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
+			Assert.assertEquals(SwitchedSortAgentImpl.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
 			Assert.assertEquals("Gender", sortStatus.getValue());
 
 			//treecol
@@ -2039,12 +2039,12 @@ public class BasicAgentTest {
 			//can sort in specified order in spite of its original sorting order
 			sortingColumn.as(SortAgent.class).sort(false);
 			Assert.assertEquals("Description", sortStatus.getValue());
-			Assert.assertEquals(GenericSortAgentBuilder.DESCENDING, sortingColumn.as(Treecol.class).getSortDirection());
+			Assert.assertEquals(SwitchedSortAgentImpl.DESCENDING, sortingColumn.as(Treecol.class).getSortDirection());
 			sortingColumn.as(SortAgent.class).sort(true);
-			Assert.assertEquals(GenericSortAgentBuilder.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
+			Assert.assertEquals(SwitchedSortAgentImpl.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
 			//repeat sorting in the same order works correctly 
 			sortingHeader.as(SortAgent.class).sort(true);
-			Assert.assertEquals(GenericSortAgentBuilder.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
+			Assert.assertEquals(SwitchedSortAgentImpl.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
 
 		}
 }

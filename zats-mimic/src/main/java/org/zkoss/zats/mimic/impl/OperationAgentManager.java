@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.Agent;
+import org.zkoss.zats.mimic.impl.operation.ColumnSortAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.DesktopBookmarkAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericClickAgentBuilder;
@@ -27,14 +28,15 @@ import org.zkoss.zats.mimic.impl.operation.GenericHoverAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericKeyStrokeAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericMoveAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericOpenAgentBuilder;
-import org.zkoss.zats.mimic.impl.operation.GenericSortAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GridRenderAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.HeaderSizeAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.ListboxRenderAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.ListheaderSortAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.PagingAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.PanelSizeAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.SliderInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.TextboxOpenAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.TreecolSortAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.WindowSizeAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.DateInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.DecimalInputAgentBuilder;
@@ -209,9 +211,9 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", Column.class, new GenericGroupAgentBuilder());
 
 		//sort
-		registerBuilder("5.0.0", "*", Column.class, new GenericSortAgentBuilder());
-		registerBuilder("5.0.0", "*", Listheader.class, new GenericSortAgentBuilder());
-		registerBuilder("5.0.0", "*", Treecol.class, new GenericSortAgentBuilder());
+		registerBuilder("5.0.0", "*", Column.class, new ColumnSortAgentBuilder());
+		registerBuilder("5.0.0", "*", Listheader.class, new ListheaderSortAgentBuilder());
+		registerBuilder("5.0.0", "*", Treecol.class, new TreecolSortAgentBuilder());
 		
 		// the scroll
 		registerBuilder("5.0.0", "*", Slider.class, new SliderInputAgentBuilder());
