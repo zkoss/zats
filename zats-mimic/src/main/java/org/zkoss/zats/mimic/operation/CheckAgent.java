@@ -12,7 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.operation;
 
 /**
- * To change the check status of a component.
+ * To change the check status of a component including Menuitem, Toolbarbutton, Checkbox, and Radio.
  * @author pao
  */
 public interface CheckAgent extends OperationAgent {

@@ -13,7 +13,7 @@ package org.zkoss.zats.mimic;
 
 
 /**
- * the zats environment, to init/destroy a zats runtime for the testing
+ * the ZATS environment, to init/destroy a ZATS runtime for testing.
  *   
  * @author Hawk
  * @author Dennis
@@ -21,7 +21,7 @@ package org.zkoss.zats.mimic;
 public interface ZatsEnvironment {
 	
 	/**
-	 * initial this environment
+	 * initialize testing environment
 	 * @param resourceRoot the resource root folder of the zul, it is usually the web content folder.
 	 */
 	public void init(String resourceRoot);
@@ -32,7 +32,7 @@ public interface ZatsEnvironment {
 	public void destroy();
 
 	/**
-	 * new a client
+	 * create a client
 	 */
 	public Client newClient();
 

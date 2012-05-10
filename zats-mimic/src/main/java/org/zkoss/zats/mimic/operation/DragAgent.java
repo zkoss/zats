@@ -14,6 +14,8 @@ package org.zkoss.zats.mimic.operation;
 import org.zkoss.zats.mimic.ComponentAgent;
 
 /**
+ * To drag a component that extends from HtmlBasedComponent. 
+ * Most of ZK components extend HtmlBasedComponent.
  * @author Hawk
  *
  */

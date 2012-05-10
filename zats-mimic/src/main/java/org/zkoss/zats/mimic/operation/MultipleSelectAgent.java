@@ -12,7 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.operation;
 
 /**
- * To do multiple selection on a component.
+ * To do multiple selection on a component including Listitem and TreeItem. 
+ * 
  * @author pao
  */
 public interface MultipleSelectAgent extends OperationAgent {

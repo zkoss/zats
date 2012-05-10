@@ -12,7 +12,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.operation;
 
 /**
- * This agent fires 3 zk component events that relate to keystroke, <b>onOK</b>, <b>onCancel</b> and <b>onCtrlKey</b>. 
+ * This agent mimics keystroke operation to a component that extends from HtmlBasedComponent. 
+ * Most of ZK components extend HtmlBasedComponent.
+ * Related events are <b>onOK</b>, <b>onCancel</b> and <b>onCtrlKey</b>. 
  * @author dennis
  *
  */

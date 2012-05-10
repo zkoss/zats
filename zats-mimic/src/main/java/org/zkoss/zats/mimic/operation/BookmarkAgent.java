@@ -11,10 +11,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zats.mimic.operation;
 
-import org.zkoss.zk.ui.event.Events;
 
 /**
- * To change the bookmark of a desktop.
+ * To change the bookmark of a Desktop.
  * @author dennis
  */
 public interface BookmarkAgent extends OperationAgent {
