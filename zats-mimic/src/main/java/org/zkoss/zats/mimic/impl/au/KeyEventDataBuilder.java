@@ -16,7 +16,7 @@ import java.util.Map;
 import org.zkoss.zk.ui.event.KeyEvent;
 
 /**
- * A data builder for key event.
+ * A data builder for KeyEvent.
  * 
  * @author pao
  * 

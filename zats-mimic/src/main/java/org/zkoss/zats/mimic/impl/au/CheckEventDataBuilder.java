@@ -16,7 +16,7 @@ import java.util.Map;
 import org.zkoss.zk.ui.event.CheckEvent;
 
 /**
- * A data builder for check event.
+ * A data builder for CheckEvent.
  * 
  * @author pao
  */

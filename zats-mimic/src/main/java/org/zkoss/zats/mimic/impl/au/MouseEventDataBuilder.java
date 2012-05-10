@@ -17,7 +17,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.MouseEvent;
 
 /**
- * A data builder for mouse event.
+ * A data builder for MouseEvent.
  * 
  * @author pao
  */

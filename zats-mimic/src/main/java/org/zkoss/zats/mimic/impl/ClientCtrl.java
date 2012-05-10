@@ -18,7 +18,7 @@ import org.zkoss.zats.mimic.DesktopAgent;
 
 /**
  * Client controller interface.
- * To provide more control of the client.
+ * To provide more control of the client for developers.
  * @author pao
  */
 public interface ClientCtrl {

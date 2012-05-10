@@ -35,7 +35,7 @@ import org.zkoss.zats.mimic.impl.emulator.Emulator;
 import org.zkoss.zk.ui.Desktop;
 
 /**
- * The server emulator client implement
+ * The default server emulator client implementation.
  * @author pao
  */
 public class EmulatorClient implements Client, ClientCtrl {

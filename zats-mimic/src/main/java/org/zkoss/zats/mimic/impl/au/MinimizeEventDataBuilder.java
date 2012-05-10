@@ -16,7 +16,7 @@ import java.util.Map;
 import org.zkoss.zk.ui.event.MinimizeEvent;
 
 /**
- * The data builder of minimize event.
+ * The data builder of MinimizeEvent.
  * @author pao
  */
 public class MinimizeEventDataBuilder implements EventDataBuilder<MinimizeEvent> {

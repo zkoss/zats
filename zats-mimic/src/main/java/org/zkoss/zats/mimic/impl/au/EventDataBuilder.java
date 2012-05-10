@@ -16,6 +16,7 @@ import java.util.Map;
 import org.zkoss.zk.ui.event.Event;
 
 /**
+ * To build content of AU data.
  * @author dennis
  *
  */

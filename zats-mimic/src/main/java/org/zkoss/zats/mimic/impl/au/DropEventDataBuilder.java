@@ -14,9 +14,9 @@ package org.zkoss.zats.mimic.impl.au;
 import java.util.Map;
 
 import org.zkoss.zk.ui.event.DropEvent;
-import org.zkoss.zk.ui.event.Event;
 
 /**
+ * AU data builder for DropEvent.
  * @author Hawk
  *
  */

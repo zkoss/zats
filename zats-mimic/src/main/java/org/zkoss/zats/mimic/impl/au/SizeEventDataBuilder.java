@@ -16,7 +16,7 @@ import java.util.Map;
 import org.zkoss.zk.ui.event.SizeEvent;
 
 /**
- * The data builder of size event. 
+ * The data builder for size event. 
  * @author pao
  */
 public class SizeEventDataBuilder implements EventDataBuilder<SizeEvent>{

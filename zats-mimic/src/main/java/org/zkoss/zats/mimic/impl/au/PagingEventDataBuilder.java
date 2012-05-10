@@ -16,6 +16,7 @@ import java.util.Map;
 import org.zkoss.zul.event.PagingEvent;
 
 /**
+ * AU data builder for PagingEvent.
  * @author Hawk
  *
  */

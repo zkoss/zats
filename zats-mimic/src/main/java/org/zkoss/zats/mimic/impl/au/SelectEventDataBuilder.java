@@ -16,7 +16,7 @@ import java.util.Map;
 import org.zkoss.zk.ui.event.SelectEvent;
 
 /**
- * A data builder for select event.
+ * AU data builder for SelectEvent.
  * 
  * @author pao
  */

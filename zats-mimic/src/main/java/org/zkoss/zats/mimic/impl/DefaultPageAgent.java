@@ -23,6 +23,10 @@ import org.zkoss.zats.mimic.PageAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 
+/**
+ * Default implementation for PageAgent. 
+ *
+ */
 public class DefaultPageAgent implements PageAgent {
 	private DesktopAgent desktopAgent;
 	private Page page;

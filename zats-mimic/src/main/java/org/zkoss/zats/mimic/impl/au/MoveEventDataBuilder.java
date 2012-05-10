@@ -16,7 +16,7 @@ import java.util.Map;
 import org.zkoss.zk.ui.event.MoveEvent;
 
 /**
- * The data builder of move event.
+ * The data builder of MoveEvent.
  * @author pao
  */
 public class MoveEventDataBuilder implements EventDataBuilder<MoveEvent> {

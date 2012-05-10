@@ -21,6 +21,7 @@ import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zk.ui.event.Event;
 
 /**
+ * This class maintain a list of {@link ValueResolver}. When it resolves a Agent, it calls each resolver in the list to resolve it.
  * @author dennis
  *
  */
@@ -29,7 +30,7 @@ public class ValueResolverManager {
 	private static List<ValueResolver> resolvers = new ArrayList<ValueResolver>();
 
 	static {
-		//resolve agent
+		//ComponentAgent resolver
 		registerResolver("5.0.0","*",new ValueResolver(){
 			@SuppressWarnings("unchecked")
 			public <T> T resolve(Agent agent, Class<T> clazz) {
@@ -43,7 +44,7 @@ public class ValueResolverManager {
 				return null;
 			}
 		});
-		//resolver comp
+		//ZK native component resolver
 		registerResolver("5.0.0","*",new ValueResolver(){
 			@SuppressWarnings("unchecked")
 			public <T> T resolve(Agent agent, Class<T> clazz) {
@@ -85,7 +86,7 @@ public class ValueResolverManager {
 	}
 	
 	/**
-	 * resolve the component agent to a object by registered value resolver
+	 * resolve the component agent to a object with registered value resolver
 	 */
 	public static <T> T resolve(Agent agent, Class<T> clazz){
 		for(ValueResolver r:resolvers){
