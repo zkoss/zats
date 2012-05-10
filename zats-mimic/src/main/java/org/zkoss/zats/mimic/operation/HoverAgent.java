@@ -12,7 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.operation;
 
 /**
- * To hover a mouse pointer over a component.
+ * To hover a mouse pointer over a component that extends from HtmlBasedComponent. 
+ * Most of ZK components extend HtmlBasedComponent..
  * 
  * @author Hawk
  *

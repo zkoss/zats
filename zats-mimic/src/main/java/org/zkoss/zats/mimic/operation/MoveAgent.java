@@ -12,7 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.operation;
 
 /**
- * The agent for moving operation.
+ * The agent for moving operation. Supported components are Window and Panel.
  * @author pao
  */
 public interface MoveAgent extends OperationAgent {

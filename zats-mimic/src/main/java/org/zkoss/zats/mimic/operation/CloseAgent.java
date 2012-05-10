@@ -12,7 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.operation;
 
 /**
- * To close a component, e.g., a window.
+ * To close a component including Window, Panel, and Tab.
  * When closing a closable component, it's detached from desktop by default behavior.
  * 
  * 

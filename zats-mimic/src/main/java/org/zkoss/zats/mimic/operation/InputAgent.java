@@ -12,8 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.operation;
 
 /**
- * To perform input to a component.
- * You can input data either by {@link #type(String)} or {@link #input(Object)}
+ * To perform input to a component that extends from  InputElement.
+ * For most input components that can type text in, use {@link #type(String)} and for others use {@link #input(Object)}. 
  * @author pao
  * @author dennis
  */
@@ -22,16 +22,18 @@ public interface InputAgent extends OperationAgent {
 
 	
 	/**
-	 * To input value into component. 
-	 * You can use the Integer or Double directly for a intbox or doublebox, use Date for a datebox.
+	 * To input value into a component. This method generalizes various input operation to a InputElement, e.g. typing in a Textbox,
+	 * or scrolling a Slider. For those components that you cannot type text in, e.g. Slider is inputed by scrolling its bar.
+	 *  you can use this method to mimic the special input operation other than typing. <br/>
+	 * You can pass in an Integer for a a intbox, Double for a doublebox, and Date for a datebox. 
+	 * Parameter's type depends on target component.
 	 * @param value the input value
 	 */
 	void input(Object value);
 	
 	/**
-	 * To type data into a component. The value should be valid for target
-	 * component. e.g. Intbox only accepts integer. If the target is Datebox or Timebox,
-	 * the format depends on its "format" attribute. 
+	 * To type text into a component. The value should be valid for target component, e.g. Intbox only accepts integer. 
+	 * If the target is Datebox or Timebox, your input text format should match "format" attribute's pattern. 
 	 * @param value the input value
 	 */
 	public void type(String value);
@@ -43,8 +45,8 @@ public interface InputAgent extends OperationAgent {
 	public void typing(String value);
 	
 	/**
-	 * To select (highlight) a range to text of an InputElement by specifying 2 indexes. Index value begins from 0.
-	 * @param start the beginning index, inclusive.
+	 * To select (highlight) a range to text of an InputElement by specifying 2 indexes.
+	 * @param start the beginning index,start from 0, inclusive.
 	 * @param end the ending index, exclusive.
 	 */
 	public void select(int start, int end);
