@@ -17,8 +17,8 @@ import java.util.Map;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.EventDataManager;
 import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
-import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.SortAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
@@ -65,7 +65,7 @@ public class GenericSortAgentBuilder implements OperationAgentBuilder<ComponentA
 			Map<String, Object> data = null;
 			//When desired sorting direction equals Column's current direction, it still send AU.
 			if (header instanceof Column){
-				data = EventDataManager.build(new SortEvent(cmd, header, ascending));
+				data = EventDataManager.getInstance().build(new SortEvent(cmd, header, ascending));
 				((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, header.getUuid(), data, null);
 			}else{
 				try{
@@ -76,23 +76,23 @@ public class GenericSortAgentBuilder implements OperationAgentBuilder<ComponentA
 					//if header is sorted, switch sorting direction between ascending and descending
 					if (currentDirection.equals(ASCENDING)){
 						if (!ascending){
-							data = EventDataManager.build(new SortEvent(cmd, header, false));
+							data = EventDataManager.getInstance().build(new SortEvent(cmd, header, false));
 							((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, header.getUuid(), data, null);
 						}
 					}else if (currentDirection.equals(DESCENDING)){
 						if (ascending){
-							data = EventDataManager.build(new SortEvent(cmd, header, true));
+							data = EventDataManager.getInstance().build(new SortEvent(cmd, header, true));
 							((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, header.getUuid(), data, null);
 						}
 						return;
 					}else { //natural, not sorted yet
 						if(ascending){
-							data = EventDataManager.build(new SortEvent(cmd, header, ascending));
+							data = EventDataManager.getInstance().build(new SortEvent(cmd, header, ascending));
 							((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, header.getUuid(), data, null);
 						}else{
-							data = EventDataManager.build(new SortEvent(cmd, header, true));
+							data = EventDataManager.getInstance().build(new SortEvent(cmd, header, true));
 							((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, header.getUuid(), data, null);
-							data = EventDataManager.build(new SortEvent(cmd, header, ascending));
+							data = EventDataManager.getInstance().build(new SortEvent(cmd, header, ascending));
 							((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, header.getUuid(), data, null);
 						}
 					}

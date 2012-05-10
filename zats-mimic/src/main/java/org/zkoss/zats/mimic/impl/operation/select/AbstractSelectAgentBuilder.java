@@ -18,8 +18,8 @@ import java.util.Set;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.EventDataManager;
 import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
-import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.impl.operation.AgentDelegator;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zk.ui.Component;
@@ -54,7 +54,7 @@ public abstract class AbstractSelectAgentBuilder implements OperationAgentBuilde
 
 			Component ancestry = getEventTarget();
 			Event event = new SelectEvent(Events.ON_SELECT, ancestry, items, (Component)target.getDelegatee());
-			Map<String, Object> data = EventDataManager.build(event);
+			Map<String, Object> data = EventDataManager.getInstance().build(event);
 			contributeExtraInfo(data);
 			((ClientCtrl) target.getClient()).postUpdate(target.getDesktop().getId(), event.getName(), ancestry.getUuid(),
 					data, null);

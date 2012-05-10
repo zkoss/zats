@@ -16,8 +16,8 @@ import java.util.Map;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.EventDataManager;
 import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
-import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.PagingAgent;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.event.PagingEvent;
@@ -55,7 +55,7 @@ public class PagingAgentBuilder implements OperationAgentBuilder<ComponentAgent,
 			
 			String desktopId = target.getDesktop().getId();
 			String cmd = ZulEvents.ON_PAGING;
-			Map<String, Object> data = EventDataManager.build(new PagingEvent(cmd, paging, pageIndex));
+			Map<String, Object> data = EventDataManager.getInstance().build(new PagingEvent(cmd, paging, pageIndex));
 			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, paging.getUuid(), data,null);
 			
 		}

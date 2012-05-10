@@ -16,8 +16,8 @@ import java.util.Map;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.EventDataManager;
 import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
-import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.SizeAgent;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.Events;
@@ -54,7 +54,7 @@ public abstract class AbstractSizeAgentBuilder implements OperationAgentBuilder<
 			HtmlBasedComponent comp = target.as(HtmlBasedComponent.class);
 			String cmd = Events.ON_MAXIMIZE;
 			MaximizeEvent event = new MaximizeEvent(cmd, comp, "", "", comp.getWidth(), comp.getHeight(), maximized);
-			Map<String, Object> data = EventDataManager.build(event);
+			Map<String, Object> data = EventDataManager.getInstance().build(event);
 			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
 		}
 
@@ -65,7 +65,7 @@ public abstract class AbstractSizeAgentBuilder implements OperationAgentBuilder<
 			HtmlBasedComponent comp = target.as(HtmlBasedComponent.class);
 			String cmd = Events.ON_MINIMIZE;
 			MinimizeEvent event = new MinimizeEvent(cmd, comp, "", "", comp.getWidth(), comp.getHeight(), minimized);
-			Map<String, Object> data = EventDataManager.build(event);
+			Map<String, Object> data = EventDataManager.getInstance().build(event);
 			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
 		}
 
@@ -102,7 +102,7 @@ public abstract class AbstractSizeAgentBuilder implements OperationAgentBuilder<
 			// post AU
 			String cmd = Events.ON_SIZE;
 			SizeEvent event = new SizeEvent(cmd, comp, width + "px", height + "px", 0);
-			Map<String, Object> data = EventDataManager.build(event);
+			Map<String, Object> data = EventDataManager.getInstance().build(event);
 			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
 		}
 	}

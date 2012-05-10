@@ -9,13 +9,31 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
-package org.zkoss.zats.mimic.impl.au;
+package org.zkoss.zats.mimic.impl;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.AgentException;
-import org.zkoss.zats.mimic.impl.Util;
+import org.zkoss.zats.mimic.impl.au.BookmarkEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.CheckEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.ColSizeEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.DefaultEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.DropEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.InputEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.KeyEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.MaximizeEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.MinimizeEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.MouseEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.MoveEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.OpenEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.PagingEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.RenderEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.ScrollEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.SelectEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.SelectionEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.SizeEventDataBuilder;
+import org.zkoss.zats.mimic.impl.au.SortEventDataBuilder;
 import org.zkoss.zk.ui.event.Event;
 
 /**
@@ -28,9 +46,18 @@ import org.zkoss.zk.ui.event.Event;
  */
 public class EventDataManager {
 
-	private static Map<Class<? extends Event>, EventDataBuilder<? extends Event>> builders;
+	private static EventDataManager instance;
+	
+	public static synchronized EventDataManager getInstance(){
+		if(instance==null){
+			instance = new EventDataManager(); 
+		}
+		return instance;
+	}
+	
+	private Map<Class<? extends Event>, EventDataBuilder<? extends Event>> builders;
 
-	static {
+	public EventDataManager() {
 		builders = new HashMap<Class<? extends Event>, EventDataBuilder<? extends Event>>();
 		
 
@@ -57,8 +84,7 @@ public class EventDataManager {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static  
-		void registerBuilder(String startVersion, String endVersion, String builderClazz) {
+	public void registerBuilder(String startVersion, String endVersion, String builderClazz) {
 		if (startVersion == null || endVersion == null || builderClazz == null)
 			throw new IllegalArgumentException();
 		
@@ -76,8 +102,8 @@ public class EventDataManager {
 	}
 
 	
-	public static <T extends Event> 
-		void registerBuilder(String startVersion, String endVersion, EventDataBuilder<? extends Event> builder) {
+	public <T extends Event> void registerBuilder(String startVersion, String endVersion, 
+			EventDataBuilder<? extends Event> builder) {
 		
 		if (startVersion == null || endVersion == null || builder == null)
 			throw new IllegalArgumentException();
@@ -86,7 +112,7 @@ public class EventDataManager {
 		builders.put(builder.getEventClass(), builder);
 	}
 
-	public static Map<String, Object> build(Event evt) {
+	public Map<String, Object> build(Event evt) {
 		Class<? extends Object> clz = evt.getClass();
 
 		EventDataBuilder builder = null;

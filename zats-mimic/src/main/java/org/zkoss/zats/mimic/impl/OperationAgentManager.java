@@ -11,6 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,10 +100,24 @@ import org.zkoss.zul.impl.InputElement;
  *
  */
 public class OperationAgentManager {
-	private static Map<Key, OperationAgentBuilder<? extends Agent, ? extends OperationAgent>> builders;
+	
+	private static OperationAgentManager instance;
+	
+	public static synchronized OperationAgentManager getInstance(){
+		if(instance==null){
+			instance = new OperationAgentManager(); 
+		}
+		return instance;
+	}
+	
+	//hold registered builders
+	private Map<Key, OperationAgentBuilder<? extends Agent, ? extends OperationAgent>> registeredBuilders;
+	//hold the resolved builders, it is like a cache
+	private Map<Key, OperationAgentBuilder<? extends Agent, ? extends OperationAgent>> resolvedBuilders;
 
-	static {
-		builders = new HashMap<OperationAgentManager.Key, OperationAgentBuilder<? extends Agent, ? extends OperationAgent>>();
+	public OperationAgentManager() {
+		registeredBuilders = Collections.synchronizedMap(new HashMap<OperationAgentManager.Key, OperationAgentBuilder<? extends Agent, ? extends OperationAgent>>());
+		resolvedBuilders = Collections.synchronizedMap(new HashMap<OperationAgentManager.Key, OperationAgentBuilder<? extends Agent, ? extends OperationAgent>>());
 
 		//most common agents
 		registerBuilder("5.0.0", "*", Desktop.class, new DesktopBookmarkAgentBuilder());
@@ -255,7 +270,7 @@ public class OperationAgentManager {
 	 *            operation builder
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static <O extends OperationAgent> void registerBuilder(String startVersion, String endVersion,
+	public <O extends OperationAgent> void registerBuilder(String startVersion, String endVersion,
 			String delegateeClass, String builderClazz) {
 		if (startVersion == null || endVersion == null || delegateeClass == null || builderClazz == null)
 			throw new IllegalArgumentException();
@@ -297,7 +312,7 @@ public class OperationAgentManager {
 	 * @param builder
 	 *            operation builder
 	 */
-	public static <O extends OperationAgent, C extends Object> void registerBuilder(String startVersion,
+	public <O extends OperationAgent, C extends Object> void registerBuilder(String startVersion,
 			String endVersion, Class<C> delegateeClass, OperationAgentBuilder<? extends Agent,O> builder) {
 
 		if (startVersion == null || endVersion == null || delegateeClass == null || builder == null)
@@ -308,38 +323,52 @@ public class OperationAgentManager {
 
 		// component and operation classes mapping to builder
 		// builder would be replace by later register
-		builders.put(new Key(delegateeClass, builder.getOperationClass()), builder);
+		registeredBuilders.put(new Key(delegateeClass, builder.getOperationClass()), builder);
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <O extends OperationAgent> OperationAgentBuilder<Agent, O> getBuilder(Object delegatee,
+	public <O extends OperationAgent> OperationAgentBuilder<Agent, O> getBuilder(Object delegatee,
 			Class<O> operation) {
 		// search from self class to parent class
 		Class<?> c = delegatee.getClass();
-
-		OperationAgentBuilder<? extends Agent, ? extends OperationAgent> builder = lookupBuilder(c, operation);
-		if (builder != null) {
-			return (OperationAgentBuilder<Agent, O>)builder;
-		}
-
-		Class<?>[] ifs = c.getInterfaces();
-		for (Class<?> i : ifs) {
-			builder = lookupBuilder(i, operation);
-			if (builder != null) {
-				return (OperationAgentBuilder<Agent, O>)builder;
+		
+		Key key = new Key(c, operation);
+		OperationAgentBuilder<? extends Agent, ? extends OperationAgent> builder = resolvedBuilders.get(key);
+		if(builder==null){
+			//cache the lookup
+			builder = lookupBuilder(c, operation);
+			if(builder!=null){
+				resolvedBuilders.put(key, builder);
 			}
 		}
-		return null; // not found
+		
+		return (OperationAgentBuilder<Agent, O>)builder;
 	}
-	
-	private static <O extends OperationAgent> OperationAgentBuilder<Agent, O> lookupBuilder(Class<?> delegatee, Class<O> operation) {
-		// search from self class to parent class
+	@SuppressWarnings("unchecked")
+	private <O extends OperationAgent> OperationAgentBuilder<Agent, O> lookupBuilder(Class<?> delegatee, Class<O> operation) {
+		// search from class to super class and interfaces
+		OperationAgentBuilder<? extends Agent, ? extends OperationAgent> builder;
+		//look super first
 		Class<?> c = delegatee;
 		while (c != null) {
-			OperationAgentBuilder<? extends Agent, ? extends OperationAgent> builder = builders.get(new Key(c, operation));
+			builder = registeredBuilders.get(new Key(c, operation));
 			if (builder != null)
 				return (OperationAgentBuilder<Agent, O>) builder;
 			//check super
+			c = c.getSuperclass();
+		}
+		
+		//then lookup interface
+		c = delegatee;
+		while (c != null) {
+			Class<?>[] ifs = delegatee.getInterfaces();
+			for (Class<?> i : ifs) {
+				builder = lookupBuilder(i, operation);
+				if (builder != null) {
+					return (OperationAgentBuilder<Agent, O>)builder;
+				}
+			}
+			//check interface of super
 			c = c.getSuperclass();
 		}
 		return null; // not found

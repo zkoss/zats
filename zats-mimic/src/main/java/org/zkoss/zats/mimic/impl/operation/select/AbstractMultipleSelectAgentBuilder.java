@@ -18,8 +18,8 @@ import java.util.Set;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.EventDataManager;
 import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
-import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.impl.operation.AgentDelegator;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zk.ui.Component;
@@ -76,7 +76,7 @@ public abstract class AbstractMultipleSelectAgentBuilder implements OperationAge
 		private void postUpdate(Component component, Set<String> selected) {
 			String desktopId = target.getDesktop().getId();
 			Event event = new SelectEvent(Events.ON_SELECT, component, selected, (Component)target.getDelegatee());
-			Map<String, Object> data = EventDataManager.build(event);
+			Map<String, Object> data = EventDataManager.getInstance().build(event);
 			ClientCtrl ctrl = (ClientCtrl) target.getClient();
 			ctrl.postUpdate(desktopId, event.getName(), component.getUuid(), data, null);
 		}

@@ -15,8 +15,8 @@ import java.util.Map;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.EventDataManager;
 import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
-import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
@@ -41,7 +41,7 @@ public class GenericOpenAgentBuilder implements OperationAgentBuilder<ComponentA
 		public void open(boolean open) {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_OPEN;
-			Map<String, Object> data = EventDataManager.build(new OpenEvent(cmd, (Component)target.getDelegatee(), open, null,
+			Map<String, Object> data = EventDataManager.getInstance().build(new OpenEvent(cmd, (Component)target.getDelegatee(), open, null,
 					null));
 			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
 		}

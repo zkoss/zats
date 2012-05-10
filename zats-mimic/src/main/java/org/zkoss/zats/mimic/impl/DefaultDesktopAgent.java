@@ -97,13 +97,13 @@ public class DefaultDesktopAgent implements DesktopAgent {
 	}
 	
 	public <T> T as(Class<T> clazz) {
-		T obj = ValueResolverManager.resolve(this, clazz);
+		T obj = ValueResolverManager.getInstance().resolve(this, clazz);
 		if(obj!=null) return obj;
 		throw new AgentException("cannot resolve " + clazz.getName() +" for "+ getType());
 	}
 
 	public <T> boolean is(Class<T> clazz) {
-		T obj = ValueResolverManager.resolve(this, clazz);
+		T obj = ValueResolverManager.getInstance().resolve(this, clazz);
 		return obj!=null;
 	}
 	

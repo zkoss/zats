@@ -15,8 +15,8 @@ import java.util.Map;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.EventDataManager;
 import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
-import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.HoverAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
@@ -48,14 +48,14 @@ public class GenericHoverAgentBuilder implements OperationAgentBuilder<Component
 		public void moveOver() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_MOUSE_OVER;
-			Map<String, Object> data = EventDataManager.build(new MouseEvent(cmd, (Component)target.getDelegatee()));
+			Map<String, Object> data = EventDataManager.getInstance().build(new MouseEvent(cmd, (Component)target.getDelegatee()));
 			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
 		}
 
 		public void moveOut() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_MOUSE_OUT;
-			Map<String, Object> data = EventDataManager.build(new MouseEvent(cmd, (Component)target.getDelegatee()));
+			Map<String, Object> data = EventDataManager.getInstance().build(new MouseEvent(cmd, (Component)target.getDelegatee()));
 			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
 		}
 		

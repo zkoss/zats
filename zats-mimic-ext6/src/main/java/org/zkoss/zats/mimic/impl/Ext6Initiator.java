@@ -38,15 +38,15 @@ public class Ext6Initiator implements WebAppInit{
 		//so it is ok to register builder by webapp init
 		
 		// operation
-		OperationAgentManager.registerBuilder("6.0.0", "*", Toolbarbutton.class,
+		OperationAgentManager.getInstance().registerBuilder("6.0.0", "*", Toolbarbutton.class,
 				new GenericCheckAgentBuilder()); // toolbarbutton on check in zk6 only 
-		OperationAgentManager.registerBuilder("6.0.0", "*", Datebox.class,
+		OperationAgentManager.getInstance().registerBuilder("6.0.0", "*", Datebox.class,
 				new DateTypeAgentBuilderZK6()); // date format changed in zk6
-		OperationAgentManager.registerBuilder("6.0.0", "*", Timebox.class,
+		OperationAgentManager.getInstance().registerBuilder("6.0.0", "*", Timebox.class,
 				new TimeTypeAgentBuilderZK6()); // date format changed in zk6
-		OperationAgentManager.registerBuilder("6.0.0", "*", Combobutton.class,
+		OperationAgentManager.getInstance().registerBuilder("6.0.0", "*", Combobutton.class,
 				new GenericOpenAgentBuilder()); // combobutton introduced since zk6
-		OperationAgentManager.registerBuilder("6.0.0", "*", Selectbox.class,
+		OperationAgentManager.getInstance().registerBuilder("6.0.0", "*", Selectbox.class,
 				new SelectboxSelectByIndexAgentBuilder()); // selectbox introduced since zk6
 		
 		//event data
@@ -55,7 +55,7 @@ public class Ext6Initiator implements WebAppInit{
 		// resolvers
 		//resolve view model
 		if(Util.hasClass("org.zkoss.bind.Binder")){
-			ValueResolverManager.registerResolver("6.0.0","*","org.zkoss.zats.mimic.impl.BindValueResolver");
+			ValueResolverManager.getInstance().registerResolver("6.0.0","*","org.zkoss.zats.mimic.impl.BindValueResolver");
 		}
 	}
 

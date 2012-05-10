@@ -9,7 +9,7 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
-package org.zkoss.zats.mimic.impl.au;
+package org.zkoss.zats.mimic.impl;
 
 import java.util.Map;
 

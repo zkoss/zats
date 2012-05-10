@@ -15,8 +15,8 @@ import java.util.Map;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.EventDataManager;
 import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
-import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.BookmarkAgent;
 import org.zkoss.zk.ui.event.BookmarkEvent;
 import org.zkoss.zk.ui.event.Events;
@@ -43,7 +43,7 @@ public class DesktopBookmarkAgentBuilder implements OperationAgentBuilder<Deskto
 		public void bookmark(String value) {
 			String desktopId = target.getId();
 			ClientCtrl cctrl = (ClientCtrl) target.getClient();
-			Map<String, Object> data = EventDataManager.build(new BookmarkEvent(Events.ON_BOOKMARK_CHANGE, value));
+			Map<String, Object> data = EventDataManager.getInstance().build(new BookmarkEvent(Events.ON_BOOKMARK_CHANGE, value));
 			cctrl.postUpdate(desktopId, Events.ON_BOOKMARK_CHANGE, null, data, null);
 		}
 	}

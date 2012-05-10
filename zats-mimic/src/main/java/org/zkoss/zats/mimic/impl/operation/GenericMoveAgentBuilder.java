@@ -15,8 +15,8 @@ import java.util.Map;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.EventDataManager;
 import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
-import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.MoveAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
@@ -44,7 +44,7 @@ public class GenericMoveAgentBuilder implements OperationAgentBuilder<ComponentA
 		public void moveTo(int left, int top) {
 			String cmd = Events.ON_MOVE;
 			MoveEvent event = new MoveEvent(cmd, target.as(Component.class), left + "px", top + "px", 0);
-			Map<String, Object> data = EventDataManager.build(event);
+			Map<String, Object> data = EventDataManager.getInstance().build(event);
 			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
 		}
 	}

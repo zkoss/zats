@@ -23,8 +23,8 @@ import org.zkoss.lang.Strings;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.EventDataManager;
 import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
-import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.impl.operation.AgentDelegator;
 import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zk.ui.Component;
@@ -71,7 +71,7 @@ public abstract class AbstractInputAgentBuilder implements OperationAgentBuilder
 				ClientCtrl cctrl = (ClientCtrl) target.getClient();
 				String cmd = Events.ON_CHANGE;
 				InputEvent event = new InputEvent(cmd, (Component) target.getDelegatee(), value, null);
-				Map<String, Object> data = EventDataManager.build(event);
+				Map<String, Object> data = EventDataManager.getInstance().build(event);
 				putValue(target, value, data); // parse value and put into data collection 
 				cctrl.postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
 				
@@ -86,7 +86,7 @@ public abstract class AbstractInputAgentBuilder implements OperationAgentBuilder
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_CHANGING;
 			InputEvent event = new InputEvent(cmd, (Component) target.getDelegatee(), value, null);
-			Map<String, Object> data = EventDataManager.build(event);
+			Map<String, Object> data = EventDataManager.getInstance().build(event);
 			((ClientCtrl) target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
 		}
 
@@ -95,7 +95,7 @@ public abstract class AbstractInputAgentBuilder implements OperationAgentBuilder
 			String cmd = Events.ON_SELECTION;
 			String selectedText = ((InputElement)target.getDelegatee()).getText().substring(start, end);
 			SelectionEvent event = new SelectionEvent(cmd, (Component) target.getDelegatee(), start, end,selectedText);
-			Map<String, Object> data = EventDataManager.build(event);
+			Map<String, Object> data = EventDataManager.getInstance().build(event);
 			((ClientCtrl) target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data,null);
 		}
 	}

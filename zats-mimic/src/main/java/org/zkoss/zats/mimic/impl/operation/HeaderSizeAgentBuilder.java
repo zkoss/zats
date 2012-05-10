@@ -18,8 +18,8 @@ import java.util.Map;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.EventDataManager;
 import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
-import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.SizeAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
@@ -100,14 +100,14 @@ public class HeaderSizeAgentBuilder implements OperationAgentBuilder<ComponentAg
 			ClientCtrl cc = (ClientCtrl) target.getClient();
 			String desktopId = target.getDesktop().getId();
 			String cmd = "onInnerWidth";
-			Map<String, Object> data = EventDataManager.build(new Event(cmd));
+			Map<String, Object> data = EventDataManager.getInstance().build(new Event(cmd));
 			data.put("", innerWidth);
 			cc.postUpdate(desktopId, cmd, container.getUuid(), data, null);
 
 			// post column resize event
 			cmd = ZulEvents.ON_COL_SIZE;
 			ColSizeEvent event = new ColSizeEvent(cmd, head, index, column, widths, 0);
-			data = EventDataManager.build(event);
+			data = EventDataManager.getInstance().build(event);
 			data.put("widths", widths);
 			cc.postUpdate(desktopId, cmd, head.getUuid(), data, null);
 		}
