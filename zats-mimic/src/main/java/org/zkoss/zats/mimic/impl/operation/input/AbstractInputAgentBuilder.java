@@ -11,15 +11,11 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl.operation.input;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import org.zkoss.json.JSONs;
-import org.zkoss.lang.Strings;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
@@ -31,11 +27,10 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.event.SelectionEvent;
-import org.zkoss.zul.impl.FormatInputElement;
 import org.zkoss.zul.impl.InputElement;
 
 /**
- * The abstract builder of typing operation.
+ * The abstract builder of input operation. Because different ZK components accept different format of text input.
  * 
  * @author dennis
  */
@@ -54,11 +49,11 @@ public abstract class AbstractInputAgentBuilder implements OperationAgentBuilder
 			super(target);
 		}
 		/**
-		 * extender should put parsed value(s) into data map 
+		 * sub-class should put parsed value(s) into AU data 
 		 */
 		protected abstract void putValue(ComponentAgent target, String raw, Map<String, Object> data);
 		/**
-		 * extender converter value to raw string to set to {@link InputAgent#type(String)}
+		 * sub-class should convert value into raw string to set to {@link InputAgent#type(String)}
 		 */
 		protected abstract String toRawString(ComponentAgent target, Object value);
 		

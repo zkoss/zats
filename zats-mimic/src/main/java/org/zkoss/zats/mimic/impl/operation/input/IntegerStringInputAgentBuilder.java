@@ -20,7 +20,8 @@ import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zul.impl.FormatInputElement;
 
 /**
- * 
+ * Build InputAgent object for Longbox.
+ * AU data for "value" represents with string instead of integer.
  * @author dennis
  *
  */

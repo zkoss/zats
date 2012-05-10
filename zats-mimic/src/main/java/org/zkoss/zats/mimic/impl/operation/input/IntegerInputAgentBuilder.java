@@ -1,4 +1,4 @@
-/* IntegerStringInputAgentBuilder.java
+/* IntegerInputAgentBuilder.java
 
 	Purpose:
 		
