@@ -15,7 +15,6 @@ import org.zkoss.zats.mimic.Agent;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericOpenAgentBuilder;
-import org.zkoss.zats.mimic.impl.operation.OperationAgentManager;
 import org.zkoss.zats.mimic.impl.operation.input.DateTypeAgentBuilderZK6;
 import org.zkoss.zats.mimic.impl.operation.input.TimeTypeAgentBuilderZK6;
 import org.zkoss.zats.mimic.impl.operation.select.SelectboxSelectByIndexAgentBuilder;

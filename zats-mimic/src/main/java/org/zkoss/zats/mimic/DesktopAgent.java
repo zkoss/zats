@@ -61,10 +61,10 @@ public interface DesktopAgent extends Agent {
 
 	
 	/**
-	 * try to transfer the desktop agent to the target class, the target class
-	 * is usually a {@link OperationAgent} or a native {@link Desktop} <br/>
+	 * Try to get a instance of target class for this desktop agent, the target class
+	 * is usually a {@link OperationAgent} or a native {@link Component} <br/>
 	 * 
-	 * if it cannot transfer to target class, it will throw
+	 * if it cannot get a instance of target class, it will throw
 	 * {@link AgentException}.
 	 * 
 	 * @param clazz
@@ -72,6 +72,15 @@ public interface DesktopAgent extends Agent {
 	 * @return operation object.
 	 */
 	<T> T as(Class<T> clazz);
+	
+	/**
+	 * Can get a instance of target class for this desktop
+	 * 
+	 * @param clazz
+	 *            the class cast to.
+	 * @return true if can get a instance of target class
+	 */
+	<T> boolean is(Class<T> clazz);
 	
 	void destroy();
 }

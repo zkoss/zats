@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
 import org.zkoss.zats.mimic.impl.au.EventDataManager;
 import org.zkoss.zats.mimic.operation.BookmarkAgent;
 import org.zkoss.zk.ui.event.BookmarkEvent;

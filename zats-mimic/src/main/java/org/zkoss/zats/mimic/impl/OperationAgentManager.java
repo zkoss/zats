@@ -9,13 +9,32 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
-package org.zkoss.zats.mimic.impl.operation;
+package org.zkoss.zats.mimic.impl;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.Agent;
-import org.zkoss.zats.mimic.impl.Util;
+import org.zkoss.zats.mimic.impl.operation.DesktopBookmarkAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.GenericClickAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.GenericCloseAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.GenericDragAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.GenericFocusAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.GenericGroupAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.GenericHoverAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.GenericKeyStrokeAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.GenericMoveAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.GenericOpenAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.GenericSortAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.GridRenderAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.HeaderSizeAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.ListboxRenderAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.PagingAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.PanelSizeAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.SliderInputAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.TextboxOpenAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.WindowSizeAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.DateInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.DecimalInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.DecimalStringInputAgentBuilder;
@@ -73,7 +92,12 @@ import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.West;
 import org.zkoss.zul.Window;
 import org.zkoss.zul.impl.InputElement;
-
+/**
+ * 
+ * @author pao
+ * @author dennis
+ *
+ */
 public class OperationAgentManager {
 	private static Map<Key, OperationAgentBuilder<? extends Agent, ? extends OperationAgent>> builders;
 
@@ -288,20 +312,33 @@ public class OperationAgentManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <O extends OperationAgent> OperationAgentBuilder<Agent, O> getBuilder(Object delegatee, Class<O> operation) {
+	public static <O extends OperationAgent> OperationAgentBuilder<Agent, O> getBuilder(Object delegatee,
+			Class<O> operation) {
 		// search from self class to parent class
 		Class<?> c = delegatee.getClass();
+
+		OperationAgentBuilder<? extends Agent, ? extends OperationAgent> builder = lookupBuilder(c, operation);
+		if (builder != null) {
+			return (OperationAgentBuilder<Agent, O>)builder;
+		}
+
+		Class<?>[] ifs = c.getInterfaces();
+		for (Class<?> i : ifs) {
+			builder = lookupBuilder(i, operation);
+			if (builder != null) {
+				return (OperationAgentBuilder<Agent, O>)builder;
+			}
+		}
+		return null; // not found
+	}
+	
+	private static <O extends OperationAgent> OperationAgentBuilder<Agent, O> lookupBuilder(Class<?> delegatee, Class<O> operation) {
+		// search from self class to parent class
+		Class<?> c = delegatee;
 		while (c != null) {
 			OperationAgentBuilder<? extends Agent, ? extends OperationAgent> builder = builders.get(new Key(c, operation));
 			if (builder != null)
 				return (OperationAgentBuilder<Agent, O>) builder;
-			//check interface also
-			Class<?>[] ifs = c.getInterfaces();
-			for(Class<?> i:ifs){
-				builder = builders.get(new Key(i, operation));
-				if (builder != null)
-					return (OperationAgentBuilder<Agent, O>) builder;
-			}
 			//check super
 			c = c.getSuperclass();
 		}

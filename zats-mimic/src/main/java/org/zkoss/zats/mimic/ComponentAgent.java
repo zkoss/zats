@@ -101,11 +101,11 @@ public interface ComponentAgent extends Agent{
 	<T> T as(Class<T> clazz);
 
 	/**
-	 * Check can get a instance of target class for this component
+	 * Can get a instance of target class for this component
 	 * 
 	 * @param clazz
 	 *            the class cast to.
-	 * @return true if the component can cast to another class
+	 * @return true if can get a instance of target class
 	 */
 	<T> boolean is(Class<T> clazz);
 	

@@ -52,10 +52,10 @@ public interface PageAgent extends Agent {
 	Object getAttribute(String name);
 	
 	/**
-	 * try to transfer the page agent to the target class, the target class
-	 * is usually a {@link OperationAgent} or a native {@link Page} <br/>
+	 * Try to get a instance of target class for this page agent, the target class
+	 * is usually a {@link OperationAgent} or a native {@link Component} <br/>
 	 * 
-	 * if it cannot transfer to target class, it will throw
+	 * if it cannot get a instance of target class, it will throw
 	 * {@link AgentException}.
 	 * 
 	 * @param clazz
@@ -63,6 +63,15 @@ public interface PageAgent extends Agent {
 	 * @return operation object.
 	 */
 	<T> T as(Class<T> clazz);
+	
+	/**
+	 * Can get a instance of target class for this page
+	 * 
+	 * @param clazz
+	 *            the class cast to.
+	 * @return true if can get a instance of target class
+	 */
+	<T> boolean is(Class<T> clazz);
 
 	/**
 	 * get desktop of this page
