@@ -151,7 +151,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 				consumeReply(is);
 			}
 		} catch (Exception e) {
-			throw new ZatsException("", e);
+			throw new ZatsException(e.getMessage(), e);
 		} finally {
 			close(os);
 			close(is);
@@ -170,7 +170,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 			huc.addRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
 			return huc;
 		} catch (Exception e) {
-			throw new ZatsException("", e);
+			throw new ZatsException(e.getMessage(), e);
 		}
 	}
 
