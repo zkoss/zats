@@ -32,7 +32,7 @@ public class ValueResolverManager {
 		}
 		return instance;
 	}
-	private static List<ValueResolver> resolvers = new ArrayList<ValueResolver>();
+	private List<ValueResolver> resolvers = new ArrayList<ValueResolver>();
 
 	public ValueResolverManager() {
 	
