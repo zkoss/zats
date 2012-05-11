@@ -20,7 +20,7 @@ import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zul.impl.FormatInputElement;
 
 /**
- * 
+ * Build the InputAgent object for ZK components that accept integer.
  * @author dennis
  *
  */
