@@ -16,7 +16,7 @@ import java.util.Map;
 import org.zkoss.zk.ui.event.Event;
 
 /**
- * This interface define API to construct data of AU request.
+ * This interface defines API to construct data of AU request.
  * @author dennis
  *
  */
