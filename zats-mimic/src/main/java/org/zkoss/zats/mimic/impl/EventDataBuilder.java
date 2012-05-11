@@ -1,4 +1,4 @@
-/* DataBuilder.java
+/* EventDataBuilder.java
 
 	Purpose:
 		

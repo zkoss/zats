@@ -1,4 +1,4 @@
-/* GenericPagingAgentBuilder.java
+/* PagingAgentBuilder.java
 
 	Purpose:
 		

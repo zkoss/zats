@@ -1,4 +1,4 @@
-/* ColumnSortAgentBuilder.java
+/* TreecolSortAgentBuilder.java
 
 	Purpose:
 

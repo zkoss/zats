@@ -1,4 +1,4 @@
-/* GenericSizeAgentBuilder.java
+/* AbstractSizeAgentBuilder.java
 
 	Purpose:
 		

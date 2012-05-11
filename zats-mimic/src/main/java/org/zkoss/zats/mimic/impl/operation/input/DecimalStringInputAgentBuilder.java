@@ -1,4 +1,4 @@
-/* IntegerStringInputAgentBuilder.java
+/* DecimalStringInputAgentBuilder.java
 
 	Purpose:
 		
@@ -20,7 +20,7 @@ import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zul.impl.FormatInputElement;
 
 /**
- * 
+ * Build the InputAgent object for ZK components that accept Double input. 
  * @author dennis
  *
  */

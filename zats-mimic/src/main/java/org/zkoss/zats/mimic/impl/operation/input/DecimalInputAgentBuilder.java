@@ -1,4 +1,4 @@
-/* IntegerStringInputAgentBuilder.java
+/* DecimalInputAgentBuilder.java
 
 	Purpose:
 		

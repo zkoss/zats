@@ -41,7 +41,7 @@ public abstract class SwitchedSortAgentImpl extends AgentDelegator<ComponentAgen
 		super(target);
 	}
 	
-	public abstract String getSortDirection();
+	protected abstract String getSortDirection();
 
 	/**
 	 * Send AU data based on the component's current sorting direction.

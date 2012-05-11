@@ -14,7 +14,7 @@ package org.zkoss.zats.mimic;
 import java.util.List;
 
 import org.zkoss.zats.mimic.operation.OperationAgent;
-import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
 /**
  * The page agent, represents a server-side zk page
  * 

@@ -23,7 +23,7 @@ import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zk.ui.event.Events;
 
 /**
- * A specific {@link InputAgent} implementation for colorbox, because its AU data only contains 1 key-value pair, {"color":"#333366"}
+ * A specific {@link InputAgent} implementation for Colorbox, because its AU data only contains 1 key-value pair, {"color":"#333366"}
  * @author Hawk
  *
  */
@@ -53,9 +53,6 @@ public class ColorboxInputAgentBuilder implements OperationAgentBuilder<Componen
 			return value==null?"":value.toString();
 		}
 
-		/* (non-Javadoc)
-		 * @see org.zkoss.zats.mimic.operation.TypeAgent#type(java.lang.String)
-		 */
 		public void type(String value) {
 			final String COLOR_PATTERN = "^#([a-fA-F0-9]{6})";
 			//check input format first
@@ -72,24 +69,15 @@ public class ColorboxInputAgentBuilder implements OperationAgentBuilder<Componen
 
 		}
 
-		/* (non-Javadoc)
-		 * @see org.zkoss.zats.mimic.operation.TypeAgent#typing(java.lang.String)
-		 */
 		public void typing(String value) {
 			throw new AgentException("Unsuppported operation");
 
 		}
 
-		/* (non-Javadoc)
-		 * @see org.zkoss.zats.mimic.operation.TypeAgent#select(int, int)
-		 */
 		public void select(int start, int end) {
 			throw new AgentException("Unsuppported operation");
-			
 		}
 		
-		
-
 	}
 
 }

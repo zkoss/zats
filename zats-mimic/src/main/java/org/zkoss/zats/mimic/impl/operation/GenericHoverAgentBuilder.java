@@ -1,4 +1,4 @@
-/* GenericHoverAgent.java
+/* GenericHoverAgentBuilder.java
 
 	Purpose:
 		
