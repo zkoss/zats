@@ -1,4 +1,4 @@
-/* EventDataManager.java
+/* ValueResolverManager.java
 
 	Purpose:
 		
