@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 
 /**
- * A tool for searching components.
+ * A tool for searching components with Selector syntax.
  * 
  * @author pao
  */

@@ -17,7 +17,7 @@ import org.zkoss.zats.mimic.impl.EventDataBuilder;
 import org.zkoss.zk.ui.event.InputEvent;
 
 /**
- * A data builder for input event.
+ * A data builder for InputEvent.
  * 
  * @author pao
  */

@@ -1,4 +1,4 @@
-/* ComponentAgentDelegator.java
+/* AgentDelegator.java
 
 	Purpose:
 		

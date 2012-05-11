@@ -17,6 +17,7 @@ import org.zkoss.zats.mimic.impl.EventDataBuilder;
 import org.zkoss.zk.ui.event.SelectionEvent;
 
 /**
+ * AU data builder for SelectionEvent.
  * @author Hawk
  *
  */

@@ -17,7 +17,7 @@ import org.zkoss.zats.mimic.impl.EventDataBuilder;
 import org.zkoss.zul.event.ColSizeEvent;
 
 /**
- * The data builder of column size event. 
+ * The data builder for ColSizeEvent. 
  * @author pao
  */
 public class ColSizeEventDataBuilder implements EventDataBuilder<ColSizeEvent> {

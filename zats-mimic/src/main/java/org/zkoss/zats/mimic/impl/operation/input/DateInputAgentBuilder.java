@@ -1,4 +1,4 @@
-/* IntegerStringInputAgentBuilder.java
+/* DateInputAgentBuilder.java
 
 	Purpose:
 		
@@ -21,7 +21,7 @@ import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zul.impl.FormatInputElement;
 
 /**
- * 
+ * Build an InputAgent for Datebox.
  * @author dennis
  *
  */

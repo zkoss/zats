@@ -13,8 +13,14 @@ package org.zkoss.zats.mimic.impl.emulator;
 
 import java.io.Closeable;
 import java.util.Map;
+
 import javax.servlet.ServletContext;
 
+/**
+ * The application server emulator interface. 
+ * @author Hawk
+ *
+ */
 public interface Emulator extends Closeable {
 	/**
 	 * get the host address the emulator bound. normally, it should be

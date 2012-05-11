@@ -14,8 +14,9 @@ package org.zkoss.zats.mimic.operation;
 import org.zkoss.zats.mimic.Agent;
 
 /**
- * The base class of all operation agents that mimic user action.
- * An operation mimics a client's action by sending Ajax Update to testing application running in a emulator.
+ * The base class of all operation agents that mimic user action. Testers use this class to mimic various user operations 
+ * such as typing or clicking.
+ * An operation mimics a client's action by sending AJAX Update to a testing application running in a emulator.
  * 
  * @author pao
  */

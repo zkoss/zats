@@ -17,7 +17,7 @@ import org.zkoss.zats.mimic.impl.EventDataBuilder;
 import org.zkoss.zk.ui.event.MaximizeEvent;
 
 /**
- * The data builder of maximize event.
+ * The data builder of MaximizeEvent.
  * @author pao
  */
 public class MaximizeEventDataBuilder implements EventDataBuilder<MaximizeEvent> {

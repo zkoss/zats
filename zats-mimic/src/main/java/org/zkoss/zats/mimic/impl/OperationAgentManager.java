@@ -29,7 +29,6 @@ import org.zkoss.zats.mimic.impl.operation.GenericKeyStrokeAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericMoveAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericOpenAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GridRenderAgentBuilder;
-import org.zkoss.zats.mimic.impl.operation.HeaderSizeAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.ListboxRenderAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.ListheaderSortAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.PagingAgentBuilder;
@@ -96,6 +95,16 @@ import org.zkoss.zul.West;
 import org.zkoss.zul.Window;
 import org.zkoss.zul.impl.InputElement;
 /**
+ * <p>
+ * This class maintains a mapping registry between ZK components (in specific version range) and {@link OperationAgentBuilder}. 
+ * It registers all entries in the constructor and retrieve them when {@link ValueResolver} requests. 
+ * </p>
+ * We design the registration mechanism in order to deal with the issue: one component might have different behaviors in different versions.
+ * This mechanism has several features:
+ * Later registered entry overwrite previous one with the same key.
+ * When get {@link OperationAgentBuilder},  it will keeping search ZK component's class and its parent class until it finds a match or fails to match.
+ * 
+ * 
  * 
  * @author pao
  * @author dennis
@@ -114,7 +123,7 @@ public class OperationAgentManager {
 	
 	//hold registered builders
 	private Map<Key, OperationAgentBuilder<? extends Agent, ? extends OperationAgent>> registeredBuilders;
-	//hold the resolved builders, it is like a cache
+	//cache the resolved builders 
 	private Map<Key, OperationAgentBuilder<? extends Agent, ? extends OperationAgent>> resolvedBuilders;
 
 	public OperationAgentManager() {
@@ -194,9 +203,9 @@ public class OperationAgentManager {
 		// the resize
 		registerBuilder("5.0.0", "*", Window.class, new WindowSizeAgentBuilder());
 		registerBuilder("5.0.0", "*", Panel.class, new PanelSizeAgentBuilder());
-		registerBuilder("5.0.0", "*", Column.class, new HeaderSizeAgentBuilder());
-		registerBuilder("5.0.0", "*", Listheader.class, new HeaderSizeAgentBuilder());
-		registerBuilder("5.0.0", "*", Treecol.class, new HeaderSizeAgentBuilder());
+//		registerBuilder("5.0.0", "*", Column.class, new HeaderSizeAgentBuilder());
+//		registerBuilder("5.0.0", "*", Listheader.class, new HeaderSizeAgentBuilder());
+//		registerBuilder("5.0.0", "*", Treecol.class, new HeaderSizeAgentBuilder());
 
 		//drag & drop
 		registerBuilder("5.0.0", "*", HtmlBasedComponent.class, new GenericDragAgentBuilder());
@@ -240,19 +249,12 @@ public class OperationAgentManager {
 			registerBuilder("5.0.0", "*", extClz,
 					"org.zkoss.zats.mimic.impl.operation.input.TextInputAgentBuilder");
 		} 
-		
-		// the check of zhtml (optional)
-		extClz = "org.zkoss.zhtml.Input";
-		if(Util.hasClass(extClz)){
-			registerBuilder("5.0.0", "*", extClz,
-					"org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder");
-		} 
 	}
 
 	/**
 	 * Register a operation builder mapping to component and operation. We can
 	 * specify zk version worked on. The version text could be normal version
-	 * format (e.g 6.0.0 or 5.0.7.1) or "*" sign means no specify. If specify
+	 * format (e.g. 6.0.0 or 5.0.7.1) or "*" sign means no specify. If specify
 	 * version range doesn't include current zk version at runtime, this
 	 * register will be ignored.
 	 * <p/>
@@ -328,6 +330,14 @@ public class OperationAgentManager {
 		registeredBuilders.put(new Key(delegateeClass, builder.getOperationClass()), builder);
 	}
 
+	/**
+	 * Return a corresponding OperationAgentBuilder for delegatee supported operation class.
+	 * It will search in registry with delegatee's class first. If not found, it keeps searching with delegatee's parent class until found or failed.
+	 * 
+	 * @param delegatee
+	 * @param operation 
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public <O extends OperationAgent> OperationAgentBuilder<Agent, O> getBuilder(Object delegatee,
 			Class<O> operation) {

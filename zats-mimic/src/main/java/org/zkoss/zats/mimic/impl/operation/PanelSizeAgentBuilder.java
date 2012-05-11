@@ -1,4 +1,4 @@
-/* WindowSizeAgentBuilder.java
+/* PanelSizeAgentBuilder.java
 
 	Purpose:
 		
@@ -14,7 +14,6 @@ package org.zkoss.zats.mimic.impl.operation;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.operation.SizeAgent;
 import org.zkoss.zul.Panel;
-import org.zkoss.zul.Window;
 
 /**
  * @author dennis

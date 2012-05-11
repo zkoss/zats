@@ -15,7 +15,11 @@ import org.zkoss.zats.mimic.Agent;
 
 
 /**
- * To resolve component agent to a special object
+ * ValueResolver will try to convert a ComponentAgent to the object of specified class. 
+ * If failed, it will throw run-time exception. 
+ * A ComponentAgent can be converted into multiple types of objects, e.g. OperationAgent or native ZK component class.
+ * We design the value resolver mechanism to keep extension for potential conversion in the future.
+ *  
  * @author dennis
  *
  */

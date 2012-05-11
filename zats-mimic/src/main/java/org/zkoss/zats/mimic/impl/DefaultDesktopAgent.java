@@ -23,7 +23,7 @@ import org.zkoss.zats.mimic.PageAgent;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 /**
- * 
+ * Default implementation fof DesktopAgent.
  * @author dennis
  *
  */

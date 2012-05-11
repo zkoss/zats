@@ -1,4 +1,4 @@
-/* DataBuilder.java
+/* EventDataBuilder.java
 
 	Purpose:
 		
@@ -16,6 +16,7 @@ import java.util.Map;
 import org.zkoss.zk.ui.event.Event;
 
 /**
+ * This interface defines API to construct data of AU request.
  * @author dennis
  *
  */

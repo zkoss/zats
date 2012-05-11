@@ -1,4 +1,4 @@
-/* GenericSelectAgentBuilder.java
+/* AbstractSelectAgentBuilder.java
 
 	Purpose:
 		
