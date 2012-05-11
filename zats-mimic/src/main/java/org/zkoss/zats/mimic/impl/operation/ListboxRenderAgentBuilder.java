@@ -26,7 +26,7 @@ import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.event.RenderEvent;
 /**
- * 
+ * Build {@link RenderAgent} object for Listbox. 
  * @author dennis
  *
  */
