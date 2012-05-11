@@ -29,7 +29,6 @@ import org.zkoss.zats.mimic.impl.operation.GenericKeyStrokeAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericMoveAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericOpenAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GridRenderAgentBuilder;
-import org.zkoss.zats.mimic.impl.operation.HeaderSizeAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.ListboxRenderAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.ListheaderSortAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.PagingAgentBuilder;
@@ -194,9 +193,9 @@ public class OperationAgentManager {
 		// the resize
 		registerBuilder("5.0.0", "*", Window.class, new WindowSizeAgentBuilder());
 		registerBuilder("5.0.0", "*", Panel.class, new PanelSizeAgentBuilder());
-		registerBuilder("5.0.0", "*", Column.class, new HeaderSizeAgentBuilder());
-		registerBuilder("5.0.0", "*", Listheader.class, new HeaderSizeAgentBuilder());
-		registerBuilder("5.0.0", "*", Treecol.class, new HeaderSizeAgentBuilder());
+//		registerBuilder("5.0.0", "*", Column.class, new HeaderSizeAgentBuilder());
+//		registerBuilder("5.0.0", "*", Listheader.class, new HeaderSizeAgentBuilder());
+//		registerBuilder("5.0.0", "*", Treecol.class, new HeaderSizeAgentBuilder());
 
 		//drag & drop
 		registerBuilder("5.0.0", "*", HtmlBasedComponent.class, new GenericDragAgentBuilder());

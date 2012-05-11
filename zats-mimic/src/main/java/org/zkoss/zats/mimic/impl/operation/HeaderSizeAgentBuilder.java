@@ -30,9 +30,10 @@ import org.zkoss.zul.impl.HeadersElement;
 
 /**
  * The builder for size agent of header element.
+ * TODO unsupported temporary, the behavior of it isn't compatible with the resize agent. 
  * @author pao
  */
-public class HeaderSizeAgentBuilder implements OperationAgentBuilder<ComponentAgent, SizeAgent> {
+class HeaderSizeAgentBuilder implements OperationAgentBuilder<ComponentAgent, SizeAgent> {
 
 	public Class<SizeAgent> getOperationClass() {
 		return SizeAgent.class;
