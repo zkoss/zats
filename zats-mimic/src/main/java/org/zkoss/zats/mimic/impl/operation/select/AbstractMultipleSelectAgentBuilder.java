@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 
 /**
+ * An abstract builder, because different components have different ways to get its status.
  * @author pao
  *
  */

@@ -96,6 +96,16 @@ import org.zkoss.zul.West;
 import org.zkoss.zul.Window;
 import org.zkoss.zul.impl.InputElement;
 /**
+ * <p>
+ * This class maintains a mapping registry between ZK components (in specific version range) and {@link OperationAgentBuilder}. 
+ * It registers all entries in the constructor and retrieve them when {@link ValueResolver} requests. 
+ * </p>
+ * We design the registration mechanism in order to deal with the issue: one component might have different behaviors in different versions.
+ * This mechanism has several features:
+ * Later registered entry overwrite previous one with the same key.
+ * When get {@link OperationAgentBuilder},  it will keeping search ZK component's class and its parent class until it finds a match or fails to match.
+ * 
+ * 
  * 
  * @author pao
  * @author dennis
@@ -114,7 +124,7 @@ public class OperationAgentManager {
 	
 	//hold registered builders
 	private Map<Key, OperationAgentBuilder<? extends Agent, ? extends OperationAgent>> registeredBuilders;
-	//hold the resolved builders, it is like a cache
+	//cache the resolved builders 
 	private Map<Key, OperationAgentBuilder<? extends Agent, ? extends OperationAgent>> resolvedBuilders;
 
 	public OperationAgentManager() {
@@ -252,7 +262,7 @@ public class OperationAgentManager {
 	/**
 	 * Register a operation builder mapping to component and operation. We can
 	 * specify zk version worked on. The version text could be normal version
-	 * format (e.g 6.0.0 or 5.0.7.1) or "*" sign means no specify. If specify
+	 * format (e.g. 6.0.0 or 5.0.7.1) or "*" sign means no specify. If specify
 	 * version range doesn't include current zk version at runtime, this
 	 * register will be ignored.
 	 * <p/>
@@ -328,6 +338,14 @@ public class OperationAgentManager {
 		registeredBuilders.put(new Key(delegateeClass, builder.getOperationClass()), builder);
 	}
 
+	/**
+	 * Return a corresponding OperationAgentBuilder for delegatee supported operation class.
+	 * It will search in registry with delegatee's class first. If not found, it keeps searching with delegatee's parent class until found or failed.
+	 * 
+	 * @param delegatee
+	 * @param operation 
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public <O extends OperationAgent> OperationAgentBuilder<Agent, O> getBuilder(Object delegatee,
 			Class<O> operation) {

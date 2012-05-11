@@ -21,7 +21,7 @@ import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zul.impl.FormatInputElement;
 
 /**
- * Build an InputAgent for Databox.
+ * Build an InputAgent for Datebox.
  * @author dennis
  *
  */

@@ -19,7 +19,7 @@ import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zk.ui.event.Event;
 
 /**
- * This class maintain a list of {@link ValueResolver}. When it resolves a Agent, it calls each resolver in the list to resolve it.
+ * This class maintains a list of {@link ValueResolver}. When it resolves a Agent, it calls each resolver in the list to resolve it.
  * @author dennis
  *
  */
