@@ -249,13 +249,6 @@ public class OperationAgentManager {
 			registerBuilder("5.0.0", "*", extClz,
 					"org.zkoss.zats.mimic.impl.operation.input.TextInputAgentBuilder");
 		} 
-		
-		// the check of zhtml (optional)
-		extClz = "org.zkoss.zhtml.Input";
-		if(Util.hasClass(extClz)){
-			registerBuilder("5.0.0", "*", extClz,
-					"org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder");
-		} 
 	}
 
 	/**
