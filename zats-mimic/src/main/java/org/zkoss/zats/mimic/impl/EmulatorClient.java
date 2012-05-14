@@ -60,7 +60,8 @@ public class EmulatorClient implements Client, ClientCtrl {
 			cookies = huc.getHeaderFields().get("Set-Cookie");
 			is = huc.getInputStream();
 			if (logger.isLoggable(Level.FINEST)) {
-				logger.finest(getReplyString(is, huc.getContentEncoding()));
+				logger.finest("HTTP response header: " + huc.getHeaderFields());
+				logger.finest("HTTP response content: " + getReplyString(is, huc.getContentEncoding()));
 			} else {
 				consumeReply(is);
 			}
@@ -138,6 +139,10 @@ public class EmulatorClient implements Client, ClientCtrl {
 				c.addRequestProperty("Cookie", cookie.split(";", 2)[0]);
 			}
 			c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+			if (logger.isLoggable(Level.FINEST)) {
+				logger.finest("HTTP request header: " + c.getRequestProperties());
+				logger.finest("HTTP request content: " + content);
+			}
 			c.connect();
 			os = c.getOutputStream();
 			os.write(content.getBytes("utf-8"));
@@ -146,7 +151,8 @@ public class EmulatorClient implements Client, ClientCtrl {
 			// read response
 			is = c.getInputStream();
 			if (logger.isLoggable(Level.FINEST)) {
-				logger.finest(getReplyString(is, c.getContentEncoding()));
+				logger.finest("HTTP response header: " + c.getHeaderFields());
+				logger.finest("HTTP response content: " + getReplyString(is, c.getContentEncoding()));
 			} else {
 				consumeReply(is);
 			}
@@ -217,4 +223,5 @@ public class EmulatorClient implements Client, ClientCtrl {
 	public void setDestroyListener(DestroyListener l) {
 		destroyListener = l;
 	}
+
 }
