@@ -20,7 +20,6 @@ public interface BookmarkAgent extends OperationAgent {
 	
 	/**
 	 * change bookmark of a desktop.
-	 * @param value
 	 */
-	void bookmark(String value);
+	void change(String value);
 }

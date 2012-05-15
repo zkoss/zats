@@ -1701,7 +1701,7 @@ public class BasicAgentTest {
 		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/bookmark.zul");
 		assertEquals("Hello World!", desktopAgent.query("#msg").as(Label.class).getValue());
 		
-		desktopAgent.as(BookmarkAgent.class).bookmark("ABCD");
+		desktopAgent.as(BookmarkAgent.class).change("ABCD");
 		assertEquals("Welcome ABCD", desktopAgent.query("#msg").as(Label.class).getValue());
 		
 		desktopAgent.query("#btn").as(ClickAgent.class).click();

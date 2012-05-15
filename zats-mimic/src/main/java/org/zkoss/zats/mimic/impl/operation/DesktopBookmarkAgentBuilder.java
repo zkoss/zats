@@ -40,7 +40,7 @@ public class DesktopBookmarkAgentBuilder implements OperationAgentBuilder<Deskto
 			super(target);
 		}
 
-		public void bookmark(String value) {
+		public void change(String value) {
 			String desktopId = target.getId();
 			ClientCtrl cctrl = (ClientCtrl) target.getClient();
 			Map<String, Object> data = EventDataManager.getInstance().build(new BookmarkEvent(Events.ON_BOOKMARK_CHANGE, value));
