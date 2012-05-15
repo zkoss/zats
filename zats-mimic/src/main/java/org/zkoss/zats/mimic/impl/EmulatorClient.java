@@ -224,4 +224,17 @@ public class EmulatorClient implements Client, ClientCtrl {
 		destroyListener = l;
 	}
 
+	public void setCookie(String key, String value) {
+		// TODO Auto-generated method stub
+	}
+
+	public String getCookie(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Map<String, String> getCookies() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

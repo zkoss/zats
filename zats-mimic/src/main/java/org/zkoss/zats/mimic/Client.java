@@ -11,6 +11,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic;
 
+import java.util.Map;
+
 
 /**
  * Represent a client that can connect to zul files. It plays a role like a browser but without rendering anything.
@@ -33,8 +35,25 @@ public interface Client {
 	 */
 	void destroy();
 	
-	//TODO
-	//getCookie
-	//setCookie
-	
+	/**
+	 * set cookie for the client, the cookie will be sent at every HTTP request.
+	 * key name can't start with '$'.
+	 * If the key existed, the origin value will be replaced.
+	 * @param key The key of the cookie, it should not be null or empty string.  
+	 * @param value The value of the cookie. If the value is null, it will erase this cookie.
+	 */
+	void setCookie(String key, String value);
+
+	/**
+	 * get value of cookie with specify key. 
+	 * @param key The key of the cookie, it should not be null or empty string.
+	 * @return the cookie value if cookie is existed or null otherwise.
+	 */
+	String getCookie(String key);
+
+	/**
+	 * get all cookies in a map.
+	 * @return the map contained cookies.
+	 */
+	Map<String, String> getCookies();
 }
