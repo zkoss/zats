@@ -17,52 +17,44 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 
-public class EnvironmentTest
-{
+public class EnvironmentTest {
 	@BeforeClass
-	public static void init()
-	{
-//		Conversations.start("."); //from project folder
+	public static void init() {
 		Zats.init("./src/main/webapp"); // user can load by configuration file
 	}
 
 	@AfterClass
-	public static void end()
-	{
+	public static void end() {
 		Zats.end();//
 	}
 
 	@After
-	public void after()
-	{
+	public void after() {
 		Zats.cleanup();
 	}
 
 	@Test
-	public void test()
-	{
+	public void test() {
 		DesktopAgent desktop = Zats.newClient().connect("/session.zul");
-		
-		assertNotNull(desktop);
-		assertNotNull(((Desktop)desktop.getDelegatee()).getSession());
-		
 
-		HttpSession session = (HttpSession)((Desktop)desktop.getDelegatee()).getSession().getNativeSession();
+		assertNotNull(desktop);
+		assertNotNull(((Desktop) desktop.getDelegatee()).getSession());
+
+		HttpSession session = (HttpSession) ((Desktop) desktop.getDelegatee()).getSession().getNativeSession();
 		assertEquals("session", session.getAttribute("msg"));
 		assertEquals("desktop", desktop.getAttribute("msg"));
-		
+
 		ComponentAgent win = desktop.query("#win");
 		assertNotNull(win);
 		assertNotNull(win.as(Window.class));
-		assertEquals("my window",win.as(Window.class).getTitle());
-		
-		ComponentAgent msg = win.query("#msg"); 
+		assertEquals("my window", win.as(Window.class).getTitle());
+
+		ComponentAgent msg = win.query("#msg");
 		assertNotNull(msg);
 		assertEquals("hello", msg.as(Label.class).getValue());
-//		assertEquals("hello", ((Label)msg.nat()).getValue());
-		
-		for(int i = 0; i < 10; ++i)
-		{
+		//		assertEquals("hello", ((Label)msg.nat()).getValue());
+
+		for (int i = 0; i < 10; ++i) {
 			win.query("#btn").as(ClickAgent.class).click();
 			assertEquals("s" + i, session.getAttribute("msg"));
 			assertEquals("d" + i, desktop.getAttribute("msg"));
