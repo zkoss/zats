@@ -12,17 +12,24 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.testcase;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DefaultZatsEnvironment;
 import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.operation.ClickAgent;
+import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zul.Label;
 
@@ -169,5 +176,82 @@ public class EnvironmentTest {
 			ctx.destroy();
 		}
 	}
+	
+	@Test
+	public void testCookies() {
+		Zats.init(".");
+		try {
+			Client client = Zats.newClient();
+			Map<String, String> cookies = client.getCookies();
+			assertEquals("{}", cookies.toString());
 
+			DesktopAgent desktop = client.connect("/~./basic/cookie.zul");
+			cookies = client.getCookies();
+			assertFalse("{}".equals(cookies.toString()));
+			Label msg = desktop.query("#msg").as(Label.class);
+			assertEquals("", msg.getValue());
+
+			// set by server
+			desktop.query("#myCookie").as(InputAgent.class).type("testing");
+			desktop.query("#set").click();
+			assertEquals("testing", client.getCookie("myCookie"));
+			desktop.query("#show").click();
+			assertTrue(msg.getValue().contains("myCookie=testing"));
+
+			// set by server again
+			desktop.query("#myCookie").as(InputAgent.class).type("zk");
+			desktop.query("#set").click();
+			assertEquals("zk", client.getCookie("myCookie"));
+			desktop.query("#show").click();
+			assertTrue(msg.getValue().contains("myCookie=zk"));
+
+			// erase by server
+			desktop.query("#delete").click();
+			assertTrue(client.getCookie("myCookie") == null);
+			desktop.query("#show").click();
+			assertFalse(msg.getValue().contains("myCookie"));
+			
+			// set by client
+			client.setCookie("hello", "world");
+			assertEquals("world" , client.getCookie("hello"));
+			desktop.query("#show").click();
+			assertTrue(msg.getValue().contains("hello=world"));
+			
+			// set by client again
+			client.setCookie("hello", "zk");
+			assertEquals("zk" , client.getCookie("hello"));
+			desktop.query("#show").click();
+			assertTrue(msg.getValue().contains("hello=zk"));
+			
+			// erase by client
+			client.setCookie("hello" , null);
+			assertTrue(client.getCookie("hello") == null);
+			desktop.query("#show").click();
+			assertFalse(msg.getValue().contains("hello"));
+			
+			// special case
+			
+			// set empty cookie
+			desktop.query("#myCookie").as(InputAgent.class).type("");
+			desktop.query("#set").click();
+			assertEquals("", client.getCookie("myCookie"));
+			desktop.query("#show").click();
+			assertFalse(msg.getValue().contains("myCookie"));
+
+			// illegal cookie name
+			try {
+				client.setCookie(null, "zk");
+				Assert.fail();
+			} catch (ZatsException e) {
+			}
+			try {
+				client.setCookie("$hello", "zk");
+				Assert.fail();
+			} catch (ZatsException e) {
+			}			
+			
+		} finally {
+			Zats.cleanup();
+		}
+	}
 }
