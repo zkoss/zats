@@ -38,7 +38,7 @@ public class EnvironmentTest2{
 	}
 
 	@Test
-	public void test() {
+	public void testCustomWebinfPath() {
 		DesktopAgent desktop = env.newClient().connect("/session.zul");
 
 		assertNotNull(desktop);
