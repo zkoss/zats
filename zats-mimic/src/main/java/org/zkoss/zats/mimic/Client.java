@@ -37,22 +37,22 @@ public interface Client {
 	
 	/**
 	 * set cookie for the client, the cookie will be sent at every HTTP request.
-	 * key name can't start with '$'.
-	 * If the key existed, the origin value will be replaced.
-	 * @param key The key of the cookie, it should not be null or empty string.  
+	 * cookie name can't start with '$'.
+	 * If the name existed, the origin value will be replaced.
+	 * @param name The name of the cookie, it should not be null or empty string.  
 	 * @param value The value of the cookie. If the value is null, it will erase this cookie.
 	 */
-	void setCookie(String key, String value);
+	void setCookie(String name, String value);
 
 	/**
-	 * get value of cookie with specify key. 
-	 * @param key The key of the cookie, it should not be null or empty string.
+	 * get value of cookie with specify name. 
+	 * @param name The name of the cookie, it should not be null or empty string.
 	 * @return the cookie value if cookie is existed or null otherwise.
 	 */
-	String getCookie(String key);
+	String getCookie(String name);
 
 	/**
-	 * get all cookies in a map.
+	 * get all cookies in an unmodifiable map.
 	 * @return the map contained cookies.
 	 */
 	Map<String, String> getCookies();
