@@ -1,0 +1,23 @@
+<zk>
+	<vbox>
+		<button label="download from file">
+			<attribute name="onClick"><![CDATA[
+				org.zkoss.zul.Filedownload.save("/basic/download.zul", "application/octet-stream");
+				Events.echoEvent("onClick", btn2, null);
+			]]>
+			</attribute>
+		</button>
+		<button id="btn2" label="download from data">
+			<attribute name="onClick"><![CDATA[
+				org.zkoss.zul.Filedownload.save("Hello world!\nHello ZK!", "application/octet-stream", "test.txt");
+			]]>
+			</attribute>
+		</button>
+		<button label="download from data and resumable">
+			<attribute name="onClick"><![CDATA[
+				org.zkoss.zkmax.zul.Filedownload.saveResumable("/basic/download.zul", "application/octet-stream", null);
+			]]>
+			</attribute>
+		</button>
+	</vbox>
+</zk>
