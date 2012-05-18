@@ -252,6 +252,7 @@ public class EnvironmentTest {
 			
 		} finally {
 			Zats.cleanup();
+			Zats.end();
 		}
 	}
 }
