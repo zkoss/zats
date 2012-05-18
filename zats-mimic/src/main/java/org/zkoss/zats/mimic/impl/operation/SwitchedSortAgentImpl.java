@@ -79,6 +79,7 @@ public abstract class SwitchedSortAgentImpl extends AgentDelegator<ComponentAgen
 				}else{
 					data = EventDataManager.getInstance().build(new SortEvent(cmd, header, true));
 					((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, header.getUuid(), data, null);
+					((ClientCtrl) getClient()).flush(desktopId); // listheader will remove duplicate AU
 					data = EventDataManager.getInstance().build(new SortEvent(cmd, header, ascending));
 					((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, header.getUuid(), data, null);
 				}
