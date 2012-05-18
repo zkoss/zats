@@ -45,6 +45,7 @@ public class DesktopBookmarkAgentBuilder implements OperationAgentBuilder<Deskto
 			ClientCtrl cctrl = (ClientCtrl) target.getClient();
 			Map<String, Object> data = EventDataManager.getInstance().build(new BookmarkEvent(Events.ON_BOOKMARK_CHANGE, value));
 			cctrl.postUpdate(desktopId, Events.ON_BOOKMARK_CHANGE, null, data, null);
+			cctrl.flush(desktopId);
 		}
 	}
 }

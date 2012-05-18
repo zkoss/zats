@@ -70,6 +70,7 @@ public abstract class SwitchedSortAgentImpl extends AgentDelegator<ComponentAgen
 					data = EventDataManager.getInstance().build(new SortEvent(cmd, header, true));
 					((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, header.getUuid(), data, null);
 				}
+				((ClientCtrl) getClient()).flush(desktopId);
 				return;
 			}else { //natural, not sorted yet
 				if(ascending){
@@ -82,6 +83,7 @@ public abstract class SwitchedSortAgentImpl extends AgentDelegator<ComponentAgen
 					((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, header.getUuid(), data, null);
 				}
 			}
+			((ClientCtrl) getClient()).flush(desktopId);
 		}catch(Exception e){
 			throw new AgentException(e.getMessage(), e);
 		}

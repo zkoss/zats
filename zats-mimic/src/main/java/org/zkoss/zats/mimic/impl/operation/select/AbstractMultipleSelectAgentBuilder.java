@@ -80,6 +80,7 @@ public abstract class AbstractMultipleSelectAgentBuilder implements OperationAge
 			Map<String, Object> data = EventDataManager.getInstance().build(event);
 			ClientCtrl ctrl = (ClientCtrl) target.getClient();
 			ctrl.postUpdate(desktopId, event.getName(), component.getUuid(), data, null);
+			ctrl.flush(desktopId);
 		}
 
 		abstract protected Component getEventTarget();

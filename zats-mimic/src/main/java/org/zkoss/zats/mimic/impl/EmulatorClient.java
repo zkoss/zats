@@ -49,9 +49,11 @@ public class EmulatorClient implements Client, ClientCtrl {
 	private List<DesktopAgent> desktopAgentList = new LinkedList<DesktopAgent>();
 	private Map<String, String> cookies = new HashMap<String, String>();
 	private DestroyListener destroyListener;
+	private Map<String, List<String>> auQueues; // AU queues of desktops
 
 	public EmulatorClient(Emulator emulator) {
 		this.emulator = emulator;
+		this.auQueues = new HashMap<String, List<String>>();
 	}
 
 	public DesktopAgent connect(String zulPath) {
@@ -100,6 +102,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 
 	public void destroy(DesktopAgent desktopAgent) {
 		postUpdate(desktopAgent.getId(),"rmDesktop",null,null,"i");
+		flush(desktopAgent.getId());
 	}
 	
 	public void postUpdate(String desktopId, String command, String targetUUID, Map<String, Object> data,String option) {
@@ -109,35 +112,54 @@ public class EmulatorClient implements Client, ClientCtrl {
 			throw new IllegalArgumentException("command is null");
 		}
 		
-		// prepare au data
-		final String dtid = UrlEncoded.encodeString(desktopId);
+		// get or create AU queue
+		List<String> queue = auQueues.get(desktopId);
+		if (queue == null) {
+			queue = new LinkedList<String>();
+			auQueues.put(desktopId, queue);
+		}
+		// prepare AU data and queue it (without desktop ID)
+		final int index = queue.size();
 		final String cmd = command = UrlEncoded.encodeString(command);
 		final StringBuilder param = new StringBuilder();
-		
-		param.append("dtid=").append(dtid).append("&cmd_0=").append(cmd);
-		
-		if(targetUUID!=null){
+		param.append("&cmd_").append(index).append("=").append(cmd);
+		if (targetUUID != null) {
 			String uuid = UrlEncoded.encodeString(targetUUID);
-			param.append("&uuid_0=").append(uuid);
+			param.append("&uuid_").append(index).append("=").append(uuid);
 		}
-		if(data != null && data.size() > 0){
+		if (data != null && data.size() > 0) {
 			String jsonData = UrlEncoded.encodeString(JSONValue.toJSONString(data));
-			param.append("&data_0=").append(jsonData);
+			param.append("&data_").append(index).append("=").append(jsonData);
 		}
-		if(option!=null && option.length()>0){
+		if (option != null && option.length() > 0) {
 			option = UrlEncoded.encodeString(option);
-			param.append("&opt_0=").append(option);
+			param.append("&opt_").append(index).append("=").append(option);
 		}
-
-		final String content = param.toString();
+		queue.add(param.toString());
 		
+		// debug log
 		if (logger.isLoggable(Level.FINEST)) {
+			String content = param.toString();
 			logger.finest(targetUUID + " perform AU: " + UrlEncoded.decodeString(content, 0, content.length(), "utf-8"));
 		}
-
+	}
+	
+	public void flush(String desktopId) {
 		OutputStream os = null;
 		InputStream is = null;
 		try {
+
+			// combine AU events from queue into single request
+			StringBuilder sb = new StringBuilder();
+			sb.append("dtid=").append(UrlEncoded.encodeString(desktopId)); // desktop ID.
+			List<String> queue = auQueues.get(desktopId);
+			if (queue == null || queue.size() <= 0) // do nothing
+				return;
+			while (!queue.isEmpty()) {
+				sb.append(queue.remove(0));
+			}
+			final String content = sb.toString();
+
 			// create http request and perform it
 			HttpURLConnection c = getConnection("/zkau", "POST");
 			c.setDoOutput(true);
@@ -157,7 +179,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 			os.write(content.getBytes("utf-8"));
 			close(os);
 			// TODO, read response, handle redirect.
-			
+
 			// read response
 			fetchCookies(c);
 			is = c.getInputStream();

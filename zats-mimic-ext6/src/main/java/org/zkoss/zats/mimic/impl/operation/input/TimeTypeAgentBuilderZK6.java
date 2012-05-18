@@ -18,7 +18,6 @@ import org.zkoss.json.JSONs;
 import org.zkoss.lang.Strings;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.operation.input.TimeInputAgentBuilder;
-import org.zkoss.zats.mimic.impl.operation.input.DateTypeAgentBuilderZK6.InputAgentZK6Impl;
 import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zul.impl.FormatInputElement;
 

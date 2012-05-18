@@ -75,7 +75,9 @@ public class SliderInputAgentBuilder implements OperationAgentBuilder<ComponentA
 			String cmd = Events.ON_SCROLL;
 			ScrollEvent event = new ScrollEvent(cmd, (Component) getDelegatee(), value);
 			Map<String, Object> data = EventDataManager.getInstance().build(event);
-			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
+			String desktopId = target.getDesktop().getId();
+			((ClientCtrl) getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
+			((ClientCtrl) target.getClient()).flush(desktopId);
 		}
 
 		public void type(String value) {
