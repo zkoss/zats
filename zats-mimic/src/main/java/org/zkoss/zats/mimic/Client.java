@@ -37,7 +37,7 @@ public interface Client {
 	
 	/**
 	 * set cookie for the client, the cookie will be sent at every HTTP request.
-	 * cookie name can't start with '$'.
+	 * The cookie name can't start with '$'. Please refer to section 3.2.2 of RFC 2965.
 	 * If the name existed, the origin value will be replaced.
 	 * @param name The name of the cookie, it should not be null or empty string.  
 	 * @param value The value of the cookie. If the value is null, it will erase this cookie.
