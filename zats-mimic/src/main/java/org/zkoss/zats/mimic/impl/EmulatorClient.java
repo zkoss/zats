@@ -282,9 +282,13 @@ public class EmulatorClient implements Client, ClientCtrl {
 				// check expired time and remove cookie if necessary 
 				String expired = attr.getProperty("Expires");
 				if (expired != null && expired.length() > 0) {
-					long time = Date.parse(expired); // W3C Datetime Format
-					if (time < System.currentTimeMillis())
-						cookies.remove(tokens[0]);
+					try {
+						long time = Date.parse(expired); // W3C Datetime Format
+						if (time < System.currentTimeMillis())
+							cookies.remove(tokens[0]);
+					} catch (Throwable e) {
+						logger.log(Level.WARNING, "unexpect exception when parsing HTTP Datetime string", e);
+					}
 				}
 			} catch (Exception e) {
 				new ZatsException("unexpected exception", e);
