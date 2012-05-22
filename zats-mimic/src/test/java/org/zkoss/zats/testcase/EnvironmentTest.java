@@ -320,9 +320,12 @@ public class EnvironmentTest {
 	}
 	
 	public static class HandlerImpl implements LayoutResponseHandler {
+		public static boolean enabled = true; // avoid other test cases
 		public static int count = 0;
-		
+
 		public void process(ClientCtrl controller, String response) {
+			if (!enabled)
+				return;
 			++count;
 			assertTrue(controller != null);
 			assertTrue(response != null);
@@ -346,6 +349,7 @@ public class EnvironmentTest {
 			desktopAgent.query("#btn").as(ClickAgent.class).click();
 			assertEquals("Welcome", desktopAgent.query("#msg").as(Label.class).getValue());
 			assertEquals(2 , HandlerImpl.count);
+			HandlerImpl.enabled = false;
 		} finally {
 			Zats.cleanup();
 			Zats.end();
