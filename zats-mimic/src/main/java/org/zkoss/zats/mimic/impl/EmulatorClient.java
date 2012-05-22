@@ -294,7 +294,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 	
 	public void setCookie(String key, String value) {
 		if (key == null || key.startsWith("$"))
-			throw new ZatsException(key == null ? "cookie key name can't be null"
+			throw new IllegalArgumentException(key == null ? "cookie key name can't be null"
 					: "cookie key name can't be start with '$'");
 		if (value != null)
 			cookies.put(key, value);
@@ -304,7 +304,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 
 	public String getCookie(String key) {
 		if (key == null)
-			throw new ZatsException("cookie key name can't be null");
+			throw new IllegalArgumentException("cookie key name can't be null");
 		return cookies.get(key);
 	}
 
