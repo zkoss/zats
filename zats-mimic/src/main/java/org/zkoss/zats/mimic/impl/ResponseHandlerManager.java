@@ -41,25 +41,35 @@ public class ResponseHandlerManager {
 		// TODO AU response handler
 	}
 
-	public void registerBuilder(String startVersion, String endVersion, String className) {
-		if (startVersion == null || endVersion == null || className == null)
-			throw new IllegalArgumentException();
-		// check version
-		if (!Util.checkVersion(startVersion, endVersion))
-			return;
-
+	public void registerHandler(String startVersion, String endVersion, String className) {
 		try {
 			// create object and check type
 			Class<?> clazz = Class.forName(className);
 			if (LayoutResponseHandler.class.isAssignableFrom(clazz))
-				layoutHandlers.add((LayoutResponseHandler) clazz.newInstance());
+				registerHandler(startVersion, endVersion, (LayoutResponseHandler) clazz.newInstance());
 			else if (UpdateResponseHandler.class.isAssignableFrom(clazz))
-				updateHandlers.add((UpdateResponseHandler) clazz.newInstance());
+				registerHandler(startVersion, endVersion, (UpdateResponseHandler) clazz.newInstance());
 			else
 				throw new ClassCastException(className + " neither layout response handler nor update response handler");
 		} catch (Exception x) {
 			throw new IllegalArgumentException(x.getMessage(), x);
 		}
+	}
+
+	public void registerHandler(String startVersion, String endVersion, LayoutResponseHandler handler) {
+		if (startVersion == null || endVersion == null || handler == null)
+			throw new IllegalArgumentException();
+		if (!Util.checkVersion(startVersion, endVersion))
+			return;
+		layoutHandlers.add(handler);
+	}
+
+	public void registerHandler(String startVersion, String endVersion, UpdateResponseHandler handler) {
+		if (startVersion == null || endVersion == null || handler == null)
+			throw new IllegalArgumentException();
+		if (!Util.checkVersion(startVersion, endVersion))
+			return;
+		updateHandlers.add(handler);
 	}
 
 	public List<LayoutResponseHandler> getLayoutResponseHandlers() {

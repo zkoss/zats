@@ -26,12 +26,14 @@ import javax.servlet.http.HttpSession;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DefaultZatsEnvironment;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Zats;
+import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.LayoutResponseHandler;
+import org.zkoss.zats.mimic.impl.ResponseHandlerManager;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zats.mimic.operation.SortAgent;
@@ -311,6 +313,39 @@ public class EnvironmentTest {
 		} catch (Throwable e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
+		} finally {
+			Zats.cleanup();
+			Zats.end();
+		}
+	}
+	
+	public static class HandlerImpl implements LayoutResponseHandler {
+		public static int count = 0;
+		
+		public void process(ClientCtrl controller, String response) {
+			++count;
+			assertTrue(controller != null);
+			assertTrue(response != null);
+			assertTrue(response.indexOf("html") >= 0);
+			assertTrue(response.indexOf("ZK") >= 0);
+			assertTrue(response.indexOf("Hello World") >= 0);
+		}
+	}
+
+	@Test
+	public void testLayoutResponseHandler() {
+		ResponseHandlerManager manager = ResponseHandlerManager.getInstance();
+		manager.registerHandler("*", "*", HandlerImpl.class.getName());
+		manager.registerHandler("*", "*", new HandlerImpl());
+		manager.registerHandler("9.9.9", "*", new HandlerImpl());
+
+		Zats.init(".");
+		try {
+			DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/click.zul");
+			assertEquals("Hello World!", desktopAgent.query("#msg").as(Label.class).getValue());
+			desktopAgent.query("#btn").as(ClickAgent.class).click();
+			assertEquals("Welcome", desktopAgent.query("#msg").as(Label.class).getValue());
+			assertEquals(2 , HandlerImpl.count);
 		} finally {
 			Zats.cleanup();
 			Zats.end();
