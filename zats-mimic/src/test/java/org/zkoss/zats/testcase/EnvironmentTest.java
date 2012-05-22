@@ -247,12 +247,12 @@ public class EnvironmentTest {
 			try {
 				client.setCookie(null, "zk");
 				Assert.fail();
-			} catch (ZatsException e) {
+			} catch (Throwable e) {
 			}
 			try {
 				client.setCookie("$hello", "zk");
 				Assert.fail();
-			} catch (ZatsException e) {
+			} catch (Throwable e) {
 			}			
 			
 		} finally {
