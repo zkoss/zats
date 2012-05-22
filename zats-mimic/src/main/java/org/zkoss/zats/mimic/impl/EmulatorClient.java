@@ -182,15 +182,18 @@ public class EmulatorClient implements Client, ClientCtrl {
 			close(os);
 			// TODO, read response, handle redirect.
 
-			// read response
+			// read response and pass to layout response handlers
 			fetchCookies(c);
 			is = c.getInputStream();
+			String raw = getReplyString(is, c.getContentEncoding());
+			List<LayoutResponseHandler> handlers = ResponseHandlerManager.getInstance().getLayoutResponseHandlers();
+			for (LayoutResponseHandler h : handlers)
+				h.process(this, raw);
 			if (logger.isLoggable(Level.FINEST)) {
 				logger.finest("HTTP response header: " + c.getHeaderFields());
-				logger.finest("HTTP response content: " + getReplyString(is, c.getContentEncoding()));
-			} else {
-				consumeReply(is);
+				logger.finest("HTTP response content: " + raw);
 			}
+			
 		} catch (Exception e) {
 			throw new ZatsException(e.getMessage(), e);
 		} finally {
