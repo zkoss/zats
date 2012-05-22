@@ -1,0 +1,22 @@
+	--------
+ZATS Mimic 1.0.0
+May 22, 2012
+
+* Features
+  Automatic/Fast test without server and browser.
+  No-javascript needed to write a test case.
+  Searching components by query expression.
+  Validation via component APIs directly.
+  Support multiple test-environment configuration
+  Support multiple clients/desktops.
+  Support 20 operations on 100+ components
+    Click / Double click / Right click operations
+    Input operation
+    Single and Multiple select operations
+    And more...
+  Compatible to ZK 5 and ZK 6
+
+* Bugs
+
+* Upgrade Notes
+
