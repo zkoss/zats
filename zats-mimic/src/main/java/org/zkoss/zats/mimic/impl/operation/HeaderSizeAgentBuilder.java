@@ -111,6 +111,7 @@ class HeaderSizeAgentBuilder implements OperationAgentBuilder<ComponentAgent, Si
 			data = EventDataManager.getInstance().build(event);
 			data.put("widths", widths);
 			cc.postUpdate(desktopId, cmd, head.getUuid(), data, null);
+			cc.flush(desktopId);
 		}
 	}
 }

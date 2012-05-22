@@ -47,6 +47,7 @@ public class TextboxOpenAgentBuilder implements OperationAgentBuilder<ComponentA
 			OpenEvent event = new OpenEvent(cmd, (Component)target.getDelegatee(), open, null, value);
 			Map<String, Object> data = EventDataManager.getInstance().build(event);
 			((ClientCtrl) target.getClient()).postUpdate(desktopId,cmd, target.getUuid(), data, null);
+			((ClientCtrl) getClient()).flush(desktopId);
 		}
 	}
 

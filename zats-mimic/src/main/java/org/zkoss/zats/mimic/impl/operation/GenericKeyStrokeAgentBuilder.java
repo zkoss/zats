@@ -144,6 +144,7 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<Compo
 			Map<String, Object> data = EventDataManager.getInstance().build(new KeyEvent(cmd, (Component)et.getDelegatee(), keyCode, ctrlKey,
 					shiftKey, altKey, (Component)target.getDelegatee()));
 			((ClientCtrl)et.getClient()).postUpdate(desktopId, cmd, et.getUuid(), data, null);
+			((ClientCtrl)target.getClient()).flush(desktopId);
 		}
 
 		private void doOnCancel() {
@@ -155,6 +156,7 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<Compo
 			Map<String, Object> data = EventDataManager.getInstance().build(new KeyEvent(cmd, (Component)et.getDelegatee(), ESC, false, false,
 					false, (Component)target.getDelegatee()));
 			((ClientCtrl)et.getClient()).postUpdate(desktopId, cmd, et.getUuid(), data, null);
+			((ClientCtrl)target.getClient()).flush(desktopId);
 		}
 
 		private void doOnOK() {
@@ -166,6 +168,7 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<Compo
 			Map<String, Object> data = EventDataManager.getInstance().build(new KeyEvent(cmd, (Component)et.getDelegatee(), ENTER, false, false,
 					false, (Component)target.getDelegatee()));
 			((ClientCtrl)et.getClient()).postUpdate(desktopId, cmd, et.getUuid(), data, null);
+			((ClientCtrl)target.getClient()).flush(desktopId);
 		}
 	}
 }

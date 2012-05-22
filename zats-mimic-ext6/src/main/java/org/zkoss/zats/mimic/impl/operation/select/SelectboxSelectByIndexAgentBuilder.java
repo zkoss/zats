@@ -56,7 +56,9 @@ public class SelectboxSelectByIndexAgentBuilder implements OperationAgentBuilder
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("", index);
 			ClientCtrl ctrl = (ClientCtrl) target.getClient();
-			ctrl.postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
+			String desktopId = target.getDesktop().getId();
+			ctrl.postUpdate(desktopId, cmd, target.getUuid(), data, null);
+			ctrl.flush(desktopId);
 		}
 	}
 }

@@ -41,6 +41,7 @@ public class GenericCheckAgentBuilder implements OperationAgentBuilder<Component
 					checked));
 			ClientCtrl cctrl = (ClientCtrl) target.getClient();
 			cctrl.postUpdate(desktopId, Events.ON_CHECK, target.getUuid(), data, null);
+			cctrl.flush(desktopId);
 		}
 	}
 }

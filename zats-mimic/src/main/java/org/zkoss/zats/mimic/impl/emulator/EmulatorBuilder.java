@@ -105,7 +105,7 @@ public class EmulatorBuilder {
 	
 	public EmulatorBuilder setContextPath(String contextPath) {
 		if(contextPath==null)
-			throw new ZatsException("unll context path");
+			throw new IllegalArgumentException("null context path");
 		this.contextPath = contextPath;
 		return this;
 	}

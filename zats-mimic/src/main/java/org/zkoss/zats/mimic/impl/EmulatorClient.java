@@ -13,6 +13,7 @@ package org.zkoss.zats.mimic.impl;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,9 +21,14 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,11 +48,13 @@ public class EmulatorClient implements Client, ClientCtrl {
 	private static Logger logger = Logger.getLogger(EmulatorClient.class.getName());
 	private Emulator emulator;
 	private List<DesktopAgent> desktopAgentList = new LinkedList<DesktopAgent>();
-	private List<String> cookies;
+	private Map<String, String> cookies = new HashMap<String, String>();
 	private DestroyListener destroyListener;
+	private Map<String, List<String>> auQueues; // AU queues of desktops
 
 	public EmulatorClient(Emulator emulator) {
 		this.emulator = emulator;
+		this.auQueues = new ConcurrentHashMap<String, List<String>>();
 	}
 
 	public DesktopAgent connect(String zulPath) {
@@ -57,10 +65,11 @@ public class EmulatorClient implements Client, ClientCtrl {
 			huc.connect();
 			// TODO, read response, handle redirect.
 
-			cookies = huc.getHeaderFields().get("Set-Cookie");
+			fetchCookies(huc);
 			is = huc.getInputStream();
 			if (logger.isLoggable(Level.FINEST)) {
-				logger.finest(getReplyString(is, huc.getContentEncoding()));
+				logger.finest("HTTP response header: " + huc.getHeaderFields());
+				logger.finest("HTTP response content: " + getReplyString(is, huc.getContentEncoding()));
 			} else {
 				consumeReply(is);
 			}
@@ -87,10 +96,15 @@ public class EmulatorClient implements Client, ClientCtrl {
 			destroy(d);
 		}
 		desktopAgentList.clear();
+
+		// should be after cleaning desktop
+		cookies.clear();
+		auQueues.clear();
 	}
 
 	public void destroy(DesktopAgent desktopAgent) {
 		postUpdate(desktopAgent.getId(),"rmDesktop",null,null,"i");
+		flush(desktopAgent.getId());
 	}
 	
 	public void postUpdate(String desktopId, String command, String targetUUID, Map<String, Object> data,String option) {
@@ -100,53 +114,80 @@ public class EmulatorClient implements Client, ClientCtrl {
 			throw new IllegalArgumentException("command is null");
 		}
 		
-		// prepare au data
-		final String dtid = UrlEncoded.encodeString(desktopId);
+		// get or create AU queue
+		List<String> queue = auQueues.get(desktopId);
+		if (queue == null) {
+			queue = new LinkedList<String>();
+			auQueues.put(desktopId, queue);
+		}
+		// prepare AU data and queue it (without desktop ID)
+		final int index = queue.size();
 		final String cmd = command = UrlEncoded.encodeString(command);
 		final StringBuilder param = new StringBuilder();
-		
-		param.append("dtid=").append(dtid).append("&cmd_0=").append(cmd);
-		
-		if(targetUUID!=null){
+		param.append("&cmd_").append(index).append("=").append(cmd);
+		if (targetUUID != null) {
 			String uuid = UrlEncoded.encodeString(targetUUID);
-			param.append("&uuid_0=").append(uuid);
+			param.append("&uuid_").append(index).append("=").append(uuid);
 		}
-		if(data != null && data.size() > 0){
+		if (data != null && data.size() > 0) {
 			String jsonData = UrlEncoded.encodeString(JSONValue.toJSONString(data));
-			param.append("&data_0=").append(jsonData);
+			param.append("&data_").append(index).append("=").append(jsonData);
 		}
-		if(option!=null && option.length()>0){
+		if (option != null && option.length() > 0) {
 			option = UrlEncoded.encodeString(option);
-			param.append("&opt_0=").append(option);
+			param.append("&opt_").append(index).append("=").append(option);
 		}
-
-		final String content = param.toString();
+		queue.add(param.toString());
 		
+		// debug log
 		if (logger.isLoggable(Level.FINEST)) {
+			String content = param.toString();
 			logger.finest(targetUUID + " perform AU: " + UrlEncoded.decodeString(content, 0, content.length(), "utf-8"));
 		}
-
+	}
+	
+	public void flush(String desktopId) {
 		OutputStream os = null;
 		InputStream is = null;
 		try {
+
+			// combine AU events from queue into single request
+			StringBuilder sb = new StringBuilder();
+			sb.append("dtid=").append(UrlEncoded.encodeString(desktopId)); // desktop ID.
+			List<String> queue = auQueues.get(desktopId);
+			if (queue == null || queue.size() <= 0) // do nothing
+				return;
+			for (String cmd : queue)
+				sb.append(cmd);
+			queue.clear();
+			final String content = sb.toString();
+
 			// create http request and perform it
 			HttpURLConnection c = getConnection("/zkau", "POST");
 			c.setDoOutput(true);
 			c.setDoInput(true);
-			for (String cookie : cookies) {
-				// handle cookie for session
-				c.addRequestProperty("Cookie", cookie.split(";", 2)[0]);
+			// handle cookies
+			for (Entry<String, String> cookie : cookies.entrySet()) {
+				String value = cookie.getValue() != null ? cookie.getValue() : "";
+				c.addRequestProperty("Cookie", cookie.getKey() + "=" + value);
 			}
 			c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+			if (logger.isLoggable(Level.FINEST)) {
+				logger.finest("HTTP request header: " + c.getRequestProperties());
+				logger.finest("HTTP request content: " + content);
+			}
 			c.connect();
 			os = c.getOutputStream();
 			os.write(content.getBytes("utf-8"));
 			close(os);
 			// TODO, read response, handle redirect.
+
 			// read response
+			fetchCookies(c);
 			is = c.getInputStream();
 			if (logger.isLoggable(Level.FINEST)) {
-				logger.finest(getReplyString(is, c.getContentEncoding()));
+				logger.finest("HTTP response header: " + c.getHeaderFields());
+				logger.finest("HTTP response content: " + getReplyString(is, c.getContentEncoding()));
 			} else {
 				consumeReply(is);
 			}
@@ -216,5 +257,62 @@ public class EmulatorClient implements Client, ClientCtrl {
 
 	public void setDestroyListener(DestroyListener l) {
 		destroyListener = l;
+	}
+
+	@SuppressWarnings("deprecation")
+	private void fetchCookies(HttpURLConnection connection)
+	{
+		// fetch and parse cookies from connection
+		List<String> list = connection.getHeaderFields().get("Set-Cookie");
+		if (list == null)
+			return;
+		for (String raw : list) {
+			try {
+
+				// parse cookie and append to the collection of cookies 
+				String[] tokens = raw.trim().split(";"); // fetch cookie
+				tokens = tokens[0].split("="); // fetch key and value from cookie
+				cookies.put(tokens[0], tokens.length < 2 ? "" : tokens[1]); // value can be null
+
+				// get cookie attributes
+				byte[] data = raw.replaceAll(";", "\n").getBytes("ASCII");
+				Properties attr = new Properties();
+				attr.load(new ByteArrayInputStream(data));
+
+				// check expired time and remove cookie if necessary 
+				String expired = attr.getProperty("Expires");
+				if (expired != null && expired.length() > 0) {
+					try {
+						long time = Date.parse(expired); // W3C Datetime Format
+						if (time < System.currentTimeMillis())
+							cookies.remove(tokens[0]);
+					} catch (Throwable e) {
+						logger.log(Level.WARNING, "unexpect exception when parsing HTTP Datetime string", e);
+					}
+				}
+			} catch (Exception e) {
+				new ZatsException("unexpected exception", e);
+			}
+		}
+	}
+	
+	public void setCookie(String key, String value) {
+		if (key == null || key.startsWith("$"))
+			throw new IllegalArgumentException(key == null ? "cookie key name can't be null"
+					: "cookie key name can't be start with '$'");
+		if (value != null)
+			cookies.put(key, value);
+		else
+			cookies.remove(key);
+	}
+
+	public String getCookie(String key) {
+		if (key == null)
+			throw new IllegalArgumentException("cookie key name can't be null");
+		return cookies.get(key);
+	}
+
+	public Map<String, String> getCookies() {
+		return new HashMap<String, String>(cookies); // a copy of cookies
 	}
 }
