@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -116,36 +115,29 @@ public class EmulatorClient implements Client, ClientCtrl {
 		}
 		
 		// get or create AU queue
-		List<String> queue;
-		queue = auQueues.get(desktopId);
+		List<String> queue = auQueues.get(desktopId);
 		if (queue == null) {
-			synchronized (this) { // prevent concurrent creation
-				if (queue == null) { // double locking (efficiently)
-					queue = new CopyOnWriteArrayList<String>();
-					auQueues.put(desktopId, queue);
-				}
-			}
+			queue = new LinkedList<String>();
+			auQueues.put(desktopId, queue);
 		}
 		// prepare AU data and queue it (without desktop ID)
+		final int index = queue.size();
 		final String cmd = command = UrlEncoded.encodeString(command);
 		final StringBuilder param = new StringBuilder();
-		synchronized (queue) { // lock necessary code
-			final int index = queue.size(); // should not be racing
-			param.append("&cmd_").append(index).append("=").append(cmd);
-			if (targetUUID != null) {
-				String uuid = UrlEncoded.encodeString(targetUUID);
-				param.append("&uuid_").append(index).append("=").append(uuid);
-			}
-			if (data != null && data.size() > 0) {
-				String jsonData = UrlEncoded.encodeString(JSONValue.toJSONString(data));
-				param.append("&data_").append(index).append("=").append(jsonData);
-			}
-			if (option != null && option.length() > 0) {
-				option = UrlEncoded.encodeString(option);
-				param.append("&opt_").append(index).append("=").append(option);
-			}
-			queue.add(param.toString());
+		param.append("&cmd_").append(index).append("=").append(cmd);
+		if (targetUUID != null) {
+			String uuid = UrlEncoded.encodeString(targetUUID);
+			param.append("&uuid_").append(index).append("=").append(uuid);
 		}
+		if (data != null && data.size() > 0) {
+			String jsonData = UrlEncoded.encodeString(JSONValue.toJSONString(data));
+			param.append("&data_").append(index).append("=").append(jsonData);
+		}
+		if (option != null && option.length() > 0) {
+			option = UrlEncoded.encodeString(option);
+			param.append("&opt_").append(index).append("=").append(option);
+		}
+		queue.add(param.toString());
 		
 		// debug log
 		if (logger.isLoggable(Level.FINEST)) {
@@ -165,11 +157,9 @@ public class EmulatorClient implements Client, ClientCtrl {
 			List<String> queue = auQueues.get(desktopId);
 			if (queue == null || queue.size() <= 0) // do nothing
 				return;
-			synchronized (queue) { // prevent racing condition
-				for (String cmd : queue)
-					sb.append(cmd);
-				queue.clear();
-			}
+			for (String cmd : queue)
+				sb.append(cmd);
+			queue.clear();
 			final String content = sb.toString();
 
 			// create http request and perform it

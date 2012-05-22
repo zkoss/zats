@@ -16,7 +16,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.servlet.http.HttpSession;
 
@@ -25,11 +28,13 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.Client;
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DefaultZatsEnvironment;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.InputAgent;
+import org.zkoss.zats.mimic.operation.SortAgent;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zul.Label;
 
@@ -250,6 +255,62 @@ public class EnvironmentTest {
 			} catch (ZatsException e) {
 			}			
 			
+		} finally {
+			Zats.cleanup();
+			Zats.end();
+		}
+	}
+	
+	@Test
+	public void testConcurrentPostAU() {
+		Zats.init(".");
+		try {
+
+			// exceptions handler
+			final Queue<Throwable> exceptions = new ConcurrentLinkedQueue<Throwable>();
+			UncaughtExceptionHandler handler = new UncaughtExceptionHandler() {
+				public void uncaughtException(Thread t, Throwable e) {
+					exceptions.add(e);
+				}
+			};
+
+			// concurrent test with different desktops
+			final DesktopAgent[] desktops = { 
+					Zats.newClient().connect("/~./basic/group-sort.zul"),
+					Zats.newClient().connect("/~./basic/group-sort.zul") 
+			};
+			Runnable work = new Runnable() {
+				public void run() {
+					int index = Integer.parseInt(Thread.currentThread().getName());
+					DesktopAgent desktop = desktops[index];
+					for (int i = 0; i < 100; ++i) {
+						Label status = desktop.query("#sortStatus").as(Label.class);
+						ComponentAgent column = desktop.query("column[label='Author']");
+						column.as(SortAgent.class).sort(false);
+						assertEquals(i + " rounds", "Author,false", status.getValue());
+						column.as(SortAgent.class).sort(true);
+						assertEquals(i + " rounds", "Author,true", status.getValue());
+					}
+				}
+			};
+			Thread[] threads = { 
+					new Thread(work, "0"), 
+					new Thread(work, "1") 
+			};
+			for (Thread t : threads) {
+				t.setUncaughtExceptionHandler(handler);
+				t.start();
+			}
+			for (Thread t : threads)
+				t.join();
+			for(DesktopAgent d : desktops)
+				d.destroy();
+			if(!exceptions.isEmpty())
+				throw exceptions.remove();
+			
+		} catch (Throwable e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
 		} finally {
 			Zats.cleanup();
 			Zats.end();
