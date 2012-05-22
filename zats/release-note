@@ -1,4 +1,15 @@
 	--------
+ZATS Mimic 1.0.1
+
+* Features
+  ZATS-3: allow users to set cookie
+  ZATS-8: batch AU support
+
+* Bugs
+
+* Upgrade Notes
+
+	--------
 ZATS Mimic 1.0.0
 May 22, 2012
 
@@ -19,4 +30,3 @@ May 22, 2012
 * Bugs
 
 * Upgrade Notes
-
