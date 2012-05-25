@@ -11,7 +11,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.Closeable;
@@ -47,7 +46,7 @@ import org.zkoss.zk.ui.Desktop;
 public class EmulatorClient implements Client, ClientCtrl {
 	private static Logger logger = Logger.getLogger(EmulatorClient.class.getName());
 	private Emulator emulator;
-	private List<DesktopAgent> desktopAgentList = new LinkedList<DesktopAgent>();
+	private Map<String, DesktopAgent> desktopAgents = new HashMap<String, DesktopAgent>();
 	private Map<String, String> cookies = new HashMap<String, String>();
 	private DestroyListener destroyListener;
 	private Map<String, List<String>> auQueues; // AU queues of desktops
@@ -63,8 +62,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 			// load zul page
 			HttpURLConnection huc = getConnection(zulPath, "GET");
 			huc.connect();
-			// TODO, read response, handle redirect.
-
+			// read response and pass to response handlers
 			fetchCookies(huc);
 			is = huc.getInputStream();
 			String raw = getReplyString(is, huc.getContentEncoding());
@@ -80,7 +78,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 			Desktop desktop = (Desktop) emulator.getRequestAttributes().get("javax.zkoss.zk.ui.desktop");
 			// TODO, what if a non-zk(zul) page, throw exception?
 			DesktopAgent desktopAgent = new DefaultDesktopAgent(this, desktop);
-			desktopAgentList.add(desktopAgent);
+			desktopAgents.put(desktopAgent.getId(), desktopAgent);
 			return desktopAgent;
 		} catch (Exception e) {
 			throw new ZatsException(e.getMessage(), e);
@@ -94,10 +92,10 @@ public class EmulatorClient implements Client, ClientCtrl {
 			destroyListener.willDestroy(this);
 		}
 
-		for (DesktopAgent d : desktopAgentList) {
+		for (DesktopAgent d : desktopAgents.values()) {
 			destroy(d);
 		}
-		desktopAgentList.clear();
+		desktopAgents.clear();
 
 		// should be after cleaning desktop
 		cookies.clear();
@@ -148,6 +146,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void flush(String desktopId) {
 		OutputStream os = null;
 		InputStream is = null;
@@ -182,17 +181,20 @@ public class EmulatorClient implements Client, ClientCtrl {
 			os = c.getOutputStream();
 			os.write(content.getBytes("utf-8"));
 			close(os);
-			// TODO, read response, handle redirect.
 
-			// read response
+			// read and parse response, and pass to response handlers
 			fetchCookies(c);
 			is = c.getInputStream();
+			String raw = getReplyString(is, c.getContentEncoding());
+			Map<String, Object> json = (Map<String, Object>) org.zkoss.zats.common.json.JSONValue.parseWithException(raw);
+			List<UpdateResponseHandler> handlers = ResponseHandlerManager.getInstance().getUpdateResponseHandlers();
+			for (UpdateResponseHandler h : handlers)
+				h.process((DesktopCtrl) desktopAgents.get(desktopId), json);
 			if (logger.isLoggable(Level.FINEST)) {
 				logger.finest("HTTP response header: " + c.getHeaderFields());
-				logger.finest("HTTP response content: " + getReplyString(is, c.getContentEncoding()));
-			} else {
-				consumeReply(is);
+				logger.finest("HTTP response content: " + raw);
 			}
+			
 		} catch (Exception e) {
 			throw new ZatsException(e.getMessage(), e);
 		} finally {
@@ -221,18 +223,6 @@ public class EmulatorClient implements Client, ClientCtrl {
 		try {
 			c.close();
 		} catch (Throwable e) {
-		}
-	}
-
-	private void consumeReply(InputStream is) {
-		try {
-			is = new BufferedInputStream(is);
-			while (is.read() >= 0) {
-			}
-		} catch (Throwable e) {
-			logger.log(Level.WARNING, "", e);
-		} finally {
-			close(is);
 		}
 	}
 

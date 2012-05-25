@@ -17,6 +17,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -32,8 +33,10 @@ import org.zkoss.zats.mimic.DefaultZatsEnvironment;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.DesktopCtrl;
 import org.zkoss.zats.mimic.impl.LayoutResponseHandler;
 import org.zkoss.zats.mimic.impl.ResponseHandlerManager;
+import org.zkoss.zats.mimic.impl.UpdateResponseHandler;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zats.mimic.operation.SortAgent;
@@ -319,7 +322,7 @@ public class EnvironmentTest {
 		}
 	}
 	
-	public static class HandlerImpl implements LayoutResponseHandler {
+	public static class LayoutHandlerImpl implements LayoutResponseHandler {
 		public static boolean enabled = true; // avoid other test cases
 		public static int count = 0;
 
@@ -334,13 +337,40 @@ public class EnvironmentTest {
 			assertTrue(response.indexOf("Hello World") >= 0);
 		}
 	}
+	
+	public static class UpdateHandlerImpl implements UpdateResponseHandler {
+		public static boolean enabled = true; // avoid other test cases
+		public static int count = 0;
+
+		public void process(DesktopCtrl controller, Map<String, Object> jsonObject) {
+			if (!enabled)
+				return;
+			++count;
+			assertTrue(controller != null);
+			assertTrue(jsonObject != null);
+			assertTrue(jsonObject.containsKey("rid"));
+			assertTrue(jsonObject.containsKey("rs"));
+			List<?> list = (List<?>) jsonObject.get("rs");
+			list = (List<?>) list.get(0);
+			Assert.assertEquals("setAttr", list.get(0));
+			list = (List<?>) list.get(1);
+			assertEquals("value", list.get(1));
+			assertEquals("Welcome", list.get(2));
+		}
+	}
 
 	@Test
-	public void testLayoutResponseHandler() {
+	public void testResponseHandler() {
+		// test handlers register
 		ResponseHandlerManager manager = ResponseHandlerManager.getInstance();
-		manager.registerHandler("*", "*", HandlerImpl.class.getName());
-		manager.registerHandler("*", "*", new HandlerImpl());
-		manager.registerHandler("9.9.9", "*", new HandlerImpl());
+		// layout handlers
+		manager.registerHandler("*", "*", LayoutHandlerImpl.class.getName());
+		manager.registerHandler("*", "*", new LayoutHandlerImpl());
+		manager.registerHandler("9.9.9", "*", new LayoutHandlerImpl());
+		// update handlers
+		manager.registerHandler("*", "*", UpdateHandlerImpl.class.getName());
+		manager.registerHandler("*", "*", new UpdateHandlerImpl());
+		manager.registerHandler("9.9.9", "*", new UpdateHandlerImpl());
 
 		Zats.init(".");
 		try {
@@ -348,8 +378,10 @@ public class EnvironmentTest {
 			assertEquals("Hello World!", desktopAgent.query("#msg").as(Label.class).getValue());
 			desktopAgent.query("#btn").as(ClickAgent.class).click();
 			assertEquals("Welcome", desktopAgent.query("#msg").as(Label.class).getValue());
-			assertEquals(2 , HandlerImpl.count);
-			HandlerImpl.enabled = false;
+			assertEquals(2 , LayoutHandlerImpl.count);
+			assertEquals(2 , UpdateHandlerImpl.count);
+			LayoutHandlerImpl.enabled = false;
+			UpdateHandlerImpl.enabled = false;
 		} finally {
 			Zats.cleanup();
 			Zats.end();

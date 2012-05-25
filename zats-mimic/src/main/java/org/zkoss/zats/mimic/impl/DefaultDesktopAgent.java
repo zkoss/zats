@@ -19,6 +19,7 @@ import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zats.mimic.Downloadable;
 import org.zkoss.zats.mimic.PageAgent;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -27,7 +28,7 @@ import org.zkoss.zk.ui.Page;
  * @author dennis
  *
  */
-public class DefaultDesktopAgent implements DesktopAgent {
+public class DefaultDesktopAgent implements DesktopAgent, DesktopCtrl {
 	private Client client;
 	private Desktop desktop;
 
@@ -105,6 +106,10 @@ public class DefaultDesktopAgent implements DesktopAgent {
 	public <T> boolean is(Class<T> clazz) {
 		T obj = ValueResolverManager.getInstance().resolve(this, clazz);
 		return obj!=null;
+	}
+
+	public void setDownloadable(Downloadable downloadable) {
+		// TODO setDownloadable
 	}
 	
 }
