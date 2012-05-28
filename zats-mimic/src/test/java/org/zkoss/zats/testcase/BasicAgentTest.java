@@ -2025,7 +2025,7 @@ public class BasicAgentTest {
 			Assert.assertEquals(SwitchedSortAgentImpl.ASCENDING, sortingHeader.as(Listheader.class).getSortDirection());
 			sortingHeader.as(SortAgent.class).sort(false);
 			Assert.assertEquals(SwitchedSortAgentImpl.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
-			//repeat sorting in the same order works correctly 
+			//repeat sorting in the same order should work correctly 
 			sortingHeader.as(SortAgent.class).sort(false);
 			Assert.assertEquals(SwitchedSortAgentImpl.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
 
@@ -2043,8 +2043,8 @@ public class BasicAgentTest {
 			Assert.assertEquals(SwitchedSortAgentImpl.DESCENDING, sortingColumn.as(Treecol.class).getSortDirection());
 			sortingColumn.as(SortAgent.class).sort(true);
 			Assert.assertEquals(SwitchedSortAgentImpl.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
-			//repeat sorting in the same order works correctly 
-			sortingHeader.as(SortAgent.class).sort(true);
+			//repeat sorting in the same order should work correctly 
+			sortingColumn.as(SortAgent.class).sort(true);
 			Assert.assertEquals(SwitchedSortAgentImpl.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
 
 		}
