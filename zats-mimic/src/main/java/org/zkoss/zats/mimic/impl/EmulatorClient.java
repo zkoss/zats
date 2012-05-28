@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 import org.eclipse.jetty.util.UrlEncoded;
 import org.zkoss.json.JSONValue;
 import org.zkoss.zats.ZatsException;
+import org.zkoss.zats.common.json.parser.ParseException;
 import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.impl.emulator.Emulator;
@@ -195,6 +196,8 @@ public class EmulatorClient implements Client, ClientCtrl {
 				logger.finest("HTTP response content: " + raw);
 			}
 			
+		} catch (ParseException e) {
+			logger.log(Level.SEVERE, "unexpect exception when parsing JSON", e);
 		} catch (Exception e) {
 			throw new ZatsException(e.getMessage(), e);
 		} finally {
