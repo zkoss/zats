@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.Page;
 public class DefaultDesktopAgent implements DesktopAgent, DesktopCtrl {
 	private Client client;
 	private Desktop desktop;
+	private Downloadable downloadable;
 
 	public DefaultDesktopAgent(Client client, Desktop desktop) {
 		this.client = client;
@@ -109,7 +110,11 @@ public class DefaultDesktopAgent implements DesktopAgent, DesktopCtrl {
 	}
 
 	public void setDownloadable(Downloadable downloadable) {
-		// TODO setDownloadable
+		this.downloadable = downloadable;
+	}
+
+	public Downloadable getDownloadable() {
+		return downloadable;
 	}
 	
 }

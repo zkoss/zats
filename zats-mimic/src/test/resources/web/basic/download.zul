@@ -1,21 +1,51 @@
 <zk>
+	<zscript><![CDATA[
+	                  
+		public void dummy() {}
+		
+		// create a temp file for testing
+		java.io.File temp = null;
+		java.io.Writer writer = null;
+		try {
+			temp = java.io.File.createTempFile("zats-", ".tmp");
+			temp.deleteOnExit();
+			writer = new java.io.FileWriter(temp);
+			writer.write("Hello ZK!\nThis is a test file!");
+		} catch(Throwable e) {
+			e.printStackTrace();
+		} finally {
+			org.zkoss.zats.mimic.impl.Util.close(writer);				
+		}
+	]]>
+	</zscript>
 	<vbox>
-		<button label="download from file">
+		<hbox>
+			<label value="test file path:" />
+			<label id="path" value="${temp.path }" />
+		</hbox>
+		<button id="dummy" label="dummy button" onClick="dummy();" />
+		<button id="btn0" label="download from file">
 			<attribute name="onClick"><![CDATA[
-				org.zkoss.zul.Filedownload.save("/basic/download.zul", "application/octet-stream");
-				Events.echoEvent("onClick", btn2, null);
+				org.zkoss.zul.Filedownload.save(temp, "application/octet-stream");
 			]]>
 			</attribute>
 		</button>
-		<button id="btn2" label="download from data">
+		<button id="btn1" label="download from data">
 			<attribute name="onClick"><![CDATA[
 				org.zkoss.zul.Filedownload.save("Hello world!\nHello ZK!", "application/octet-stream", "test.txt");
 			]]>
 			</attribute>
 		</button>
-		<button label="download from data and resumable">
+		<button id="btn2" label="download from file and resumable">
 			<attribute name="onClick"><![CDATA[
-				org.zkoss.zkmax.zul.Filedownload.saveResumable("/basic/download.zul", "application/octet-stream", null);
+				org.zkoss.zkmax.zul.Filedownload.saveResumable(temp, "application/octet-stream", null);
+			]]>
+			</attribute>
+		</button>
+		<button id="btn3" label="download last file but invoked download twice">
+			<attribute name="onClick"><![CDATA[
+				org.zkoss.zul.Filedownload.save("This is no. 0!", "application/octet-stream", "file0.txt");
+				org.zkoss.zul.Filedownload.save("This is no. 1!", "application/octet-stream", "file1.txt");
 			]]>
 			</attribute>
 		</button>

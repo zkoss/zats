@@ -17,6 +17,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,6 +39,7 @@ import org.junit.Test;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zats.mimic.Downloadable;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zats.mimic.impl.operation.SwitchedSortAgentImpl;
@@ -60,6 +66,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listheader;
@@ -2048,6 +2055,70 @@ public class BasicAgentTest {
 			Assert.assertEquals(SwitchedSortAgentImpl.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
 
 		}
-}
+		
+	private String fetchString(InputStream is) throws Exception {
+		StringBuilder sb = new StringBuilder();
+		try {
+			Reader r = new InputStreamReader(is);
+			r = new BufferedReader(r);
+			int c;
+			while ((c = r.read()) >= 0)
+				sb.append((char) c);
+		} finally {
+			Util.close(is);
+		}
+		return sb.toString();
+	}
+	
+	@Test
+	public void testDownload() throws Exception {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/download.zul");
+		assertTrue(desktop.query("#dummy").is(Button.class));
+		assertTrue(desktop.query("#btn0").is(Button.class));
+		assertTrue(desktop.query("#btn1").is(Button.class));
+		assertTrue(desktop.query("#btn2").is(Button.class));
+		// temp file
+		String path = desktop.query("#path").as(Label.class).getValue();
+		assertTrue(path != null && path.length() > 0);
+		File temp = new File(path);
+		assertTrue(temp.canRead());
 
+		// no download
+		assertTrue(desktop.getDownloadable() == null);
+		desktop.query("#dummy").click();
+		assertTrue(desktop.getDownloadable() == null);
+
+		// download from file
+		desktop.query("#btn0").click();
+		Downloadable downloadable = desktop.getDownloadable();
+		assertTrue(downloadable != null);
+		assertEquals(temp.getName(), downloadable.getFileName());
+		assertEquals("Hello ZK!\nThis is a test file!", fetchString(downloadable.getInputStream()));
+
+		// no download again
+		desktop.query("#dummy").click();
+		assertTrue(desktop.getDownloadable() == null);
+
+		// download from data
+		desktop.query("#btn1").click();
+		downloadable = desktop.getDownloadable();
+		assertTrue(downloadable != null);
+		assertEquals("test.txt", downloadable.getFileName());
+		assertEquals("Hello world!\nHello ZK!", fetchString(downloadable.getInputStream()));
+
+		// download from file and resumable
+		desktop.query("#btn2").click();
+		downloadable = desktop.getDownloadable();
+		assertTrue(downloadable != null);
+		assertEquals(temp.getName(), downloadable.getFileName());
+		assertEquals("Hello ZK!\nThis is a test file!", fetchString(downloadable.getInputStream()));
+
+		// download last file (invoke download twice in one AU event)
+		desktop.query("#btn3").click();
+		downloadable = desktop.getDownloadable();
+		assertTrue(downloadable != null);
+		assertEquals("file1.txt", downloadable.getFileName());
+		assertEquals("This is no.1!", fetchString(downloadable.getInputStream()));
+	}
+}
 

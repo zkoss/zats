@@ -82,5 +82,14 @@ public interface DesktopAgent extends Agent {
 	 */
 	<T> boolean is(Class<T> clazz);
 	
+	/**
+	 * destroy this desktop.
+	 */
 	void destroy();
+	
+	/**
+	 * get the downloadable file currently.
+	 * @return downloadable file or null if there is no downloadable file currently.
+	 */
+	Downloadable getDownloadable();
 }
