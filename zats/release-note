@@ -4,8 +4,9 @@ ZATS Mimic 1.0.1
 * Features
   ZATS-3: allow users to set cookie
   ZATS-8: batch AU support
+  ZATS-9: The mechanism of handling AU response
   ZATS-10: The mechanism of handling layout response
-
+  
 * Bugs
 
 * Upgrade Notes
