@@ -326,11 +326,12 @@ public class EnvironmentTest {
 		public static boolean enabled = true; // avoid other test cases
 		public static int count = 0;
 
-		public void process(ClientCtrl controller, String response) {
+		public void process(Client client, String response) {
 			if (!enabled)
 				return;
 			++count;
-			assertTrue(controller != null);
+			assertTrue(client != null);
+			assertTrue(client instanceof ClientCtrl);
 			assertTrue(response != null);
 			assertTrue(response.indexOf("html") >= 0);
 			assertTrue(response.indexOf("ZK") >= 0);
@@ -342,11 +343,12 @@ public class EnvironmentTest {
 		public static boolean enabled = true; // avoid other test cases
 		public static int count = 0;
 
-		public void process(DesktopCtrl controller, Map<String, Object> jsonObject) {
+		public void process(DesktopAgent desktop, Map<String, Object> jsonObject) {
 			if (!enabled)
 				return;
 			++count;
-			assertTrue(controller != null);
+			assertTrue(desktop != null);
+			assertTrue(desktop instanceof DesktopCtrl);
 			assertTrue(jsonObject != null);
 			assertTrue(jsonObject.containsKey("rid"));
 			assertTrue(jsonObject.containsKey("rs"));

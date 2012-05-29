@@ -11,6 +11,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zats.mimic.impl;
 
+import org.zkoss.zats.mimic.Client;
+
 /**
  * The interface of layout response handler.
  * The handler can process response when client opened a URL,
@@ -21,8 +23,8 @@ public interface LayoutResponseHandler {
 	
 	/**
 	 * perform layout response processing.
-	 * @param controller client controller
+	 * @param client current client
 	 * @param response RAW text of layout response (HTML/XHTML)
 	 */
-	void process(ClientCtrl controller , String response);
+	void process(Client client, String response);
 }

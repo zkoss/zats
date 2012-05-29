@@ -190,7 +190,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 			Map<String, Object> json = (Map<String, Object>) org.zkoss.zats.common.json.JSONValue.parseWithException(raw);
 			List<UpdateResponseHandler> handlers = ResponseHandlerManager.getInstance().getUpdateResponseHandlers();
 			for (UpdateResponseHandler h : handlers)
-				h.process((DesktopCtrl) desktopAgents.get(desktopId), json);
+				h.process(desktopAgents.get(desktopId), json);
 			if (logger.isLoggable(Level.FINEST)) {
 				logger.finest("HTTP response header: " + c.getHeaderFields());
 				logger.finest("HTTP response content: " + raw);
