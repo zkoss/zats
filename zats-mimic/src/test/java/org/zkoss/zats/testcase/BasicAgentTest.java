@@ -2118,7 +2118,7 @@ public class BasicAgentTest {
 		downloadable = desktop.getDownloadable();
 		assertTrue(downloadable != null);
 		assertEquals("file1.txt", downloadable.getFileName());
-		assertEquals("This is no.1!", fetchString(downloadable.getInputStream()));
+		assertEquals("This is no. 1!", fetchString(downloadable.getInputStream()));
 	}
 }
 

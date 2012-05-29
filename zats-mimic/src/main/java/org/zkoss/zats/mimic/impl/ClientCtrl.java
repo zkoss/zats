@@ -11,6 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zats.mimic.impl;
 
+import java.io.InputStream;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.Client;
@@ -42,4 +43,8 @@ public interface ClientCtrl {
 		void willDestroy(Client conv);
 	}
 	
+	/**
+	 * download file via client directly.
+	 */
+	InputStream download(String path);
 }

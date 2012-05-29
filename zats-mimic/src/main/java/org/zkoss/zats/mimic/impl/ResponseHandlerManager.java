@@ -14,6 +14,8 @@ package org.zkoss.zats.mimic.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.zkoss.zats.mimic.impl.response.DownloadHandler;
+
 /**
  * The manager of response handler.
  * It provide registry for handlers and let others access handlers.
@@ -36,9 +38,10 @@ public class ResponseHandlerManager {
 		layoutHandlers = new ArrayList<LayoutResponseHandler>();
 		updateHandlers = new ArrayList<UpdateResponseHandler>();
 
-		// layout response handler
+		// TODO layout response handler
 
-		// TODO AU response handler
+		// AU response handler
+		registerHandler("5.0.0", "*", new DownloadHandler());
 	}
 
 	public void registerHandler(String startVersion, String endVersion, String className) {

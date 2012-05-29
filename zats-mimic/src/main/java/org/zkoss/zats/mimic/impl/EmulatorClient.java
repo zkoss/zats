@@ -68,8 +68,13 @@ public class EmulatorClient implements Client, ClientCtrl {
 			is = huc.getInputStream();
 			String raw = getReplyString(is, huc.getContentEncoding());
 			List<LayoutResponseHandler> handlers = ResponseHandlerManager.getInstance().getLayoutResponseHandlers();
-			for (LayoutResponseHandler h : handlers)
-				h.process(this, raw);
+			for (LayoutResponseHandler h : handlers) {
+				try {
+					h.process(this, raw);
+				} catch (Throwable e) {
+					logger.log(Level.SEVERE, e.getMessage(), e);
+				}
+			}
 			if (logger.isLoggable(Level.FINEST)) {
 				logger.finest("HTTP response header: " + huc.getHeaderFields());
 				logger.finest("HTTP response content: " + raw);
@@ -189,8 +194,13 @@ public class EmulatorClient implements Client, ClientCtrl {
 			String raw = getReplyString(is, c.getContentEncoding());
 			Map<String, Object> json = (Map<String, Object>) org.zkoss.zats.common.json.JSONValue.parseWithException(raw);
 			List<UpdateResponseHandler> handlers = ResponseHandlerManager.getInstance().getUpdateResponseHandlers();
-			for (UpdateResponseHandler h : handlers)
-				h.process(desktopAgents.get(desktopId), json);
+			for (UpdateResponseHandler h : handlers) {
+				try {
+					h.process(desktopAgents.get(desktopId), json);
+				} catch (Throwable e) {
+					logger.log(Level.SEVERE, e.getMessage(), e);
+				}
+			}
 			if (logger.isLoggable(Level.FINEST)) {
 				logger.finest("HTTP response header: " + c.getHeaderFields());
 				logger.finest("HTTP response content: " + raw);
@@ -218,6 +228,22 @@ public class EmulatorClient implements Client, ClientCtrl {
 			huc.addRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
 			return huc;
 		} catch (Exception e) {
+			throw new ZatsException(e.getMessage(), e);
+		}
+	}
+	
+	public InputStream download(String path) {
+		try {
+			HttpURLConnection c = getConnection(path, "GET");
+			c.setDoOutput(false);
+			c.setDoInput(true);
+			// handle cookies, download require same session
+			for (Entry<String, String> cookie : cookies.entrySet()) {
+				String value = cookie.getValue() != null ? cookie.getValue() : "";
+				c.addRequestProperty("Cookie", cookie.getKey() + "=" + value);
+			}
+			return c.getInputStream();
+		} catch (Throwable e) {
 			throw new ZatsException(e.getMessage(), e);
 		}
 	}
