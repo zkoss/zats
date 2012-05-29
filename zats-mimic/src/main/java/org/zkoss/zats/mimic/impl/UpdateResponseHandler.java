@@ -26,7 +26,7 @@ public interface UpdateResponseHandler {
 	/**
 	 * perform AU response processing.
 	 * @param desktop desktop agent
-	 * @param response response data
+	 * @param jsonObject the root jsonObjct map of the response
 	 */
 	void process(DesktopAgent desktop, Map<String, Object> jsonObject);
 }

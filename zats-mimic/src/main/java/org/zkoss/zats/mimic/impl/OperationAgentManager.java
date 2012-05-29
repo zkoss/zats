@@ -336,7 +336,7 @@ public class OperationAgentManager {
 	 * 
 	 * @param delegatee
 	 * @param operation 
-	 * @return
+	 * @return the operation agent builder
 	 */
 	@SuppressWarnings("unchecked")
 	public <O extends OperationAgent> OperationAgentBuilder<Agent, O> getBuilder(Object delegatee,
