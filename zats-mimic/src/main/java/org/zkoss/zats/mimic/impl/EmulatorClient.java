@@ -14,6 +14,7 @@ package org.zkoss.zats.mimic.impl;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.Closeable;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -232,20 +233,16 @@ public class EmulatorClient implements Client, ClientCtrl {
 		}
 	}
 	
-	public InputStream download(String path) {
-		try {
-			HttpURLConnection c = getConnection(path, "GET");
-			c.setDoOutput(false);
-			c.setDoInput(true);
-			// handle cookies, download require same session
-			for (Entry<String, String> cookie : cookies.entrySet()) {
-				String value = cookie.getValue() != null ? cookie.getValue() : "";
-				c.addRequestProperty("Cookie", cookie.getKey() + "=" + value);
-			}
-			return c.getInputStream();
-		} catch (Throwable e) {
-			throw new ZatsException(e.getMessage(), e);
+	public InputStream openConnection(String path) throws IOException {
+		HttpURLConnection c = getConnection(path, "GET");
+		c.setDoOutput(false);
+		c.setDoInput(true);
+		// handle cookies, download require same session
+		for (Entry<String, String> cookie : cookies.entrySet()) {
+			String value = cookie.getValue() != null ? cookie.getValue() : "";
+			c.addRequestProperty("Cookie", cookie.getKey() + "=" + value);
 		}
+		return c.getInputStream();
 	}
 
 	private void close(Closeable c) {

@@ -11,6 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zats.mimic.impl.response;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
 
 import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zats.mimic.Downloadable;
+import org.zkoss.zats.mimic.Resource;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.DesktopCtrl;
 import org.zkoss.zats.mimic.impl.UpdateResponseHandler;
@@ -53,12 +54,12 @@ public class DownloadHandler implements UpdateResponseHandler {
 			String path = data[0].toString().replaceAll("\\\\", ""); // remove unnecessary char.
 			if (logger.isLoggable(Level.FINEST))
 				logger.finest("download event: " + path);
-			Downloadable downloadable = new DownloadableImpl(desktop, path);
+			Resource downloadable = new DownloadableImpl(desktop, path);
 			((DesktopCtrl) desktop).setDownloadable(downloadable);
 		}
 	}
 
-	private static class DownloadableImpl implements Downloadable {
+	private static class DownloadableImpl implements Resource {
 
 		private DesktopAgent desktop;
 		private String path;
@@ -68,14 +69,14 @@ public class DownloadHandler implements UpdateResponseHandler {
 			this.path = path;
 		}
 
-		public String getFileName() {
+		public String getName() {
 			return path.substring(path.lastIndexOf("/") + 1);
 		}
 
-		public InputStream getInputStream() {
+		public InputStream getInputStream() throws IOException{
 			Client client = desktop.getClient();
 			ClientCtrl cc = (ClientCtrl) client;
-			return cc.download(path);
+			return cc.openConnection(path);
 		}
 	}
 }

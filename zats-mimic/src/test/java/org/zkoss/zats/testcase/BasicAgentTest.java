@@ -39,7 +39,7 @@ import org.junit.Test;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zats.mimic.Downloadable;
+import org.zkoss.zats.mimic.Resource;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zats.mimic.impl.operation.SwitchedSortAgentImpl;
@@ -2090,9 +2090,9 @@ public class BasicAgentTest {
 
 		// download from file
 		desktop.query("#btn0").click();
-		Downloadable downloadable = desktop.getDownloadable();
+		Resource downloadable = desktop.getDownloadable();
 		assertTrue(downloadable != null);
-		assertEquals(temp.getName(), downloadable.getFileName());
+		assertEquals(temp.getName(), downloadable.getName());
 		assertEquals("Hello ZK!\nThis is a test file!", fetchString(downloadable.getInputStream()));
 
 		// no download again
@@ -2103,21 +2103,21 @@ public class BasicAgentTest {
 		desktop.query("#btn1").click();
 		downloadable = desktop.getDownloadable();
 		assertTrue(downloadable != null);
-		assertEquals("test.txt", downloadable.getFileName());
+		assertEquals("test.txt", downloadable.getName());
 		assertEquals("Hello world!\nHello ZK!", fetchString(downloadable.getInputStream()));
 
 		// download from file and resumable
 		desktop.query("#btn2").click();
 		downloadable = desktop.getDownloadable();
 		assertTrue(downloadable != null);
-		assertEquals(temp.getName(), downloadable.getFileName());
+		assertEquals(temp.getName(), downloadable.getName());
 		assertEquals("Hello ZK!\nThis is a test file!", fetchString(downloadable.getInputStream()));
 
 		// download last file (invoke download twice in one AU event)
 		desktop.query("#btn3").click();
 		downloadable = desktop.getDownloadable();
 		assertTrue(downloadable != null);
-		assertEquals("file1.txt", downloadable.getFileName());
+		assertEquals("file1.txt", downloadable.getName());
 		assertEquals("This is no. 1!", fetchString(downloadable.getInputStream()));
 	}
 }

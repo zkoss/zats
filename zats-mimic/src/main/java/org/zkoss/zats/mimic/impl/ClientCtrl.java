@@ -11,6 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zats.mimic.impl;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
@@ -44,7 +45,9 @@ public interface ClientCtrl {
 	}
 	
 	/**
-	 * download file via client directly.
+	 * open a connect with current session and cookie.
+	 * @param path the path to connect to.
+	 * @throws IOException 
 	 */
-	InputStream download(String path);
+	InputStream openConnection(String path) throws IOException;
 }

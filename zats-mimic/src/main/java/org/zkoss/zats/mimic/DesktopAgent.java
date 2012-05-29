@@ -88,8 +88,8 @@ public interface DesktopAgent extends Agent {
 	void destroy();
 	
 	/**
-	 * get the downloadable file currently.
-	 * @return downloadable file or null if there is no downloadable file currently.
+	 * Get the current downloadable resource.
+	 * @return downloadable resource or null if there is no such resource.
 	 */
-	Downloadable getDownloadable();
+	Resource getDownloadable();
 }
