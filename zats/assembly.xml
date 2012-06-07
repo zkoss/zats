@@ -12,6 +12,7 @@
 			<outputDirectory>/doc</outputDirectory>
 			<includes>
 				<include>COPYING*</include>
+				<include>release-note</include>
 			</includes>
 		</fileSet>
 		<fileSet>
