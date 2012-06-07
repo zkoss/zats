@@ -1,5 +1,5 @@
 	--------
-ZATS Mimic 1.0.1
+ZATS Mimic 1.1.0
 
 * Features
   ZATS-3: allow users to set cookie
@@ -9,6 +9,7 @@ ZATS Mimic 1.0.1
   ZATS-10: The mechanism of handling layout response
   
 * Bugs
+  ZATS-13: fixed session keeping issue
 
 * Upgrade Notes
 
