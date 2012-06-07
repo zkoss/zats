@@ -20,6 +20,7 @@ import java.io.IOException;
 /**
  * Beans that support customized output of JSON text to a writer shall implement this interface.  
  * @author FangYidong<fangyidong@yahoo.com.cn>
+ * @since 1.1.0
  */
 public interface JSONStreamAware {
 	/**

@@ -21,6 +21,7 @@ import java.io.IOException;
  * protected class used to stored Internal methods
  * 
  * @author Uriel Chemouni <uchemouni@gmail.com>
+ * @since 1.1.0
  */
 class JStylerObj {
 

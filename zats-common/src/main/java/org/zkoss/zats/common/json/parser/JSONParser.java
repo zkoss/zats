@@ -22,6 +22,7 @@ import java.io.Reader;
  * Parser for JSON text. Please note that JSONParser is NOT thread-safe.
  * 
  * @author Uriel Chemouni <uchemouni@gmail.com>
+ * @since 1.1.0
  */
 public class JSONParser extends JSONParserStream {
 

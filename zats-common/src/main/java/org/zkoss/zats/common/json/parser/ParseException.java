@@ -19,6 +19,7 @@ package org.zkoss.zats.common.json.parser;
  * ParseException explains why and where the error occurs in source JSON text.
  * 
  * @author Uriel Chemouni <uchemouni@gmail.com>
+ * @since 1.1.0
  */
 public class ParseException extends Exception {
 	private static final long serialVersionUID = 8879024178584091857L;

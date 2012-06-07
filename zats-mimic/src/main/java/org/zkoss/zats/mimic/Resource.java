@@ -18,6 +18,7 @@ import java.io.InputStream;
  * The Resource interface.
  * It provides some information about a resource and the input stream of it.
  * @author pao
+ * @since 1.1.0
  */
 public interface Resource {
 

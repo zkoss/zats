@@ -41,6 +41,7 @@ public interface Client {
 	 * If the name existed, the origin value will be replaced.
 	 * @param name The name of the cookie, it should not be null or empty string.  
 	 * @param value The value of the cookie. If the value is null, it will erase this cookie.
+	 * @since 1.1.0
 	 */
 	void setCookie(String name, String value);
 
@@ -48,12 +49,14 @@ public interface Client {
 	 * get value of cookie with specify name. 
 	 * @param name The name of the cookie, it should not be null or empty string.
 	 * @return the cookie value if cookie is existed or null otherwise.
+	 * @since 1.1.0
 	 */
 	String getCookie(String name);
 
 	/**
 	 * get all cookies in an unmodifiable map.
 	 * @return the map contained cookies.
+	 * @since 1.1.0
 	 */
 	Map<String, String> getCookies();
 }

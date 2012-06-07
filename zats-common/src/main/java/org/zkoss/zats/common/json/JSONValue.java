@@ -32,6 +32,7 @@ import org.zkoss.zats.common.json.parser.ParseException;
 /**
  * @author FangYidong<fangyidong@yahoo.com.cn>
  * @author Uriel Chemouni <uchemouni@gmail.com>
+ * @since 1.1.0
  */
 public class JSONValue {
 

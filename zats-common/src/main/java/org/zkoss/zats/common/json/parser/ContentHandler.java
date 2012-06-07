@@ -26,6 +26,7 @@ import java.io.Reader;
  * @see JSONParser#parse(Reader, ContainerFactory)
  * 
  * @author FangYidong<fangyidong@yahoo.com.cn>
+ * @since 1.1.0
  */
 public interface ContentHandler {
 	/**

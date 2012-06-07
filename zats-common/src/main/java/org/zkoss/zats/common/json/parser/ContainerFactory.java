@@ -26,6 +26,7 @@ import org.zkoss.zats.common.json.parser.ContainerFactory;
  * Container factory for creating containers for JSON object and JSON array.
  *
  * @author FangYidong<fangyidong@yahoo.com.cn>
+ * @since 1.1.0
  */
 public class ContainerFactory {
 	public final static ContainerFactory FACTORY = new ContainerFactory();

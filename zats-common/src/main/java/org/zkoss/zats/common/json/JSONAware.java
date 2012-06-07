@@ -18,6 +18,7 @@ package org.zkoss.zats.common.json;
 /**
  * Beans that support customized output of JSON text shall implement this interface.
  * @author FangYidong<fangyidong@yahoo.com.cn>
+ * @since 1.1.0
  */
 public interface JSONAware {
 	/**

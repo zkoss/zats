@@ -24,6 +24,7 @@ import java.util.List;
  * 
  * @author FangYidong<fangyidong@yahoo.com.cn>
  * @author Uriel Chemouni <uchemouni@gmail.com>
+ * @since 1.1.0
  */
 public class JSONArray extends ArrayList<Object> implements List<Object> {
 	private static final long serialVersionUID = 9106884089231309568L;

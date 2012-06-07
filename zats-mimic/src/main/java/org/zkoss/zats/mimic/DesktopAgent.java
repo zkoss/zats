@@ -90,6 +90,7 @@ public interface DesktopAgent extends Agent {
 	/**
 	 * Get the current downloadable resource.
 	 * @return downloadable resource or null if there is no such resource.
+	 * @since 1.1.0
 	 */
 	Resource getDownloadable();
 }
