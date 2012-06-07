@@ -14,7 +14,6 @@ package org.zkoss.zats.testcase;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -32,15 +31,12 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.logging.Logger;
 
-import javax.servlet.http.HttpSession;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.AgentException;
-import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Resource;
@@ -2125,14 +2121,5 @@ public class BasicAgentTest {
 		assertEquals("This is no. 1!", fetchString(downloadable.getInputStream()));
 	}
 	
-	@Test
-	public void testSameSession() {
-		Client c = Zats.newClient();
-		DesktopAgent desktop1 = c.connect("/~./basic/click.zul");
-		DesktopAgent desktop2 = c.connect("/~./basic/click.zul");
-		assertNotSame(desktop1.getId(), desktop2.getId());
-		assertEquals(((HttpSession) ((Desktop) desktop1.getDelegatee()).getSession().getNativeSession()).getId(),
-				((HttpSession) ((Desktop) desktop2.getDelegatee()).getSession().getNativeSession()).getId());
-	}
 }
 

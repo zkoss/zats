@@ -389,4 +389,20 @@ public class EnvironmentTest {
 			Zats.end();
 		}
 	}
+	
+	@Test
+	public void testSameSession() {
+		Zats.init(".");
+		try {
+			Client c = Zats.newClient();
+			DesktopAgent desktop1 = c.connect("/~./basic/click.zul");
+			DesktopAgent desktop2 = c.connect("/~./basic/click.zul");
+			assertNotSame(desktop1.getId(), desktop2.getId());
+			assertEquals(((HttpSession) ((Desktop) desktop1.getDelegatee()).getSession().getNativeSession()).getId(),
+					((HttpSession) ((Desktop) desktop2.getDelegatee()).getSession().getNativeSession()).getId());
+		} finally {
+			Zats.cleanup();
+			Zats.end();
+		}
+	}
 }
