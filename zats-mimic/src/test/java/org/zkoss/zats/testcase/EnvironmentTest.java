@@ -394,12 +394,25 @@ public class EnvironmentTest {
 	public void testSameSession() {
 		Zats.init(".");
 		try {
+			String zul = "/~./basic/click.zul";
+			
 			Client c = Zats.newClient();
-			DesktopAgent desktop1 = c.connect("/~./basic/click.zul");
-			DesktopAgent desktop2 = c.connect("/~./basic/click.zul");
-			assertNotSame(desktop1.getId(), desktop2.getId());
-			assertEquals(((HttpSession) ((Desktop) desktop1.getDelegatee()).getSession().getNativeSession()).getId(),
-					((HttpSession) ((Desktop) desktop2.getDelegatee()).getSession().getNativeSession()).getId());
+			DesktopAgent desktop1 = c.connect(zul);
+			String s1 = ((HttpSession) ((Desktop) desktop1.getDelegatee()).getSession().getNativeSession()).getId();
+			DesktopAgent desktop2 = c.connect(zul);
+			String s2 = ((HttpSession) ((Desktop) desktop2.getDelegatee()).getSession().getNativeSession()).getId();
+			assertFalse(desktop1.getId().equals(desktop2.getId()));
+			assertEquals(s1, s2);
+			
+			DesktopAgent desktop3 = Zats.newClient().connect(zul);
+			String s3 = ((HttpSession) ((Desktop) desktop3.getDelegatee()).getSession().getNativeSession()).getId();
+			assertFalse(desktop1.getId().equals(desktop3.getId()));
+			assertFalse(desktop2.getId().equals(desktop3.getId()));
+			assertFalse(desktop1.getId().equals(desktop2.getId()));
+			assertEquals(s1, s2);
+			assertFalse(s1.equals(s3));
+			assertFalse(s2.equals(s3));
+			
 		} finally {
 			Zats.cleanup();
 			Zats.end();
