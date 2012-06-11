@@ -418,4 +418,19 @@ public class EnvironmentTest {
 			Zats.end();
 		}
 	}
+	
+	@Test
+	public void testRichlet() {
+		DefaultZatsEnvironment env = new DefaultZatsEnvironment("./src/test/resources/web/WEB-INF");
+		try {
+			env.init("./src/test/resources/web");
+			DesktopAgent desktop = env.newClient().connect("/zk/test");
+			Label msg = desktop.query("#msg").as(Label.class);
+			Assert.assertEquals("Hello world!", msg.getValue());
+			desktop.query("#btn").click();
+			Assert.assertEquals("Hello ZK!", msg.getValue());
+		} finally {
+			env.destroy();
+		}
+	}
 }
