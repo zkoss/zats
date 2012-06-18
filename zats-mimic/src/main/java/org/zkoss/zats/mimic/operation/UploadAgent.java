@@ -33,9 +33,8 @@ public interface UploadAgent extends OperationAgent {
 
 	/**
 	 * Upload a file to ZK web application.
-	 * @param fileName specify name for uploading file, should not be null.
 	 * @param file file for uploading, should not be null.
 	 * @param contentType specify type of content. If null, indicate it is binary form.
 	 */
-	void upload(String fileName, File file, String contentType);
+	void upload(File file, String contentType);
 }
