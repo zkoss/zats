@@ -13,7 +13,10 @@
 			<label id="btn5" value="label with multiple upload" onClick="Fileupload.get(3);" />
 		</vbox>
 		<separator orient="vertical" />
-		<vbox id="results"></vbox>
+		<vbox>
+			<button id="clean" label="clean" onClick="results.getChildren().clear();" />
+			<vbox id="results"></vbox>
+		</vbox>
 	</hbox>
 	<zscript>
 		<![CDATA[

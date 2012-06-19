@@ -14,7 +14,10 @@
 			</toolbar>
 		</vbox>
 		<separator orient="vertical" />
-		<vbox id="results"></vbox>
+		<vbox>
+			<button id="clean" label="clean" onClick="results.getChildren().clear();" />
+			<vbox id="results"></vbox>
+		</vbox>
 	</hbox>
 	<zscript>
 		<![CDATA[
