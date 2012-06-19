@@ -37,4 +37,9 @@ public interface UploadAgent extends OperationAgent {
 	 * @param contentType specify type of content. If null, indicate it is binary form.
 	 */
 	void upload(File file, String contentType);
+
+	/**
+	 * Invoke this method when uploading finished.
+	 */
+	void finish();
 }

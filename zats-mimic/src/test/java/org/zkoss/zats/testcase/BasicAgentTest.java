@@ -18,7 +18,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -2121,5 +2123,21 @@ public class BasicAgentTest {
 		assertEquals("This is no. 1!", fetchString(downloadable.getInputStream()));
 	}
 	
+	@Test
+	public void testUploadAgent() throws Exception{
+		// prepare temp. file for testing 
+		File textFile = File.createTempFile("zats-upload-text-", ".tmp");
+		textFile.deleteOnExit();
+		BufferedWriter bw = new BufferedWriter(new FileWriter(textFile));
+		bw.write("Hello! World!");
+		bw.newLine();
+		bw.write("Hello! ZK!");
+		bw.close();
+		
+		// single binary file
+		
+		
+		
+	}
 }
 
