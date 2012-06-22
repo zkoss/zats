@@ -2258,7 +2258,7 @@ public class BasicAgentTest {
 		agent = desktop.as(UploadAgent.class);
 		agent.upload(imageFile, "image/png");
 		agent.finish();
-		Assert.assertEquals("test.png", desktop.query("#file0 .name").as(Label.class).getValue());
+		Assert.assertEquals(imageFile.getName(), desktop.query("#file0 .name").as(Label.class).getValue());
 		Assert.assertEquals("image/png", desktop.query("#file0 .contentType").as(Label.class).getValue());
 		Assert.assertEquals("png", desktop.query("#file0 .format").as(Label.class).getValue());
 		Assert.assertEquals(imageBinary, desktop.query("#file0 .binary").as(Label.class).getValue());
@@ -2271,7 +2271,7 @@ public class BasicAgentTest {
 		agent = desktop.as(UploadAgent.class);
 		agent.upload(textFile, "text/plain");
 		agent.upload(textFile, "application/octet-stream");
-		agent.upload(textFile, "image/png");
+		agent.upload(imageFile, "image/png");
 		agent.finish();
 		Assert.assertEquals(3, desktop.query("#results").getChildren().size());
 		// text
@@ -2291,7 +2291,7 @@ public class BasicAgentTest {
 		Assert.assertEquals("", desktop.query("#file1 .width").as(Label.class).getValue());
 		Assert.assertEquals("", desktop.query("#file1 .height").as(Label.class).getValue());
 		// image
-		Assert.assertEquals("test.png", desktop.query("#file2 .name").as(Label.class).getValue());
+		Assert.assertEquals(imageFile.getName(), desktop.query("#file2 .name").as(Label.class).getValue());
 		Assert.assertEquals("image/png", desktop.query("#file2 .contentType").as(Label.class).getValue());
 		Assert.assertEquals("png", desktop.query("#file2 .format").as(Label.class).getValue());
 		Assert.assertEquals(imageBinary, desktop.query("#file2 .binary").as(Label.class).getValue());
