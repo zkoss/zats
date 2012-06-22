@@ -1,6 +1,6 @@
 <zk>
 	<hbox id="theRoot" onUpload="upload(event);">
-		<vbox class="kk" width="200px">
+		<vbox width="200px">
 			<fileupload id="btn0" label="fileupload comp." onUpload="upload(event);" />
 			<button id="btn1" label="button" upload="true" onUpload="upload(event);" />
 			<menubar>

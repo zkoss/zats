@@ -9,7 +9,7 @@
 					onUpload="upload(event);" />
 			</menubar>
 			<toolbar>
-				<toolbarbutton id="btn3" label="toolbar" upload="true,multiple=true"
+				<toolbarbutton id="btn3" label="toolbarbutton" upload="true,multiple=true"
 					onUpload="upload(event);" />
 			</toolbar>
 		</vbox>
@@ -21,6 +21,14 @@
 	</hbox>
 	<zscript>
 		<![CDATA[
+	public void upload(Event event) {
+		results.getChildren().clear();
+		org.zkoss.util.media.Media[] medias = event.getMedias();
+		if(medias != null) {
+			for(int i = 0; i < medias.length; ++i)
+				show(i, medias[i]);
+		}
+	}
 	public String get(String value) {
 		return value != null ? value : "NULL";
 	}
@@ -33,6 +41,8 @@
 		label.setParent(box);
 	}
 	public void show(int index, org.zkoss.util.media.Media media) {
+		System.out.println("received: " + media.getName());
+
 		Vbox box = new Vbox();
 		box.setId("file" + index);
 		box.setStyle("border: 1px solid black; padding: 3px;");
@@ -51,14 +61,6 @@
 		else {
 			label(box, "width", "");
 			label(box, "height", "");
-		}
-	}
-	public void upload(Event event) {
-		results.getChildren().clear();
-		org.zkoss.util.media.Media[] medias = event.getMedias();
-		if(medias != null) {
-			for(int i = 0; i < medias.length; ++i)
-				show(i, medias[i]);
 		}
 	}
 ]]>
