@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.Agent;
+import org.zkoss.zats.mimic.impl.operation.ButtonUploadAgent;
 import org.zkoss.zats.mimic.impl.operation.ColumnSortAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.DesktopBookmarkAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder;
@@ -68,6 +69,7 @@ import org.zkoss.zul.Detail;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Doublespinner;
 import org.zkoss.zul.East;
+import org.zkoss.zul.Fileupload;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Group;
 import org.zkoss.zul.Groupbox;
@@ -88,6 +90,7 @@ import org.zkoss.zul.Spinner;
 import org.zkoss.zul.Splitter;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Timebox;
+import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treecol;
 import org.zkoss.zul.Treeitem;
@@ -230,6 +233,12 @@ public class OperationAgentManager {
 		// the move
 		registerBuilder("5.0.0", "*", Window.class, new GenericMoveAgentBuilder());
 		registerBuilder("5.0.0", "*", Panel.class, new GenericMoveAgentBuilder());
+		
+		// upload
+		registerBuilder("5.0.0", "*", Fileupload.class, new ButtonUploadAgent());
+		registerBuilder("5.0.0", "*", Button.class, new ButtonUploadAgent());
+		registerBuilder("5.0.0", "*", Menuitem.class, new ButtonUploadAgent());
+		registerBuilder("5.0.0", "*", Toolbarbutton.class, new ButtonUploadAgent());
 		
 		//----------special case ---
 		

@@ -212,7 +212,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 		}
 	}
 
-	private HttpURLConnection getConnection(String path, String method) {
+	public HttpURLConnection getConnection(String path, String method) {
 		try {
 			URL url = new URL(emulator.getAddress() + path);
 			HttpURLConnection huc = (HttpURLConnection) url.openConnection();
@@ -239,7 +239,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 		c.setDoInput(true);
 		return c.getInputStream();
 	}
-
+	
 	private void close(Closeable c) {
 		try {
 			c.close();
