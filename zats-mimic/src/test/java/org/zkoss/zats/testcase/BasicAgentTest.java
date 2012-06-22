@@ -2298,6 +2298,20 @@ public class BasicAgentTest {
 		Assert.assertEquals("", desktop.query("#file2 .text").as(Label.class).getValue());
 		Assert.assertEquals("10px", desktop.query("#file2 .width").as(Label.class).getValue());
 		Assert.assertEquals("10px", desktop.query("#file2 .height").as(Label.class).getValue());
+		
+		// can't upload
+		try {
+			agent.upload(textFile, "text/plain");
+			fail("should throw exception");
+		} catch (AgentException e) {
+			System.out.println(e.getMessage());
+		}
+		try {
+			agent.finish();
+			fail("should throw exception");
+		} catch (AgentException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }
 

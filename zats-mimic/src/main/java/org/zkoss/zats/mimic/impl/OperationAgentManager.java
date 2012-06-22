@@ -19,6 +19,7 @@ import org.zkoss.zats.mimic.Agent;
 import org.zkoss.zats.mimic.impl.operation.ButtonUploadAgent;
 import org.zkoss.zats.mimic.impl.operation.ColumnSortAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.DesktopBookmarkAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.DialogUploadAgent;
 import org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericClickAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericCloseAgentBuilder;
@@ -239,6 +240,7 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", Button.class, new ButtonUploadAgent());
 		registerBuilder("5.0.0", "*", Menuitem.class, new ButtonUploadAgent());
 		registerBuilder("5.0.0", "*", Toolbarbutton.class, new ButtonUploadAgent());
+		registerBuilder("5.0.0", "*", Desktop.class, new DialogUploadAgent());
 		
 		//----------special case ---
 		
