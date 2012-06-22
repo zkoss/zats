@@ -12,6 +12,8 @@
 				<toolbarbutton id="btn3" label="toolbarbutton" upload="true,multiple=true"
 					onUpload="upload(event);" />
 			</toolbar>
+			<button id="btn4" label="single upload" upload="true" onUpload="upload(event);" />
+			<button id="btn5" label="single upload" upload="true, multiple=false" onUpload="upload(event);" />
 		</vbox>
 		<separator orient="vertical" />
 		<vbox>

@@ -19,10 +19,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,8 +58,9 @@ public class ButtonUploadAgent implements OperationAgentBuilder<ComponentAgent, 
 
 	class UploadAgentImpl extends AgentDelegator<ComponentAgent> implements UploadAgent {
 
-		private MultiPartOutputStream multipartStream;
 		private HttpURLConnection conn;
+		private MultiPartOutputStream multipartStream;
+		private boolean isMultiple;
 
 		public UploadAgentImpl(ComponentAgent target) {
 			super(target);
@@ -88,25 +87,37 @@ public class ButtonUploadAgent implements OperationAgentBuilder<ComponentAgent, 
 			if (content == null)
 				throw new NullPointerException("content stream can't be null.");
 
-			// fetch upload flag
-			String flag = null;
-			if (target.is(Button.class))
-				flag = target.as(Button.class).getUpload();
-			else if (target.is(Menuitem.class))
-				flag = target.as(Menuitem.class).getUpload();
-			else
-				throw new AgentException("unsupported component: " + target.getDelegatee().getClass().getName());
-			// check upload flag
-			if (flag == null || flag.length() == 0)
-				throw new AgentException("upload feature doesn't turn on.");
-			else {
-				Set<String> set = new HashSet<String>(Arrays.asList(flag.split("[\\s,]+")));
-				if (set.contains("false"))
-					throw new AgentException("upload feature doesn't turn on.");
-			}
-
 			// first time upload
 			if (multipartStream == null) {
+
+				// fetch upload flag
+				String flag = null;
+				if (target.is(Button.class))
+					flag = target.as(Button.class).getUpload();
+				else if (target.is(Menuitem.class))
+					flag = target.as(Menuitem.class).getUpload();
+				else
+					throw new AgentException("unsupported component: " + target.getDelegatee().getClass().getName());
+				// check upload flag
+				if (flag == null || flag.length() == 0)
+					throw new AgentException("upload feature doesn't turn on.");
+				else {
+					Map<String, String> attr = new HashMap<String, String>();
+					for (String token : flag.split("\\s*,\\s*")) {
+						if (token.trim().length() <= 0)
+							continue;
+						String[] tokens = token.split("[\\s=]+");
+						if (tokens.length == 1)
+							attr.put("", tokens[0]);
+						else if (tokens.length >= 2)
+							attr.put(tokens[0], tokens[1]);
+					}
+					String value = attr.get("");
+					if ("false".equals(value))
+						throw new AgentException("upload feature doesn't turn on.");
+					isMultiple = Boolean.parseBoolean(attr.get("multiple"));
+				}
+
 				try {
 					// parameters 
 					String param = "?uuid={0}&dtid={1}&sid=0&maxsize=undefined";
@@ -124,6 +135,8 @@ public class ButtonUploadAgent implements OperationAgentBuilder<ComponentAgent, 
 					clean();
 					throw new AgentException(e.getMessage(), e);
 				}
+			} else if (!isMultiple) { // check allow of multiple
+				throw new AgentException("multiple upload feature doesn't turn on.");
 			}
 
 			try {

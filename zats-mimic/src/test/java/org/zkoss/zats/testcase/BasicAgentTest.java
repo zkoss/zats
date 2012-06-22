@@ -2191,6 +2191,16 @@ public class BasicAgentTest {
 		Assert.assertEquals("10px", desktop.query("#file0 .width").as(Label.class).getValue());
 		Assert.assertEquals("10px", desktop.query("#file0 .height").as(Label.class).getValue());
 		
+		// can't multiple upload
+		try {
+			agent = desktop.query("#btn0").as(UploadAgent.class);
+			agent.upload("binary.dat", new ByteArrayInputStream(raw), null);
+			agent.upload("text.txt", new ByteArrayInputStream(raw), "text/plain");
+			fail("should throw exception");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
 		// can't upload
 		try {
 			desktop.query("#clean").as(UploadAgent.class).upload(textFile, null);

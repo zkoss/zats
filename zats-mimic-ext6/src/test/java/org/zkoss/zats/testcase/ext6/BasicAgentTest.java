@@ -13,6 +13,7 @@ package org.zkoss.zats.testcase.ext6;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,8 +25,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
 import org.zkoss.zats.mimic.operation.SelectByIndexAgent;
@@ -179,7 +180,7 @@ public class BasicAgentTest {
 			// clean
 			desktop.query("#clean").click();
 			Assert.assertEquals(0, desktop.query("#results").getChildren().size());
-			
+
 			// upload 3 files
 			UploadAgent agent = desktop.query("#btn" + i).as(UploadAgent.class);
 			agent.upload(textFile, "text/plain");
@@ -187,7 +188,7 @@ public class BasicAgentTest {
 			agent.upload(imageFile, "image/png");
 			agent.finish();
 			Assert.assertEquals(3, desktop.query("#results").getChildren().size());
-			
+
 			// text
 			Assert.assertEquals(textFile.getName(), desktop.query("#file0 .name").as(Label.class).getValue());
 			Assert.assertEquals("text/plain", desktop.query("#file0 .contentType").as(Label.class).getValue());
@@ -198,7 +199,8 @@ public class BasicAgentTest {
 			Assert.assertEquals("", desktop.query("#file0 .height").as(Label.class).getValue());
 			// binary
 			Assert.assertEquals(textFile.getName(), desktop.query("#file1 .name").as(Label.class).getValue());
-			Assert.assertEquals("application/octet-stream", desktop.query("#file1 .contentType").as(Label.class).getValue());
+			Assert.assertEquals("application/octet-stream", desktop.query("#file1 .contentType").as(Label.class)
+					.getValue());
 			Assert.assertEquals("octet-stream", desktop.query("#file1 .format").as(Label.class).getValue());
 			Assert.assertEquals(textBinary, desktop.query("#file1 .binary").as(Label.class).getValue());
 			Assert.assertEquals("", desktop.query("#file1 .text").as(Label.class).getValue());
@@ -212,6 +214,24 @@ public class BasicAgentTest {
 			Assert.assertEquals("", desktop.query("#file2 .text").as(Label.class).getValue());
 			Assert.assertEquals("10px", desktop.query("#file2 .width").as(Label.class).getValue());
 			Assert.assertEquals("10px", desktop.query("#file2 .height").as(Label.class).getValue());
+		}
+
+		// can't multiple upload
+		try {
+			UploadAgent agent = desktop.query("#btn4").as(UploadAgent.class);
+			agent.upload(textFile, "text/plain");
+			agent.upload(textFile, "application/octet-stream");
+			fail("should throw exception");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		try {
+			UploadAgent agent = desktop.query("#btn5").as(UploadAgent.class);
+			agent.upload(textFile, "text/plain");
+			agent.upload(textFile, "application/octet-stream");
+			fail("should throw exception");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 	}
 }
