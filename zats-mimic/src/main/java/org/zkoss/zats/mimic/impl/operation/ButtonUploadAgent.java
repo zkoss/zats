@@ -108,7 +108,6 @@ public class ButtonUploadAgent implements OperationAgentBuilder<ComponentAgent, 
 			// first time upload
 			if (multipartStream == null) {
 				try {
-
 					// parameters 
 					String param = "?uuid={0}&dtid={1}&sid=0&maxsize=undefined";
 					param = MessageFormat.format(param, target.getUuid(), target.getDesktop().getId());
@@ -128,7 +127,7 @@ public class ButtonUploadAgent implements OperationAgentBuilder<ComponentAgent, 
 			}
 
 			try {
-				// additional readers
+				// additional headers
 				String contentDisposition = "Content-Disposition: form-data; name=\"file\"; filename=\"{0}\"";
 				contentDisposition = MessageFormat.format(contentDisposition, fileName);
 				String[] headers = new String[] { contentDisposition };
