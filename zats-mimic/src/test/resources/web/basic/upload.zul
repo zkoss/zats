@@ -1,20 +1,20 @@
 <zk>
 	<hbox id="theRoot" onUpload="upload(event);">
-		<vbox width="200px">
+		<vbox class="kk" width="200px">
 			<fileupload id="btn0" label="fileupload comp." onUpload="upload(event);" />
 			<button id="btn1" label="button" upload="true" onUpload="upload(event);" />
 			<menubar>
 				<menuitem id="btn2" label="menuitem" upload="true" onUpload="upload(event);" />
 			</menubar>
 			<toolbar>
-				<toolbarbutton id="btn3" label="toolbar" upload="true" onUpload="upload(event);" />
+				<toolbarbutton id="btn3" label="toolbarbutton" upload="true" onUpload="upload(event);" />
 			</toolbar>
 			<label id="btn4" value="label with fileupload.get()" onClick="Fileupload.get();" />
 			<label id="btn5" value="label with multiple upload" onClick="Fileupload.get(3);" />
 		</vbox>
 		<separator orient="vertical" />
 		<vbox>
-			<button id="clean" label="clean" onClick="results.getChildren().clear();" />
+			<button id="clean" label="clean" upload="false" onClick="results.getChildren().clear();" />
 			<vbox id="results"></vbox>
 		</vbox>
 	</hbox>

@@ -18,21 +18,25 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Logger;
 
+import org.eclipse.jetty.util.TypeUtil;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -63,6 +67,7 @@ import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.SizeAgent;
 import org.zkoss.zats.mimic.operation.SortAgent;
+import org.zkoss.zats.mimic.operation.UploadAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -77,6 +82,7 @@ import org.zkoss.zul.Paging;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treecol;
 import org.zkoss.zul.Treeitem;
+import org.zkoss.zul.Vbox;
 
 /**
  * @author dennis
@@ -2124,20 +2130,77 @@ public class BasicAgentTest {
 	}
 	
 	@Test
-	public void testUploadAgent() throws Exception{
+	public void testUploadAgent() throws Exception {
+
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/upload.zul");
+		Vbox results = desktop.query("#results").as(Vbox.class);
+		Assert.assertEquals(0, results.getChildren().size());
+
 		// prepare temp. file for testing 
 		File textFile = File.createTempFile("zats-upload-text-", ".tmp");
 		textFile.deleteOnExit();
-		BufferedWriter bw = new BufferedWriter(new FileWriter(textFile));
-		bw.write("Hello! World!");
-		bw.newLine();
-		bw.write("Hello! ZK!");
-		bw.close();
+		String text = "Hello! World!\r\nHello! ZK!\r\n";
+		byte[] raw = text.getBytes("ISO-8859-1");
+		String binary = TypeUtil.toHexString(raw).toUpperCase();
+		FileOutputStream fos = new FileOutputStream(textFile);
+		fos.write(raw);
+		fos.close();
+
+		// binary file
+		for (int i = 0; i < 4; ++i) {
+			String id = "#btn" + i;
+			UploadAgent agent = desktop.query(id).as(UploadAgent.class);
+			agent.upload(textFile, null);
+			agent.finish();
+			Assert.assertEquals(textFile.getName(), desktop.query("#file0 .name").as(Label.class).getValue());
+			Assert.assertEquals("application/octet-stream", desktop.query("#file0 .contentType").as(Label.class)
+					.getValue());
+			Assert.assertEquals("octet-stream", desktop.query("#file0 .format").as(Label.class).getValue());
+			Assert.assertEquals(binary, desktop.query("#file0 .binary").as(Label.class).getValue());
+			Assert.assertEquals("", desktop.query("#file0 .text").as(Label.class).getValue());
+			Assert.assertEquals("", desktop.query("#file0 .width").as(Label.class).getValue());
+			Assert.assertEquals("", desktop.query("#file0 .height").as(Label.class).getValue());
+			desktop.query("#clean").click(); // clean results
+		}
+
+		// text stream
+		UploadAgent agent = desktop.query("#btn0").as(UploadAgent.class);
+		agent.upload("sample.txt", new ByteArrayInputStream(raw), "text/plain");
+		agent.finish();
+		Assert.assertEquals("sample.txt", desktop.query("#file0 .name").as(Label.class).getValue());
+		Assert.assertEquals("text/plain", desktop.query("#file0 .contentType").as(Label.class).getValue());
+		Assert.assertEquals("txt", desktop.query("#file0 .format").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .binary").as(Label.class).getValue());
+		Assert.assertEquals(text, desktop.query("#file0 .text").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .width").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .height").as(Label.class).getValue());
+
+		// image stream
+		raw = new byte[] { -119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 10, 0, 0, 0, 10, 8,
+				2, 0, 0, 0, 2, 80, 88, -22, 0, 0, 0, 4, 103, 65, 77, 65, 0, 0, -79, -113, 11, -4, 97, 5, 0, 0, 0, 9,
+				112, 72, 89, 115, 0, 0, 18, 116, 0, 0, 18, 116, 1, -34, 102, 31, 120, 0, 0, 0, 39, 73, 68, 65, 84, 40,
+				83, 99, 124, 43, -93, -62, -128, 4, 76, -89, 106, 32, 115, -103, -112, 57, -104, 108, -102, 74, 51, 42,
+				109, -12, 65, -74, 82, 118, 122, -61, 96, 113, 26, 0, -35, -38, 4, -123, -73, -75, -2, 83, 0, 0, 0, 0,
+				73, 69, 78, 68, -82, 66, 96, -126 };
+		binary = TypeUtil.toHexString(raw).toUpperCase();
+		agent = desktop.query("#btn0").as(UploadAgent.class);
+		agent.upload("test.png", new ByteArrayInputStream(raw), "image/png");
+		agent.finish();
+		Assert.assertEquals("test.png", desktop.query("#file0 .name").as(Label.class).getValue());
+		Assert.assertEquals("image/png", desktop.query("#file0 .contentType").as(Label.class).getValue());
+		Assert.assertEquals("png", desktop.query("#file0 .format").as(Label.class).getValue());
+		Assert.assertEquals(binary, desktop.query("#file0 .binary").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .text").as(Label.class).getValue());
+		Assert.assertEquals("10px", desktop.query("#file0 .width").as(Label.class).getValue());
+		Assert.assertEquals("10px", desktop.query("#file0 .height").as(Label.class).getValue());
 		
-		// single binary file
-		
-		
-		
+		// can't upload
+		try {
+			desktop.query("#clean").as(UploadAgent.class).upload(textFile, null);
+			fail("should throw exception");
+		} catch (AgentException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }
 
