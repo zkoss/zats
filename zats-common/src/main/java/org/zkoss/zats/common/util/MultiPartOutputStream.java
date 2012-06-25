@@ -63,10 +63,6 @@ public class MultiPartOutputStream extends FilterOutputStream
         inPart=false;
     }
 
-	public static String generateBoundary() {
-		return "jetty" + System.identityHashCode(MultiPartOutputStream.class) + Long.toString(System.currentTimeMillis(), 36);
-	}
-
     /* ------------------------------------------------------------ */
     /** End the current part.
      * @exception IOException IOException

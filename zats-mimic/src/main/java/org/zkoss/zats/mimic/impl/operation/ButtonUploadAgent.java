@@ -123,7 +123,7 @@ public class ButtonUploadAgent implements OperationAgentBuilder<ComponentAgent, 
 					String param = "?uuid={0}&dtid={1}&sid=0&maxsize=undefined";
 					param = MessageFormat.format(param, target.getUuid(), target.getDesktop().getId());
 					// open connection
-					String boundary = MultiPartOutputStream.generateBoundary(); // boundary for multipart
+					String boundary = Util.generateRandomString(); // boundary for multipart
 					ClientCtrl cc = (ClientCtrl) getClient();
 					conn = cc.getConnection("/zkau/upload" + param, "POST");
 					conn.addRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);

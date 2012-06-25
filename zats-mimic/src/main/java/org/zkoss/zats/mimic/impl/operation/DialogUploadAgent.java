@@ -98,7 +98,7 @@ public class DialogUploadAgent implements OperationAgentBuilder<DesktopAgent, Up
 				String param = "?uuid={0}&dtid={1}&sid={2}&maxsize=undefined";
 				param = MessageFormat.format(param, fileupload.getUuid(), desktop.getId(), String.valueOf(sid));
 				// open connection
-				String boundary = MultiPartOutputStream.generateBoundary(); // boundary for multipart
+				String boundary = Util.generateRandomString(); // boundary for multipart
 				ClientCtrl cc = (ClientCtrl) getClient();
 				HttpURLConnection conn = cc.getConnection("/zkau/upload" + param, "POST");
 				conn.addRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);

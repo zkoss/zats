@@ -13,6 +13,7 @@ package org.zkoss.zats.mimic.impl;
 
 import java.io.Closeable;
 import java.math.BigInteger;
+import java.util.Random;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -121,5 +122,9 @@ public class Util {
 				return version;
 			}
 		};
+	}
+	
+	public static String generateRandomString() {
+		return "zats-" + Integer.toHexString(System.identityHashCode(Util.class)) + new BigInteger(64, new Random()).abs().toString(36);
 	}
 }
