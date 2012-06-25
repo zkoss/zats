@@ -99,7 +99,7 @@ public class EnvironmentTest {
 		}
 				
 		//to test open a local zul
-		ctx = new DefaultZatsEnvironment("./src/test/resources/web/WEB-INF");
+		ctx = new DefaultZatsEnvironment("./src/test/resources/web/WEB-INF/custom");
 		try{
 			ctx.init("./src/test/resources/web");
 			Client client = ctx.newClient();

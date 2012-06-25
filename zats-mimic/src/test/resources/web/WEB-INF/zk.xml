@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk>
-	<library-property>
-		<name>zats.hello</name>
-		<value>hello zats</value>
-	</library-property>
 	<richlet>
 		<richlet-name>TestRichlet</richlet-name>
 		<richlet-class>org.zkoss.zats.testapp.TestRichlet</richlet-class>
