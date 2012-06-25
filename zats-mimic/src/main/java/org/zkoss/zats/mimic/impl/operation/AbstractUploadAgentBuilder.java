@@ -37,32 +37,26 @@ import org.zkoss.zats.mimic.operation.UploadAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Menuitem;
 
 /**
- * The upload agent implementation for buttons.
+ * The abstract builder of upload agent.
  * @author pao
  * @since 1.1.0
  */
-public class ButtonUploadAgent implements OperationAgentBuilder<ComponentAgent, UploadAgent> {
-	private final static Logger logger = Logger.getLogger(ButtonUploadAgent.class.getName());
+public abstract class AbstractUploadAgentBuilder implements OperationAgentBuilder<ComponentAgent, UploadAgent> {
+	private final static Logger logger = Logger.getLogger(AbstractUploadAgentBuilder.class.getName());
 
 	public Class<UploadAgent> getOperationClass() {
 		return UploadAgent.class;
 	}
 
-	public UploadAgent getOperation(ComponentAgent target) {
-		return new UploadAgentImpl(target);
-	}
-
-	class UploadAgentImpl extends AgentDelegator<ComponentAgent> implements UploadAgent {
+	abstract class AbstractUploadAgentImpl extends AgentDelegator<ComponentAgent> implements UploadAgent {
 
 		private HttpURLConnection conn;
 		private MultiPartOutputStream multipartStream;
 		private boolean isMultiple;
 
-		public UploadAgentImpl(ComponentAgent target) {
+		public AbstractUploadAgentImpl(ComponentAgent target) {
 			super(target);
 		}
 
@@ -80,6 +74,8 @@ public class ButtonUploadAgent implements OperationAgentBuilder<ComponentAgent, 
 				Util.close(is);
 			}
 		}
+		
+		protected abstract String getUploadFlag();
 
 		public void upload(String fileName, InputStream content, String contentType) {
 			if (fileName == null)
@@ -90,15 +86,8 @@ public class ButtonUploadAgent implements OperationAgentBuilder<ComponentAgent, 
 			// first time upload
 			if (multipartStream == null) {
 
-				// fetch upload flag
-				String flag = null;
-				if (target.is(Button.class))
-					flag = target.as(Button.class).getUpload();
-				else if (target.is(Menuitem.class))
-					flag = target.as(Menuitem.class).getUpload();
-				else
-					throw new AgentException("unsupported component: " + target.getDelegatee().getClass().getName());
-				// check upload flag
+				// fetch and check upload flag
+				String flag = getUploadFlag();
 				if (flag == null || flag.length() == 0)
 					throw new AgentException("upload feature doesn't turn on.");
 				else {

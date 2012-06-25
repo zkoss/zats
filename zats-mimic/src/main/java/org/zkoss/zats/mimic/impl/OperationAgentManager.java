@@ -16,10 +16,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.Agent;
-import org.zkoss.zats.mimic.impl.operation.ButtonUploadAgent;
+import org.zkoss.zats.mimic.impl.operation.ButtonUploadAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.ColumnSortAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.DesktopBookmarkAgentBuilder;
-import org.zkoss.zats.mimic.impl.operation.DialogUploadAgent;
+import org.zkoss.zats.mimic.impl.operation.DialogUploadAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericClickAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericCloseAgentBuilder;
@@ -33,6 +33,7 @@ import org.zkoss.zats.mimic.impl.operation.GenericOpenAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GridRenderAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.ListboxRenderAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.ListheaderSortAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.MenuitemUploadAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.PagingAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.PanelSizeAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.SliderInputAgentBuilder;
@@ -236,11 +237,11 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", Panel.class, new GenericMoveAgentBuilder());
 		
 		// upload
-		registerBuilder("5.0.0", "*", Fileupload.class, new ButtonUploadAgent());
-		registerBuilder("5.0.0", "*", Button.class, new ButtonUploadAgent());
-		registerBuilder("5.0.0", "*", Menuitem.class, new ButtonUploadAgent());
-		registerBuilder("5.0.0", "*", Toolbarbutton.class, new ButtonUploadAgent());
-		registerBuilder("5.0.0", "*", Desktop.class, new DialogUploadAgent());
+		registerBuilder("5.0.0", "*", Button.class, new ButtonUploadAgentBuilder());
+		registerBuilder("5.0.0", "*", Fileupload.class, new ButtonUploadAgentBuilder());
+		registerBuilder("5.0.0", "*", Toolbarbutton.class, new ButtonUploadAgentBuilder());
+		registerBuilder("5.0.0", "*", Menuitem.class, new MenuitemUploadAgentBuilder());
+		registerBuilder("5.0.0", "*", Desktop.class, new DialogUploadAgentBuilder());
 		
 		//----------special case ---
 		

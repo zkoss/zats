@@ -40,12 +40,12 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 
 /**
- * The dialog upload agent implementation.
+ * The builder implementation of dialog upload agent
  * @author pao
  * @since 1.1.0
  */
-public class DialogUploadAgent implements OperationAgentBuilder<DesktopAgent, UploadAgent> {
-	private final static Logger logger = Logger.getLogger(DialogUploadAgent.class.getName());
+public class DialogUploadAgentBuilder implements OperationAgentBuilder<DesktopAgent, UploadAgent> {
+	private final static Logger logger = Logger.getLogger(DialogUploadAgentBuilder.class.getName());
 
 	public Class<UploadAgent> getOperationClass() {
 		return UploadAgent.class;
