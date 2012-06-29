@@ -2137,10 +2137,10 @@ public class BasicAgentTest {
 		File textFile = File.createTempFile("zats-upload-text-", ".tmp");
 		textFile.deleteOnExit();
 		String text = "Hello! World!\r\nHello! ZK!\r\n";
-		byte[] raw = text.getBytes("ISO-8859-1");
-		String binary = TypeUtil.toHexString(raw).toUpperCase();
+		byte[] textRaw = text.getBytes("ISO-8859-1");
+		String binary = TypeUtil.toHexString(textRaw).toUpperCase();
 		FileOutputStream fos = new FileOutputStream(textFile);
-		fos.write(raw);
+		fos.write(textRaw);
 		fos.close();
 
 		// binary file
@@ -2162,7 +2162,7 @@ public class BasicAgentTest {
 
 		// text stream
 		UploadAgent agent = desktop.query("#btn0").as(UploadAgent.class);
-		agent.upload("sample.txt", new ByteArrayInputStream(raw), "text/plain");
+		agent.upload("sample.txt", new ByteArrayInputStream(textRaw), "text/plain");
 		agent.finish();
 		Assert.assertEquals("sample.txt", desktop.query("#file0 .name").as(Label.class).getValue());
 		Assert.assertEquals("text/plain", desktop.query("#file0 .contentType").as(Label.class).getValue());
@@ -2173,15 +2173,15 @@ public class BasicAgentTest {
 		Assert.assertEquals("", desktop.query("#file0 .height").as(Label.class).getValue());
 
 		// image stream
-		raw = new byte[] { -119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 10, 0, 0, 0, 10, 8,
+		byte[] ImageRaw = new byte[] { -119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 10, 0, 0, 0, 10, 8,
 				2, 0, 0, 0, 2, 80, 88, -22, 0, 0, 0, 4, 103, 65, 77, 65, 0, 0, -79, -113, 11, -4, 97, 5, 0, 0, 0, 9,
 				112, 72, 89, 115, 0, 0, 18, 116, 0, 0, 18, 116, 1, -34, 102, 31, 120, 0, 0, 0, 39, 73, 68, 65, 84, 40,
 				83, 99, 124, 43, -93, -62, -128, 4, 76, -89, 106, 32, 115, -103, -112, 57, -104, 108, -102, 74, 51, 42,
 				109, -12, 65, -74, 82, 118, 122, -61, 96, 113, 26, 0, -35, -38, 4, -123, -73, -75, -2, 83, 0, 0, 0, 0,
 				73, 69, 78, 68, -82, 66, 96, -126 };
-		binary = TypeUtil.toHexString(raw).toUpperCase();
+		binary = TypeUtil.toHexString(ImageRaw).toUpperCase();
 		agent = desktop.query("#btn0").as(UploadAgent.class);
-		agent.upload("test.png", new ByteArrayInputStream(raw), "image/png");
+		agent.upload("test.png", new ByteArrayInputStream(ImageRaw), "image/png");
 		agent.finish();
 		Assert.assertEquals("test.png", desktop.query("#file0 .name").as(Label.class).getValue());
 		Assert.assertEquals("image/png", desktop.query("#file0 .contentType").as(Label.class).getValue());
@@ -2191,11 +2191,22 @@ public class BasicAgentTest {
 		Assert.assertEquals("10px", desktop.query("#file0 .width").as(Label.class).getValue());
 		Assert.assertEquals("10px", desktop.query("#file0 .height").as(Label.class).getValue());
 		
+		// same instance again
+		agent.upload("sample.txt", new ByteArrayInputStream(textRaw), "text/plain");
+		agent.finish();
+		Assert.assertEquals("sample.txt", desktop.query("#file0 .name").as(Label.class).getValue());
+		Assert.assertEquals("text/plain", desktop.query("#file0 .contentType").as(Label.class).getValue());
+		Assert.assertEquals("txt", desktop.query("#file0 .format").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .binary").as(Label.class).getValue());
+		Assert.assertEquals(text, desktop.query("#file0 .text").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .width").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .height").as(Label.class).getValue());
+
 		// can't multiple upload
 		try {
 			agent = desktop.query("#btn0").as(UploadAgent.class);
-			agent.upload("binary.dat", new ByteArrayInputStream(raw), null);
-			agent.upload("text.txt", new ByteArrayInputStream(raw), "text/plain");
+			agent.upload("binary.dat", new ByteArrayInputStream(textRaw), null);
+			agent.upload("text.txt", new ByteArrayInputStream(textRaw), "text/plain");
 			fail("should throw exception");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
