@@ -28,6 +28,16 @@ public interface Client {
 	 * @see ZatsEnvironment#init(String)
 	 */
 	DesktopAgent connect(String zulPath);
+	
+	/**
+	 * connect to a zul file, you have to provide the path that relative to the resource root folder.
+	 * You can pass arguments through a map into the specific zul file as including.
+	 * @param zulPath the path of zul file. 
+	 * @param args the arguments to pass.
+	 * @return desktop agent.
+	 * @see ZatsEnvironment#init(String)
+	 */
+	DesktopAgent connectAsIncluded(String zulPath, Map<String, Object> args);
 
 	
 	/**

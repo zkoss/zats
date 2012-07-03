@@ -17,8 +17,10 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -431,6 +433,37 @@ public class EnvironmentTest {
 			Assert.assertEquals("Hello ZK!", msg.getValue());
 		} finally {
 			env.destroy();
+		}
+	}
+	
+	@Test
+	public void testConnectAsIncluded() {
+		Zats.init(".");
+		try {
+			Map<String, Object> args = new HashMap<String, Object>();
+			for (int i = 0; i < 10; ++i)
+				args.put("k" + i, "v" + i);
+
+			Client client = Zats.newClient();
+			DesktopAgent desktop = client.connectAsIncluded("/~./basic/include.zul", args);
+			Assert.assertNotNull(desktop.query("#content"));
+			List<ComponentAgent> labels = desktop.queryAll("#content label");
+			Assert.assertEquals(args.size(), labels.size());
+
+			Map<String, Object> results = new HashMap<String, Object>();
+			for (ComponentAgent label : labels) {
+				String[] tokens = label.as(Label.class).getValue().split("=");
+				results.put(tokens[0], tokens[1]);
+			}
+			
+			for (Entry<String, Object> entry : args.entrySet()) {
+				Object value = results.get(entry.getKey());
+				Assert.assertNotNull(value);
+				Assert.assertEquals(entry.getValue(), value);
+			}
+
+		} finally {
+			Zats.end();
 		}
 	}
 }

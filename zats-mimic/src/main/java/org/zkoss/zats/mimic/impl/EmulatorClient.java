@@ -58,6 +58,10 @@ public class EmulatorClient implements Client, ClientCtrl {
 		this.auQueues = new ConcurrentHashMap<String, List<String>>();
 	}
 
+	public DesktopAgent connectAsIncluded(String zulPath, Map<String, Object> args){
+		return null;
+	}
+
 	public DesktopAgent connect(String zulPath) {
 		InputStream is = null;
 		try {
