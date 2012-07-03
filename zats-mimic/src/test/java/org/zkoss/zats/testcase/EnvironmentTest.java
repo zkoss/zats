@@ -20,7 +20,6 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -455,12 +454,7 @@ public class EnvironmentTest {
 				String[] tokens = label.as(Label.class).getValue().split("=");
 				results.put(tokens[0], tokens[1]);
 			}
-			
-			for (Entry<String, Object> entry : args.entrySet()) {
-				Object value = results.get(entry.getKey());
-				Assert.assertNotNull(value);
-				Assert.assertEquals(entry.getValue(), value);
-			}
+			Assert.assertEquals(args, results);
 
 		} finally {
 			Zats.end();
