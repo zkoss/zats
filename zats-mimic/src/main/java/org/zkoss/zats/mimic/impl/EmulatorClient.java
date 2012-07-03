@@ -61,14 +61,14 @@ public class EmulatorClient implements Client, ClientCtrl {
 	public DesktopAgent connectAsIncluded(String zulPath, Map<String, Object> args) {
 
 		// generate key and map for transferring data into server side
-		String key = Long.toString(System.nanoTime(), 36);
+		String key = "zats_" + Long.toString(Thread.currentThread().getId(), 36);
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("url", zulPath);
 		data.put("args", args);
 		emulator.getServletContext().setAttribute(key, data);
 
 		// connect to adapter with key
-		String adapter = "/~./impl/includingAdapter.zul?id=" + key;
+		String adapter = "/~./zats/includingAdapter.zul?id=" + key;
 		DesktopAgent desktop = connect(adapter);
 
 		// clean resources
