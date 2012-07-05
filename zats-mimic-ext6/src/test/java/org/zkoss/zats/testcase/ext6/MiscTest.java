@@ -58,7 +58,7 @@ public class MiscTest {
 	}
 	
 	@Test
-	public void testConnectAsIncludedWithZK6Features() {
+	public void testConnectAsIncludedWithZK6Features1() {
 		Map<String, Object> args = new HashMap<String, Object>();
 		for (int i = 0; i < 10; ++i)
 			args.put("k" + i, "v" + i);
@@ -77,8 +77,36 @@ public class MiscTest {
 		Assert.assertEquals(args, results);
 
 		// zkbind
-		Assert.assertEquals(12, desktop.queryAll("label").size());
+		Assert.assertEquals(args.size() + 2, desktop.queryAll("label").size());
 		Label msg = desktop.query("#msg").as(Label.class);
 		Assert.assertEquals("Hello! ZK!", msg.getValue());
 	}
+	
+	@Test
+	public void testConnectAsIncludedWithZK6Features2() {
+
+		Map<String, Object> args = new HashMap<String, Object>();
+		for (int i = 0; i < 5; ++i)
+			args.put("key" + i, "value" + i);
+
+		Client client = Zats.newClient();
+		DesktopAgent desktop = client.connect("/~./basic/include-outer-ext6.zul");
+		Assert.assertNotNull(desktop.query("#inner #content"));
+		List<ComponentAgent> labels = desktop.queryAll("#inner #content label");
+		Assert.assertEquals(args.size(), labels.size());
+
+		Map<String, Object> results = new HashMap<String, Object>();
+		for (ComponentAgent label : labels) {
+			String[] tokens = label.as(Label.class).getValue().split("=");
+			results.put(tokens[0], tokens[1]);
+		}
+		Assert.assertEquals(args, results);
+
+		// zkbind
+		Assert.assertEquals(args.size() + 2, desktop.queryAll("#inner label").size());
+		Label msg = desktop.query("#inner #msg").as(Label.class);
+		Assert.assertEquals("Hello! ZK!", msg.getValue());
+
+	}
+
 }

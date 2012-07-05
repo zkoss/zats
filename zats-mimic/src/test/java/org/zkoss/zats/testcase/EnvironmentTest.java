@@ -436,7 +436,7 @@ public class EnvironmentTest {
 	}
 	
 	@Test
-	public void testConnectAsIncluded() {
+	public void testConnectAsIncluded1() {
 		Zats.init(".");
 		try {
 			Map<String, Object> args = new HashMap<String, Object>();
@@ -459,5 +459,33 @@ public class EnvironmentTest {
 		} finally {
 			Zats.end();
 		}
+	}
+	
+	@Test
+	public void testConnectAsIncluded2() {
+
+		Zats.init(".");
+		try {
+			Map<String, Object> args = new HashMap<String, Object>();
+			for (int i = 0; i < 5; ++i)
+				args.put("key" + i, "value" + i);
+
+			Client client = Zats.newClient();
+			DesktopAgent desktop = client.connect("/~./basic/include-outer.zul");
+			Assert.assertNotNull(desktop.query("#inner #content"));
+			List<ComponentAgent> labels = desktop.queryAll("#inner #content label");
+			Assert.assertEquals(args.size(), labels.size());
+
+			Map<String, Object> results = new HashMap<String, Object>();
+			for (ComponentAgent label : labels) {
+				String[] tokens = label.as(Label.class).getValue().split("=");
+				results.put(tokens[0], tokens[1]);
+			}
+			Assert.assertEquals(args, results);
+
+		} finally {
+			Zats.end();
+		}
+
 	}
 }
