@@ -59,7 +59,11 @@ public class EmulatorClient implements Client, ClientCtrl {
 	}
 	
 	public DesktopAgent connectAsIncluded(String zulPath, Map<String, Object> args) {
-
+		if(zulPath == null)
+			throw new IllegalArgumentException("the path of ZUL can't be null");
+		if (args == null)
+			throw new IllegalArgumentException("the arguments can't be null");
+		
 		// generate key and map for transferring data into server side
 		String key = "zats_" + Long.toString(Thread.currentThread().getId(), 36);
 		Map<String, Object> data = new HashMap<String, Object>();
@@ -79,6 +83,9 @@ public class EmulatorClient implements Client, ClientCtrl {
 	}
 
 	public DesktopAgent connect(String zulPath) {
+		if(zulPath == null)
+			throw new IllegalArgumentException("the path of ZUL can't be null");
+		
 		InputStream is = null;
 		try {
 			// load zul page

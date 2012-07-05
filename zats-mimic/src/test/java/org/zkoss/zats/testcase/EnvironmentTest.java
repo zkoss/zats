@@ -455,6 +455,26 @@ public class EnvironmentTest {
 				results.put(tokens[0], tokens[1]);
 			}
 			Assert.assertEquals(args, results);
+			
+			// test exceptions
+			try {
+				client.connect(null);
+				Assert.fail("should throw an exception");
+			} catch (IllegalArgumentException e) {
+				System.out.println(e.getMessage());
+			}
+			try {
+				client.connectAsIncluded(null, args);
+				Assert.fail("should throw an exception");
+			} catch (IllegalArgumentException e) {
+				System.out.println(e.getMessage());
+			}
+			try {
+				client.connectAsIncluded("", null);
+				Assert.fail("should throw an exception");
+			} catch (IllegalArgumentException e) {
+				System.out.println(e.getMessage());
+			}
 
 		} finally {
 			Zats.end();
