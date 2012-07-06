@@ -469,12 +469,6 @@ public class EnvironmentTest {
 			} catch (IllegalArgumentException e) {
 				System.out.println(e.getMessage());
 			}
-			try {
-				client.connectAsIncluded("", null);
-				Assert.fail("should throw an exception");
-			} catch (IllegalArgumentException e) {
-				System.out.println(e.getMessage());
-			}
 
 		} finally {
 			Zats.end();

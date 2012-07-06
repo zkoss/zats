@@ -62,7 +62,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 		if(zulPath == null)
 			throw new IllegalArgumentException("the path of ZUL can't be null");
 		if (args == null)
-			throw new IllegalArgumentException("the arguments can't be null");
+			args = new HashMap<String, Object>();
 		
 		// generate key and map for transferring data into server side
 		String key = "zats_" + Long.toString(Thread.currentThread().getId(), 36);
