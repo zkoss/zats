@@ -41,6 +41,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
+import org.zkoss.zats.mimic.DefaultZatsEnvironment;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Resource;
 import org.zkoss.zats.mimic.Zats;
@@ -2332,6 +2333,21 @@ public class BasicAgentTest {
 			fail("should throw exception");
 		} catch (AgentException e) {
 			System.out.println(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testRichlet() {
+		DefaultZatsEnvironment env = new DefaultZatsEnvironment("./src/test/resources/web/WEB-INF");
+		try {
+			env.init("./src/test/resources/web");
+			DesktopAgent desktop = env.newClient().connect("/zk/test");
+			Label msg = desktop.query("#msg").as(Label.class);
+			Assert.assertEquals("Hello world!", msg.getValue());
+			desktop.query("#btn").click();
+			Assert.assertEquals("Hello ZK!", msg.getValue());
+		} finally {
+			env.destroy();
 		}
 	}
 }
