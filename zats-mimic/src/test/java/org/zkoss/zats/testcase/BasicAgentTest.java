@@ -610,17 +610,20 @@ public class BasicAgentTest {
 		
 		inp.type("5");
 		Assert.assertEquals("5.0",l.as(Label.class).getValue());
-		inp.type(null);
-		Assert.assertEquals("null",l.as(Label.class).getValue());
+		// ZK-1534: Spinner no longer supports null value
+		// inp.type(null);
+		// Assert.assertEquals("null",l.as(Label.class).getValue());
 		inp.type("-5");
 		Assert.assertEquals("-5.0",l.as(Label.class).getValue());
-		inp.type("");
-		Assert.assertEquals("null",l.as(Label.class).getValue());
+		// ZK-1534: Spinner no longer supports null value
+		// inp.type("");
+		// Assert.assertEquals("null",l.as(Label.class).getValue());
 		
 		inp.as(InputAgent.class).input(55D);
 		Assert.assertEquals("55.0",l.as(Label.class).getValue());
-		inp.as(InputAgent.class).input(null);
-		Assert.assertEquals("null",l.as(Label.class).getValue());
+		// ZK-1534: Spinner no longer supports null value
+		// inp.as(InputAgent.class).input(null);
+		// Assert.assertEquals("null",l.as(Label.class).getValue());
 		
 		//intbox
 		l = desktopAgent.query("#l7");
@@ -666,25 +669,28 @@ public class BasicAgentTest {
 		inp.type("11");
 		Assert.assertEquals("11",l.as(Label.class).getValue());
 		
+		// update: ZK-1534: Spinner no longer supports null value
 		//zk 6 has bug, I comment it out untile bug fixed
 		//http://tracker.zkoss.org/browse/ZK-1117
-		if(Util.isZKVersion(5)){
-			inp.type(null);
-			Assert.assertEquals("null",l.as(Label.class).getValue());
-		}
+		//if(Util.isZKVersion(5)){
+		//	inp.type(null);
+		//	Assert.assertEquals("null",l.as(Label.class).getValue());
+		//}
 		inp.type("-11");
 		Assert.assertEquals("-11",l.as(Label.class).getValue());
-		if(Util.isZKVersion(5)){
-			inp.type("");
-			Assert.assertEquals("null",l.as(Label.class).getValue());
-		}
+		// ZK-1534: Spinner no longer supports null value
+		//if(Util.isZKVersion(5)){
+		//	inp.type("");
+		//	Assert.assertEquals("null",l.as(Label.class).getValue());
+		//}
 		
 		inp.as(InputAgent.class).input(111);
 		Assert.assertEquals("111",l.as(Label.class).getValue());
-		if(Util.isZKVersion(5)){
-			inp.as(InputAgent.class).input(null);
-			Assert.assertEquals("null",l.as(Label.class).getValue());
-		}
+		// ZK-1534: Spinner no longer supports null value
+		//if(Util.isZKVersion(5)){
+		//	inp.as(InputAgent.class).input(null);
+		//	Assert.assertEquals("null",l.as(Label.class).getValue());
+		//}
 		
 		//datebox
 		l = desktopAgent.query("#l3");
