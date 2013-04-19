@@ -38,6 +38,7 @@ import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.common.json.parser.ParseException;
 import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zats.mimic.EchoEventMode;
 import org.zkoss.zats.mimic.impl.emulator.Emulator;
 import org.zkoss.zk.ui.Desktop;
 
@@ -354,5 +355,17 @@ public class EmulatorClient implements Client, ClientCtrl {
 
 	public Map<String, String> getCookies() {
 		return new HashMap<String, String>(cookies); // a copy of cookies
+	}
+
+	public void setEchoEventMode(EchoEventMode mode) {
+		if(mode == null) {
+			return;
+		}
+		// TODO
+	}
+
+	public EchoEventMode getEchoEventMode() {
+		// TODO
+		return null;
 	}
 }
