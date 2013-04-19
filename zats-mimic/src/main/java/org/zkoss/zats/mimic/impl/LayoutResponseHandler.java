@@ -14,7 +14,7 @@ package org.zkoss.zats.mimic.impl;
 import org.zkoss.zats.mimic.Client;
 
 /**
- * The interface of layout response handler.
+ * The interface of DHtmlLayoutServlet response handler.
  * The handler can process response when client opened a URL,
  * and modify status of client if necessary. 
  * @author pao

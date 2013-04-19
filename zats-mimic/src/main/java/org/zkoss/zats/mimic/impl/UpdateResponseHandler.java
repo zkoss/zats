@@ -16,7 +16,7 @@ import java.util.Map;
 import org.zkoss.zats.mimic.DesktopAgent;
 
 /**
- * The interface of asynchronous update response handler.
+ * The interface of asynchronous update response handler (DHtmlUpdateServlet).
  * The handler can process response when client post an AU event,
  * and modify status of desktop if necessary. 
  * @author pao
