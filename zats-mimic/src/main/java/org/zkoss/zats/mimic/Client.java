@@ -18,13 +18,12 @@ import java.util.Map;
  * Represent a client that can connect to zul files. It plays a role like a browser but without rendering anything.
  * @author Hawk
  * @author Dennis
- *
+ * @author Pao
  */
 public interface Client {
 	
 	/**
 	 * connect to a zul file, you have to provide the path that relative to the resource root folder
-	 * 
 	 * @see ZatsEnvironment#init(String)
 	 */
 	DesktopAgent connect(String zulPath);
@@ -69,4 +68,23 @@ public interface Client {
 	 * @since 1.1.0
 	 */
 	Map<String, String> getCookies();
+	
+	
+	/**
+	 * change the echo event handling mode.
+	 * the default mode is EchoEventMode.IMMEDIATE
+	 * @see EchoEventMode
+	 * @param mode Control echo event handling mode. If null, do nothing.
+	 * @since 1.1.0
+	 */
+	void setEchoEventMode(EchoEventMode mode);
+	
+	/**
+	 * get the current echo event handling mode.
+	 * the default mode is EchoEventMode.IMMEDIATE
+	 * @see EchoEventMode
+	 * @return current echo event handling mode.
+	 * @since 1.1.0
+	 */
+	EchoEventMode getEchoEventMode();
 }

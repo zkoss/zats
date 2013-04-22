@@ -8,6 +8,7 @@ ZATS Mimic 1.1.0
   ZATS-8: batch AU support
   ZATS-9: provide the mechanism of handling AU response
   ZATS-10: provide the mechanism of handling layout response
+  ZATS-11: handle echo event
   ZATS-12: support connecting as included
   ZATS-14: support EventAgent for posting AU manually
   
