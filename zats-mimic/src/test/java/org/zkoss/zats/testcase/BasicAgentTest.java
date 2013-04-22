@@ -47,6 +47,8 @@ import org.zkoss.zats.mimic.Resource;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zats.mimic.impl.operation.SwitchedSortAgentImpl;
+import org.zkoss.zats.mimic.operation.AuEvent;
+import org.zkoss.zats.mimic.operation.AuEventAgent;
 import org.zkoss.zats.mimic.operation.BookmarkAgent;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
@@ -2355,6 +2357,43 @@ public class BasicAgentTest {
 		} finally {
 			env.destroy();
 		}
+	}
+	
+	@Test
+	public void testAuEventAgent() {
+
+		// click test
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/click.zul");
+		assertEquals("Hello World!", desktopAgent.query("#msg").as(Label.class).getValue());
+
+		//	desktopAgent.query("#btn").as(ClickAgent.class).click();
+		AuEvent auEvent = new AuEvent(Events.ON_CLICK).setData("x", 0).setData("y", 0).setData("pageX", 0)
+				.setData("pageY", 0);
+		desktopAgent.query("#btn").as(AuEventAgent.class).post(auEvent);
+
+		assertEquals("Welcome", desktopAgent.query("#msg").as(Label.class).getValue());
+
+		// select test
+		Zats.cleanup();
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/select.zul");
+
+		Label selected = desktop.query("#selected").as(Label.class);
+		assertEquals("", selected.getValue());
+
+		// combobox
+		String[] labels = new String[] { "cbi1", "cbi2", "cbi3" };
+		List<ComponentAgent> cbitems = desktop.queryAll("#cb > comboitem");
+		assertEquals(labels.length, cbitems.size());
+		for (int i = 0; i < labels.length; ++i) {
+			ComponentAgent target = cbitems.get(i);
+			ComponentAgent parent = target.getParent();
+			auEvent = new AuEvent(Events.ON_SELECT).setData("items", new Object[] { target.getUuid() }).setData(
+					"reference", parent.getUuid());
+			parent.as(AuEventAgent.class).post(auEvent);
+			assertEquals(labels[i], selected.getValue());
+		}
+		
+		
 	}
 }
 
