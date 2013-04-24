@@ -101,6 +101,7 @@ import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.West;
 import org.zkoss.zul.Window;
 import org.zkoss.zul.impl.InputElement;
+
 /**
  * <p>
  * This class maintains a mapping registry between ZK components (in specific version range) and {@link OperationAgentBuilder}. 
@@ -115,7 +116,6 @@ import org.zkoss.zul.impl.InputElement;
  * 
  * @author pao
  * @author dennis
- *
  */
 public class OperationAgentManager {
 	
@@ -320,7 +320,6 @@ public class OperationAgentManager {
 	 * format (e.g 6.0.0 or 5.0.7.1) or "*" sign means no specify. If specify
 	 * version range doesn't include current zk version at runtime, this
 	 * register will be ignored.
-	 * 
 	 * @param startVersion
 	 *            start version (include)
 	 * @param endVersion
@@ -348,7 +347,6 @@ public class OperationAgentManager {
 	/**
 	 * Return a corresponding OperationAgentBuilder for delegatee supported operation class.
 	 * It will search in registry with delegatee's class first. If not found, it keeps searching with delegatee's parent class until found or failed.
-	 * 
 	 * @param delegatee
 	 * @param operation 
 	 * @return the operation agent builder
@@ -371,6 +369,7 @@ public class OperationAgentManager {
 		
 		return (OperationAgentBuilder<Agent, O>)builder;
 	}
+	
 	@SuppressWarnings("unchecked")
 	private <O extends OperationAgent> OperationAgentBuilder<Agent, O> lookupBuilder(Class<?> delegatee, Class<O> operation) {
 		// search from class to super class and interfaces
@@ -388,7 +387,7 @@ public class OperationAgentManager {
 		//then lookup interface
 		c = delegatee;
 		while (c != null) {
-			Class<?>[] ifs = delegatee.getInterfaces();
+			Class<?>[] ifs = c.getInterfaces();
 			for (Class<?> i : ifs) {
 				builder = lookupBuilder(i, operation);
 				if (builder != null) {
@@ -403,7 +402,6 @@ public class OperationAgentManager {
 
 	/**
 	 * for operation builder mapping
-	 * 
 	 * @author pao
 	 */
 	private static class Key {
