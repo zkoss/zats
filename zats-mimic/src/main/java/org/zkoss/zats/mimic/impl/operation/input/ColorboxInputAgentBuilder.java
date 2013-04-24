@@ -61,7 +61,7 @@ public class ColorboxInputAgentBuilder implements OperationAgentBuilder<Componen
 				Map<String, Object> data = new HashMap<String, Object>();
 				data.put("color",value); // parse value and put into data collection
 				String desktopId = target.getDesktop().getId();
-				((ClientCtrl) target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
+				((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
 				((ClientCtrl) getClient()).flush(desktopId);
 			}else{
 				throw new AgentException("value \"" + value

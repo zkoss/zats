@@ -64,7 +64,7 @@ public class ListboxRenderAgentBuilder implements OperationAgentBuilder<Componen
 			String cmd = Events.ON_RENDER;
 			Map<String, Object> data = EventDataManager.getInstance().build(
 					new RenderEvent(cmd, new HashSet<String>(ids)));
-			((ClientCtrl) target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
+			((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
 			((ClientCtrl) getClient()).flush(desktopId);
 		};
 	}

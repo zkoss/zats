@@ -63,25 +63,25 @@ public abstract class SwitchedSortAgentImpl extends AgentDelegator<ComponentAgen
 			if (currentDirection.equals(ASCENDING)){
 				if (!ascending){
 					data = EventDataManager.getInstance().build(new SortEvent(cmd, header, false));
-					((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, header.getUuid(), data, null);
+					((ClientCtrl)target.getClient()).postUpdate(desktopId, header.getUuid(), cmd, data, false);
 				}
 			}else if (currentDirection.equals(DESCENDING)){
 				if (ascending){
 					data = EventDataManager.getInstance().build(new SortEvent(cmd, header, true));
-					((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, header.getUuid(), data, null);
+					((ClientCtrl)target.getClient()).postUpdate(desktopId, header.getUuid(), cmd, data, false);
 				}
 				((ClientCtrl) getClient()).flush(desktopId);
 				return;
 			}else { //natural, not sorted yet
 				if(ascending){
 					data = EventDataManager.getInstance().build(new SortEvent(cmd, header, ascending));
-					((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, header.getUuid(), data, null);
+					((ClientCtrl)target.getClient()).postUpdate(desktopId, header.getUuid(), cmd, data, false);
 				}else{
 					data = EventDataManager.getInstance().build(new SortEvent(cmd, header, true));
-					((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, header.getUuid(), data, null);
+					((ClientCtrl)target.getClient()).postUpdate(desktopId, header.getUuid(), cmd, data, false);
 					((ClientCtrl) getClient()).flush(desktopId); // listheader will remove duplicate AU
 					data = EventDataManager.getInstance().build(new SortEvent(cmd, header, ascending));
-					((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, header.getUuid(), data, null);
+					((ClientCtrl)target.getClient()).postUpdate(desktopId, header.getUuid(), cmd, data, false);
 				}
 			}
 			((ClientCtrl) getClient()).flush(desktopId);

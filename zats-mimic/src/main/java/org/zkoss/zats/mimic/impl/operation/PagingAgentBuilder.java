@@ -56,7 +56,7 @@ public class PagingAgentBuilder implements OperationAgentBuilder<ComponentAgent,
 			String desktopId = target.getDesktop().getId();
 			String cmd = ZulEvents.ON_PAGING;
 			Map<String, Object> data = EventDataManager.getInstance().build(new PagingEvent(cmd, paging, pageIndex));
-			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, paging.getUuid(), data,null);
+			((ClientCtrl)target.getClient()).postUpdate(desktopId, paging.getUuid(), cmd, data, false);
 			((ClientCtrl) getClient()).flush(desktopId);
 		}
 	}

@@ -52,11 +52,12 @@ public class EmulatorClient implements Client, ClientCtrl {
 	private Map<String, DesktopAgent> desktopAgents = new HashMap<String, DesktopAgent>();
 	private Map<String, String> cookies = new HashMap<String, String>();
 	private DestroyListener destroyListener;
-	private Map<String, List<String>> auQueues; // AU queues of desktops
-
+	private Map<String, List<EventData>> auQueues; // AU queues of desktops
+	private EchoEventMode echoEventMode = EchoEventMode.IMMEDIATE;
+	
 	public EmulatorClient(Emulator emulator) {
 		this.emulator = emulator;
-		this.auQueues = new ConcurrentHashMap<String, List<String>>();
+		this.auQueues = new ConcurrentHashMap<String, List<EventData>>();
 	}
 	
 	public DesktopAgent connectAsIncluded(String zulPath, Map<String, Object> args) {
@@ -138,11 +139,11 @@ public class EmulatorClient implements Client, ClientCtrl {
 	}
 
 	public void destroy(DesktopAgent desktopAgent) {
-		postUpdate(desktopAgent.getId(),"rmDesktop",null,null,"i");
+		postUpdate(desktopAgent.getId(), null, "rmDesktop", null, true);
 		flush(desktopAgent.getId());
 	}
 	
-	public void postUpdate(String desktopId, String command, String targetUUID, Map<String, Object> data,String option) {
+	public void postUpdate(String desktopId, String targetUUID, String command, Map<String, Object> data, boolean ignorable) {
 		if(desktopId==null){
 			throw new IllegalArgumentException("desktop id is null");
 		}else if(command == null){
@@ -150,35 +151,52 @@ public class EmulatorClient implements Client, ClientCtrl {
 		}
 		
 		// get or create AU queue
-		List<String> queue = auQueues.get(desktopId);
+		List<EventData> queue = auQueues.get(desktopId);
 		if (queue == null) {
-			queue = new LinkedList<String>();
+			queue = new LinkedList<EventData>();
 			auQueues.put(desktopId, queue);
 		}
-		// prepare AU data and queue it (without desktop ID)
-		final int index = queue.size();
-		final String cmd = command = UrlEncoded.encodeString(command);
-		final StringBuilder param = new StringBuilder();
-		param.append("&cmd_").append(index).append("=").append(cmd);
-		if (targetUUID != null) {
-			String uuid = UrlEncoded.encodeString(targetUUID);
-			param.append("&uuid_").append(index).append("=").append(uuid);
+		// queue such AU event
+		queue.add(new EventData(targetUUID, command, data, ignorable));
+	}
+	
+	private String getCombinedEventString(String desktopId) {
+
+		List<EventData> queue = auQueues.get(desktopId);
+		if (queue == null || queue.size() <= 0) { // do nothing
+			return null;
 		}
-		if (data != null && data.size() > 0) {
-			String jsonData = UrlEncoded.encodeString(JSONValue.toJSONString(data));
-			param.append("&data_").append(index).append("=").append(jsonData);
+
+		// combine AU events from queue into single request content
+		int index = 0;
+		StringBuilder sb = new StringBuilder();
+		while (!queue.isEmpty()) {
+			EventData event = queue.remove(0);
+			// command
+			sb.append("&cmd_").append(index).append("=").append(event.cmd);
+			// UUID
+			if (event.uuid != null) {
+				String uuid = UrlEncoded.encodeString(event.uuid);
+				sb.append("&uuid_").append(index).append("=").append(uuid);
+			}
+			// event data
+			if (event.data != null && event.data.size() > 0) {
+				String jsonData = UrlEncoded.encodeString(JSONValue.toJSONString(event.data));
+				sb.append("&data_").append(index).append("=").append(jsonData);
+			}
+			// ignorable
+			if (event.ignorable) {
+				sb.append("&opt_").append(index).append("=").append("i");
+			}
 		}
-		if (option != null && option.length() > 0) {
-			option = UrlEncoded.encodeString(option);
-			param.append("&opt_").append(index).append("=").append(option);
-		}
-		queue.add(param.toString());
-		
+
 		// debug log
 		if (logger.isLoggable(Level.FINEST)) {
-			String content = param.toString();
-			logger.finest(targetUUID + " perform AU: " + UrlEncoded.decodeString(content, 0, content.length(), "utf-8"));
+			logger.finest("Desktop " + desktopId + " perform AU: "
+					+ UrlEncoded.decodeString(sb.toString(), 0, sb.length(), "utf-8"));
 		}
+
+		return sb.toString();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -190,13 +208,11 @@ public class EmulatorClient implements Client, ClientCtrl {
 			// combine AU events from queue into single request
 			StringBuilder sb = new StringBuilder();
 			sb.append("dtid=").append(UrlEncoded.encodeString(desktopId)); // desktop ID.
-			List<String> queue = auQueues.get(desktopId);
-			if (queue == null || queue.size() <= 0) // do nothing
+			String combinedEvents = getCombinedEventString(desktopId);
+			if (combinedEvents == null) { // do nothing
 				return;
-			for (String cmd : queue)
-				sb.append(cmd);
-			queue.clear();
-			final String content = sb.toString();
+			}
+			final String content = sb.append(combinedEvents).toString();
 
 			// create http request and perform it
 			HttpURLConnection c = getConnection("/zkau", "POST");
@@ -358,14 +374,26 @@ public class EmulatorClient implements Client, ClientCtrl {
 	}
 
 	public void setEchoEventMode(EchoEventMode mode) {
-		if(mode == null) {
-			return;
+		if(mode != null) {
+			echoEventMode = mode;
 		}
-		// TODO
 	}
 
 	public EchoEventMode getEchoEventMode() {
-		// TODO
-		return null;
+		return echoEventMode;
+	}
+	
+	private static class EventData {
+		String uuid;
+		String cmd;
+		Map<String, Object> data;
+		boolean ignorable = false;
+		
+		EventData(String uuid, String cmd, Map<String, Object> data, boolean ignorable) {
+			this.uuid = uuid;
+			this.cmd = cmd;
+			this.data = data;
+			this.ignorable = ignorable;
+		}
 	}
 }

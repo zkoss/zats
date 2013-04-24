@@ -148,7 +148,7 @@ public class DialogUploadAgentBuilder implements OperationAgentBuilder<DesktopAg
 			data.put("wid", fileupload.getUuid());
 			data.put("contentId", contentId);
 			data.put("sid", String.valueOf(sid++)); // increase sid
-			((ClientCtrl) getClient()).postUpdate(desktopId, cmd, fileupload.getUuid(), data, null);
+			((ClientCtrl) getClient()).postUpdate(desktopId, fileupload.getUuid(), cmd, data, false);
 			((ClientCtrl) getClient()).flush(desktopId);
 		}
 
@@ -165,7 +165,7 @@ public class DialogUploadAgentBuilder implements OperationAgentBuilder<DesktopAg
 			Event event = new Event(Events.ON_CLOSE, (Component) dialog.getDelegatee());
 			Map<String, Object> data = EventDataManager.getInstance().build(event);
 			data.put("", true);
-			((ClientCtrl) getClient()).postUpdate(desktopId, Events.ON_CLOSE, dialog.getUuid(), data, null);
+			((ClientCtrl) getClient()).postUpdate(desktopId, dialog.getUuid(), Events.ON_CLOSE, data, false);
 			((ClientCtrl) getClient()).flush(desktopId);
 
 			// reset

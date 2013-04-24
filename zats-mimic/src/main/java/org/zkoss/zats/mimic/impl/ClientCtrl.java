@@ -25,12 +25,13 @@ import org.zkoss.zats.mimic.DesktopAgent;
  * @author pao
  */
 public interface ClientCtrl {
+
 	/**
 	 * post an asynchronous update event.
 	 * It will be queued until invoke flush.
 	 */
-	void postUpdate(String desktopId, String cmd, String targetUUID, Map<String, Object> data,String option);
-	
+	void postUpdate(String desktopId, String targetUUID, String cmd, Map<String, Object> data, boolean ignorable);
+
 	/**
 	 * flush the queued AU update event.
 	 */

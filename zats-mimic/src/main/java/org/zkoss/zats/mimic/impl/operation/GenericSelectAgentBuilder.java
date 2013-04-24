@@ -51,7 +51,7 @@ public class GenericSelectAgentBuilder implements OperationAgentBuilder<Componen
 			String desktopId = target.getDesktop().getId();
 			Event event = new SelectEvent(Events.ON_SELECT, (Component)parent.getDelegatee(), items, (Component)target.getDelegatee());
 			Map<String, Object> data = EventDataManager.getInstance().build(event);
-			((ClientCtrl) target.getClient()).postUpdate(desktopId, event.getName(), parent.getUuid(), data, null);
+			((ClientCtrl) target.getClient()).postUpdate(desktopId, parent.getUuid(), event.getName(), data, false);
 			((ClientCtrl) getClient()).flush(desktopId);
 		}
 	}

@@ -44,7 +44,7 @@ public class AuEventAgentBuilder implements OperationAgentBuilder<ComponentAgent
 			String desktopId = target.getDesktop().getId();
 			for (AuEvent event : events) {
 				if(event != null) {
-					client.postUpdate(desktopId, event.getName(), target.getUuid(), event.getData(), null);
+					client.postUpdate(desktopId, target.getUuid(), event.getName(), event.getData(), false);
 				} else {
 					throw new AgentException("an AU event for posting is null");
 				}

@@ -57,7 +57,7 @@ public class SelectboxSelectByIndexAgentBuilder implements OperationAgentBuilder
 			data.put("", index);
 			ClientCtrl ctrl = (ClientCtrl) target.getClient();
 			String desktopId = target.getDesktop().getId();
-			ctrl.postUpdate(desktopId, cmd, target.getUuid(), data, null);
+			ctrl.postUpdate(desktopId, target.getUuid(), cmd, data, false);
 			ctrl.flush(desktopId);
 		}
 	}

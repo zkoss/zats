@@ -160,7 +160,7 @@ public abstract class AbstractUploadAgentBuilder implements OperationAgentBuilde
 			data.put("wid", target.getUuid());
 			data.put("contentId", contentId);
 			data.put("sid", "0");
-			((ClientCtrl) target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
+			((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
 			((ClientCtrl) target.getClient()).flush(desktopId);
 		}
 

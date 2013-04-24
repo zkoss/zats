@@ -47,7 +47,7 @@ public class GenericDragAgentBuilder implements OperationAgentBuilder<ComponentA
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_DROP;
 			Map<String, Object> data = EventDataManager.getInstance().build(new DropEvent(cmd,(Component)dropTarget.getDelegatee(), (Component)target.getDelegatee(),0,0,0,0,0));
-			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, dropTarget.getUuid(), data, null);
+			((ClientCtrl)target.getClient()).postUpdate(desktopId, dropTarget.getUuid(), cmd, data, false);
 			((ClientCtrl)target.getClient()).flush(desktopId);
 		}
 	}

@@ -143,7 +143,7 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<Compo
 			String cmd = Events.ON_CTRL_KEY;
 			Map<String, Object> data = EventDataManager.getInstance().build(new KeyEvent(cmd, (Component)et.getDelegatee(), keyCode, ctrlKey,
 					shiftKey, altKey, (Component)target.getDelegatee()));
-			((ClientCtrl)et.getClient()).postUpdate(desktopId, cmd, et.getUuid(), data, null);
+			((ClientCtrl)et.getClient()).postUpdate(desktopId, et.getUuid(), cmd, data, false);
 			((ClientCtrl)target.getClient()).flush(desktopId);
 		}
 
@@ -155,7 +155,7 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<Compo
 			String cmd = Events.ON_CANCEL;
 			Map<String, Object> data = EventDataManager.getInstance().build(new KeyEvent(cmd, (Component)et.getDelegatee(), ESC, false, false,
 					false, (Component)target.getDelegatee()));
-			((ClientCtrl)et.getClient()).postUpdate(desktopId, cmd, et.getUuid(), data, null);
+			((ClientCtrl)et.getClient()).postUpdate(desktopId, et.getUuid(), cmd, data, false);
 			((ClientCtrl)target.getClient()).flush(desktopId);
 		}
 
@@ -167,7 +167,7 @@ public class GenericKeyStrokeAgentBuilder implements OperationAgentBuilder<Compo
 			String cmd = Events.ON_OK;
 			Map<String, Object> data = EventDataManager.getInstance().build(new KeyEvent(cmd, (Component)et.getDelegatee(), ENTER, false, false,
 					false, (Component)target.getDelegatee()));
-			((ClientCtrl)et.getClient()).postUpdate(desktopId, cmd, et.getUuid(), data, null);
+			((ClientCtrl)et.getClient()).postUpdate(desktopId, et.getUuid(), cmd, data, false);
 			((ClientCtrl)target.getClient()).flush(desktopId);
 		}
 	}
