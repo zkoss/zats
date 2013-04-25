@@ -1,0 +1,7 @@
+<!--
+Example application for the custom operation.
+The "mycomponent" here is not a real component. 
+ -->
+<mycomponent id="my" />
+
+	

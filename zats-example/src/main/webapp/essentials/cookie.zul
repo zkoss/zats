@@ -1,0 +1,5 @@
+<zk>
+	<div apply="org.zkoss.zats.essentials.CookieComposer">
+		<button id="change" label="change" />
+	</div>
+</zk>
