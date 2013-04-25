@@ -1,0 +1,5 @@
+<zk>
+    <div apply="org.zkoss.zats.essentials.DownloadComposer">
+        <button id="btn" label="download" />
+    </div>
+</zk>
