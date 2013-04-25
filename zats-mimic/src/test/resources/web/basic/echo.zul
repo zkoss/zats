@@ -1,0 +1,60 @@
+<vbox>
+
+	Immediate Echo Event:
+	<hbox>
+		<button id="btn1" label="echo">
+			<attribute name="onClick"><![CDATA[
+				Events.echoEvent("onMyEvent", lbl1, "my echo ");
+			]]></attribute>
+		</button>
+
+		<label id="lbl1">
+			<attribute name="onMyEvent"><![CDATA[
+				String value = self.getValue();
+				self.setValue(value + event.getData());
+			]]></attribute>
+		</label>
+	</hbox>
+	
+	Immediate Echo Event without Data:
+	<hbox>
+		<button id="btn2" label="echo2">
+			<attribute name="onClick"><![CDATA[
+				Events.echoEvent("onMyEvent2", lbl2, null);
+			]]></attribute>
+		</button>
+
+		<label id="lbl2">
+			<attribute name="onMyEvent2"><![CDATA[
+				String value = self.getValue();
+				self.setValue(value + "echo2 ");
+			]]></attribute>
+		</label>
+	</hbox>
+	
+	Loop Echo Event:
+	<hbox>
+		<button id="btn3" label="echo3">
+			<attribute name="onClick"><![CDATA[
+			    lbl3.setValue("0");
+				Events.echoEvent("onLoop", btn3, null);
+			]]></attribute>
+			<attribute name="onLoop"><![CDATA[
+				int count = Integer.parseInt(lbl3.getValue());
+				lbl3.setValue(String.valueOf(++count));
+				if(count < 3) {
+					Events.echoEvent("onLoop", btn3, null);
+				}
+			]]></attribute>
+		</button>
+		<label id="lbl3" />
+	</hbox>
+	<hbox>
+		<button id="btn4" label="speak">
+			<attribute name="onClick"><![CDATA[
+			    lbl4.setValue(lbl4.getValue() + "HelloEcho");
+			]]></attribute>
+		</button>
+		<label id="lbl4" />
+	</hbox>
+</vbox>
