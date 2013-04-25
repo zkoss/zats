@@ -15,34 +15,34 @@ import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
-import org.zkoss.zats.mimic.operation.AuEvent;
-import org.zkoss.zats.mimic.operation.AuEventAgent;
+import org.zkoss.zats.mimic.operation.AuData;
+import org.zkoss.zats.mimic.operation.AuAgent;
 
 /**
- * The builder for AU event agent.
+ * The builder for AU request agent.
  * @author pao
  * @since 1.1.0
  */
-public class AuEventAgentBuilder implements OperationAgentBuilder<ComponentAgent, AuEventAgent> {
+public class AuAgentBuilder implements OperationAgentBuilder<ComponentAgent, AuAgent> {
 
-	public AuEventAgent getOperation(ComponentAgent agent) {
-		return new AuEventAgentImpl(agent);
+	public AuAgent getOperation(ComponentAgent agent) {
+		return new AuAgentImpl(agent);
 	}
 
-	public Class<AuEventAgent> getOperationClass() {
-		return AuEventAgent.class;
+	public Class<AuAgent> getOperationClass() {
+		return AuAgent.class;
 	}
 
-	class AuEventAgentImpl extends AgentDelegator<ComponentAgent> implements AuEventAgent {
+	class AuAgentImpl extends AgentDelegator<ComponentAgent> implements AuAgent {
 
-		public AuEventAgentImpl(ComponentAgent target) {
+		public AuAgentImpl(ComponentAgent target) {
 			super(target);
 		}
 
-		public void post(AuEvent... events) {
+		public void post(AuData... events) {
 			ClientCtrl client = (ClientCtrl) target.getClient();
 			String desktopId = target.getDesktop().getId();
-			for (AuEvent event : events) {
+			for (AuData event : events) {
 				if(event != null) {
 					client.postUpdate(desktopId, target.getUuid(), event.getName(), event.getData(), false);
 				} else {

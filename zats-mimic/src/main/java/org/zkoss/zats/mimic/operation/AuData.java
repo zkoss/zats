@@ -20,21 +20,20 @@ import org.zkoss.zats.common.json.JSONObject;
 import org.zkoss.zats.mimic.AgentException;
 
 /**
- * An AU event class to define event name and its data for posting.
+ * An AU request data class to define custom event and data.
  * @author pao
  * @since 1.1.0
  */
-public class AuEvent {
+public class AuData {
 
-	private String name;
+	private String eventName;
 	private Map<String, Object> data = new HashMap<String, Object>();
-	private boolean ignorable = false;
 
-	public AuEvent(String Name) {
-		if (Name == null || Name.length() <= 0) {
+	public AuData(String eventName) {
+		if (eventName == null || eventName.length() <= 0) {
 			throw new AgentException("event name can't be null or empty");
 		}
-		this.name = Name;
+		this.eventName = eventName;
 	}
 
 	/**
@@ -48,7 +47,7 @@ public class AuEvent {
 	 * 	null.
 	 * @return The AU event itself.
 	 */
-	public AuEvent setData(String key, Object value) {
+	public AuData setData(String key, Object value) {
 		if (key == null) {
 			throw new AgentException("key can't be null.");
 		}
@@ -68,7 +67,7 @@ public class AuEvent {
 	 * 	null.
 	 * @return The AU event itself.
 	 */
-	public AuEvent setData(String key, Object[] values) {
+	public AuData setData(String key, Object[] values) {
 		if (key == null) {
 			throw new AgentException("key can't be null.");
 		}
@@ -92,21 +91,10 @@ public class AuEvent {
 	}
 
 	public String getName() {
-		return name;
+		return eventName;
 	}
 
 	public Map<String, Object> getData() {
 		return data;
-	}
-
-	/**
-	 * whether this event is ignorable, i.e., whether to ignore any error of sending this event back the server.
-	 */
-	public void setIgnorable(boolean ignorable) {
-		this.ignorable = ignorable;
-	}
-
-	public boolean isIgnorable() {
-		return ignorable;
 	}
 }

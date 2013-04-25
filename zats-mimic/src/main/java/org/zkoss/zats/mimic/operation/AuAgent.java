@@ -12,12 +12,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.operation;
 
 /**
- * The agent supports posting customized AU events.
+ * The agent supports posting customized AU requests.
  * @author pao
  * @since 1.1.0
  */
-public interface AuEventAgent extends OperationAgent {
+public interface AuAgent extends OperationAgent {
 
-	void post(AuEvent... events);
+	void post(AuData... auData);
 
 }

@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.Agent;
-import org.zkoss.zats.mimic.impl.operation.AuEventAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.AuAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.ButtonUploadAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.ColumnSortAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.DesktopBookmarkAgentBuilder;
@@ -142,7 +142,7 @@ public class OperationAgentManager {
 
 		registerBuilder("5.0.0", "*", AbstractComponent.class, new GenericClickAgentBuilder());
 		registerBuilder("5.0.0", "*", AbstractComponent.class, new GenericKeyStrokeAgentBuilder());
-		registerBuilder("5.0.0", "*", Component.class, new AuEventAgentBuilder());
+		registerBuilder("5.0.0", "*", Component.class, new AuAgentBuilder());
 
 		// the focus
 		registerBuilder("5.0.0", "*", InputElement.class, new GenericFocusAgentBuilder());
