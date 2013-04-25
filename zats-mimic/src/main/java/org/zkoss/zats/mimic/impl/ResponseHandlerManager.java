@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.zkoss.zats.mimic.impl.response.DownloadHandler;
+import org.zkoss.zats.mimic.impl.response.EchoEventHandler;
 
 /**
  * The manager of response handler.
@@ -42,6 +43,7 @@ public class ResponseHandlerManager {
 
 		// AU response handler
 		registerHandler("5.0.0", "*", new DownloadHandler());
+		registerHandler("5.0.0", "*", new EchoEventHandler());
 	}
 
 	public void registerHandler(String startVersion, String endVersion, String className) {

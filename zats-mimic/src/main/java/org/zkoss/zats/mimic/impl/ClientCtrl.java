@@ -30,10 +30,18 @@ public interface ClientCtrl {
 	 * post an asynchronous update event.
 	 * It will be queued until invoke flush.
 	 */
-	void postUpdate(String desktopId, String targetUUID, String cmd, Map<String, Object> data, boolean ignorable);
+	void postUpdate(String desktopId, String targetUUID, String command, Map<String, Object> data, boolean ignorable);
+	
+	/**
+	 * post a piggyback asynchronous update event.
+	 * a piggyback event's order is after normal events.
+	 * It will be queued until invoke flush.
+	 * @param  true indicated that it's 
+	 */
+	void postPiggyback(String desktopId, String targetUUID, String command, Map<String, Object> data, boolean ignorable);
 
 	/**
-	 * flush the queued AU update event.
+	 * flush the queued AU update event including piggyback events.
 	 */
 	void flush(String desktopId);
 	

@@ -52,12 +52,14 @@ public class EmulatorClient implements Client, ClientCtrl {
 	private Map<String, DesktopAgent> desktopAgents = new HashMap<String, DesktopAgent>();
 	private Map<String, String> cookies = new HashMap<String, String>();
 	private DestroyListener destroyListener;
-	private Map<String, List<EventData>> auQueues; // AU queues of desktops
+	private Map<String, List<UpdateEvent>> auQueues; // AU queues of desktops
+	private Map<String, List<UpdateEvent>> auQueues4piggyback; // AU queues for piggyback events
 	private EchoEventMode echoEventMode = EchoEventMode.IMMEDIATE;
 	
 	public EmulatorClient(Emulator emulator) {
 		this.emulator = emulator;
-		this.auQueues = new ConcurrentHashMap<String, List<EventData>>();
+		this.auQueues = new ConcurrentHashMap<String, List<UpdateEvent>>();
+		this.auQueues4piggyback = new ConcurrentHashMap<String, List<UpdateEvent>>();
 	}
 	
 	public DesktopAgent connectAsIncluded(String zulPath, Map<String, Object> args) {
@@ -144,6 +146,14 @@ public class EmulatorClient implements Client, ClientCtrl {
 	}
 	
 	public void postUpdate(String desktopId, String targetUUID, String command, Map<String, Object> data, boolean ignorable) {
+		postUpdate(desktopId, targetUUID, command, data, ignorable, false);
+	}
+	
+	public void postPiggyback(String desktopId, String targetUUID, String command, Map<String, Object> data, boolean ignorable) {
+		postUpdate(desktopId, targetUUID, command, data, ignorable, true);
+	}
+	
+	private void postUpdate(String desktopId, String targetUUID, String command, Map<String, Object> data, boolean ignorable, boolean piggyback) {
 		if(desktopId==null){
 			throw new IllegalArgumentException("desktop id is null");
 		}else if(command == null){
@@ -151,27 +161,35 @@ public class EmulatorClient implements Client, ClientCtrl {
 		}
 		
 		// get or create AU queue
-		List<EventData> queue = auQueues.get(desktopId);
+		Map<String, List<UpdateEvent>> queues = piggyback ? auQueues4piggyback : auQueues;
+		List<UpdateEvent> queue = queues.get(desktopId);
 		if (queue == null) {
-			queue = new LinkedList<EventData>();
-			auQueues.put(desktopId, queue);
+			queue = new LinkedList<UpdateEvent>();
+			queues.put(desktopId, queue);
 		}
 		// queue such AU event
-		queue.add(new EventData(targetUUID, command, data, ignorable));
+		queue.add(new UpdateEvent(targetUUID, command, data, ignorable));
 	}
 	
 	private String getCombinedEventString(String desktopId) {
 
-		List<EventData> queue = auQueues.get(desktopId);
-		if (queue == null || queue.size() <= 0) { // do nothing
-			return null;
+		// collect all events
+		List<UpdateEvent> queue = new LinkedList<UpdateEvent>();
+		if (auQueues4piggyback.containsKey(desktopId)) {
+			queue.addAll(auQueues4piggyback.remove(desktopId));
+		}
+		if (auQueues.containsKey(desktopId)) {
+			queue.addAll(auQueues.remove(desktopId));
+		}
+		if (queue.size() <= 0) {
+			return null;// do nothing
 		}
 
 		// combine AU events from queue into single request content
 		int index = 0;
 		StringBuilder sb = new StringBuilder();
 		while (!queue.isEmpty()) {
-			EventData event = queue.remove(0);
+			UpdateEvent event = queue.remove(0);
 			// command
 			sb.append("&cmd_").append(index).append("=").append(event.cmd);
 			// UUID
@@ -188,6 +206,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 			if (event.ignorable) {
 				sb.append("&opt_").append(index).append("=").append("i");
 			}
+			++index;
 		}
 
 		// debug log
@@ -203,56 +222,60 @@ public class EmulatorClient implements Client, ClientCtrl {
 	public void flush(String desktopId) {
 		OutputStream os = null;
 		InputStream is = null;
-		try {
-
-			// combine AU events from queue into single request
-			StringBuilder sb = new StringBuilder();
-			sb.append("dtid=").append(UrlEncoded.encodeString(desktopId)); // desktop ID.
-			String combinedEvents = getCombinedEventString(desktopId);
-			if (combinedEvents == null) { // do nothing
-				return;
-			}
-			final String content = sb.append(combinedEvents).toString();
-
-			// create http request and perform it
-			HttpURLConnection c = getConnection("/zkau", "POST");
-			c.setDoOutput(true);
-			c.setDoInput(true);
-			c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-			if (logger.isLoggable(Level.FINEST)) {
-				logger.finest("HTTP request header: " + c.getRequestProperties());
-				logger.finest("HTTP request content: " + content);
-			}
-			c.connect();
-			os = c.getOutputStream();
-			os.write(content.getBytes("utf-8"));
-			close(os);
-
-			// read and parse response, and pass to response handlers
-			fetchCookies(c);
-			is = c.getInputStream();
-			String raw = getReplyString(is, c.getContentEncoding());
-			Map<String, Object> json = (Map<String, Object>) org.zkoss.zats.common.json.JSONValue.parseWithException(raw);
-			List<UpdateResponseHandler> handlers = ResponseHandlerManager.getInstance().getUpdateResponseHandlers();
-			for (UpdateResponseHandler h : handlers) {
-				try {
-					h.process(desktopAgents.get(desktopId), json);
-				} catch (Throwable e) {
-					logger.log(Level.SEVERE, e.getMessage(), e);
+		
+		// #ZATS-11: when post-flush, handlers process AU responses.
+		// They might require posting more AU requests immediately, so repeat posting.
+		while(auQueues.containsKey(desktopId) && auQueues.get(desktopId).size() > 0) {
+			try {
+				// combine AU events from queue into single request
+				StringBuilder sb = new StringBuilder();
+				sb.append("dtid=").append(UrlEncoded.encodeString(desktopId)); // desktop ID.
+				String combinedEvents = getCombinedEventString(desktopId); // this will clean such desktop's event queue
+				if (combinedEvents == null) { // do nothing
+					return;
 				}
+				final String content = sb.append(combinedEvents).toString();
+				
+				// create http request and perform it
+				HttpURLConnection c = getConnection("/zkau", "POST");
+				c.setDoOutput(true);
+				c.setDoInput(true);
+				c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+				if (logger.isLoggable(Level.FINEST)) {
+					logger.finest("HTTP request header: " + c.getRequestProperties());
+					logger.finest("HTTP request content: " + content);
+				}
+				c.connect();
+				os = c.getOutputStream();
+				os.write(content.getBytes("utf-8"));
+				close(os);
+				
+				// read and parse response, and pass to response handlers
+				fetchCookies(c);
+				is = c.getInputStream();
+				String raw = getReplyString(is, c.getContentEncoding());
+				Map<String, Object> json = (Map<String, Object>) org.zkoss.zats.common.json.JSONValue.parseWithException(raw);
+				List<UpdateResponseHandler> handlers = ResponseHandlerManager.getInstance().getUpdateResponseHandlers();
+				for (UpdateResponseHandler h : handlers) {
+					try {
+						h.process(desktopAgents.get(desktopId), json);
+					} catch (Throwable e) {
+						logger.log(Level.SEVERE, e.getMessage(), e);
+					}
+				}
+				if (logger.isLoggable(Level.FINEST)) {
+					logger.finest("HTTP response header: " + c.getHeaderFields());
+					logger.finest("HTTP response content: " + raw);
+				}
+				
+			} catch (ParseException e) {
+				logger.log(Level.SEVERE, "unexpect exception when parsing JSON", e);
+			} catch (Exception e) {
+				throw new ZatsException(e.getMessage(), e);
+			} finally {
+				close(os);
+				close(is);
 			}
-			if (logger.isLoggable(Level.FINEST)) {
-				logger.finest("HTTP response header: " + c.getHeaderFields());
-				logger.finest("HTTP response content: " + raw);
-			}
-			
-		} catch (ParseException e) {
-			logger.log(Level.SEVERE, "unexpect exception when parsing JSON", e);
-		} catch (Exception e) {
-			throw new ZatsException(e.getMessage(), e);
-		} finally {
-			close(os);
-			close(is);
 		}
 	}
 
@@ -383,13 +406,13 @@ public class EmulatorClient implements Client, ClientCtrl {
 		return echoEventMode;
 	}
 	
-	private static class EventData {
+	private static class UpdateEvent {
 		String uuid;
 		String cmd;
 		Map<String, Object> data;
 		boolean ignorable = false;
 		
-		EventData(String uuid, String cmd, Map<String, Object> data, boolean ignorable) {
+		UpdateEvent(String uuid, String cmd, Map<String, Object> data, boolean ignorable) {
 			this.uuid = uuid;
 			this.cmd = cmd;
 			this.data = data;

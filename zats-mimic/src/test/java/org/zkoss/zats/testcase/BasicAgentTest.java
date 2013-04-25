@@ -43,6 +43,7 @@ import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DefaultZatsEnvironment;
 import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zats.mimic.EchoEventMode;
 import org.zkoss.zats.mimic.Resource;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.impl.Util;
@@ -2392,8 +2393,61 @@ public class BasicAgentTest {
 			parent.as(AuEventAgent.class).post(auEvent);
 			assertEquals(labels[i], selected.getValue());
 		}
-		
-		
+	}
+	
+	
+	@Test
+	public void testEchoEvent() {
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/echo.zul");
+
+		// immediate echo event
+		Label lbl1 = desktopAgent.query("#lbl1").as(Label.class);
+		assertEquals("", lbl1.getValue());
+		assertFalse("incorrect".equals(lbl1.getValue()));
+
+		ComponentAgent btn1 = desktopAgent.query("#btn1");
+		btn1.click();
+		assertEquals("my echo ", lbl1.getValue());
+		btn1.click();
+		assertEquals("my echo my echo ", lbl1.getValue());
+
+		// immediate echo event without data 
+		Label lbl2 = desktopAgent.query("#lbl2").as(Label.class);
+		assertEquals("", lbl2.getValue());
+
+		ComponentAgent btn2 = desktopAgent.query("#btn2");
+		btn2.click();
+		assertEquals("echo2 ", lbl2.getValue());
+		btn2.click();
+		assertEquals("echo2 echo2 ", lbl2.getValue());
+
+		// loop echo with normal operations - immediate mode
+		Label lbl3 = desktopAgent.query("#lbl3").as(Label.class);
+		Label lbl4 = desktopAgent.query("#lbl4").as(Label.class);
+		assertEquals("", lbl3.getValue());
+		assertEquals("", lbl4.getValue());
+
+		desktopAgent.query("#btn3").click();
+		assertEquals("3", lbl3.getValue());
+		assertEquals("", lbl4.getValue());
+		desktopAgent.query("#btn4").click();
+		assertEquals("3", lbl3.getValue());
+		assertEquals("HelloEcho", lbl4.getValue());
+
+		// loop echo with normal operations - piggyback mode
+		desktopAgent.getClient().setEchoEventMode(EchoEventMode.PIGGYBACK);
+
+		String hellos = "HelloEcho";
+		desktopAgent.query("#btn3").click();
+		assertEquals("0", lbl3.getValue());
+		assertEquals(hellos, lbl4.getValue());
+
+		String[] numbers = { "1", "2", "3", "3", "3" };
+		for (String number : numbers) {
+			desktopAgent.query("#btn4").click();
+			assertEquals(number, lbl3.getValue());
+			assertEquals(hellos += "HelloEcho", lbl4.getValue());
+		}
 	}
 }
 
