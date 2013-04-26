@@ -33,8 +33,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.eclipse.jetty.util.UrlEncoded;
-import org.zkoss.json.JSONValue;
 import org.zkoss.zats.ZatsException;
+import org.zkoss.zats.common.json.JSONValue;
 import org.zkoss.zats.common.json.parser.ParseException;
 import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -138,6 +138,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 		// should be after cleaning desktop
 		cookies.clear();
 		auQueues.clear();
+		auQueues4piggyback.clear();
 	}
 
 	public void destroy(DesktopAgent desktopAgent) {
@@ -254,7 +255,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 				fetchCookies(c);
 				is = c.getInputStream();
 				String raw = getReplyString(is, c.getContentEncoding());
-				Map<String, Object> json = (Map<String, Object>) org.zkoss.zats.common.json.JSONValue.parseWithException(raw);
+				Map<String, Object> json = (Map<String, Object>) JSONValue.parseWithException(raw);
 				List<UpdateResponseHandler> handlers = ResponseHandlerManager.getInstance().getUpdateResponseHandlers();
 				for (UpdateResponseHandler h : handlers) {
 					try {

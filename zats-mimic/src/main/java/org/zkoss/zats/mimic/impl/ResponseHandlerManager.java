@@ -12,7 +12,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.zats.mimic.impl.response.DownloadHandler;
 import org.zkoss.zats.mimic.impl.response.EchoEventHandler;
@@ -32,28 +34,28 @@ public class ResponseHandlerManager {
 		return instance;
 	}
 
-	private List<LayoutResponseHandler> layoutHandlers;
-	private List<UpdateResponseHandler> updateHandlers;
+	private Map<String, LayoutResponseHandler> layoutHandlers;
+	private Map<String, UpdateResponseHandler> updateHandlers;
 
 	public ResponseHandlerManager() {
-		layoutHandlers = new ArrayList<LayoutResponseHandler>();
-		updateHandlers = new ArrayList<UpdateResponseHandler>();
+		layoutHandlers = new HashMap<String, LayoutResponseHandler>();
+		updateHandlers = new HashMap<String, UpdateResponseHandler>();
 
 		// TODO layout response handler
 
 		// AU response handler
-		registerHandler("5.0.0", "*", new DownloadHandler());
-		registerHandler("5.0.0", "*", new EchoEventHandler());
+		registerHandler("5.0.0", "*", DownloadHandler.REGISTER_KEY, new DownloadHandler());
+		registerHandler("5.0.0", "5.*.*", EchoEventHandler.REGISTER_KEY, new EchoEventHandler());
 	}
 
-	public void registerHandler(String startVersion, String endVersion, String className) {
+	public void registerHandler(String startVersion, String endVersion, String key, String className) {
 		try {
 			// create object and check type
 			Class<?> clazz = Class.forName(className);
 			if (LayoutResponseHandler.class.isAssignableFrom(clazz))
-				registerHandler(startVersion, endVersion, (LayoutResponseHandler) clazz.newInstance());
+				registerHandler(startVersion, endVersion, key, (LayoutResponseHandler) clazz.newInstance());
 			else if (UpdateResponseHandler.class.isAssignableFrom(clazz))
-				registerHandler(startVersion, endVersion, (UpdateResponseHandler) clazz.newInstance());
+				registerHandler(startVersion, endVersion, key, (UpdateResponseHandler) clazz.newInstance());
 			else
 				throw new ClassCastException(className + " neither layout response handler nor update response handler");
 		} catch (Exception x) {
@@ -61,28 +63,30 @@ public class ResponseHandlerManager {
 		}
 	}
 
-	public void registerHandler(String startVersion, String endVersion, LayoutResponseHandler handler) {
-		if (startVersion == null || endVersion == null || handler == null)
+	public void registerHandler(String startVersion, String endVersion, String key, LayoutResponseHandler handler) {
+		if (startVersion == null || endVersion == null || key == null || handler == null)
 			throw new IllegalArgumentException();
 		if (!Util.checkVersion(startVersion, endVersion))
 			return;
-		layoutHandlers.add(handler);
+		// ZATS-11: note that, the key can be used for replacing previous one and prevent duplicate handlers
+		layoutHandlers.put(key, handler);
 	}
 
-	public void registerHandler(String startVersion, String endVersion, UpdateResponseHandler handler) {
-		if (startVersion == null || endVersion == null || handler == null)
+	public void registerHandler(String startVersion, String endVersion, String key, UpdateResponseHandler handler) {
+		if (startVersion == null || endVersion == null || key == null || handler == null)
 			throw new IllegalArgumentException();
 		if (!Util.checkVersion(startVersion, endVersion))
 			return;
-		updateHandlers.add(handler);
+		// ZATS-11: note that, the key can be used for replacing previous one and prevent duplicate handlers
+		updateHandlers.put(key, handler);
 	}
 
 	public List<LayoutResponseHandler> getLayoutResponseHandlers() {
-		return new ArrayList<LayoutResponseHandler>(layoutHandlers);
+		return new ArrayList<LayoutResponseHandler>(layoutHandlers.values());
 	}
 
 	public List<UpdateResponseHandler> getUpdateResponseHandlers() {
-		return new ArrayList<UpdateResponseHandler>(updateHandlers);
+		return new ArrayList<UpdateResponseHandler>(updateHandlers.values());
 	}
 
 }

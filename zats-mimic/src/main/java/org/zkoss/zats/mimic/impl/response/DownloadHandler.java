@@ -33,8 +33,8 @@ import org.zkoss.zk.au.AuResponse;
  * @author pao
  */
 public class DownloadHandler implements UpdateResponseHandler {
-
-	private static Logger logger = Logger.getLogger(DownloadHandler.class.getName());
+	public final static String REGISTER_KEY = "download"; 
+	private final static Logger logger = Logger.getLogger(DownloadHandler.class.getName());
 
 	public void process(DesktopAgent desktop, Map<String, Object> jsonObject) {
 

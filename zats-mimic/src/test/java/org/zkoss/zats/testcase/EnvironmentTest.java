@@ -367,13 +367,15 @@ public class EnvironmentTest {
 		// test handlers register
 		ResponseHandlerManager manager = ResponseHandlerManager.getInstance();
 		// layout handlers
-		manager.registerHandler("*", "*", LayoutHandlerImpl.class.getName());
-		manager.registerHandler("*", "*", new LayoutHandlerImpl());
-		manager.registerHandler("9.9.9", "*", new LayoutHandlerImpl());
+		manager.registerHandler("*", "*", "foo0", LayoutHandlerImpl.class.getName());
+		manager.registerHandler("*", "*", "foo1", new LayoutHandlerImpl());
+		manager.registerHandler("*", "*", "foo1", new LayoutHandlerImpl()); // test duplicate
+		manager.registerHandler("9.9.9", "*", "foo2", new LayoutHandlerImpl());
 		// update handlers
-		manager.registerHandler("*", "*", UpdateHandlerImpl.class.getName());
-		manager.registerHandler("*", "*", new UpdateHandlerImpl());
-		manager.registerHandler("9.9.9", "*", new UpdateHandlerImpl());
+		manager.registerHandler("*", "*", "bar0", UpdateHandlerImpl.class.getName());
+		manager.registerHandler("*", "*", "bar1", new UpdateHandlerImpl());
+		manager.registerHandler("*", "*", "bar1", new UpdateHandlerImpl()); // test duplicate
+		manager.registerHandler("9.9.9", "*", "bar2", new UpdateHandlerImpl());
 
 		Zats.init(".");
 		try {
@@ -383,9 +385,9 @@ public class EnvironmentTest {
 			assertEquals("Welcome", desktopAgent.query("#msg").as(Label.class).getValue());
 			assertEquals(2 , LayoutHandlerImpl.count);
 			assertEquals(2 , UpdateHandlerImpl.count);
+		} finally {
 			LayoutHandlerImpl.enabled = false;
 			UpdateHandlerImpl.enabled = false;
-		} finally {
 			Zats.cleanup();
 			Zats.end();
 		}

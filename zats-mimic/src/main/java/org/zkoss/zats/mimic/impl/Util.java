@@ -23,7 +23,6 @@ import org.zkoss.zats.ZatsException;
 
 /**
  * Utilities for implementation.
- * 
  * @author pao
  */
 public class Util {
@@ -65,14 +64,17 @@ public class Util {
 		return false;
 	}
 	
-	
+	/**
+	 * check the given version range is match current ZK version or not.
+	 * it accepts wildcard "*". e.g * or 5.0.* or 6.*.* 
+	 */
 	public static boolean checkVersion(String startVersion, String endVersion){
 		// check version
 		// If current isn't between start and end version, ignore this register.
 		BigInteger start = "*".equals(startVersion.trim()) ? BigInteger.ZERO
-				: Util.parseVersion(startVersion);
+				: Util.parseVersion(startVersion.replaceAll("[*]", "0"));
 		BigInteger end = "*".equals(endVersion.trim()) ? BigInteger
-				.valueOf(Long.MAX_VALUE) : Util.parseVersion(endVersion);
+				.valueOf(Long.MAX_VALUE) : Util.parseVersion(endVersion.replaceAll("[*]", String.valueOf(Byte.MAX_VALUE)));
 		if (start == null || end == null)
 			throw new IllegalArgumentException("wrong version format");
 		if (zkVersion.compareTo(start) < 0 || zkVersion.compareTo(end) > 0)
@@ -82,9 +84,7 @@ public class Util {
 	
 	/**
 	 * close resource without any exception.
-	 * 
-	 * @param r
-	 *            resource. If null, do nothing.
+	 * @param r resource. If null, do nothing.
 	 */
 	public static void close(Closeable r) {
 		try {

@@ -2400,38 +2400,56 @@ public class BasicAgentTest {
 	public void testEchoEvent() {
 		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/echo.zul");
 
-		// immediate echo event
-		Label lbl1 = desktopAgent.query("#lbl1").as(Label.class);
-		assertEquals("", lbl1.getValue());
-		assertFalse("incorrect".equals(lbl1.getValue()));
+		// immediate echo events
+		Label lbl11 = desktopAgent.query("#lbl11").as(Label.class);
+		Label lbl12 = desktopAgent.query("#lbl12").as(Label.class);
+		Label lbl13 = desktopAgent.query("#lbl13").as(Label.class);
+		assertEquals("", lbl11.getValue());
+		assertEquals("", lbl12.getValue());
+		assertEquals("", lbl13.getValue());
+		assertFalse("incorrect".equals(lbl11.getValue()));
 
 		ComponentAgent btn1 = desktopAgent.query("#btn1");
 		btn1.click();
-		assertEquals("my echo ", lbl1.getValue());
+		assertEquals("MyEcho", lbl11.getValue());
+		assertEquals("YourEcho", lbl12.getValue());
+		assertEquals("ItsEcho", lbl13.getValue());
 		btn1.click();
-		assertEquals("my echo my echo ", lbl1.getValue());
+		assertEquals("MyEchoMyEcho", lbl11.getValue());
+		assertEquals("YourEchoYourEcho", lbl12.getValue());
+		assertEquals("ItsEchoItsEcho", lbl13.getValue());
 
-		// immediate echo event without data 
-		Label lbl2 = desktopAgent.query("#lbl2").as(Label.class);
-		assertEquals("", lbl2.getValue());
+		// immediate echo events without data 
+		Label lbl21 = desktopAgent.query("#lbl21").as(Label.class);
+		Label lbl22 = desktopAgent.query("#lbl22").as(Label.class);
+		Label lbl23 = desktopAgent.query("#lbl23").as(Label.class);
+		assertEquals("", lbl21.getValue());
 
 		ComponentAgent btn2 = desktopAgent.query("#btn2");
 		btn2.click();
-		assertEquals("echo2 ", lbl2.getValue());
+		assertEquals("MyEcho2", lbl21.getValue());
+		assertEquals("YourEcho2", lbl22.getValue());
+		assertEquals("ItsEcho2", lbl23.getValue());
 		btn2.click();
-		assertEquals("echo2 echo2 ", lbl2.getValue());
+		assertEquals("MyEcho2MyEcho2", lbl21.getValue());
+		assertEquals("YourEcho2YourEcho2", lbl22.getValue());
+		assertEquals("ItsEcho2ItsEcho2", lbl23.getValue());
 
 		// loop echo with normal operations - immediate mode
-		Label lbl3 = desktopAgent.query("#lbl3").as(Label.class);
+		Label lbl31 = desktopAgent.query("#lbl31").as(Label.class);
+		Label lbl32 = desktopAgent.query("#lbl32").as(Label.class);
 		Label lbl4 = desktopAgent.query("#lbl4").as(Label.class);
-		assertEquals("", lbl3.getValue());
+		assertEquals("", lbl31.getValue());
+		assertEquals("", lbl32.getValue());
 		assertEquals("", lbl4.getValue());
 
 		desktopAgent.query("#btn3").click();
-		assertEquals("3", lbl3.getValue());
+		assertEquals("3", lbl31.getValue());
+		assertEquals("4", lbl32.getValue());
 		assertEquals("", lbl4.getValue());
 		desktopAgent.query("#btn4").click();
-		assertEquals("3", lbl3.getValue());
+		assertEquals("3", lbl31.getValue());
+		assertEquals("4", lbl32.getValue());
 		assertEquals("HelloEcho", lbl4.getValue());
 
 		// loop echo with normal operations - piggyback mode
@@ -2439,13 +2457,16 @@ public class BasicAgentTest {
 
 		String hellos = "HelloEcho";
 		desktopAgent.query("#btn3").click();
-		assertEquals("0", lbl3.getValue());
+		assertEquals("0", lbl31.getValue());
+		assertEquals("0", lbl32.getValue());
 		assertEquals(hellos, lbl4.getValue());
 
-		String[] numbers = { "1", "2", "3", "3", "3" };
-		for (String number : numbers) {
+		String[] a31 = { "1", "2", "3", "3", "3", "3" };
+		String[] a32 = { "1", "2", "3", "4", "4", "4" };
+		for (int i = 0; i < a31.length; ++i) {
 			desktopAgent.query("#btn4").click();
-			assertEquals(number, lbl3.getValue());
+			assertEquals(a31[i], lbl31.getValue());
+			assertEquals(a32[i], lbl32.getValue());
 			assertEquals(hellos += "HelloEcho", lbl4.getValue());
 		}
 	}

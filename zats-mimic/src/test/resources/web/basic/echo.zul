@@ -4,12 +4,25 @@
 	<hbox>
 		<button id="btn1" label="echo">
 			<attribute name="onClick"><![CDATA[
-				Events.echoEvent("onMyEvent", lbl1, "my echo ");
+				Events.echoEvent("onMyEvent", lbl11, "MyEcho");
+				Events.echoEvent("onYourEvent", lbl12, "YourEcho");
+				Events.echoEvent("onItsEvent", lbl13, "ItsEcho");
 			]]></attribute>
 		</button>
-
-		<label id="lbl1">
+		<label id="lbl11">
 			<attribute name="onMyEvent"><![CDATA[
+				String value = self.getValue();
+				self.setValue(value + event.getData());
+			]]></attribute>
+		</label>
+		<label id="lbl12">
+			<attribute name="onYourEvent"><![CDATA[
+				String value = self.getValue();
+				self.setValue(value + event.getData());
+			]]></attribute>
+		</label>
+		<label id="lbl13">
+			<attribute name="onItsEvent"><![CDATA[
 				String value = self.getValue();
 				self.setValue(value + event.getData());
 			]]></attribute>
@@ -20,14 +33,24 @@
 	<hbox>
 		<button id="btn2" label="echo2">
 			<attribute name="onClick"><![CDATA[
-				Events.echoEvent("onMyEvent2", lbl2, null);
+				Events.echoEvent("onMyEvent2", lbl21, "MyEcho");
+				Events.echoEvent("onYourEvent2", lbl22, "YourEcho");
+				Events.echoEvent("onItsEvent2", lbl23, "ItsEcho");
 			]]></attribute>
 		</button>
-
-		<label id="lbl2">
+		<label id="lbl21">
 			<attribute name="onMyEvent2"><![CDATA[
-				String value = self.getValue();
-				self.setValue(value + "echo2 ");
+				self.setValue(self.getValue() + "MyEcho2");
+			]]></attribute>
+		</label>
+		<label id="lbl22">
+			<attribute name="onYourEvent2"><![CDATA[
+				self.setValue(self.getValue() + "YourEcho2");
+			]]></attribute>
+		</label>
+		<label id="lbl23">
+			<attribute name="onItsEvent2"><![CDATA[
+				self.setValue(self.getValue() + "ItsEcho2");
 			]]></attribute>
 		</label>
 	</hbox>
@@ -36,18 +59,28 @@
 	<hbox>
 		<button id="btn3" label="echo3">
 			<attribute name="onClick"><![CDATA[
-			    lbl3.setValue("0");
-				Events.echoEvent("onLoop", btn3, null);
+				lbl31.setValue("0");
+				lbl32.setValue("0");
+				Events.echoEvent("onLoop1", btn3, null);
+				Events.echoEvent("onLoop2", btn3, null);
 			]]></attribute>
-			<attribute name="onLoop"><![CDATA[
-				int count = Integer.parseInt(lbl3.getValue());
-				lbl3.setValue(String.valueOf(++count));
+			<attribute name="onLoop1"><![CDATA[
+				int count = Integer.parseInt(lbl31.getValue());
+				lbl31.setValue(String.valueOf(++count));
 				if(count < 3) {
-					Events.echoEvent("onLoop", btn3, null);
+					Events.echoEvent("onLoop1", btn3, null);
+				}
+			]]></attribute>
+			<attribute name="onLoop2"><![CDATA[
+				int count = Integer.parseInt(lbl32.getValue());
+				lbl32.setValue(String.valueOf(++count));
+				if(count < 4) {
+					Events.echoEvent("onLoop2", btn3, null);
 				}
 			]]></attribute>
 		</button>
-		<label id="lbl3" />
+		<label id="lbl31" />
+		<label id="lbl32" />
 	</hbox>
 	<hbox>
 		<button id="btn4" label="speak">

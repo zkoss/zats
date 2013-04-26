@@ -11,13 +11,13 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zats.mimic.impl;
 
-import org.zkoss.zats.mimic.Agent;
-import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericOpenAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.DateTypeAgentBuilderZK6;
 import org.zkoss.zats.mimic.impl.operation.input.TimeTypeAgentBuilderZK6;
 import org.zkoss.zats.mimic.impl.operation.select.SelectboxSelectByIndexAgentBuilder;
+import org.zkoss.zats.mimic.impl.response.EchoEventHandler;
+import org.zkoss.zats.mimic.impl.response.EchoEventHandlerExt6;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.util.WebAppInit;
 import org.zkoss.zul.Combobutton;
@@ -51,12 +51,18 @@ public class Ext6Initiator implements WebAppInit{
 		
 		//event data
 		
-		
 		// resolvers
 		//resolve view model
-		if(Util.hasClass("org.zkoss.bind.Binder")){
-			ValueResolverManager.getInstance().registerResolver("6.0.0","*","org.zkoss.zats.mimic.impl.BindValueResolver");
+		//TODO add key 
+		if (Util.hasClass("org.zkoss.bind.Binder")) {
+			ValueResolverManager.getInstance().registerResolver("6.0.0", "*", "bind",
+					"org.zkoss.zats.mimic.impl.BindValueResolver");
 		}
+		
+		// response handlers
+		// ZATS-11: note that, the key can be used for replacing previous one and prevent duplicate handlers
+		ResponseHandlerManager.getInstance().registerHandler("6.0.0", "*", EchoEventHandler.REGISTER_KEY,
+				new EchoEventHandlerExt6());
 	}
 
 }

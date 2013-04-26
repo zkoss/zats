@@ -11,12 +11,11 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zats.mimic.impl.response;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.zkoss.zats.common.json.JSONObject;
-import org.zkoss.zats.common.json.JSONValue;
 import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.EchoEventMode;
@@ -30,6 +29,7 @@ import org.zkoss.zk.au.AuResponse;
  * @author pao
  */
 public class EchoEventHandler implements UpdateResponseHandler {
+	public final static String REGISTER_KEY = "echo"; 
 	private final static String REQUEST_ECHO_EVENT = "echo";
 	private final static String RESPONSE_ECHO_EVENT = "echo2";
 
@@ -41,9 +41,11 @@ public class EchoEventHandler implements UpdateResponseHandler {
 
 				// fetch data and post a piggyback event
 				Object[] rawData = resp.getRawData();
-				String uuid = getUuid(rawData[0].toString());
-				Object[] replyData = new Object[rawData.length - 1];
-				System.arraycopy(rawData, 1, replyData, 0, rawData.length - 1);
+				String uuid = parseUuid(rawData[0]);
+				List<Object> replyData = new ArrayList<Object>();
+				for(int i = 1 ; i < rawData.length ; ++i) {
+					replyData.add(rawData[i]);
+				}
 				Map<String, Object> data = new HashMap<String, Object>();
 				data.put("", replyData);
 				Client client = desktop.getClient();
@@ -57,17 +59,7 @@ public class EchoEventHandler implements UpdateResponseHandler {
 		}
 	}
 
-	/**
-	 * UUID format in ZK 5: "UUID"
-	 * UUID format in ZK 6: {$u:'UUID'}
-	 * i.e. it's a JSON object in ZK 6.  
-	 */
-	private String getUuid(String raw) {
-		Object json = JSONValue.parse(raw);
-		if (json instanceof JSONObject) {
-			return ((JSONObject) json).get("$u").toString();
-		} else {
-			return json.toString();
-		}
+	protected String parseUuid(Object object) {
+		return object.toString();
 	}
 }
