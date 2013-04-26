@@ -24,6 +24,7 @@ import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Resource;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.DesktopCtrl;
+import org.zkoss.zats.mimic.impl.LayoutResponseHandler;
 import org.zkoss.zats.mimic.impl.UpdateResponseHandler;
 import org.zkoss.zats.mimic.impl.au.AuUtility;
 import org.zkoss.zk.au.AuResponse;
@@ -32,7 +33,7 @@ import org.zkoss.zk.au.AuResponse;
  * The response handler for download event.
  * @author pao
  */
-public class DownloadHandler implements UpdateResponseHandler {
+public class DownloadHandler implements UpdateResponseHandler, LayoutResponseHandler{
 	public final static String REGISTER_KEY = "download"; 
 	private final static Logger logger = Logger.getLogger(DownloadHandler.class.getName());
 
@@ -77,6 +78,15 @@ public class DownloadHandler implements UpdateResponseHandler {
 			Client client = desktop.getClient();
 			ClientCtrl cc = (ClientCtrl) client;
 			return cc.openConnection(path);
+		}
+	}
+
+	public void process(DesktopAgent desktopAgent, String response) {
+		// ZATS-11: in most ZK version, the <script> doesn't have <![CDATA[]]>, so, escape "&"
+		response = response.replaceAll("[&]", "&amp;");
+		Map<String, Object> map = AuUtility.parseAuResponseFromLayout(response);
+		if (map != null) {
+			process(desktopAgent, map);
 		}
 	}
 }

@@ -20,6 +20,7 @@ import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.EchoEventMode;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
+import org.zkoss.zats.mimic.impl.LayoutResponseHandler;
 import org.zkoss.zats.mimic.impl.UpdateResponseHandler;
 import org.zkoss.zats.mimic.impl.au.AuUtility;
 import org.zkoss.zk.au.AuResponse;
@@ -28,8 +29,8 @@ import org.zkoss.zk.au.AuResponse;
  * The response handler for echo event.
  * @author pao
  */
-public class EchoEventHandler implements UpdateResponseHandler {
-	public final static String REGISTER_KEY = "echo"; 
+public class EchoEventHandler implements UpdateResponseHandler, LayoutResponseHandler {
+	public final static String REGISTER_KEY = "echo";
 	private final static String REQUEST_ECHO_EVENT = "echo";
 	private final static String RESPONSE_ECHO_EVENT = "echo2";
 
@@ -43,7 +44,7 @@ public class EchoEventHandler implements UpdateResponseHandler {
 				Object[] rawData = resp.getRawData();
 				String uuid = parseUuid(rawData[0]);
 				List<Object> replyData = new ArrayList<Object>();
-				for(int i = 1 ; i < rawData.length ; ++i) {
+				for (int i = 1; i < rawData.length; ++i) {
 					replyData.add(rawData[i]);
 				}
 				Map<String, Object> data = new HashMap<String, Object>();
@@ -61,5 +62,14 @@ public class EchoEventHandler implements UpdateResponseHandler {
 
 	protected String parseUuid(Object object) {
 		return object.toString();
+	}
+
+	public void process(DesktopAgent desktopAgent, String response) {
+		// ZATS-11: in most ZK version, the <script> doesn't have <![CDATA[]]>, so, escape "&"
+		response = response.replaceAll("[&]", "&amp;");
+		Map<String, Object> map = AuUtility.parseAuResponseFromLayout(response);
+		if (map != null) {
+			process(desktopAgent, map);
+		}
 	}
 }

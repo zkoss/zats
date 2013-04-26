@@ -41,11 +41,13 @@ public class ResponseHandlerManager {
 		layoutHandlers = new HashMap<String, LayoutResponseHandler>();
 		updateHandlers = new HashMap<String, UpdateResponseHandler>();
 
-		// TODO layout response handler
+		// layout response handler
+		registerHandler("5.0.0", "*", DownloadHandler.REGISTER_KEY, (LayoutResponseHandler)new DownloadHandler());
+		registerHandler("5.0.0", "5.*.*", EchoEventHandler.REGISTER_KEY, (LayoutResponseHandler)new EchoEventHandler());
 
 		// AU response handler
-		registerHandler("5.0.0", "*", DownloadHandler.REGISTER_KEY, new DownloadHandler());
-		registerHandler("5.0.0", "5.*.*", EchoEventHandler.REGISTER_KEY, new EchoEventHandler());
+		registerHandler("5.0.0", "*", DownloadHandler.REGISTER_KEY, (UpdateResponseHandler)new DownloadHandler());
+		registerHandler("5.0.0", "5.*.*", EchoEventHandler.REGISTER_KEY, (UpdateResponseHandler)new EchoEventHandler());
 	}
 
 	public void registerHandler(String startVersion, String endVersion, String key, String className) {

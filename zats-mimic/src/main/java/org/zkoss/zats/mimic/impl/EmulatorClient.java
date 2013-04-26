@@ -95,14 +95,23 @@ public class EmulatorClient implements Client, ClientCtrl {
 			// load zul page
 			HttpURLConnection huc = getConnection(zulPath, "GET");
 			huc.connect();
-			// read response and pass to response handlers
+			
+			// read response 
 			fetchCookies(huc);
 			is = huc.getInputStream();
 			String raw = getReplyString(is, huc.getContentEncoding());
+			
+			// get specified objects such as Desktop
+			Desktop desktop = (Desktop) emulator.getRequestAttributes().get("javax.zkoss.zk.ui.desktop");
+			// TODO, what if a non-zk(zul) page, throw exception?
+			DesktopAgent desktopAgent = new DefaultDesktopAgent(this, desktop);
+			desktopAgents.put(desktopAgent.getId(), desktopAgent);
+			
+			// pass layout response to response handlers
 			List<LayoutResponseHandler> handlers = ResponseHandlerManager.getInstance().getLayoutResponseHandlers();
 			for (LayoutResponseHandler h : handlers) {
 				try {
-					h.process(this, raw);
+					h.process(desktopAgent, raw);
 				} catch (Throwable e) {
 					logger.log(Level.SEVERE, e.getMessage(), e);
 				}
@@ -111,12 +120,10 @@ public class EmulatorClient implements Client, ClientCtrl {
 				logger.finest("HTTP response header: " + huc.getHeaderFields());
 				logger.finest("HTTP response content: " + raw);
 			}
+			
+			// ZATS-11: must flush AU requests after layout 
+			flush(desktopAgent.getId());
 
-			// get specified objects such as Desktop
-			Desktop desktop = (Desktop) emulator.getRequestAttributes().get("javax.zkoss.zk.ui.desktop");
-			// TODO, what if a non-zk(zul) page, throw exception?
-			DesktopAgent desktopAgent = new DefaultDesktopAgent(this, desktop);
-			desktopAgents.put(desktopAgent.getId(), desktopAgent);
 			return desktopAgent;
 		} catch (Exception e) {
 			throw new ZatsException(e.getMessage(), e);

@@ -2137,6 +2137,15 @@ public class BasicAgentTest {
 	}
 	
 	@Test
+	public void testDownload2() throws Exception {
+		// download file at "doAfterComposer()"
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/download2.zul");
+		Resource downloadable = desktop.getDownloadable();
+		assertTrue(downloadable != null);
+		assertEquals("Hello ZK!\nThis is a test file!", fetchString(downloadable.getInputStream()));
+	}
+
+	@Test
 	public void testUploadAgent() throws Exception {
 
 		DesktopAgent desktop = Zats.newClient().connect("/~./basic/upload.zul");
@@ -2400,6 +2409,14 @@ public class BasicAgentTest {
 	public void testEchoEvent() {
 		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/echo.zul");
 
+		// echo events at doAfterComposer()
+		ComponentAgent lblX = desktopAgent.query("#lblX");
+		assertNotNull(lblX);
+		assertEquals("Bar", lblX.as(Label.class).getValue());
+		ComponentAgent lblY = desktopAgent.query("#lblY");
+		assertNotNull(lblY);
+		assertEquals("Bar2", lblY.as(Label.class).getValue());
+		
 		// immediate echo events
 		Label lbl11 = desktopAgent.query("#lbl11").as(Label.class);
 		Label lbl12 = desktopAgent.query("#lbl12").as(Label.class);

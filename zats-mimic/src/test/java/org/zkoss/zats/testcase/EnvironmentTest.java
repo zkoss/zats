@@ -33,7 +33,6 @@ import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DefaultZatsEnvironment;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Zats;
-import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.DesktopCtrl;
 import org.zkoss.zats.mimic.impl.LayoutResponseHandler;
 import org.zkoss.zats.mimic.impl.ResponseHandlerManager;
@@ -327,12 +326,12 @@ public class EnvironmentTest {
 		public static boolean enabled = true; // avoid other test cases
 		public static int count = 0;
 
-		public void process(Client client, String response) {
+		public void process(DesktopAgent desktop, String response) {
 			if (!enabled)
 				return;
 			++count;
-			assertTrue(client != null);
-			assertTrue(client instanceof ClientCtrl);
+			assertTrue(desktop != null);
+			assertTrue(desktop instanceof DesktopCtrl);
 			assertTrue(response != null);
 			assertTrue(response.indexOf("html") >= 0);
 			assertTrue(response.indexOf("ZK") >= 0);

@@ -49,20 +49,23 @@ public class Ext6Initiator implements WebAppInit{
 		OperationAgentManager.getInstance().registerBuilder("6.0.0", "*", Selectbox.class,
 				new SelectboxSelectByIndexAgentBuilder()); // selectbox introduced since zk6
 		
-		//event data
+		// event data
 		
 		// resolvers
-		//resolve view model
-		//TODO add key 
+		// resolve view model
 		if (Util.hasClass("org.zkoss.bind.Binder")) {
 			ValueResolverManager.getInstance().registerResolver("6.0.0", "*", "bind",
 					"org.zkoss.zats.mimic.impl.BindValueResolver");
 		}
 		
-		// response handlers
+		// layout response handlers
+		ResponseHandlerManager.getInstance().registerHandler("6.0.0", "*", EchoEventHandler.REGISTER_KEY,
+				(LayoutResponseHandler) new EchoEventHandlerExt6());
+		
+		// update response handlers
 		// ZATS-11: note that, the key can be used for replacing previous one and prevent duplicate handlers
 		ResponseHandlerManager.getInstance().registerHandler("6.0.0", "*", EchoEventHandler.REGISTER_KEY,
-				new EchoEventHandlerExt6());
+				(UpdateResponseHandler) new EchoEventHandlerExt6());
 	}
 
 }

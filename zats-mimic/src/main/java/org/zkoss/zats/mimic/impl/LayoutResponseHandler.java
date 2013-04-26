@@ -11,7 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zats.mimic.impl;
 
-import org.zkoss.zats.mimic.Client;
+import org.zkoss.zats.mimic.DesktopAgent;
 
 /**
  * The interface of DHtmlLayoutServlet response handler.
@@ -23,8 +23,8 @@ public interface LayoutResponseHandler {
 	
 	/**
 	 * perform layout response processing.
-	 * @param client current client
+	 * @param desktop desktop agent
 	 * @param response RAW text of layout response (HTML/XHTML)
 	 */
-	void process(Client client, String response);
+	void process(DesktopAgent desktopAgent, String response);
 }
