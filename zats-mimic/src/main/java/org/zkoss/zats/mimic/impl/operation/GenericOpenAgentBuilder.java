@@ -43,7 +43,8 @@ public class GenericOpenAgentBuilder implements OperationAgentBuilder<ComponentA
 			String cmd = Events.ON_OPEN;
 			Map<String, Object> data = EventDataManager.getInstance().build(new OpenEvent(cmd, (Component)target.getDelegatee(), open, null,
 					null));
-			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
+			((ClientCtrl)target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
+			((ClientCtrl) getClient()).flush(desktopId);
 		}
 	}
 

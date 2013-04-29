@@ -67,9 +67,10 @@ public abstract class AbstractInputAgentBuilder implements OperationAgentBuilder
 				String cmd = Events.ON_CHANGE;
 				InputEvent event = new InputEvent(cmd, (Component) target.getDelegatee(), value, null);
 				Map<String, Object> data = EventDataManager.getInstance().build(event);
-				putValue(target, value, data); // parse value and put into data collection 
-				cctrl.postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
-				
+				putValue(target, value, data); // parse value and put into data collection
+				String desktopId = target.getDesktop().getId();
+				cctrl.postUpdate(desktopId, target.getUuid(), cmd, data, false);
+				cctrl.flush(desktopId);
 			} catch (Exception e) {
 				throw new AgentException("value \"" + value
 						+ "\"is invalid for the component: "
@@ -82,7 +83,8 @@ public abstract class AbstractInputAgentBuilder implements OperationAgentBuilder
 			String cmd = Events.ON_CHANGING;
 			InputEvent event = new InputEvent(cmd, (Component) target.getDelegatee(), value, null);
 			Map<String, Object> data = EventDataManager.getInstance().build(event);
-			((ClientCtrl) target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
+			((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
+			((ClientCtrl) getClient()).flush(desktopId);
 		}
 
 		public void select(int start, int end) {
@@ -91,7 +93,8 @@ public abstract class AbstractInputAgentBuilder implements OperationAgentBuilder
 			String selectedText = ((InputElement)target.getDelegatee()).getText().substring(start, end);
 			SelectionEvent event = new SelectionEvent(cmd, (Component) target.getDelegatee(), start, end,selectedText);
 			Map<String, Object> data = EventDataManager.getInstance().build(event);
-			((ClientCtrl) target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data,null);
+			((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
+			((ClientCtrl) getClient()).flush(desktopId);
 		}
 	}
 

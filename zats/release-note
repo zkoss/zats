@@ -1,0 +1,40 @@
+	--------
+ZATS Mimic 1.1.0
+
+* Features
+  ZATS-3: allow users to set cookie
+  ZATS-4: support file upload operation
+  ZATS-5: support download action
+  ZATS-8: batch AU support
+  ZATS-9: provide the mechanism of handling AU response
+  ZATS-10: provide the mechanism of handling layout response
+  ZATS-11: handle echo event
+  ZATS-12: support connecting as included
+  ZATS-14: support EventAgent for posting AU manually
+  
+* Bugs
+  ZATS-13: fixed session keeping issue
+
+* Upgrade Notes
+
+	--------
+ZATS Mimic 1.0.0
+May 22, 2012
+
+* Features
+  Automatic/Fast test without server and browser.
+  No-javascript needed to write a test case.
+  Searching components by query expression.
+  Validation via component APIs directly.
+  Support multiple test-environment configuration
+  Support multiple clients/desktops.
+  Support 20 operations on 100+ components
+    Click / Double click / Right click operations
+    Input operation
+    Single and Multiple select operations
+    And more...
+  Compatible to ZK 5 and ZK 6
+
+* Bugs
+
+* Upgrade Notes

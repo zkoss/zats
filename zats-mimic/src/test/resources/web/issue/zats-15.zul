@@ -1,0 +1,38 @@
+<window id="win" width="600px">
+	<listbox id="lb">
+		<listhead>
+			<listheader label="row0" />
+		</listhead>
+		<listitem>
+			<listcell label="item0" />
+		</listitem>
+		<listitem>
+			<listcell label="item1" />
+		</listitem>
+		<listitem>
+			<listcell label="item2" />
+		</listitem>
+		<listitem>
+			<listcell label="item3" />
+		</listitem>
+		<listitem>
+			<listcell label="item4" />
+		</listitem>
+	</listbox>
+	<hbox>
+		<button label="show">
+			<attribute name="onClick"><![CDATA[
+	Listitem item = lb.getSelectedItem();
+	if(item != null) {
+		List children = item.getChildren();
+		Component comp = children.get(0);
+		System.out.println(comp.getClass());
+		lbl0.setValue(comp.getLabel());
+	}
+]]>
+			</attribute>
+		</button>
+		selected:
+		<label id="lbl0" value="--" />
+	</hbox>
+</window>

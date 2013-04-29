@@ -17,6 +17,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,6 +33,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.logging.Logger;
 
+import org.eclipse.jetty.util.TypeUtil;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -33,10 +41,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
+import org.zkoss.zats.mimic.DefaultZatsEnvironment;
 import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zats.mimic.EchoEventMode;
+import org.zkoss.zats.mimic.Resource;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zats.mimic.impl.operation.SwitchedSortAgentImpl;
+import org.zkoss.zats.mimic.operation.AuAgent;
+import org.zkoss.zats.mimic.operation.AuData;
 import org.zkoss.zats.mimic.operation.BookmarkAgent;
 import org.zkoss.zats.mimic.operation.CheckAgent;
 import org.zkoss.zats.mimic.operation.ClickAgent;
@@ -55,11 +68,13 @@ import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.SizeAgent;
 import org.zkoss.zats.mimic.operation.SortAgent;
+import org.zkoss.zats.mimic.operation.UploadAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listheader;
@@ -68,6 +83,7 @@ import org.zkoss.zul.Paging;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treecol;
 import org.zkoss.zul.Treeitem;
+import org.zkoss.zul.Vbox;
 
 /**
  * @author dennis
@@ -597,17 +613,20 @@ public class BasicAgentTest {
 		
 		inp.type("5");
 		Assert.assertEquals("5.0",l.as(Label.class).getValue());
-		inp.type(null);
-		Assert.assertEquals("null",l.as(Label.class).getValue());
+		// ZK-1534: Spinner no longer supports null value
+		// inp.type(null);
+		// Assert.assertEquals("null",l.as(Label.class).getValue());
 		inp.type("-5");
 		Assert.assertEquals("-5.0",l.as(Label.class).getValue());
-		inp.type("");
-		Assert.assertEquals("null",l.as(Label.class).getValue());
+		// ZK-1534: Spinner no longer supports null value
+		// inp.type("");
+		// Assert.assertEquals("null",l.as(Label.class).getValue());
 		
 		inp.as(InputAgent.class).input(55D);
 		Assert.assertEquals("55.0",l.as(Label.class).getValue());
-		inp.as(InputAgent.class).input(null);
-		Assert.assertEquals("null",l.as(Label.class).getValue());
+		// ZK-1534: Spinner no longer supports null value
+		// inp.as(InputAgent.class).input(null);
+		// Assert.assertEquals("null",l.as(Label.class).getValue());
 		
 		//intbox
 		l = desktopAgent.query("#l7");
@@ -653,25 +672,28 @@ public class BasicAgentTest {
 		inp.type("11");
 		Assert.assertEquals("11",l.as(Label.class).getValue());
 		
+		// update: ZK-1534: Spinner no longer supports null value
 		//zk 6 has bug, I comment it out untile bug fixed
 		//http://tracker.zkoss.org/browse/ZK-1117
-		if(Util.isZKVersion(5)){
-			inp.type(null);
-			Assert.assertEquals("null",l.as(Label.class).getValue());
-		}
+		//if(Util.isZKVersion(5)){
+		//	inp.type(null);
+		//	Assert.assertEquals("null",l.as(Label.class).getValue());
+		//}
 		inp.type("-11");
 		Assert.assertEquals("-11",l.as(Label.class).getValue());
-		if(Util.isZKVersion(5)){
-			inp.type("");
-			Assert.assertEquals("null",l.as(Label.class).getValue());
-		}
+		// ZK-1534: Spinner no longer supports null value
+		//if(Util.isZKVersion(5)){
+		//	inp.type("");
+		//	Assert.assertEquals("null",l.as(Label.class).getValue());
+		//}
 		
 		inp.as(InputAgent.class).input(111);
 		Assert.assertEquals("111",l.as(Label.class).getValue());
-		if(Util.isZKVersion(5)){
-			inp.as(InputAgent.class).input(null);
-			Assert.assertEquals("null",l.as(Label.class).getValue());
-		}
+		// ZK-1534: Spinner no longer supports null value
+		//if(Util.isZKVersion(5)){
+		//	inp.as(InputAgent.class).input(null);
+		//	Assert.assertEquals("null",l.as(Label.class).getValue());
+		//}
 		
 		//datebox
 		l = desktopAgent.query("#l3");
@@ -2025,7 +2047,7 @@ public class BasicAgentTest {
 			Assert.assertEquals(SwitchedSortAgentImpl.ASCENDING, sortingHeader.as(Listheader.class).getSortDirection());
 			sortingHeader.as(SortAgent.class).sort(false);
 			Assert.assertEquals(SwitchedSortAgentImpl.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
-			//repeat sorting in the same order works correctly 
+			//repeat sorting in the same order should work correctly 
 			sortingHeader.as(SortAgent.class).sort(false);
 			Assert.assertEquals(SwitchedSortAgentImpl.DESCENDING, sortingHeader.as(Listheader.class).getSortDirection());
 
@@ -2043,11 +2065,427 @@ public class BasicAgentTest {
 			Assert.assertEquals(SwitchedSortAgentImpl.DESCENDING, sortingColumn.as(Treecol.class).getSortDirection());
 			sortingColumn.as(SortAgent.class).sort(true);
 			Assert.assertEquals(SwitchedSortAgentImpl.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
-			//repeat sorting in the same order works correctly 
-			sortingHeader.as(SortAgent.class).sort(true);
+			//repeat sorting in the same order should work correctly 
+			sortingColumn.as(SortAgent.class).sort(true);
 			Assert.assertEquals(SwitchedSortAgentImpl.ASCENDING, sortingColumn.as(Treecol.class).getSortDirection());
 
 		}
-}
+		
+	private String fetchString(InputStream is) throws Exception {
+		StringBuilder sb = new StringBuilder();
+		try {
+			Reader r = new InputStreamReader(is);
+			r = new BufferedReader(r);
+			int c;
+			while ((c = r.read()) >= 0)
+				sb.append((char) c);
+		} finally {
+			Util.close(is);
+		}
+		return sb.toString();
+	}
+	
+	@Test
+	public void testDownload() throws Exception {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/download.zul");
+		assertTrue(desktop.query("#dummy").is(Button.class));
+		assertTrue(desktop.query("#btn0").is(Button.class));
+		assertTrue(desktop.query("#btn1").is(Button.class));
+		assertTrue(desktop.query("#btn2").is(Button.class));
+		// temp file
+		String path = desktop.query("#path").as(Label.class).getValue();
+		assertTrue(path != null && path.length() > 0);
+		File temp = new File(path);
+		assertTrue(temp.canRead());
 
+		// no download
+		assertTrue(desktop.getDownloadable() == null);
+		desktop.query("#dummy").click();
+		assertTrue(desktop.getDownloadable() == null);
+
+		// download from file
+		desktop.query("#btn0").click();
+		Resource downloadable = desktop.getDownloadable();
+		assertTrue(downloadable != null);
+		assertEquals(temp.getName(), downloadable.getName());
+		assertEquals("Hello ZK!\nThis is a test file!", fetchString(downloadable.getInputStream()));
+
+		// no download again
+		desktop.query("#dummy").click();
+		assertTrue(desktop.getDownloadable() == null);
+
+		// download from data
+		desktop.query("#btn1").click();
+		downloadable = desktop.getDownloadable();
+		assertTrue(downloadable != null);
+		assertEquals("test.txt", downloadable.getName());
+		assertEquals("Hello world!\nHello ZK!", fetchString(downloadable.getInputStream()));
+
+		// download from file and resumable
+		desktop.query("#btn2").click();
+		downloadable = desktop.getDownloadable();
+		assertTrue(downloadable != null);
+		assertEquals(temp.getName(), downloadable.getName());
+		assertEquals("Hello ZK!\nThis is a test file!", fetchString(downloadable.getInputStream()));
+
+		// download last file (invoke download twice in one AU event)
+		desktop.query("#btn3").click();
+		downloadable = desktop.getDownloadable();
+		assertTrue(downloadable != null);
+		assertEquals("file1.txt", downloadable.getName());
+		assertEquals("This is no. 1!", fetchString(downloadable.getInputStream()));
+	}
+	
+	@Test
+	public void testDownload2() throws Exception {
+		// download file at "doAfterComposer()"
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/download2.zul");
+		Resource downloadable = desktop.getDownloadable();
+		assertTrue(downloadable != null);
+		assertEquals("Hello ZK!\nThis is a test file!", fetchString(downloadable.getInputStream()));
+	}
+
+	@Test
+	public void testUploadAgent() throws Exception {
+
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/upload.zul");
+		Vbox results = desktop.query("#results").as(Vbox.class);
+		Assert.assertEquals(0, results.getChildren().size());
+
+		// prepare temp. file for testing 
+		File textFile = File.createTempFile("zats-upload-text-", ".tmp");
+		textFile.deleteOnExit();
+		String text = "Hello! World!\r\nHello! ZK!\r\n";
+		byte[] textRaw = text.getBytes("ISO-8859-1");
+		String binary = TypeUtil.toHexString(textRaw).toUpperCase();
+		FileOutputStream fos = new FileOutputStream(textFile);
+		fos.write(textRaw);
+		fos.close();
+
+		// binary file
+		for (int i = 0; i < 4; ++i) {
+			String id = "#btn" + i;
+			UploadAgent agent = desktop.query(id).as(UploadAgent.class);
+			agent.upload(textFile, null);
+			agent.finish();
+			Assert.assertEquals(textFile.getName(), desktop.query("#file0 .name").as(Label.class).getValue());
+			Assert.assertEquals("application/octet-stream", desktop.query("#file0 .contentType").as(Label.class)
+					.getValue());
+			Assert.assertEquals("octet-stream", desktop.query("#file0 .format").as(Label.class).getValue());
+			Assert.assertEquals(binary, desktop.query("#file0 .binary").as(Label.class).getValue());
+			Assert.assertEquals("", desktop.query("#file0 .text").as(Label.class).getValue());
+			Assert.assertEquals("", desktop.query("#file0 .width").as(Label.class).getValue());
+			Assert.assertEquals("", desktop.query("#file0 .height").as(Label.class).getValue());
+			desktop.query("#clean").click(); // clean results
+		}
+
+		// text stream
+		UploadAgent agent = desktop.query("#btn0").as(UploadAgent.class);
+		agent.upload("sample.txt", new ByteArrayInputStream(textRaw), "text/plain");
+		agent.finish();
+		Assert.assertEquals("sample.txt", desktop.query("#file0 .name").as(Label.class).getValue());
+		Assert.assertEquals("text/plain", desktop.query("#file0 .contentType").as(Label.class).getValue());
+		Assert.assertEquals("txt", desktop.query("#file0 .format").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .binary").as(Label.class).getValue());
+		Assert.assertEquals(text, desktop.query("#file0 .text").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .width").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .height").as(Label.class).getValue());
+
+		// image stream
+		byte[] ImageRaw = new byte[] { -119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 10, 0, 0, 0, 10, 8,
+				2, 0, 0, 0, 2, 80, 88, -22, 0, 0, 0, 4, 103, 65, 77, 65, 0, 0, -79, -113, 11, -4, 97, 5, 0, 0, 0, 9,
+				112, 72, 89, 115, 0, 0, 18, 116, 0, 0, 18, 116, 1, -34, 102, 31, 120, 0, 0, 0, 39, 73, 68, 65, 84, 40,
+				83, 99, 124, 43, -93, -62, -128, 4, 76, -89, 106, 32, 115, -103, -112, 57, -104, 108, -102, 74, 51, 42,
+				109, -12, 65, -74, 82, 118, 122, -61, 96, 113, 26, 0, -35, -38, 4, -123, -73, -75, -2, 83, 0, 0, 0, 0,
+				73, 69, 78, 68, -82, 66, 96, -126 };
+		binary = TypeUtil.toHexString(ImageRaw).toUpperCase();
+		agent = desktop.query("#btn0").as(UploadAgent.class);
+		agent.upload("test.png", new ByteArrayInputStream(ImageRaw), "image/png");
+		agent.finish();
+		Assert.assertEquals("test.png", desktop.query("#file0 .name").as(Label.class).getValue());
+		Assert.assertEquals("image/png", desktop.query("#file0 .contentType").as(Label.class).getValue());
+		Assert.assertEquals("png", desktop.query("#file0 .format").as(Label.class).getValue());
+		Assert.assertEquals(binary, desktop.query("#file0 .binary").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .text").as(Label.class).getValue());
+		Assert.assertEquals("10px", desktop.query("#file0 .width").as(Label.class).getValue());
+		Assert.assertEquals("10px", desktop.query("#file0 .height").as(Label.class).getValue());
+		
+		// same instance again
+		agent.upload("sample.txt", new ByteArrayInputStream(textRaw), "text/plain");
+		agent.finish();
+		Assert.assertEquals("sample.txt", desktop.query("#file0 .name").as(Label.class).getValue());
+		Assert.assertEquals("text/plain", desktop.query("#file0 .contentType").as(Label.class).getValue());
+		Assert.assertEquals("txt", desktop.query("#file0 .format").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .binary").as(Label.class).getValue());
+		Assert.assertEquals(text, desktop.query("#file0 .text").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .width").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .height").as(Label.class).getValue());
+
+		// can't multiple upload
+		try {
+			agent = desktop.query("#btn0").as(UploadAgent.class);
+			agent.upload("binary.dat", new ByteArrayInputStream(textRaw), null);
+			agent.upload("text.txt", new ByteArrayInputStream(textRaw), "text/plain");
+			fail("should throw exception");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		// can't upload
+		try {
+			desktop.query("#clean").as(UploadAgent.class).upload(textFile, null);
+			fail("should throw exception");
+		} catch (AgentException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testUploadAgentWithDialog() throws Exception {
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/upload.zul");
+		Vbox results = desktop.query("#results").as(Vbox.class);
+		Assert.assertEquals(0, results.getChildren().size());
+
+		// prepare files for testing 
+		File textFile = File.createTempFile("zats-upload-text-", ".tmp");
+		textFile.deleteOnExit();
+		String text = "Hello! World!\r\nHello! ZK!\r\n";
+		byte[] textRaw = text.getBytes("ISO-8859-1");
+		String textBinary = TypeUtil.toHexString(textRaw).toUpperCase();
+		FileOutputStream fos = new FileOutputStream(textFile);
+		fos.write(textRaw);
+		fos.close();
+		File imageFile = File.createTempFile("zats-upload-image-", ".png");
+		imageFile.deleteOnExit();
+		byte[] imageRaw = new byte[] { -119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 10, 0,
+				0, 0, 10, 8, 2, 0, 0, 0, 2, 80, 88, -22, 0, 0, 0, 4, 103, 65, 77, 65, 0, 0, -79, -113, 11, -4, 97, 5,
+				0, 0, 0, 9, 112, 72, 89, 115, 0, 0, 18, 116, 0, 0, 18, 116, 1, -34, 102, 31, 120, 0, 0, 0, 39, 73, 68,
+				65, 84, 40, 83, 99, 124, 43, -93, -62, -128, 4, 76, -89, 106, 32, 115, -103, -112, 57, -104, 108, -102,
+				74, 51, 42, 109, -12, 65, -74, 82, 118, 122, -61, 96, 113, 26, 0, -35, -38, 4, -123, -73, -75, -2, 83,
+				0, 0, 0, 0, 73, 69, 78, 68, -82, 66, 96, -126 };
+		String imageBinary = TypeUtil.toHexString(imageRaw).toUpperCase();
+		fos = new FileOutputStream(imageFile);
+		fos.write(imageRaw);
+		fos.close();
+
+		// single upload
+		// text
+		desktop.query("#btn4").click();
+		UploadAgent agent = desktop.as(UploadAgent.class);
+		agent.upload(textFile, "text/plain");
+		agent.finish();
+		Assert.assertEquals(textFile.getName(), desktop.query("#file0 .name").as(Label.class).getValue());
+		Assert.assertEquals("text/plain", desktop.query("#file0 .contentType").as(Label.class).getValue());
+		Assert.assertEquals("txt", desktop.query("#file0 .format").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .binary").as(Label.class).getValue());
+		Assert.assertEquals(text, desktop.query("#file0 .text").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .width").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .height").as(Label.class).getValue());
+		// binary
+		desktop.query("#btn4").click();
+		agent = desktop.as(UploadAgent.class);
+		agent.upload(textFile, "application/octet-stream");
+		agent.finish();
+		Assert.assertEquals(textFile.getName(), desktop.query("#file0 .name").as(Label.class).getValue());
+		Assert.assertEquals("application/octet-stream", desktop.query("#file0 .contentType").as(Label.class).getValue());
+		Assert.assertEquals("octet-stream", desktop.query("#file0 .format").as(Label.class).getValue());
+		Assert.assertEquals(textBinary, desktop.query("#file0 .binary").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .text").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .width").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .height").as(Label.class).getValue());
+		// image
+		desktop.query("#btn4").click();
+		agent = desktop.as(UploadAgent.class);
+		agent.upload(imageFile, "image/png");
+		agent.finish();
+		Assert.assertEquals(imageFile.getName(), desktop.query("#file0 .name").as(Label.class).getValue());
+		Assert.assertEquals("image/png", desktop.query("#file0 .contentType").as(Label.class).getValue());
+		Assert.assertEquals("png", desktop.query("#file0 .format").as(Label.class).getValue());
+		Assert.assertEquals(imageBinary, desktop.query("#file0 .binary").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .text").as(Label.class).getValue());
+		Assert.assertEquals("10px", desktop.query("#file0 .width").as(Label.class).getValue());
+		Assert.assertEquals("10px", desktop.query("#file0 .height").as(Label.class).getValue());
+
+		// multiple upload
+		desktop.query("#btn5").click();
+		agent = desktop.as(UploadAgent.class);
+		agent.upload(textFile, "text/plain");
+		agent.upload(textFile, "application/octet-stream");
+		agent.upload(imageFile, "image/png");
+		agent.finish();
+		Assert.assertEquals(3, desktop.query("#results").getChildren().size());
+		// text
+		Assert.assertEquals(textFile.getName(), desktop.query("#file0 .name").as(Label.class).getValue());
+		Assert.assertEquals("text/plain", desktop.query("#file0 .contentType").as(Label.class).getValue());
+		Assert.assertEquals("txt", desktop.query("#file0 .format").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .binary").as(Label.class).getValue());
+		Assert.assertEquals(text, desktop.query("#file0 .text").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .width").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file0 .height").as(Label.class).getValue());
+		// binary
+		Assert.assertEquals(textFile.getName(), desktop.query("#file1 .name").as(Label.class).getValue());
+		Assert.assertEquals("application/octet-stream", desktop.query("#file1 .contentType").as(Label.class).getValue());
+		Assert.assertEquals("octet-stream", desktop.query("#file1 .format").as(Label.class).getValue());
+		Assert.assertEquals(textBinary, desktop.query("#file1 .binary").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file1 .text").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file1 .width").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file1 .height").as(Label.class).getValue());
+		// image
+		Assert.assertEquals(imageFile.getName(), desktop.query("#file2 .name").as(Label.class).getValue());
+		Assert.assertEquals("image/png", desktop.query("#file2 .contentType").as(Label.class).getValue());
+		Assert.assertEquals("png", desktop.query("#file2 .format").as(Label.class).getValue());
+		Assert.assertEquals(imageBinary, desktop.query("#file2 .binary").as(Label.class).getValue());
+		Assert.assertEquals("", desktop.query("#file2 .text").as(Label.class).getValue());
+		Assert.assertEquals("10px", desktop.query("#file2 .width").as(Label.class).getValue());
+		Assert.assertEquals("10px", desktop.query("#file2 .height").as(Label.class).getValue());
+		
+		// can't upload
+		try {
+			agent.upload(textFile, "text/plain");
+			fail("should throw exception");
+		} catch (AgentException e) {
+			System.out.println(e.getMessage());
+		}
+		try {
+			agent.finish();
+			fail("should throw exception");
+		} catch (AgentException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testRichlet() {
+		DefaultZatsEnvironment env = new DefaultZatsEnvironment("./src/test/resources/web/WEB-INF");
+		try {
+			env.init("./src/test/resources/web");
+			DesktopAgent desktop = env.newClient().connect("/zk/test");
+			Label msg = desktop.query("#msg").as(Label.class);
+			Assert.assertEquals("Hello world!", msg.getValue());
+			desktop.query("#btn").click();
+			Assert.assertEquals("Hello ZK!", msg.getValue());
+		} finally {
+			env.destroy();
+		}
+	}
+	
+	@Test
+	public void testAuAgent() {
+
+		// click test
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/click.zul");
+		assertEquals("Hello World!", desktopAgent.query("#msg").as(Label.class).getValue());
+
+		//	desktopAgent.query("#btn").as(ClickAgent.class).click();
+		AuData au = new AuData(Events.ON_CLICK).setData("x", 0).setData("y", 0).setData("pageX", 0)
+				.setData("pageY", 0);
+		desktopAgent.query("#btn").as(AuAgent.class).post(au);
+
+		assertEquals("Welcome", desktopAgent.query("#msg").as(Label.class).getValue());
+
+		// select test
+		Zats.cleanup();
+		DesktopAgent desktop = Zats.newClient().connect("/~./basic/select.zul");
+
+		Label selected = desktop.query("#selected").as(Label.class);
+		assertEquals("", selected.getValue());
+
+		// combobox
+		String[] labels = new String[] { "cbi1", "cbi2", "cbi3" };
+		List<ComponentAgent> cbitems = desktop.queryAll("#cb > comboitem");
+		assertEquals(labels.length, cbitems.size());
+		for (int i = 0; i < labels.length; ++i) {
+			ComponentAgent target = cbitems.get(i);
+			ComponentAgent parent = target.getParent();
+			au = new AuData(Events.ON_SELECT).setData("items", new Object[] { target.getUuid() }).setData(
+					"reference", parent.getUuid());
+			parent.as(AuAgent.class).post(au);
+			assertEquals(labels[i], selected.getValue());
+		}
+	}
+	
+	
+	@Test
+	public void testEchoEvent() {
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./basic/echo.zul");
+
+		// echo events at doAfterComposer()
+		ComponentAgent lblX = desktopAgent.query("#lblX");
+		assertNotNull(lblX);
+		assertEquals("Bar", lblX.as(Label.class).getValue());
+		ComponentAgent lblY = desktopAgent.query("#lblY");
+		assertNotNull(lblY);
+		assertEquals("Bar2", lblY.as(Label.class).getValue());
+		
+		// immediate echo events
+		Label lbl11 = desktopAgent.query("#lbl11").as(Label.class);
+		Label lbl12 = desktopAgent.query("#lbl12").as(Label.class);
+		Label lbl13 = desktopAgent.query("#lbl13").as(Label.class);
+		assertEquals("", lbl11.getValue());
+		assertEquals("", lbl12.getValue());
+		assertEquals("", lbl13.getValue());
+		assertFalse("incorrect".equals(lbl11.getValue()));
+
+		ComponentAgent btn1 = desktopAgent.query("#btn1");
+		btn1.click();
+		assertEquals("MyEcho", lbl11.getValue());
+		assertEquals("YourEcho", lbl12.getValue());
+		assertEquals("ItsEcho", lbl13.getValue());
+		btn1.click();
+		assertEquals("MyEchoMyEcho", lbl11.getValue());
+		assertEquals("YourEchoYourEcho", lbl12.getValue());
+		assertEquals("ItsEchoItsEcho", lbl13.getValue());
+
+		// immediate echo events without data 
+		Label lbl21 = desktopAgent.query("#lbl21").as(Label.class);
+		Label lbl22 = desktopAgent.query("#lbl22").as(Label.class);
+		Label lbl23 = desktopAgent.query("#lbl23").as(Label.class);
+		assertEquals("", lbl21.getValue());
+
+		ComponentAgent btn2 = desktopAgent.query("#btn2");
+		btn2.click();
+		assertEquals("MyEcho2", lbl21.getValue());
+		assertEquals("YourEcho2", lbl22.getValue());
+		assertEquals("ItsEcho2", lbl23.getValue());
+		btn2.click();
+		assertEquals("MyEcho2MyEcho2", lbl21.getValue());
+		assertEquals("YourEcho2YourEcho2", lbl22.getValue());
+		assertEquals("ItsEcho2ItsEcho2", lbl23.getValue());
+
+		// loop echo with normal operations - immediate mode
+		Label lbl31 = desktopAgent.query("#lbl31").as(Label.class);
+		Label lbl32 = desktopAgent.query("#lbl32").as(Label.class);
+		Label lbl4 = desktopAgent.query("#lbl4").as(Label.class);
+		assertEquals("", lbl31.getValue());
+		assertEquals("", lbl32.getValue());
+		assertEquals("", lbl4.getValue());
+
+		desktopAgent.query("#btn3").click();
+		assertEquals("3", lbl31.getValue());
+		assertEquals("4", lbl32.getValue());
+		assertEquals("", lbl4.getValue());
+		desktopAgent.query("#btn4").click();
+		assertEquals("3", lbl31.getValue());
+		assertEquals("4", lbl32.getValue());
+		assertEquals("HelloEcho", lbl4.getValue());
+
+		// loop echo with normal operations - piggyback mode
+		desktopAgent.getClient().setEchoEventMode(EchoEventMode.PIGGYBACK);
+
+		String hellos = "HelloEcho";
+		desktopAgent.query("#btn3").click();
+		assertEquals("0", lbl31.getValue());
+		assertEquals("0", lbl32.getValue());
+		assertEquals(hellos, lbl4.getValue());
+
+		String[] a31 = { "1", "2", "3", "3", "3", "3" };
+		String[] a32 = { "1", "2", "3", "4", "4", "4" };
+		for (int i = 0; i < a31.length; ++i) {
+			desktopAgent.query("#btn4").click();
+			assertEquals(a31[i], lbl31.getValue());
+			assertEquals(a32[i], lbl32.getValue());
+			assertEquals(hellos += "HelloEcho", lbl4.getValue());
+		}
+	}
+}
 

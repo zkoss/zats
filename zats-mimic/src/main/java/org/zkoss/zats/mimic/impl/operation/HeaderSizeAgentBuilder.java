@@ -103,14 +103,15 @@ class HeaderSizeAgentBuilder implements OperationAgentBuilder<ComponentAgent, Si
 			String cmd = "onInnerWidth";
 			Map<String, Object> data = EventDataManager.getInstance().build(new Event(cmd));
 			data.put("", innerWidth);
-			cc.postUpdate(desktopId, cmd, container.getUuid(), data, null);
+			cc.postUpdate(desktopId, container.getUuid(), cmd, data, false);
 
 			// post column resize event
 			cmd = ZulEvents.ON_COL_SIZE;
 			ColSizeEvent event = new ColSizeEvent(cmd, head, index, column, widths, 0);
 			data = EventDataManager.getInstance().build(event);
 			data.put("widths", widths);
-			cc.postUpdate(desktopId, cmd, head.getUuid(), data, null);
+			cc.postUpdate(desktopId, head.getUuid(), cmd, data, false);
+			cc.flush(desktopId);
 		}
 	}
 }

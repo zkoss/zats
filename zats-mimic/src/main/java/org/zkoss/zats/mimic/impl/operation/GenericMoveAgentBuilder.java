@@ -45,7 +45,9 @@ public class GenericMoveAgentBuilder implements OperationAgentBuilder<ComponentA
 			String cmd = Events.ON_MOVE;
 			MoveEvent event = new MoveEvent(cmd, target.as(Component.class), left + "px", top + "px", 0);
 			Map<String, Object> data = EventDataManager.getInstance().build(event);
-			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
+			String desktopId = target.getDesktop().getId();
+			((ClientCtrl) getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
+			((ClientCtrl) getClient()).flush(desktopId);			
 		}
 	}
 }

@@ -26,7 +26,7 @@ public interface OperationAgentBuilder<A extends Agent,O extends OperationAgent>
 	 * This method create and return a specific implementation of {@link OperationAgent} object for specified OperationAgent class.
 	 * Similar to factory pattern.
 	 * @param agent
-	 * @return
+	 * @return the operation agent
 	 */
 	O getOperation(A agent);
 

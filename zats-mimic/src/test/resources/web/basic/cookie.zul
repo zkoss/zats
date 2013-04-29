@@ -1,0 +1,32 @@
+<zk>
+	<vbox>
+		<textbox id="myCookie" value="hello" />
+		<hbox>
+			<label value="cookies:" />
+			<label id="msg" />
+		</hbox>
+		<button id="set" label="set cookie" onClick="setCookie();" />
+		<button id="delete" label="erase cookie" onClick="eraseCookie();" />
+		<button id="show" label="show cookies" onClick="showCookies();" />
+	</vbox>
+	<zscript><![CDATA[
+	public void setCookie() {
+		javax.servlet.http.HttpServletResponse resp = (javax.servlet.http.HttpServletResponse)Executions.getCurrent().getNativeResponse();
+		resp.addCookie(new javax.servlet.http.Cookie("myCookie", myCookie.getValue()));
+	}
+	public void eraseCookie() {
+		javax.servlet.http.HttpServletResponse resp = (javax.servlet.http.HttpServletResponse)Executions.getCurrent().getNativeResponse();
+		javax.servlet.http.Cookie cookie = new javax.servlet.http.Cookie("myCookie", null);
+		cookie.setMaxAge(0);
+		resp.addCookie(cookie);
+	}
+	public void showCookies() {
+		javax.servlet.http.HttpServletRequest req = (javax.servlet.http.HttpServletRequest)Executions.getCurrent().getNativeRequest();
+		StringBuilder sb = new StringBuilder();
+		for(javax.servlet.http.Cookie c : req.getCookies())
+			sb.append(c.getName()).append("=").append(c.getValue()).append(";");
+		msg.setValue(sb.toString());
+	}
+]]>
+	</zscript>
+</zk>

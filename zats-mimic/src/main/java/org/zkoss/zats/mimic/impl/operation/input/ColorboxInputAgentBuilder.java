@@ -59,8 +59,10 @@ public class ColorboxInputAgentBuilder implements OperationAgentBuilder<Componen
 			if (value.matches(COLOR_PATTERN)){
 				String cmd = Events.ON_CHANGE;
 				Map<String, Object> data = new HashMap<String, Object>();
-				data.put("color",value); // parse value and put into data collection 
-				((ClientCtrl) target.getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
+				data.put("color",value); // parse value and put into data collection
+				String desktopId = target.getDesktop().getId();
+				((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
+				((ClientCtrl) getClient()).flush(desktopId);
 			}else{
 				throw new AgentException("value \"" + value
 						+ "\"is invalid for the component: "

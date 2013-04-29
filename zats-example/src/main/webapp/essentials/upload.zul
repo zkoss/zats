@@ -1,0 +1,11 @@
+<zk>
+	<vbox id="uploadBox" apply="org.zkoss.zats.essentials.UploadComposer">
+		<button id="btn" label="button" upload="true" />
+		<separator />
+		<label id="label1" value="click label1 will invoke fileupload.get()" />
+		<label id="label2" value="click label2 will invoke fileupload.get(3)" />
+		<separator />
+		<button id="clean" label="clean" upload="false" />
+		<vbox id="results"></vbox>
+	</vbox>
+</zk>

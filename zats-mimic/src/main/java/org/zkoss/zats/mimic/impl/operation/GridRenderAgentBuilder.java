@@ -49,6 +49,7 @@ public class GridRenderAgentBuilder implements OperationAgentBuilder<ComponentAg
 			super(target);
 		}
 
+		@SuppressWarnings("unchecked")
 		public void render(int x, int y) {
 			Grid grid = target.as(Grid.class);
 			Rows rows = grid.getRows();
@@ -69,8 +70,10 @@ public class GridRenderAgentBuilder implements OperationAgentBuilder<ComponentAg
 			
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_RENDER;
-			Map<String, Object> data = EventDataManager.getInstance().build(new RenderEvent(cmd, new HashSet(ids)));
-			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, target.getUuid(), data, null);
+			Map<String, Object> data = EventDataManager.getInstance().build(
+					new RenderEvent(cmd, new HashSet<String>(ids)));
+			((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
+			((ClientCtrl) getClient()).flush(desktopId);
 		};
 	}
 	

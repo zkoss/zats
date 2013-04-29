@@ -16,8 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.Agent;
+import org.zkoss.zats.mimic.impl.operation.AuAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.ButtonUploadAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.ColumnSortAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.DesktopBookmarkAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.DialogUploadAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericCheckAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericClickAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GenericCloseAgentBuilder;
@@ -31,6 +34,7 @@ import org.zkoss.zats.mimic.impl.operation.GenericOpenAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.GridRenderAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.ListboxRenderAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.ListheaderSortAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.MenuitemUploadAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.PagingAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.PanelSizeAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.SliderInputAgentBuilder;
@@ -52,6 +56,7 @@ import org.zkoss.zats.mimic.impl.operation.select.TreeSelectAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.select.TreeitemMultipleSelectAgentBuilder;
 import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zul.A;
@@ -68,6 +73,7 @@ import org.zkoss.zul.Detail;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Doublespinner;
 import org.zkoss.zul.East;
+import org.zkoss.zul.Fileupload;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Group;
 import org.zkoss.zul.Groupbox;
@@ -88,12 +94,14 @@ import org.zkoss.zul.Spinner;
 import org.zkoss.zul.Splitter;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Timebox;
+import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treecol;
 import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.West;
 import org.zkoss.zul.Window;
 import org.zkoss.zul.impl.InputElement;
+
 /**
  * <p>
  * This class maintains a mapping registry between ZK components (in specific version range) and {@link OperationAgentBuilder}. 
@@ -108,7 +116,6 @@ import org.zkoss.zul.impl.InputElement;
  * 
  * @author pao
  * @author dennis
- *
  */
 public class OperationAgentManager {
 	
@@ -135,6 +142,7 @@ public class OperationAgentManager {
 
 		registerBuilder("5.0.0", "*", AbstractComponent.class, new GenericClickAgentBuilder());
 		registerBuilder("5.0.0", "*", AbstractComponent.class, new GenericKeyStrokeAgentBuilder());
+		registerBuilder("5.0.0", "*", Component.class, new AuAgentBuilder());
 
 		// the focus
 		registerBuilder("5.0.0", "*", InputElement.class, new GenericFocusAgentBuilder());
@@ -231,6 +239,13 @@ public class OperationAgentManager {
 		registerBuilder("5.0.0", "*", Window.class, new GenericMoveAgentBuilder());
 		registerBuilder("5.0.0", "*", Panel.class, new GenericMoveAgentBuilder());
 		
+		// upload
+		registerBuilder("5.0.0", "*", Button.class, new ButtonUploadAgentBuilder());
+		registerBuilder("5.0.0", "*", Fileupload.class, new ButtonUploadAgentBuilder());
+		registerBuilder("5.0.0", "*", Toolbarbutton.class, new ButtonUploadAgentBuilder());
+		registerBuilder("5.0.0", "*", Menuitem.class, new MenuitemUploadAgentBuilder());
+		registerBuilder("5.0.0", "*", Desktop.class, new DialogUploadAgentBuilder());
+		
 		//----------special case ---
 		
 		
@@ -305,7 +320,6 @@ public class OperationAgentManager {
 	 * format (e.g 6.0.0 or 5.0.7.1) or "*" sign means no specify. If specify
 	 * version range doesn't include current zk version at runtime, this
 	 * register will be ignored.
-	 * 
 	 * @param startVersion
 	 *            start version (include)
 	 * @param endVersion
@@ -333,10 +347,9 @@ public class OperationAgentManager {
 	/**
 	 * Return a corresponding OperationAgentBuilder for delegatee supported operation class.
 	 * It will search in registry with delegatee's class first. If not found, it keeps searching with delegatee's parent class until found or failed.
-	 * 
 	 * @param delegatee
 	 * @param operation 
-	 * @return
+	 * @return the operation agent builder
 	 */
 	@SuppressWarnings("unchecked")
 	public <O extends OperationAgent> OperationAgentBuilder<Agent, O> getBuilder(Object delegatee,
@@ -356,6 +369,7 @@ public class OperationAgentManager {
 		
 		return (OperationAgentBuilder<Agent, O>)builder;
 	}
+	
 	@SuppressWarnings("unchecked")
 	private <O extends OperationAgent> OperationAgentBuilder<Agent, O> lookupBuilder(Class<?> delegatee, Class<O> operation) {
 		// search from class to super class and interfaces
@@ -373,7 +387,7 @@ public class OperationAgentManager {
 		//then lookup interface
 		c = delegatee;
 		while (c != null) {
-			Class<?>[] ifs = delegatee.getInterfaces();
+			Class<?>[] ifs = c.getInterfaces();
 			for (Class<?> i : ifs) {
 				builder = lookupBuilder(i, operation);
 				if (builder != null) {
@@ -388,7 +402,6 @@ public class OperationAgentManager {
 
 	/**
 	 * for operation builder mapping
-	 * 
 	 * @author pao
 	 */
 	private static class Key {

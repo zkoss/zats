@@ -11,12 +11,30 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl.au;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.zkoss.zats.ZatsException;
+import org.zkoss.zats.common.json.JSONArray;
+import org.zkoss.zats.common.json.JSONValue;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
+import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 
@@ -73,5 +91,102 @@ public class AuUtility {
 			return new ArrayList((Set)obj);
 		}
 		return obj;
+	}
+	
+	/**
+	 * convert JSON object of AU. response to AuResponse list. 
+	 * @param jsonObject AU. response. If null, throw null point exception.
+	 * @return list of AuResponse if the format of object is valid, or null if otherwise.
+	 */
+	public static List<AuResponse> convertToResponses(Map<String, Object> jsonObject) {
+		// check argument
+		if (jsonObject == null)
+			throw new NullPointerException("input object can't be null");
+		Object responses = jsonObject.get("rs");
+		if (!(responses instanceof List))
+			return null;
+
+		// fetch all response
+		ArrayList<AuResponse> list = new ArrayList<AuResponse>();
+		for (Object response : (List<?>) responses) {
+			if (response instanceof List) {
+				List<?> resp = (List<?>) response;
+				if (resp.size() == 2) {
+					// create response
+					String cmd = resp.get(0).toString();
+					Object data = resp.get(1);
+					if (data instanceof List)
+						list.add(new AuResponse(cmd, ((List<?>) data).toArray()));
+					else
+						list.add(new AuResponse(cmd, data));
+					continue;
+				}
+			}
+			// format is invalid
+			return null;
+		}
+		return list;
+	}
+	
+	public static Map<String, Object> parseAuResponseFromLayout(String raw) {
+		try {
+			String json = null;
+
+			// parse <scrpit> from XHTML by SAX
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setIgnoringComments(true);
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			builder.setEntityResolver(new EntityResolver() {
+
+				public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+					return new InputSource(new StringReader(""));
+				}
+			});
+			Document doc = builder.parse(new ByteArrayInputStream(raw.getBytes("utf-8")));
+			NodeList scripts = doc.getElementsByTagName("script");
+			for (int i = 0; i < scripts.getLength(); ++i) {
+				Element script = (Element) scripts.item(i);
+				// fetch arguments of zkmx()
+				String text = script.getTextContent().replaceAll("[\\n\\r]", "");
+				int start = text.indexOf("zkmx(");
+				if (start >= 0) {
+					int end = text.indexOf(");", start);
+					if (end >= 0) {
+						String parameters = text.substring(start + 5, end);
+						json = "[" + parameters + "]"; // convert to JSON array
+					}
+				}
+			}
+			if (json == null) {
+				return null;
+			}
+
+			// parse to JSON and wrap to map
+			JSONArray layoutCmds = (JSONArray) JSONValue.parseWithException(json);
+			if (layoutCmds.size() < 3) {
+				return null; // maybe no AU cmd
+			}
+			JSONArray rawAuCmds = (JSONArray) layoutCmds.get(2); // the 3rd argument are AuCmd -> mount.js -> zkmx()
+			JSONArray auCmds = new JSONArray();
+			// group up (two items > one AU cmd)
+			for (int i = 0; i < rawAuCmds.size(); i += 2) {
+				Object cmd = rawAuCmds.get(i);
+				Object data = rawAuCmds.get(i + 1);
+				// check data type 
+				if (!(data instanceof JSONArray)) {
+					data = JSONValue.parseWithException(data.toString());
+				}
+				JSONArray a = new JSONArray();
+				a.add(cmd);
+				a.add(data);
+				auCmds.add(a);
+			}
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("rs", auCmds); // compatible with AU response 
+			return map;
+
+		} catch (Exception e) {
+			throw new ZatsException(e.getMessage(), e);
+		}
 	}
 }

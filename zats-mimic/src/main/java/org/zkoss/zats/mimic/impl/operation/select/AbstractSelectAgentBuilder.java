@@ -56,8 +56,9 @@ public abstract class AbstractSelectAgentBuilder implements OperationAgentBuilde
 			Event event = new SelectEvent(Events.ON_SELECT, ancestry, items, (Component)target.getDelegatee());
 			Map<String, Object> data = EventDataManager.getInstance().build(event);
 			contributeExtraInfo(data);
-			((ClientCtrl) target.getClient()).postUpdate(target.getDesktop().getId(), event.getName(), ancestry.getUuid(),
-					data, null);
+			String desktopId = target.getDesktop().getId();
+			((ClientCtrl) getClient()).postUpdate(desktopId, ancestry.getUuid(), event.getName(), data, false);
+			((ClientCtrl) getClient()).flush(desktopId);
 		}
 
 		public void deselect() {

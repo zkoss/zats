@@ -1,0 +1,10 @@
+<zscript><![CDATA[
+	Execution exec = Executions.getCurrent();
+	String id = exec.getParameter("id");
+	Map data = (Map)applicationScope.get(id);
+	
+	String url = (String)data.get("url");
+	Map args = (Map)data.get("args");
+	
+	exec.createComponents(url, null, args);
+]]></zscript>

@@ -1,0 +1,5 @@
+<zk>
+	<vbox id="content">
+		<label value="${each.key }=${each.value }" forEach="${arg }" />
+	</vbox>
+</zk>

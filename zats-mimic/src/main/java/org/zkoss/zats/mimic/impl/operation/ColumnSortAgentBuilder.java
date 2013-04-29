@@ -54,7 +54,8 @@ public class ColumnSortAgentBuilder implements OperationAgentBuilder<ComponentAg
 
 			Map<String, Object> data = null;
 			data = EventDataManager.getInstance().build(new SortEvent(cmd, header, ascending));
-			((ClientCtrl)target.getClient()).postUpdate(desktopId, cmd, header.getUuid(), data, null);
+			((ClientCtrl) getClient()).postUpdate(desktopId, header.getUuid(), cmd, data, false);
+			((ClientCtrl) getClient()).flush(desktopId);
 		}
 	}
 

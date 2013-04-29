@@ -55,7 +55,9 @@ public abstract class AbstractSizeAgentBuilder implements OperationAgentBuilder<
 			String cmd = Events.ON_MAXIMIZE;
 			MaximizeEvent event = new MaximizeEvent(cmd, comp, "", "", comp.getWidth(), comp.getHeight(), maximized);
 			Map<String, Object> data = EventDataManager.getInstance().build(event);
-			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
+			String desktopId = target.getDesktop().getId();
+			((ClientCtrl) getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
+			((ClientCtrl) getClient()).flush(desktopId);
 		}
 
 		public void minimize(boolean minimized) {
@@ -66,7 +68,9 @@ public abstract class AbstractSizeAgentBuilder implements OperationAgentBuilder<
 			String cmd = Events.ON_MINIMIZE;
 			MinimizeEvent event = new MinimizeEvent(cmd, comp, "", "", comp.getWidth(), comp.getHeight(), minimized);
 			Map<String, Object> data = EventDataManager.getInstance().build(event);
-			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
+			String desktopId = target.getDesktop().getId();
+			((ClientCtrl) getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
+			((ClientCtrl) getClient()).flush(desktopId);
 		}
 
 		public void resize(int width, int height) {
@@ -103,7 +107,9 @@ public abstract class AbstractSizeAgentBuilder implements OperationAgentBuilder<
 			String cmd = Events.ON_SIZE;
 			SizeEvent event = new SizeEvent(cmd, comp, width + "px", height + "px", 0);
 			Map<String, Object> data = EventDataManager.getInstance().build(event);
-			((ClientCtrl) getClient()).postUpdate(target.getDesktop().getId(), cmd, target.getUuid(), data, null);
+			String desktopId = target.getDesktop().getId();
+			((ClientCtrl) getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
+			((ClientCtrl) getClient()).flush(desktopId);
 		}
 	}
 }

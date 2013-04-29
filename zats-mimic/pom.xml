@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.zats</groupId>
 	<artifactId>zats-mimic</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<name>ZK Application Test Suite - Mimic Library</name>
 	<description>ZK Application Test Suite - Mimic Library</description>
 	<url>http://www.zkoss.org/zats</url>
@@ -111,6 +111,12 @@
 			<artifactId>zul</artifactId>
 			<version>${zk.version}</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.3.1</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
