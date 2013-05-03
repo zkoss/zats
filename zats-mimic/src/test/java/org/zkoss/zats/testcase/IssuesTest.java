@@ -49,14 +49,24 @@ public class IssuesTest {
 	public void testZATS15() {
 		DesktopAgent desktopAgent = Zats.newClient().connect("/~./issue/zats-15.zul");
 
-		assertEquals(5, desktopAgent.queryAll("#win listbox > listitem").size());
-		assertEquals(1, desktopAgent.queryAll("#win listbox > listhead:first-child").size());
-		assertEquals(0, desktopAgent.queryAll("#win listbox > listitem:first-child").size());
+		assertEquals(5, desktopAgent.queryAll("#lb > listitem").size());
+		assertEquals(1, desktopAgent.queryAll("#lb > listhead:first-child").size());
+		assertEquals(0, desktopAgent.queryAll("#lb > listitem:first-child").size());
 		
-		List<ComponentAgent> comps = desktopAgent.queryAll("#win listbox > listitem > listcell:first-child");
+		List<ComponentAgent> comps = desktopAgent.queryAll("#lb > listitem > listcell:first-child");
 		assertEquals(5, comps.size());
+
+		comps = desktopAgent.queryAll("#lb > listitem:nth-child(2) > listcell");
+		assertEquals(1, comps.size());
+		assertEquals("item0", comps.get(0).as(Listcell.class).getLabel());
 		
-		ComponentAgent comp = desktopAgent.query("#win listbox > listitem > listcell:first-child");
+		ComponentAgent comp = desktopAgent.query("#lb > listitem > listcell:first-child");
 		assertEquals("item0", comp.as(Listcell.class).getLabel());
+		
+		// without <listhead>
+		comps = desktopAgent.queryAll("#nohead > listitem:first-child > listcell");
+		assertEquals(1, comps.size());
+		assertEquals("i0", comps.get(0).as(Listcell.class).getLabel());
+		
 	}
 }
