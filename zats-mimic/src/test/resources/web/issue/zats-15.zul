@@ -1,4 +1,17 @@
 <window id="win" width="600px">
+
+	<listbox id="nohead">
+		<listitem>
+			<listcell label="i0" />
+		</listitem>
+		<listitem>
+			<listcell label="i1" />
+		</listitem>
+		<listitem>
+			<listcell label="i2" />
+		</listitem>
+	</listbox>
+
 	<listbox id="lb">
 		<listhead>
 			<listheader label="row0" />
@@ -22,17 +35,18 @@
 	<hbox>
 		<button label="show">
 			<attribute name="onClick"><![CDATA[
-	Listitem item = lb.getSelectedItem();
-	if(item != null) {
-		List children = item.getChildren();
-		Component comp = children.get(0);
-		System.out.println(comp.getClass());
-		lbl0.setValue(comp.getLabel());
-	}
-]]>
+				Listitem item = lb.getSelectedItem();
+				if(item != null) {
+					List children = item.getChildren();
+					Component comp = children.get(0);
+					System.out.println(comp.getClass());
+					lbl0.setValue(comp.getLabel());
+				}
+			]]>
 			</attribute>
 		</button>
 		selected:
 		<label id="lbl0" value="--" />
 	</hbox>
+
 </window>

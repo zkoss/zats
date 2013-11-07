@@ -15,8 +15,6 @@ import java.io.Closeable;
 import java.math.BigInteger;
 import java.util.Random;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.zkoss.Version;
 import org.zkoss.zats.ZatsException;
@@ -32,7 +30,11 @@ public class Util {
 	static {
 		// load current zk version
 		try {
-			zkVersion = Util.parseVersion(Version.class.getField("UID").get(null).toString());
+			String version = Version.class.getField("UID").get(null).toString();
+			zkVersion = Util.parseVersion(version);
+			if(zkVersion == null) {
+				throw new Exception("failed to parse ZK version string: " + version);
+			}
 		} catch (Throwable e) {
 			throw new ZatsException("cannot load zk", e);
 		}
@@ -94,25 +96,37 @@ public class Util {
 	}
 
 	/**
-	 * parse zk version to uniform number for compare. This method doesn't
-	 * recognize beta or release candidate version.
-	 * 
-	 * @param version
-	 *            zk version string.
-	 * @return uniform number or null if argument is illegal.
+	 * parse ZK version to uniform number for compare.
+	 * the method design for normal version string, but it will still parse as long as possible.
+	 * @param version ZK version string.
+	 * @return uniform number or null if failed to parse.
 	 */
 	public static BigInteger parseVersion(final String version) {
 		if (version == null || version.length() <= 0)
 			return null;
+
+		// check version and show some warning 
+		if (!version.matches("^\\s*\\d+(?:\\.\\d+)*\\s*$")) {
+			logger.warning("not a normal ZK version: <" + version + ">");
+		}
+
 		// parse string into byte array
-		Matcher m = Pattern.compile(
-				"\\s*(\\d+)\\.(\\d+)\\.(\\d+)\\.?(\\d*)\\s*").matcher(version);
-		if (!m.matches())
+		byte[] raw = new byte[4]; // 
+		String[] tokens = version.trim().split("[^\\d\\w]+"); // it remain combined digital and char. terms
+		int length = Math.min(raw.length, tokens.length);
+		for (int i = 0; i < length; ++i) {
+			try {
+				raw[i] = Byte.parseByte(tokens[i]);
+			} catch (NumberFormatException e) {
+				logger.warning("unrecognized part when parsing version: <" + tokens[i] + ">");
+			}
+		}
+
+		// major version term must be existed
+		if (raw[0] <= 0) {
 			return null;
-		byte[] raw = new byte[4];
-		for (int i = 0; i < m.groupCount(); ++i)
-			raw[i] = m.group(i + 1).length() > 0 ? Byte.parseByte(m
-					.group(i + 1)) : 0;
+		}
+
 		// create extended BigInteger
 		// Because raw data is big-endian, major number is most significant.
 		return new BigInteger(raw) {
