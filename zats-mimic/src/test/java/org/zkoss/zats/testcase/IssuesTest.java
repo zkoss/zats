@@ -17,10 +17,12 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zats.mimic.PageAgent;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zul.Listcell;
 
@@ -47,7 +49,7 @@ public class IssuesTest {
 
 	@Test
 	public void testZATS15() {
-		DesktopAgent desktopAgent = Zats.newClient().connect("/~./issue/zats-15.zul");
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./issue/15-pseudo.zul");
 
 		assertEquals(5, desktopAgent.queryAll("#lb > listitem").size());
 		assertEquals(1, desktopAgent.queryAll("#lb > listhead:first-child").size());
@@ -68,5 +70,24 @@ public class IssuesTest {
 		assertEquals(1, comps.size());
 		assertEquals("i0", comps.get(0).as(Listcell.class).getLabel());
 		
+	}
+	
+	@Test
+	public void testZATS7() {
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./issue/7-style.zul");
+		
+		Assert.assertNotNull(desktopAgent.query("#searchWin #searchButton"));
+	}
+	
+	@Test 
+	public void testZATS20() {
+		DesktopAgent desktopAgent = Zats.newClient().connect("/~./issue/20-empty.zul");
+		
+		desktopAgent.query("#btn").click();
+		Assert.assertNull(desktopAgent.query("#btn"));
+		
+		List<PageAgent> pages = desktopAgent.getPages();
+		Assert.assertEquals(1, pages.size());
+		Assert.assertNull(pages.get(0).query("#btn"));
 	}
 }
