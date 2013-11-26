@@ -1,0 +1,10 @@
+<zk>
+	<include id="inner" src="include-ext7.zul">
+		<attribute name="key0">value0</attribute>
+		<attribute name="key1">value1</attribute>
+		<attribute name="key2">value2</attribute>
+		<attribute name="key3">value3</attribute>
+		<attribute name="key4">value4</attribute>
+	</include>
+	<include id="innerZero" src="include-ext7.zul" />
+</zk>
