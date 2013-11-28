@@ -38,33 +38,33 @@ public class Ext7Initiator implements WebAppInit{
 		//so it is ok to register builder by webapp init
 		
 		// operation
-		OperationAgentManager.getInstance().registerBuilder("6.0.0", "*", Toolbarbutton.class,
-				new GenericCheckAgentBuilder()); // toolbarbutton on check in zk6 only 
-		OperationAgentManager.getInstance().registerBuilder("6.0.0", "*", Datebox.class,
-				new DateTypeAgentBuilderZK7()); // date format changed in zk6
-		OperationAgentManager.getInstance().registerBuilder("6.0.0", "*", Timebox.class,
-				new TimeTypeAgentBuilderZK7()); // date format changed in zk6
-		OperationAgentManager.getInstance().registerBuilder("6.0.0", "*", Combobutton.class,
-				new GenericOpenAgentBuilder()); // combobutton introduced since zk6
-		OperationAgentManager.getInstance().registerBuilder("6.0.0", "*", Selectbox.class,
-				new SelectboxSelectByIndexAgentBuilder()); // selectbox introduced since zk6
+		OperationAgentManager.getInstance().registerBuilder("7.0.0", "*", Toolbarbutton.class,
+				new GenericCheckAgentBuilder()); // toolbarbutton on check in zk7
+		OperationAgentManager.getInstance().registerBuilder("7.0.0", "*", Datebox.class,
+				new DateTypeAgentBuilderZK7()); // date format changed in zk7
+		OperationAgentManager.getInstance().registerBuilder("7.0.0", "*", Timebox.class,
+				new TimeTypeAgentBuilderZK7()); // date format changed in zk7
+		OperationAgentManager.getInstance().registerBuilder("7.0.0", "*", Combobutton.class,
+				new GenericOpenAgentBuilder()); // combobutton introduced since zk7
+		OperationAgentManager.getInstance().registerBuilder("7.0.0", "*", Selectbox.class,
+				new SelectboxSelectByIndexAgentBuilder()); // selectbox introduced since zk7
 		
 		// event data
 		
 		// resolvers
 		// resolve view model
 		if (Util.hasClass("org.zkoss.bind.Binder")) {
-			ValueResolverManager.getInstance().registerResolver("6.0.0", "*", "bind",
+			ValueResolverManager.getInstance().registerResolver("7.0.0", "*", "bind",
 					"org.zkoss.zats.mimic.impl.BindValueResolver");
 		}
 		
 		// layout response handlers
-		ResponseHandlerManager.getInstance().registerHandler("6.0.0", "*", EchoEventHandler.REGISTER_KEY,
+		ResponseHandlerManager.getInstance().registerHandler("7.0.0", "*", EchoEventHandler.REGISTER_KEY,
 				(LayoutResponseHandler) new EchoEventHandlerExt7());
 		
 		// update response handlers
 		// ZATS-11: note that, the key can be used for replacing previous one and prevent duplicate handlers
-		ResponseHandlerManager.getInstance().registerHandler("6.0.0", "*", EchoEventHandler.REGISTER_KEY,
+		ResponseHandlerManager.getInstance().registerHandler("7.0.0", "*", EchoEventHandler.REGISTER_KEY,
 				(UpdateResponseHandler) new EchoEventHandlerExt7());
 	}
 
