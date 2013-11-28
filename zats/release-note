@@ -5,6 +5,7 @@ ZATS Mimic 1.2.0
   
 * Bugs
   ZATS-20 Unable to query for empty desktop
+  ZATS-25 Parsing error when using specific client side api
 
 * Upgrade Notes
 
