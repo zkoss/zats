@@ -123,7 +123,7 @@
 						<configuration>
 							<outputDirectory>${project.build.directory}/lib/ext</outputDirectory>
 							<includeScope>compile</includeScope>
-							<includeGroupIds>org.eclipse.jetty</includeGroupIds>
+							<includeGroupIds>org.eclipse.jetty, org.mozilla</includeGroupIds>
 							<stripVersion>true</stripVersion>
 						</configuration>
 					</execution>
