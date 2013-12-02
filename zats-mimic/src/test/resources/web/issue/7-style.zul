@@ -12,5 +12,6 @@
 			<textbox id="filterBox" value="*" /> 
 			<button id="searchButton" label="Search" />
 		</hbox>
+	</vbox>
 </window>
 </zk>

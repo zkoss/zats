@@ -1,0 +1,11 @@
+<zk xmlns:h="xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul/zul.xsd"
+	xmlns:n="native" xmlns:w="http://www.zkoss.org/2005/zk/client">
+	<window border="none" height="100%" width="100%">
+		<hlayout>
+			<button label="test"
+				w:onClick="alert('X'.replace('X', 'Y'))" />
+		</hlayout>
+	</window>
+</zk>

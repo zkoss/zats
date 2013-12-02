@@ -14,6 +14,7 @@ package org.zkoss.zats.mimic.impl;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -46,6 +47,7 @@ import org.zkoss.zk.ui.Page;
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<ComponentAgent> findAll(Agent parent, String selector) {
+		
 		try {
 			// detect zk version to choose implementation
 			Class<?> selectors;
@@ -71,13 +73,27 @@ import org.zkoss.zk.ui.Page;
 				Collection<Page> pages = ((Desktop)base).getPages();
 				foundComponents = new ArrayList<Component>();
 				for(Page p : pages){
+					
+					// ZATS-20: check page is empty or not before searching by selector
+					if(p.getFirstRoot() == null) {
+						continue;
+					}
+					
 					List<Component> pl = (List<Component>) findByPage.invoke(null, p , selector);
 					if(pl!=null && pl.size()>0){
 						foundComponents.addAll(pl);
 					}
 				}
 			} else if (base instanceof Page) {
-				foundComponents = (List<Component>) findByPage.invoke(null,(Page)base, selector);
+				Page p = (Page) base;
+
+				// ZATS-20: check page is empty or not before searching by selector
+				if (p.getFirstRoot() == null) {
+					foundComponents = new LinkedList<Component>();
+				} else {
+					foundComponents = (List<Component>) findByPage.invoke(null, p, selector);
+				}
+
 			} else if (base instanceof Component){
 				Method findByComp = selectors.getMethod("find",
 						Component.class, String.class);

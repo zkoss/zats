@@ -39,6 +39,7 @@ import org.zkoss.zats.common.json.parser.ParseException;
 import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.EchoEventMode;
+import org.zkoss.zats.mimic.impl.au.AuUtility;
 import org.zkoss.zats.mimic.impl.emulator.Emulator;
 import org.zkoss.zk.ui.Desktop;
 
@@ -262,6 +263,10 @@ public class EmulatorClient implements Client, ClientCtrl {
 				fetchCookies(c);
 				is = c.getInputStream();
 				String raw = getReplyString(is, c.getContentEncoding());
+				
+				// ZATS-25: filter non-JSON part (i.e. real JS code)
+				raw = AuUtility.filterNonJSON(raw);
+				
 				Map<String, Object> json = (Map<String, Object>) JSONValue.parseWithException(raw);
 				List<UpdateResponseHandler> handlers = ResponseHandlerManager.getInstance().getUpdateResponseHandlers();
 				for (UpdateResponseHandler h : handlers) {

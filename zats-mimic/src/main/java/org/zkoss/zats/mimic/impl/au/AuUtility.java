@@ -15,14 +15,23 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.mozilla.javascript.Parser;
+import org.mozilla.javascript.ast.AstNode;
+import org.mozilla.javascript.ast.AstRoot;
+import org.mozilla.javascript.ast.FunctionNode;
+import org.mozilla.javascript.ast.NodeVisitor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -150,7 +159,7 @@ public class AuUtility {
 				String text = script.getTextContent().replaceAll("[\\n\\r]", "");
 				int start = text.indexOf("zkmx(");
 				if (start >= 0) {
-					int end = text.indexOf(");", start);
+					int end = text.lastIndexOf(");");
 					if (end >= 0) {
 						String parameters = text.substring(start + 5, end);
 						json = "[" + parameters + "]"; // convert to JSON array
@@ -161,6 +170,9 @@ public class AuUtility {
 				return null;
 			}
 
+			// ZATS-25: filter non-JSON part (i.e. real JS code)
+			json = filterNonJSON(json);
+			
 			// parse to JSON and wrap to map
 			JSONArray layoutCmds = (JSONArray) JSONValue.parseWithException(json);
 			if (layoutCmds.size() < 3) {
@@ -188,5 +200,40 @@ public class AuUtility {
 		} catch (Exception e) {
 			throw new ZatsException(e.getMessage(), e);
 		}
+	}
+	
+	public static String filterNonJSON(String json) {
+		// prefix for valid js code
+		String prefix = "var tmp = ";
+		StringBuilder src = new StringBuilder(prefix).append(json);
+		
+		// parse js
+		Parser parser = new Parser();
+		AstRoot root = parser.parse(src.toString(), null, 0);
+
+		// collect functions
+		final List<FunctionNode> functions = new ArrayList<FunctionNode>();
+		root.visit(new NodeVisitor() {
+			public boolean visit(AstNode node) {
+				if(node instanceof FunctionNode) {
+					functions.add((FunctionNode)node);
+				}
+				return true;
+			}
+		});
+
+		// sort and make sure ordered (last to first)
+		Collections.sort(functions);
+		
+		// filter function declaration by replacing functions
+		for(int i = functions.size() - 1 ; i >= 0 ; --i) {
+			FunctionNode func = functions.get(i);
+			int p = func.getAbsolutePosition();
+			int len = func.getLength();
+			src.replace(p, p + len, "''"); // replace by empty js string literal
+		}
+
+		// remove prefix and return result
+		return src.substring(prefix.length());
 	}
 }
