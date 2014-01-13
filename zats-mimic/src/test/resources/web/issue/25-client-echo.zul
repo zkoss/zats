@@ -102,4 +102,5 @@
 			</hbox>
 		</vbox>
 	</window>
+	<script>alert('test');</script> <!-- ZATS-34 additional test -->
 </zk>

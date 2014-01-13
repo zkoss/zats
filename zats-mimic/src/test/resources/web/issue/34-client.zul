@@ -1,0 +1,14 @@
+<zk>
+	<script>alert('test 1');</script>
+	<window id="win" title="Messagebox error log" border="normal">
+		<script>alert('test 2');</script>
+		<button id="btn" label="Click me">
+			<attribute name="onClick"><![CDATA[
+				msg.setValue("test");
+			]]></attribute>
+		</button>
+		<label id="msg" value="" />
+		<script>alert('test 3');</script>
+	</window>
+	<script>alert('test 4');</script>
+</zk>

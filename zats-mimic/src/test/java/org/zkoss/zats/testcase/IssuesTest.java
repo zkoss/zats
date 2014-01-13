@@ -16,6 +16,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -27,6 +30,7 @@ import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.EchoEventMode;
 import org.zkoss.zats.mimic.PageAgent;
 import org.zkoss.zats.mimic.Zats;
+import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listcell;
 
@@ -184,6 +188,35 @@ public class IssuesTest {
 			assertEquals(a31[i], lbl31.getValue());
 			assertEquals(a32[i], lbl32.getValue());
 			assertEquals(hellos += "HelloEcho", lbl4.getValue());
+		}
+	}
+	
+	@Test
+	public void testZATS34() {
+		try {
+			Logger logger = Logger.getLogger("org.zkoss.zats");
+			logger.addHandler(new Handler() {
+				public void publish(LogRecord record) {
+					Throwable t = record.getThrown();
+					if (t != null) {
+						t.printStackTrace();
+						Assert.fail();
+					}
+				}
+				public void flush() {
+				}
+				public void close() throws SecurityException {
+				}
+			});
+
+			DesktopAgent desktop = Zats.newClient().connect("/~./issue/34-client.zul");
+			desktop.query("#win #btn").as(ClickAgent.class).click();
+			Label label = desktop.query("#win #msg").as(Label.class);
+			Assert.assertNotNull(label);
+			Assert.assertEquals("test", label.getValue());
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
 		}
 	}
 }

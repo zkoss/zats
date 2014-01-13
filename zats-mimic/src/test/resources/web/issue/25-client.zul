@@ -8,4 +8,5 @@
 				w:onClick="alert('X'.replace('X', 'Y'))" />
 		</hlayout>
 	</window>
+	<script>alert('test');</script> <!-- ZATS-34 additional test -->
 </zk>

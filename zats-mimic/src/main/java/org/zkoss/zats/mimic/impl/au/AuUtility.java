@@ -16,13 +16,11 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,7 +28,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
+import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.FunctionNode;
+import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -139,7 +139,7 @@ public class AuUtility {
 	
 	public static Map<String, Object> parseAuResponseFromLayout(String raw) {
 		try {
-			String json = null;
+			String zkmxArgs = null;
 
 			// parse <scrpit> from XHTML by SAX
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -157,21 +157,21 @@ public class AuUtility {
 				Element script = (Element) scripts.item(i);
 				// fetch arguments of zkmx()
 				String text = script.getTextContent().replaceAll("[\\n\\r]", "");
-				int start = text.indexOf("zkmx(");
-				if (start >= 0) {
-					int end = text.lastIndexOf(");");
-					if (end >= 0) {
-						String parameters = text.substring(start + 5, end);
-						json = "[" + parameters + "]"; // convert to JSON array
+				// ZATS-34: layout response might have other client-side scripts
+				// using JS parser to fetch argument of zkmx()
+				if (text.contains("zkmx(")) {
+					zkmxArgs = fetchJavascriptFuntionArguments("zkmx", text);
+					if(zkmxArgs != null) {
+						break;	// find first
 					}
 				}
 			}
-			if (json == null) {
+			if (zkmxArgs == null) {
 				return null;
 			}
 
 			// ZATS-25: filter non-JSON part (i.e. real JS code)
-			json = filterNonJSON(json);
+			String json = filterNonJSON(zkmxArgs);
 			
 			// parse to JSON and wrap to map
 			JSONArray layoutCmds = (JSONArray) JSONValue.parseWithException(json);
@@ -200,6 +200,53 @@ public class AuUtility {
 		} catch (Exception e) {
 			throw new ZatsException(e.getMessage(), e);
 		}
+	}
+	
+	
+	/**
+	 * @return an json array text contained specified function's arguments, or null otherwise.
+	 */
+	public static String fetchJavascriptFuntionArguments(final String funcName, String code) {
+		if (funcName == null || code == null) {
+			return null;
+		}
+
+		// parse js
+		Parser parser = new Parser();
+		AstRoot root = parser.parse(code, null, 0);
+
+		// find specified function
+		final AtomicReference<FunctionCall> target = new AtomicReference<FunctionCall>();
+		root.visit(new NodeVisitor() {
+			public boolean visit(AstNode node) {
+				if (node instanceof FunctionCall) {
+					FunctionCall call = (FunctionCall) node;
+					node = call.getTarget();
+					if (node instanceof Name) {
+						Name name = (Name) node;
+						if (funcName.equals(name.toSource())) {
+							target.set(call);
+							return false;
+						}
+					}
+				}
+				return true;
+			}
+		});
+		FunctionCall call = target.get();
+		if (call == null) {
+			return null;
+		}
+
+		// fetch arguments and merge to an array text
+		int lp = call.getLp();
+		int rp = call.getRp();
+		if (lp < 0 || rp < 0) {
+			return null;
+		}
+		int start = lp + call.getAbsolutePosition() + 1;
+		int end = rp + call.getAbsolutePosition();
+		return "[" + code.substring(start, end) + "]"; 
 	}
 	
 	public static String filterNonJSON(String json) {
