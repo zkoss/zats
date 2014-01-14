@@ -214,6 +214,10 @@ public class IssuesTest {
 			Label label = desktop.query("#win #msg").as(Label.class);
 			Assert.assertNotNull(label);
 			Assert.assertEquals("test", label.getValue());
+			
+			desktop.query("#btn3").click();
+			Assert.assertEquals("loaded",desktop.query("#msg2").as(Label.class).getValue());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();

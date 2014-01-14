@@ -1,14 +1,23 @@
-<zk>
+<zk xmlns:n="native" xmlns:w="http://www.zkoss.org/2005/zk/client">
 	<script>alert('test 1');</script>
 	<window id="win" title="Messagebox error log" border="normal">
 		<script>alert('test 2');</script>
-		<button id="btn" label="Click me">
+		<button id="btn" label="Click me" >
 			<attribute name="onClick"><![CDATA[
 				msg.setValue("test");
 			]]></attribute>
 		</button>
+		
+		<button id="btn2" label="Click me 2" w:onClick="alert('X'.replace('X', 'Y'))" />
 		<label id="msg" value="" />
 		<script>alert('test 3');</script>
 	</window>
 	<script>alert('test 4');</script>
+	
+	<button id="btn3" label="load window2"/>
+	<div id="win2" fulfill="btn3.onClick">
+		<script>alert('test 5');</script>
+		<button id="btn4" label="Click me 3" w:onClick="alert('X'.replace('X', 'Z'))" />
+		<label id="msg2" value="loaded" />
+	</div>
 </zk>
