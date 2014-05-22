@@ -2,6 +2,7 @@
 ZATS Mimic 1.2.1
 
 * Features
+  ZATS-32 Create an interface over ComponentAgent and others with query() methods
   
 * Bugs
   ZATS-34 Additional script tag causes exception to occur

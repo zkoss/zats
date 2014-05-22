@@ -20,8 +20,9 @@ import org.zkoss.zk.ui.Component;
  * 
  * @author pao
  * @author Dennis
+ * @author henrichen
  */
-public interface DesktopAgent extends Agent {
+public interface DesktopAgent extends QueryAgent {
 	/**
 	 * get ID. of this the desktop.
 	 * 
@@ -44,43 +45,6 @@ public interface DesktopAgent extends Agent {
 	 * @return attribute value or null if not found or otherwise.
 	 */
 	Object getAttribute(String name);
-	
-	/**
-	 * to find the first component agent with the selector
-	 * @param selector the selector
-	 * @return the first component agent, null if not found
-	 */
-	ComponentAgent query(String selector);
-	
-	/**
-	 * to find the component agents with the selector
-	 * @param selector the selector
-	 * @return the component agents
-	 */
-	List<ComponentAgent> queryAll(String selector);
-
-	
-	/**
-	 * Try to get a instance of target class for this desktop agent, the target class
-	 * is usually a {@link OperationAgent} or a native {@link Component} <br/>
-	 * 
-	 * if it cannot get a instance of target class, it will throw
-	 * {@link AgentException}.
-	 * 
-	 * @param clazz
-	 *            class of specify operation.
-	 * @return operation object.
-	 */
-	<T> T as(Class<T> clazz);
-	
-	/**
-	 * Can get a instance of target class for this desktop
-	 * 
-	 * @param clazz
-	 *            the class cast to.
-	 * @return true if can get a instance of target class
-	 */
-	<T> boolean is(Class<T> clazz);
 	
 	/**
 	 * destroy this desktop.

@@ -26,8 +26,9 @@ import org.zkoss.zk.ui.Component;
  * The component agent, wraps a server-side zk component.
  * 
  * @author pao
+ * @author henrichen
  */
-public interface ComponentAgent extends Agent{
+public interface ComponentAgent extends QueryAgent{
 	
 	/**
 	 * get ID. of the component.
@@ -87,41 +88,6 @@ public interface ComponentAgent extends Agent{
 	 * @return page agent.
 	 */
 	PageAgent getPage();
-
-	/**
-	 * Try to get a instance of target class for this component agent, the target class
-	 * is usually a {@link OperationAgent} or a native {@link Component} <br/>
-	 * 
-	 * if it cannot get a instance of target class, it will throw
-	 * {@link AgentException}.
-	 * 
-	 * @param clazz
-	 *            class of specify operation.
-	 * @return operation object.
-	 */
-	<T> T as(Class<T> clazz);
-
-	/**
-	 * Can get a instance of target class for this component
-	 * 
-	 * @param clazz
-	 *            the class cast to.
-	 * @return true if can get a instance of target class
-	 */
-	<T> boolean is(Class<T> clazz);
-	
-	/**
-	 * Find components matched specify selector base on this component agent.
-	 * @param selector
-	 */
-	ComponentAgent query(String selector);
-	
-	/**
-	 * Find components matched specify selector base on this component agent.
-	 * @param selector
-	 */
-	List<ComponentAgent> queryAll(String selector);
-	
 	
 	/**
 	 * Click on this component, A short cut of {@link ClickAgent#click()} <p/>
