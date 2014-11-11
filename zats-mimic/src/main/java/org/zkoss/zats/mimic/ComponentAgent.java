@@ -18,9 +18,7 @@ import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.FocusAgent;
 import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zats.mimic.operation.KeyStrokeAgent;
-import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
-import org.zkoss.zk.ui.Component;
 
 /**
  * The component agent, wraps a server-side zk component.
@@ -67,6 +65,38 @@ public interface ComponentAgent extends QueryAgent{
 	 * @return return child agent or null if index is out of boundary.
 	 */
 	ComponentAgent getChild(int index);
+
+	/**
+	 * Returns the first child, if any.
+	 * 
+	 * @since 1.2.1
+	 * @return return the first child agent or null.
+	 */
+	ComponentAgent getFirstChild();
+	
+	/**
+	 * Returns the last child, if any.
+	 * 
+	 * @since 1.2.1
+	 * @return return the last child agent or null.
+	 */
+	ComponentAgent getLastChild();
+	
+	/**
+	 * Returns the next sibling, if any. 
+	 * 
+	 * @since 1.2.1
+	 * @return return the next sibling agent or null.
+	 */
+	ComponentAgent getNextSibling();
+	
+	/**
+	 * Returns the previous sibling, if any. 
+	 * 
+	 * @since 1.2.1
+	 * @return return the previous sibling agent or null.
+	 */
+	ComponentAgent getPreviousSibling();
 
 	/**
 	 * get parent agent.

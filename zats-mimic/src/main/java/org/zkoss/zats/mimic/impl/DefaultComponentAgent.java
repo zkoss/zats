@@ -69,15 +69,38 @@ public class DefaultComponentAgent implements ComponentAgent {
 		return agents;
 	}
 
-	public ComponentAgent getChild(int index) {
-		Component child = (Component) comp.getChildren().get(index);
+	public ComponentAgent getFirstChild() {
+		return asAgent(comp.getFirstChild());
+	}
+	
+	public ComponentAgent getLastChild() {
+		return asAgent(comp.getLastChild());
+	}
+	
+	private ComponentAgent asAgent(Component child) {
 		return child != null ? new DefaultComponentAgent(pageAgent, child) : null;
 	}
 
+	public ComponentAgent getNextSibling() {
+		return asAgent(comp.getNextSibling());
+	}
+	
+	public ComponentAgent getPreviousSibling() {
+		return asAgent(comp.getPreviousSibling());
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public ComponentAgent getChild(int index) {
+		List children = comp.getChildren();
+		if (index < 0 || children.size() <= index) {
+			throw new IndexOutOfBoundsException(
+					"Index: "+index+", Size: "+ children.size());
+		}
+		return asAgent((Component)children.get(index));
+	}
+
 	public ComponentAgent getParent() {
-		Component parent = comp.getParent();
-		return parent != null ? new DefaultComponentAgent(pageAgent, parent)
-				: null;
+		return asAgent(comp.getParent());
 	}
 
 	public Client getClient() {
