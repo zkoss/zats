@@ -12,8 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.impl.au;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,9 +20,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
@@ -32,12 +27,6 @@ import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.FunctionNode;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.common.json.JSONArray;
 import org.zkoss.zats.common.json.JSONValue;
@@ -46,11 +35,16 @@ import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zsoup.Zsoup;
+import org.zkoss.zsoup.nodes.Document;
+import org.zkoss.zsoup.nodes.Element;
+import org.zkoss.zsoup.select.Elements;
 
 /**
  * A utility for AU.
  * 
  * @author dennis
+ * @author jumperchen
  */
 public class AuUtility {
 
@@ -141,22 +135,13 @@ public class AuUtility {
 		try {
 			String zkmxArgs = null;
 
-			// parse <scrpit> from XHTML by SAX
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			factory.setIgnoringComments(true);
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			builder.setEntityResolver(new EntityResolver() {
-
-				public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-					return new InputSource(new StringReader(""));
-				}
-			});
-			Document doc = builder.parse(new ByteArrayInputStream(raw.getBytes("utf-8")));
-			NodeList scripts = doc.getElementsByTagName("script");
-			for (int i = 0; i < scripts.getLength(); ++i) {
-				Element script = (Element) scripts.item(i);
+			// Bug fixed for ZATS-44
+			Document doc = Zsoup.parse(new ByteArrayInputStream(raw.getBytes("utf-8")), "UTF-8",
+					"", org.zkoss.zsoup.parser.Parser.xhtmlParser());
+			Elements scripts = doc.getElementsByTag("script");
+			for (Element script : scripts) {
 				// fetch arguments of zkmx()
-				String text = script.getTextContent().replaceAll("[\\n\\r]", "");
+				String text = script.text().replaceAll("[\\n\\r]", "");
 				// ZATS-34: layout response might have other client-side scripts
 				// using JS parser to fetch argument of zkmx()
 				if (text.contains("zkmx(")) {

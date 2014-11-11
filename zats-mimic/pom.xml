@@ -123,6 +123,11 @@
 			<artifactId>rhino</artifactId>
 			<version>1.7R4</version>
 		</dependency>
+		<dependency>
+		  <groupId>org.zkoss</groupId>
+		  <artifactId>zsoup</artifactId>
+		  <version>1.8.2.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

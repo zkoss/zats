@@ -2,11 +2,12 @@
 ZATS Mimic 1.2.1
 
 * Features
-  ZATS-32 Create an interface over ComponentAgent and others with query() methods
+  ZATS-32: Create an interface over ComponentAgent and others with query() methods
   
 * Bugs
-  ZATS-34 Additional script tag causes exception to occur
-
+  ZATS-34: Additional script tag causes exception to occur
+  ZATS-44: SAXParser error if the content contains a word '<'
+  
 * Upgrade Notes
 
 	--------
@@ -15,8 +16,8 @@ ZATS Mimic 1.2.0
 * Features
   
 * Bugs
-  ZATS-20 Unable to query for empty desktop
-  ZATS-25 Parsing error when using specific client side api
+  ZATS-20: Unable to query for empty desktop
+  ZATS-25: Parsing error when using specific client side api
 
 * Upgrade Notes
 
