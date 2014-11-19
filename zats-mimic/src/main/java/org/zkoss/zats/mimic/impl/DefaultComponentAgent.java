@@ -192,11 +192,12 @@ public class DefaultComponentAgent implements ComponentAgent {
 	}
 	
 	public Object getDelegatee() {
-		return comp;
+		return getOwner();
 	}
 	
-	public Component getComponent(){
-		return comp;
+	@SuppressWarnings("unchecked")
+	public <T extends Component> T getOwner() {
+		return (T) comp;
 	}
 	
 	
