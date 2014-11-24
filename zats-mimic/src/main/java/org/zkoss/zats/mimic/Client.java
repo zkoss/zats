@@ -13,12 +13,17 @@ package org.zkoss.zats.mimic;
 
 import java.util.Map;
 
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+
 
 /**
  * Represent a client that can connect to zul files. It plays a role like a browser but without rendering anything.
  * @author Hawk
  * @author Dennis
  * @author Pao
+ * @author jumperchen
  */
 public interface Client {
 	
@@ -37,6 +42,32 @@ public interface Client {
 	 * @see ZatsEnvironment#init(String)
 	 */
 	DesktopAgent connectAsIncluded(String zulPath, Map<String, Object> args);
+	
+	/**
+	 * Connect to a zul content or another language from a string.
+	 * You can pass arguments through a map into the specific zul content or another
+	 * language.
+	 * @param content the raw content of the page. It must be a XML and
+	 * compliant to the page format (such as ZUL).
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param parent the parent component, or null if you want it to be
+	 * a root component. If parent is null, the page is assumed to be
+	 * the current page, which is determined by the execution context.
+	 * In other words, the new component will be the root component
+	 * of the current page if parent is null.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @since 1.2.1
+	 * @return desktop agent.
+	 * @see Executions#createComponentsDirectly(String, String, org.zkoss.zk.ui.Component, Map)
+	 */
+	DesktopAgent connectWithContent(String content, String ext, ComponentAgent parent, Map<String, Object> args);
 
 	
 	/**

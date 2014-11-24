@@ -37,6 +37,7 @@ import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.common.json.JSONValue;
 import org.zkoss.zats.common.json.parser.ParseException;
 import org.zkoss.zats.mimic.Client;
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.EchoEventMode;
 import org.zkoss.zats.mimic.impl.au.AuUtility;
@@ -78,6 +79,36 @@ public class EmulatorClient implements Client, ClientCtrl {
 
 		// connect to adapter with key
 		String adapter = "/~./zats/includingAdapter.zul?id=" + key;
+		DesktopAgent desktop = connect(adapter);
+
+		// clean resources
+		emulator.getServletContext().removeAttribute(key);
+		data.clear();
+
+		return desktop;
+	}
+
+	public DesktopAgent connectWithContent(String content, String ext,
+			ComponentAgent parent, Map<String, Object> args) {
+		if (content == null)
+			throw new IllegalArgumentException(
+					"the content of ZUL can't be null");
+		if (args == null)
+			args = new HashMap<String, Object>();
+
+		// generate key and map for transferring data into server side
+		String key = "zats_"
+				+ Long.toString(Thread.currentThread().getId(), 36);
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("content", content);
+		data.put("ext", ext);
+		data.put("args", args);
+		if (parent != null)
+			data.put("parent", parent.getOwner());
+		emulator.getServletContext().setAttribute(key, data);
+
+		// connect to adapter with key
+		String adapter = "/~./zats/createComponentsDirectlyAdapter.zul?id=" + key;
 		DesktopAgent desktop = connect(adapter);
 
 		// clean resources

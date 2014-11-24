@@ -1,0 +1,12 @@
+<zscript><![CDATA[
+	Execution exec = Executions.getCurrent();
+	String id = exec.getParameter("id");
+	Map data = (Map)applicationScope.get(id);
+	
+	String content = (String)data.get("content");
+	String ext = (String)data.get("ext");
+	Component parent = (Component)data.get("parent");
+	Map args = (Map)data.get("args");
+	
+	exec.createComponentsDirectly(content, ext, parent, args);
+]]></zscript>
