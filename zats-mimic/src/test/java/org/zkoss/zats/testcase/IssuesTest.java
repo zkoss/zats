@@ -223,4 +223,10 @@ public class IssuesTest {
 			Assert.fail();
 		}
 	}
+
+	@Test
+	public void testZATS44() {
+		DesktopAgent desktopAgent = Zats.newClient().connectWithContent("<div><label><![CDATA[<Div yM5Q2>]]></label></div>", null, null, null);
+		assertEquals(1, desktopAgent.queryAll("div").size());
+	}
 }

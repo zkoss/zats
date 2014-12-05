@@ -141,7 +141,7 @@ public class AuUtility {
 			Elements scripts = doc.getElementsByTag("script");
 			for (Element script : scripts) {
 				// fetch arguments of zkmx()
-				String text = script.text().replaceAll("[\\n\\r]", "");
+				String text = script.html().replaceAll("[\\n\\r]", "");
 				// ZATS-34: layout response might have other client-side scripts
 				// using JS parser to fetch argument of zkmx()
 				if (text.contains("zkmx(")) {
