@@ -73,7 +73,7 @@ public abstract class AbstractInputAgentBuilder implements OperationAgentBuilder
 				cctrl.flush(desktopId);
 			} catch (Exception e) {
 				throw new AgentException("value \"" + value
-						+ "\"is invalid for the component: "
+						+ "\" is invalid for the component: "
 						+ target, e);
 			}
 		}

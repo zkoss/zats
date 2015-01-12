@@ -11,10 +11,21 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic;
 
+import java.io.File;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.zkoss.idom.Document;
+import org.zkoss.idom.Element;
+import org.zkoss.idom.input.SAXBuilder;
+import org.zkoss.io.Files;
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
 import org.zkoss.zats.mimic.impl.EmulatorClient;
@@ -35,6 +46,7 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 	private Emulator emulator ;
 	
 	private String webInfPathOrUrl;
+	private File tmpWebInfFolder;
 	private String contextPath;
 	
 	/**
@@ -78,6 +90,7 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 			//the web-info url
 			webInfPathOrUrl = webInfPathOrUrl.substring(0,webInfPathOrUrl.lastIndexOf('/')+1);
 		}
+		makeTmpWebInf();
 		
 		EmulatorBuilder builder = new EmulatorBuilder();
 		builder.setWebInf(webInfPathOrUrl);
@@ -85,14 +98,68 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 		builder.addContentRoot(resourceRoot);
 		emulator = builder.create();
 	}
-
 	
+	/**
+	 * In order to catch exception from zk ExecutionCleanup, we copy the WEB-INF dir
+	 * to tmp dir while the location is given from java.io.tmpdir 
+	 * and then add one more config into zk.xml
+	 */
+	private void makeTmpWebInf() {
+		try {
+			//copy whole WEB-INF dir to tmp
+			File srcFolder = new File(webInfPathOrUrl);
+			
+			String tmpWebInfPathOrUrl = System.getProperty("java.io.tmpdir") + "ZATS-TMP-WEB-INF";
+			tmpWebInfFolder = new File(tmpWebInfPathOrUrl);
+			
+			if (tmpWebInfFolder.exists())
+				Files.deleteAll(tmpWebInfFolder);
+	    	
+	    	Files.copy(tmpWebInfFolder, srcFolder, Files.CP_OVERWRITE);
+	    	
+			//insert one more config
+			Document zkxml = new SAXBuilder(true, false, true).build(webInfPathOrUrl + "/zk.xml");
+			Element el = zkxml.getRootElement();
+			Element listener = new Element("listener");
+			Element listenerclass = new Element("listener-class");
+			listenerclass.setContent("org.zkoss.zats.mimic.exception.ZKExecutionCleanup");
+			listener.appendChild(listenerclass);
+			el.appendChild(listener);
+
+			//create new zk.xml, delete the original one
+			File originZKXml = new File(tmpWebInfPathOrUrl + "/zk.xml");
+			
+			if (!originZKXml.delete()) {
+				throw new ZatsException("Can't remove zk.xml under " + tmpWebInfPathOrUrl);
+			}
+			DOMSource domSource = new DOMSource(zkxml);
+			PrintWriter writer = new PrintWriter(tmpWebInfPathOrUrl + "/zk.xml");
+			StreamResult result = new StreamResult(writer);
+			TransformerFactory tf = TransformerFactory.newInstance();
+			Transformer transformer = tf.newTransformer();
+			transformer.transform(domSource, result);
+			writer.println();
+			writer.close();
+			
+			//point web info dir to the tmp one
+			webInfPathOrUrl = tmpWebInfPathOrUrl;
+		} catch (Exception e) {
+		    throw new ZatsException(e.getMessage(), e);
+		}
+	}
+
+	private void deleteTmpWebInf() {
+		if (tmpWebInfFolder.exists())
+			Files.deleteAll(tmpWebInfFolder);
+	}
+
 	public void destroy() {
 		cleanup();
 		if (emulator!=null){
 			emulator.close();
 			emulator=null;
 		}
+		deleteTmpWebInf();
 	}
 
 	/**

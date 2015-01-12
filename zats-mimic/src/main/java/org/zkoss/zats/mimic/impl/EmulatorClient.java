@@ -40,6 +40,7 @@ import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.EchoEventMode;
+import org.zkoss.zats.mimic.exception.ZKExceptionHandler;
 import org.zkoss.zats.mimic.impl.au.AuUtility;
 import org.zkoss.zats.mimic.impl.emulator.Emulator;
 import org.zkoss.zk.ui.Desktop;
@@ -130,6 +131,14 @@ public class EmulatorClient implements Client, ClientCtrl {
 			
 			// read response 
 			fetchCookies(huc);
+			
+			// check if there exists any exception during connect
+			List l;
+			if ((l = ZKExceptionHandler.getInstance().getExceptions()).size() > 0) {
+				//only throw the first exception, and clear all once thrown
+				throw (Throwable)l.get(0);
+			}
+			
 			is = huc.getInputStream();
 			String raw = getReplyString(is, huc.getContentEncoding());
 			
@@ -159,8 +168,12 @@ public class EmulatorClient implements Client, ClientCtrl {
 			return desktopAgent;
 		} catch (Exception e) {
 			throw new ZatsException(e.getMessage(), e);
+		} catch (Throwable t) {
+			throw new ZatsException(t.getMessage(), t);
 		} finally {
 			close(is);
+			//clear exceptions once thrown out
+			ZKExceptionHandler.getInstance().destroy();
 		}
 	}
 
@@ -292,6 +305,14 @@ public class EmulatorClient implements Client, ClientCtrl {
 				
 				// read and parse response, and pass to response handlers
 				fetchCookies(c);
+
+				// check if there exists any exception during auRequest
+				List l;
+				if ((l = ZKExceptionHandler.getInstance().getExceptions()).size() > 0) {
+					//only throw the first exception, but can check in ZKExceptionHandler
+					throw (Throwable)l.get(0);
+				}
+				
 				is = c.getInputStream();
 				String raw = getReplyString(is, c.getContentEncoding());
 				
@@ -316,9 +337,13 @@ public class EmulatorClient implements Client, ClientCtrl {
 				logger.log(Level.SEVERE, "unexpect exception when parsing JSON", e);
 			} catch (Exception e) {
 				throw new ZatsException(e.getMessage(), e);
+			} catch (Throwable t) {
+				throw new ZatsException(t.getMessage(), t);
 			} finally {
 				close(os);
 				close(is);
+				//clear exceptions once thrown out
+				ZKExceptionHandler.getInstance().destroy();
 			}
 		}
 	}
