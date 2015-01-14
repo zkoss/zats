@@ -48,7 +48,7 @@
 		<module>../zats-mimic</module>
 		<module>../zats-mimic-ext6</module>
 		<module>../zats-mimic-ext7</module>
-		<module>../zats-example</module>
+		<!-- <module>../zats-example</module> -->
 	</modules>
 	<version>1.2.1-SNAPSHOT</version>
 	<dependencies>

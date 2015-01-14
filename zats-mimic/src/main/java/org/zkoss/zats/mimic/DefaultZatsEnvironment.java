@@ -83,9 +83,8 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 		if(emulator!=null) {
 			throw new ZatsException("already started up");
 		}
-		URL weburl = null; //create tmp dir will fail with url path
 		if(webInfPathOrUrl==null){
-			weburl = EmulatorClient.class.getResource("WEB-INF/web.xml");
+			URL weburl = EmulatorClient.class.getResource("WEB-INF/web.xml");
 			if(weburl==null){
 				throw new IllegalStateException("built-in web.xml not found");
 			}
@@ -94,7 +93,7 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 			//the web-info url
 			webInfPathOrUrl = webInfPathOrUrl.substring(0,webInfPathOrUrl.lastIndexOf('/')+1);
 		}
-		makeTmpWebInf(weburl);
+		makeTmpWebInf();
 		
 		EmulatorBuilder builder = new EmulatorBuilder();
 		builder.setWebInf(webInfPathOrUrl);
@@ -109,15 +108,15 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 	 * and then add one more config into zk.xml
 	 * @param weburl 
 	 */
-	private void makeTmpWebInf(URL weburl) {
+	private void makeTmpWebInf() {
 		try {
 			//copy whole WEB-INF dir to tmp
+			String os = System.getProperty("os.name").toLowerCase();
+			webInfPathOrUrl = os.indexOf("win") >= 0 ? webInfPathOrUrl.replace("file:/", "") : 
+				webInfPathOrUrl.replace("file:", "");
 			File srcFolder = new File(webInfPathOrUrl);
-			if (weburl != null) {
-				srcFolder = new File(new URI(webInfPathOrUrl));
-			}
 			
-			String tmpWebInfPathOrUrl = System.getProperty("java.io.tmpdir") + "ZATS-TMP-WEB-INF";
+			String tmpWebInfPathOrUrl = System.getProperty("java.io.tmpdir").concat("/ZATS-TMP-WEB-INF");
 			tmpWebInfFolder = new File(tmpWebInfPathOrUrl);
 			
 			if (tmpWebInfFolder.exists())
@@ -158,7 +157,7 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 
 	private void deleteTmpWebInf() {
 		webInfPathOrUrl = null; // ensure to reset web inf path
-		if (tmpWebInfFolder.exists())
+		if (tmpWebInfFolder != null && tmpWebInfFolder.exists())
 			Files.deleteAll(tmpWebInfFolder);
 	}
 
