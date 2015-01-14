@@ -10,7 +10,7 @@ public class ZKExecutionCleanup implements ExecutionCleanup {
 
 	public void cleanup(Execution exec, Execution parent, List errs)
 			throws Exception {
-		if (errs.size() > 0) {
+		if (errs != null && errs.size() > 0) {
 			ZKExceptionHandler.getInstance().setExceptions(errs);
 		}
 	}

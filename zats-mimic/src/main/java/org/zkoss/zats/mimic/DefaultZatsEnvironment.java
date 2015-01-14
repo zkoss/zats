@@ -13,6 +13,8 @@ package org.zkoss.zats.mimic;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
@@ -81,16 +83,18 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 		if(emulator!=null) {
 			throw new ZatsException("already started up");
 		}
+		URL weburl = null; //create tmp dir will fail with url path
 		if(webInfPathOrUrl==null){
-			URL weburl = EmulatorClient.class.getResource("WEB-INF/web.xml");
+			weburl = EmulatorClient.class.getResource("WEB-INF/web.xml");
 			if(weburl==null){
 				throw new IllegalStateException("built-in web.xml not found");
 			}
+
 			webInfPathOrUrl = weburl.toExternalForm();
 			//the web-info url
 			webInfPathOrUrl = webInfPathOrUrl.substring(0,webInfPathOrUrl.lastIndexOf('/')+1);
 		}
-		makeTmpWebInf();
+		makeTmpWebInf(weburl);
 		
 		EmulatorBuilder builder = new EmulatorBuilder();
 		builder.setWebInf(webInfPathOrUrl);
@@ -103,11 +107,15 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 	 * In order to catch exception from zk ExecutionCleanup, we copy the WEB-INF dir
 	 * to tmp dir while the location is given from java.io.tmpdir 
 	 * and then add one more config into zk.xml
+	 * @param weburl 
 	 */
-	private void makeTmpWebInf() {
+	private void makeTmpWebInf(URL weburl) {
 		try {
 			//copy whole WEB-INF dir to tmp
 			File srcFolder = new File(webInfPathOrUrl);
+			if (weburl != null) {
+				srcFolder = new File(new URI(webInfPathOrUrl));
+			}
 			
 			String tmpWebInfPathOrUrl = System.getProperty("java.io.tmpdir") + "ZATS-TMP-WEB-INF";
 			tmpWebInfFolder = new File(tmpWebInfPathOrUrl);
@@ -149,6 +157,7 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 	}
 
 	private void deleteTmpWebInf() {
+		webInfPathOrUrl = null; // ensure to reset web inf path
 		if (tmpWebInfFolder.exists())
 			Files.deleteAll(tmpWebInfFolder);
 	}
