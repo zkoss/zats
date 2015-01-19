@@ -32,7 +32,7 @@ public class ZKExceptionHandler {
 	}
 	
 	public void destroy() {
-		if (exceptions.size() > 0) {
+		if (exceptions != null && exceptions.size() > 0) {
 			exceptions.clear();
 		}
 	}

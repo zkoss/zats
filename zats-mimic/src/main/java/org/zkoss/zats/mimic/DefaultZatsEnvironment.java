@@ -152,7 +152,9 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 		} catch (Exception e) {
 		    throw new ZatsException(e.getMessage(), e);
 		} finally {
-			writer.close();
+			if (writer != null) {
+				writer.close();
+			}
 		}
 	}
 
