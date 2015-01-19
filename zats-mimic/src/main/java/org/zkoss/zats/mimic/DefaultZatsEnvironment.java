@@ -109,6 +109,7 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 	 * @param weburl 
 	 */
 	private void makeTmpWebInf() {
+		PrintWriter writer = null;
 		try {
 			//copy whole WEB-INF dir to tmp
 			String os = System.getProperty("os.name").toLowerCase();
@@ -116,16 +117,15 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 				webInfPathOrUrl.replace("file:", "");
 			File srcFolder = new File(webInfPathOrUrl);
 			
-			String tmpWebInfPathOrUrl = System.getProperty("java.io.tmpdir").concat("/ZATS-TMP-WEB-INF");
-			tmpWebInfFolder = new File(tmpWebInfPathOrUrl);
-			
+			tmpWebInfFolder = new File(System.getProperty("java.io.tmpdir"), "ZATS-TMP-WEB-INF");
+			String tmpWebInfPathOrUrl = tmpWebInfFolder.getAbsolutePath();
 			if (tmpWebInfFolder.exists())
 				Files.deleteAll(tmpWebInfFolder);
 	    	
 	    	Files.copy(tmpWebInfFolder, srcFolder, Files.CP_OVERWRITE);
 	    	
 			//insert one more config
-			Document zkxml = new SAXBuilder(true, false, true).build(webInfPathOrUrl + "/zk.xml");
+	    	Document zkxml = new SAXBuilder(true, false, true).build(new File(webInfPathOrUrl, "zk.xml"));
 			Element el = zkxml.getRootElement();
 			Element listener = new Element("listener");
 			Element listenerclass = new Element("listener-class");
@@ -134,24 +134,25 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 			el.appendChild(listener);
 
 			//create new zk.xml, delete the original one
-			File originZKXml = new File(tmpWebInfPathOrUrl + "/zk.xml");
+			File originZKXml = new File(tmpWebInfFolder, "zk.xml");
 			
 			if (!originZKXml.delete()) {
 				throw new ZatsException("Can't remove zk.xml under " + tmpWebInfPathOrUrl);
 			}
 			DOMSource domSource = new DOMSource(zkxml);
-			PrintWriter writer = new PrintWriter(tmpWebInfPathOrUrl + "/zk.xml");
+			writer = new PrintWriter(originZKXml);
 			StreamResult result = new StreamResult(writer);
 			TransformerFactory tf = TransformerFactory.newInstance();
 			Transformer transformer = tf.newTransformer();
 			transformer.transform(domSource, result);
 			writer.println();
-			writer.close();
 			
 			//point web info dir to the tmp one
 			webInfPathOrUrl = tmpWebInfPathOrUrl;
 		} catch (Exception e) {
 		    throw new ZatsException(e.getMessage(), e);
+		} finally {
+			writer.close();
 		}
 	}
 
