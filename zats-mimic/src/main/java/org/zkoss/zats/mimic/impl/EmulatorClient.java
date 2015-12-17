@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -265,7 +266,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 		// debug log
 		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("Desktop " + desktopId + " perform AU: "
-					+ UrlEncoded.decodeString(sb.toString(), 0, sb.length(), "utf-8"));
+					+ UrlEncoded.decodeString(sb.toString(), 0, sb.length(), StandardCharsets.UTF_8));
 		}
 
 		return sb.toString();

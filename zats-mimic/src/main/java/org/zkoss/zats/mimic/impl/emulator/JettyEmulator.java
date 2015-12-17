@@ -28,7 +28,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.NetworkConnector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -132,9 +132,11 @@ public class JettyEmulator implements Emulator {
 
 			// fetch the real port number
 			for (Connector c : server.getConnectors()) {
-				if (c.getLocalPort() > 0) {
-					port = c.getLocalPort();
-					break;
+				if (c instanceof NetworkConnector) {
+					if (((NetworkConnector)c).getLocalPort() > 0) {
+						port = ((NetworkConnector)c).getLocalPort();
+						break;
+					}
 				}
 			}
 			// get servlet context and synchronize access
@@ -160,7 +162,7 @@ public class JettyEmulator implements Emulator {
 		// clean resources
 		if (tmpDir.getName().startsWith("jetty.")) { // fuse 1
 			List<File> resources = depthFirstSearch(tmpDir);
-			if (resources.size() < 10) { // fuse 2
+			if (resources != null && resources.size() < 10) { // fuse 2
 				String tmpPath = tmpDir.getAbsolutePath();
 				for (File r : resources) {
 					String targetPath = r.getAbsolutePath();

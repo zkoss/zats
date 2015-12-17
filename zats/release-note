@@ -1,4 +1,14 @@
 	--------
+ZATS Mimic 2.0.0
+
+* Features
+
+* Bugs
+
+* Upgrade Notes
+	+ JRE dependency upped to Java 7.
+	+ Jetty dependency upped to 9.2
+	--------
 ZATS Mimic 1.2.1
 
 * Features

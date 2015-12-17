@@ -14,9 +14,9 @@ package org.zkoss.zats.mimic.impl.emulator;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -150,8 +150,9 @@ public class EmulatorBuilder {
 		}
 
 		@Override
-		public void release() {
+		public void close() {
 		}
+
 		@Override
 		public boolean exists() {
 			return true;
@@ -214,8 +215,8 @@ public class EmulatorBuilder {
 		}
 
 		@Override
-		public OutputStream getOutputStream() throws IOException, SecurityException {
-			throw new IOException("cannot open output stream in virtual folder");
+		public ReadableByteChannel getReadableByteChannel() throws IOException {
+			return null;
 		}
 
 		@Override
