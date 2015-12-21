@@ -258,11 +258,13 @@ public class AuUtility {
 		Collections.sort(functions);
 		
 		// filter function declaration by replacing functions
+		int deletedLen = 0;
 		for(int i = functions.size() - 1 ; i >= 0 ; --i) {
 			FunctionNode func = functions.get(i);
 			int p = func.getAbsolutePosition();
 			int len = func.getLength();
-			src.replace(p, p + len, "''"); // replace by empty js string literal
+			src.replace(p, p + len - deletedLen, "''"); // replace by empty js string literal
+			deletedLen += len - 2;
 		}
 
 		// remove prefix and return result

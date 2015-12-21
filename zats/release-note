@@ -4,6 +4,7 @@ ZATS Mimic 2.0.0
 * Features
 
 * Bugs
+  ZATS-53: Unexpected End Of File position 303: null
 
 * Upgrade Notes
 	+ JRE dependency upped to Java 7.
