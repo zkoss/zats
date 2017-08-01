@@ -22,16 +22,13 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.jetty.util.UrlEncoded;
 import org.zkoss.zats.ZatsException;
@@ -271,12 +268,12 @@ public class EmulatorClient implements Client, ClientCtrl {
 
 		return sb.toString();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void flush(String desktopId) {
 		OutputStream os = null;
 		InputStream is = null;
-		
+
 		// #ZATS-11: when post-flush, handlers process AU responses.
 		// They might require posting more AU requests immediately, so repeat posting.
 		while(auQueues.containsKey(desktopId) && auQueues.get(desktopId).size() > 0) {
@@ -289,7 +286,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 					return;
 				}
 				final String content = sb.append(combinedEvents).toString();
-				
+
 				// create http request and perform it
 				HttpURLConnection c = getConnection("/zkau", "POST");
 				c.setDoOutput(true);
@@ -303,7 +300,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 				os = c.getOutputStream();
 				os.write(content.getBytes("utf-8"));
 				close(os);
-				
+
 				// read and parse response, and pass to response handlers
 				fetchCookies(c);
 
@@ -313,13 +310,12 @@ public class EmulatorClient implements Client, ClientCtrl {
 					//only throw the first exception, but can check in ZKExceptionHandler
 					throw (Throwable)l.get(0);
 				}
-				
-				is = c.getInputStream();
-				String raw = getReplyString(is, c.getContentEncoding());
-				
+
+				String raw = getReplyString(c.getInputStream(), parseCharset(c));
+
 				// ZATS-25: filter non-JSON part (i.e. real JS code)
 				raw = AuUtility.filterNonJSON(raw);
-				
+
 				Map<String, Object> json = (Map<String, Object>) JSONValue.parseWithException(raw);
 				List<UpdateResponseHandler> handlers = ResponseHandlerManager.getInstance().getUpdateResponseHandlers();
 				for (UpdateResponseHandler h : handlers) {
@@ -333,7 +329,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 					logger.finest("HTTP response header: " + c.getHeaderFields());
 					logger.finest("HTTP response content: " + raw);
 				}
-				
+
 			} catch (ParseException e) {
 				logger.log(Level.SEVERE, "unexpect exception when parsing JSON", e);
 			} catch (Exception e) {
@@ -347,6 +343,16 @@ public class EmulatorClient implements Client, ClientCtrl {
 				ZKExceptionHandler.getInstance().destroy();
 			}
 		}
+	}
+
+	private static Pattern CHARSET_PATTERN = Pattern.compile("(?i)\\bcharset=\\s*\"?([^\\s;\"]*)");
+	private String parseCharset(HttpURLConnection c) {
+		Matcher matcher = CHARSET_PATTERN.matcher(c.getContentType());
+		String charset = null;
+		if(matcher.find() ) {
+			charset = matcher.group(1).trim().toUpperCase(Locale.ENGLISH);
+		}
+		return charset;
 	}
 
 	public HttpURLConnection getConnection(String path, String method) {
