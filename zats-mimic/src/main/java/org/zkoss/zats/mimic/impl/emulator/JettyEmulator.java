@@ -44,6 +44,7 @@ import org.eclipse.jetty.util.component.LifeCycle.Listener;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.resource.ResourceCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
 
 /**
  * The emulator implementation in Jetty Server.
@@ -115,6 +116,9 @@ public class JettyEmulator implements Emulator {
 			handlers.addHandler(contextHandler);
 			handlers.addHandler(new AfterHandler());
 			server.setHandler(handlers);
+
+			//enable websocket support
+			WebSocketServerContainerInitializer.configureContext(contextHandler);
 
 			// synchronize initial step
 			final BlockingQueue<Object> queue = new ArrayBlockingQueue<Object>(1, true);
