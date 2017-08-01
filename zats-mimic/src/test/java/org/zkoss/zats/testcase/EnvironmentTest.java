@@ -246,7 +246,7 @@ public class EnvironmentTest {
 			desktop.query("#set").click();
 			assertEquals("", client.getCookie("myCookie"));
 			desktop.query("#show").click();
-			assertFalse(msg.getValue().contains("myCookie"));
+			assertTrue(msg.getValue().contains("myCookie=;"));
 
 			// illegal cookie name
 			try {
