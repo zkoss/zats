@@ -247,24 +247,23 @@ public class AuUtility {
 		final List<FunctionNode> functions = new ArrayList<FunctionNode>();
 		root.visit(new NodeVisitor() {
 			public boolean visit(AstNode node) {
-				if(node instanceof FunctionNode) {
+				//exclude nested functions
+				if(node instanceof FunctionNode && node.getEnclosingFunction() == null) {
 					functions.add((FunctionNode)node);
 				}
 				return true;
 			}
 		});
 
-		// sort and make sure ordered (last to first)
+		// sort and make sure ordered
 		Collections.sort(functions);
 		
-		// filter function declaration by replacing functions
-		int deletedLen = 0;
+		// filter function declaration by replacing functions (last to first)
 		for(int i = functions.size() - 1 ; i >= 0 ; --i) {
 			FunctionNode func = functions.get(i);
 			int p = func.getAbsolutePosition();
 			int len = func.getLength();
-			src.replace(p, p + len - deletedLen, "''"); // replace by empty js string literal
-			deletedLen += len - 2;
+			src.replace(p, p + len, "''"); // replace by empty js string literal
 		}
 
 		// remove prefix and return result
