@@ -88,7 +88,7 @@
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zkmax</artifactId>
 			<version>${zk.version}</version>
-			<scope>test</scope>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>

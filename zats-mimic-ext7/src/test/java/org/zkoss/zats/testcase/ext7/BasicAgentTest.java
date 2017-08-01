@@ -28,6 +28,7 @@ import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.operation.ClickAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
+import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zats.mimic.operation.SelectByIndexAgent;
 import org.zkoss.zats.mimic.operation.UploadAgent;
 import org.zkoss.zk.ui.event.Events;
@@ -119,7 +120,7 @@ public class BasicAgentTest {
 			assertEquals("item" + i, msg.getValue());
 		}
 	}
-	
+
 	@Test
 	public void testClickAll() {
 		DesktopAgent desktop = Zats.newClient().connect("/~./basic/click-ext7.zul");
@@ -231,39 +232,6 @@ public class BasicAgentTest {
 			fail("should throw exception");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-		}
-	}
-	
-	@Test
-	public void testNavClick() {
-		DesktopAgent desktop = Zats.newClient().connect("/~./basic/nav.zul");
-
-		Label target = desktop.query("#target").as(Label.class);
-		Label event = desktop.query("#eventName").as(Label.class);
-		Label label = desktop.query("#targetLabel").as(Label.class);
-		assertEquals("", target.getValue());
-		assertEquals("", event.getValue());
-		assertEquals("", label.getValue());
-
-		ComponentAgent comps = desktop.query("#comps");
-		Assert.assertNotNull(comps);
-
-		List<ComponentAgent> items = desktop.queryAll("navitem");
-
-		String[] names = {"Home", "Step One" , "Step Two" , "Step Three", "About", "Contact"};
-		for(int i = 0 ; i > names.length ; ++i) {
-			items.get(i).as(ClickAgent.class).click();
-			assertEquals("navitem", target.getValue());
-			assertEquals(names[i], label.getValue());
-			assertEquals(Events.ON_CLICK, event.getValue());
-			items.get(i).as(ClickAgent.class).doubleClick();
-			assertEquals("navitem", target.getValue());
-			assertEquals(names[i], label.getValue());
-			assertEquals(Events.ON_CLICK, event.getValue());
-			items.get(i).as(ClickAgent.class).rightClick();
-			assertEquals("navitem", target.getValue());
-			assertEquals(names[i], label.getValue());
-			assertEquals(Events.ON_CLICK, event.getValue());
 		}
 	}
 }

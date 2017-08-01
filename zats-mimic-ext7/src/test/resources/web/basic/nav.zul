@@ -28,6 +28,13 @@
 			eventName.setValue(event.getName());
 		}
 	};
+	EventListener selectListener = new EventListener() {
+		public void onEvent(SelectEvent event) {
+			target.setValue(event.getTarget().getDefinition().getName());
+			targetLabel.setValue(event.getTarget().getSelectedItem().getLabel());
+			eventName.setValue(event.getName());
+		}
+	};
 	void listen(Component container) {
 		LinkedList queue = new LinkedList(container.getChildren());
 		while(!queue.isEmpty()) {
@@ -38,6 +45,7 @@
 			comp.addEventListener(Events.ON_RIGHT_CLICK, listener);
 			comp.addEventListener(Events.ON_OPEN, listener);
 		}
+		container.query("navbar").addEventListener(Events.ON_SELECT, selectListener);
 	}
 	listen(comps);
 ]]>

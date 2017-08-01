@@ -38,16 +38,24 @@ public class Ext7Initiator implements WebAppInit{
 		//so it is ok to register builder by webapp init
 		
 		// operation
-		OperationAgentManager.getInstance().registerBuilder("7.0.0", "*", Toolbarbutton.class,
+		OperationAgentManager operationAgentManager = OperationAgentManager.getInstance();
+		
+		operationAgentManager.registerBuilder("7.0.0", "*", Toolbarbutton.class,
 				new GenericCheckAgentBuilder()); // toolbarbutton on check in zk7
-		OperationAgentManager.getInstance().registerBuilder("7.0.0", "*", Datebox.class,
+		operationAgentManager.registerBuilder("7.0.0", "*", Datebox.class,
 				new DateTypeAgentBuilderZK7()); // date format changed in zk7
-		OperationAgentManager.getInstance().registerBuilder("7.0.0", "*", Timebox.class,
+		operationAgentManager.registerBuilder("7.0.0", "*", Timebox.class,
 				new TimeTypeAgentBuilderZK7()); // date format changed in zk7
-		OperationAgentManager.getInstance().registerBuilder("7.0.0", "*", Combobutton.class,
+		operationAgentManager.registerBuilder("7.0.0", "*", Combobutton.class,
 				new GenericOpenAgentBuilder()); // combobutton introduced since zk7
-		OperationAgentManager.getInstance().registerBuilder("7.0.0", "*", Selectbox.class,
+		operationAgentManager.registerBuilder("7.0.0", "*", Selectbox.class,
 				new SelectboxSelectByIndexAgentBuilder()); // selectbox introduced since zk7
+		
+		String navitemClassName = "org.zkoss.zkmax.zul.Navitem";
+		if(Util.hasClass(navitemClassName)){
+			operationAgentManager.registerBuilder("7.0.0", "*", navitemClassName,
+					"org.zkoss.zats.mimic.impl.operation.select.NavitemSelectAgentBuilder"); // navbar/navitem introduced in ZK7 (zkmax only)
+		}
 		
 		// event data
 		

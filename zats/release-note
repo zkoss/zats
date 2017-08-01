@@ -8,7 +8,7 @@ ZATS Mimic 2.0.0
 
 * Upgrade Notes
 	+ JRE dependency upped to Java 7.
-	+ Jetty dependency upped to 9.2
+	+ Jetty dependency upped to 9.4
 	--------
 ZATS Mimic 1.2.1
 
@@ -16,6 +16,7 @@ ZATS Mimic 1.2.1
   ZATS-32: Create an interface over ComponentAgent and others with query() methods
   ZATS-45: ComponentAgent support these APIs, getNextSibling(), getPreviousSibling(), getFirstChild(), and getLastChild()
   ZATS-47: Support to connect with a zul content, not a zul file
+  ZATS-52: Add Navitem SelectAgent support
   
 * Bugs
   ZATS-34: Additional script tag causes exception to occur
