@@ -14,10 +14,6 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	<scm>
-		<url>http://zkats.googlecode.com/svn/trunk/</url>
-		<connection>scm:svn:http://zkats.googlecode.com/svn/trunk/</connection>
-	</scm>
 	<organization>
 		<name>Potix Corporation</name>
 		<url>http://www.zkoss.org</url>
@@ -44,19 +40,16 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<zk.version>5.0.10</zk.version>
+		<jetty.version>9.4.6.v20170531</jetty.version>
 	</properties>
 	<repositories>
 		<repository>
-			<id>zk repository</id>
+			<id>ZK CE</id>
 			<url>http://mavensync.zkoss.org/maven2</url>
 		</repository>
 		<repository>
-			<id>ZK PE Evaluation</id>
-			<url>http://mavensync.zkoss.org/zk/pe-eval</url>
-		</repository>
-		<repository>
-			<id>ZK EE Evaluation</id>
-			<url>http://mavensync.zkoss.org/zk/ee-eval</url>
+			<id>ZK EE Eval</id>
+			<url>http://mavensync.zkoss.org/eval/</url>
 		</repository>
 	</repositories>
 	<dependencies>
@@ -69,7 +62,12 @@
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-webapp</artifactId>
-			<version>9.2.14.v20151106</version>
+			<version>${jetty.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty.websocket</groupId>
+			<artifactId>javax-websocket-server-impl</artifactId>
+			<version>${jetty.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
