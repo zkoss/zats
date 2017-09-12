@@ -2,6 +2,7 @@
 ZATS Mimic 2.0.0
 
 * Features
+  ZATS-51: zats not support error window
 
 * Bugs
   ZATS-53: Unexpected End Of File position 303: null
