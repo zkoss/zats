@@ -15,8 +15,8 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>http://zkats.googlecode.com/svn/trunk/</url>
-		<connection>scm:svn:http://zkats.googlecode.com/svn/trunk/</connection>
+		<url>https://github.com/zkoss/zats</url>
+		<connection>scm:git:git@github.com:zkoss/zats.git</connection>
 	</scm>
 	<organization>
 		<name>Potix Corporation</name>
@@ -164,4 +164,16 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>disable-java8-doclint</id>
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+			<properties>
+				<additionalparam>-Xdoclint:none</additionalparam>
+			</properties>
+		</profile>
+	</profiles>
 </project>

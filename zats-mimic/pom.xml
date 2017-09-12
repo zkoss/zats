@@ -14,6 +14,10 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	<scm>
+		<url>https://github.com/zkoss/zats</url>
+		<connection>scm:git:git@github.com:zkoss/zats.git</connection>
+	</scm>
 	<organization>
 		<name>Potix Corporation</name>
 		<url>http://www.zkoss.org</url>
@@ -164,4 +168,16 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>disable-java8-doclint</id>
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+			<properties>
+				<additionalparam>-Xdoclint:none</additionalparam>
+			</properties>
+		</profile>
+	</profiles>
 </project>
