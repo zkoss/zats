@@ -1,0 +1,22 @@
+#!/bin/bash
+
+maindir="$(pwd)"
+ver=$(head -1 version)
+stamp=$(date +%Y%m%d%H)
+target=$1
+if [ "$target" == "official" ] ; then
+	pver=$ver
+else
+	pver=$ver-FL-$stamp
+fi
+
+echo $pver
+
+./upVer $ver-SNAPSHOT $pver
+
+cd zats
+mvn clean install -am
+mvn source:jar javadoc:jar repository:bundle-create --batch-mode -Dmaven.test.skip
+
+cd $maindir
+./prepare-upload.sh $pver
