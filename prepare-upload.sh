@@ -5,7 +5,7 @@ rm -rf ./target/to_upload
 
 UPLOAD_FOLDER=./target/to_upload/$VERSION
 BIN_FOLDER=$UPLOAD_FOLDER/bin
-MVN_FOLDER=$UPLOAD_FOLDER/maven
+MVN_FOLDER=$UPLOAD_FOLDER/maven/EE-eval
 
 mkdir -p $UPLOAD_FOLDER
 mkdir -p $BIN_FOLDER
