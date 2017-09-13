@@ -12,7 +12,7 @@ fi
 
 echo $pver
 
-./upVer $ver-SNAPSHOT $pver
+bash ./upVer $ver-SNAPSHOT $pver
 
 cd zats
 mvn clean install -am
