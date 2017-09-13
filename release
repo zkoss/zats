@@ -19,4 +19,4 @@ mvn clean install -am
 mvn source:jar javadoc:jar repository:bundle-create --batch-mode -Dmaven.test.skip
 
 cd $maindir
-./prepare-upload.sh $pver
+bash ./prepare-upload.sh $pver
