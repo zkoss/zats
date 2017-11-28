@@ -1,0 +1,4 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<label id="libProp" value="${c:property('zats.hello')}"/>
+</zk>

@@ -1,0 +1,4 @@
+<zk>
+	<button id="testButton" label="Test Button" onClick='testLabel.setValue("updated")'/>
+	<label id="testLabel" value="initial"/>
+</zk>

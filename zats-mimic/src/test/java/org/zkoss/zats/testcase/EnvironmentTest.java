@@ -28,6 +28,7 @@ import javax.servlet.http.HttpSession;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.zkoss.lang.Library;
 import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DefaultZatsEnvironment;
@@ -107,6 +108,7 @@ public class EnvironmentTest {
 			//custom config
 			assertEquals("hello zats", desktop.query("#msg").as(Label.class).getValue());
 		}finally{
+			Library.setProperty("zats.hello", null);
 			ctx.destroy();
 		}
 	}
