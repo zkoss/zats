@@ -11,10 +11,9 @@ mkdir -p $UPLOAD_FOLDER
 mkdir -p $BIN_FOLDER
 mkdir -p $MVN_FOLDER
 
-cp zats/target/zats-$VERSION-javadoc.jar $UPLOAD_FOLDER
+cp zats/target/zats-$VERSION-javadoc.jar $UPLOAD_FOLDER/zats-javadoc-$VERSION.zip
 
 cp zats/target/zats-mimic-$VERSION.zip $BIN_FOLDER
-cp zats/target/zats-$VERSION-javadoc.jar $BIN_FOLDER
 
 cp zats-common/target/zats-common-$VERSION-bundle.jar $MVN_FOLDER
 cp zats-mimic/target/zats-mimic-$VERSION-bundle.jar $MVN_FOLDER
