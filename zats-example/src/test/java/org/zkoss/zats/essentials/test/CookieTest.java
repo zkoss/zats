@@ -1,41 +1,30 @@
 package org.zkoss.zats.essentials.test;
 
-import junit.framework.Assert;
-
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
+import org.zkoss.zats.junit.AutoClient;
+import org.zkoss.zats.junit.AutoEnvironment;
 import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zats.mimic.Zats;
 
 public class CookieTest {
-	@BeforeClass
-	public static void init() {
-		Zats.init("./src/main/webapp");
-	}
+	@ClassRule
+	public static AutoEnvironment env = new AutoEnvironment("./src/main/webapp");
 
-	@AfterClass
-	public static void end() {
-		Zats.end();
-	}
-
-	@After
-	public void after() {
-		Zats.cleanup();
-	}
+	@Rule
+	public AutoClient autoClient = env.autoClient();
 
 	@Test
-	public void test() throws Exception{
-		Client client = Zats.newClient();
+	public void test() throws Exception {
+		Client client = autoClient.getClient();
 		DesktopAgent desktop = client.connect("/essentials/cookie.zul");
 		Assert.assertEquals("bar", client.getCookie("foo"));
 		Assert.assertEquals(null, client.getCookie("not existed"));
 		desktop.query("#change").click();
 		Assert.assertEquals("hello", client.getCookie("foo"));
 	}
-
 
 
 }

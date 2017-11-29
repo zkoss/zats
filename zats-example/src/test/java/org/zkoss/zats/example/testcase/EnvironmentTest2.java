@@ -5,10 +5,9 @@ import static org.junit.Assert.assertNotNull;
 
 import javax.servlet.http.HttpSession;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import org.zkoss.zats.junit.AutoClient;
+import org.zkoss.zats.junit.AutoEnvironment;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DefaultZatsEnvironment;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -19,27 +18,16 @@ import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 
 public class EnvironmentTest2{
-	static ZatsEnvironment env;
 
-	@BeforeClass
-	public static void init() {
-		env = new DefaultZatsEnvironment("./src/main/webapp/WEB-INF");
-		env.init("./src/main/webapp"); // user can load by configuration file
-	}
+	@ClassRule
+	public static AutoEnvironment env = new AutoEnvironment("./src/main/webapp/WEB-INF", "./src/main/webapp");
 
-	@AfterClass
-	public static void end() {
-		env.destroy();
-	}
-
-	@After
-	public void after() {
-		env.cleanup();
-	}
+	@Rule
+	public AutoClient autoClient = env.autoClient();
 
 	@Test
 	public void testCustomWebinfPath() {
-		DesktopAgent desktop = env.newClient().connect("/session.zul");
+		DesktopAgent desktop = autoClient.connect("/session.zul");
 
 		assertNotNull(desktop);
 		assertNotNull(((Desktop) desktop.getDelegatee()).getSession());

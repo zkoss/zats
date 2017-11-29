@@ -1,45 +1,29 @@
 package org.zkoss.zats.essentials.test;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import junit.framework.Assert;
-
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
+import org.zkoss.zats.junit.AutoClient;
+import org.zkoss.zats.junit.AutoEnvironment;
 import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zul.Label;
 
+import java.util.Collections;
+
 public class IncludeTest {
-	@BeforeClass
-	public static void init() {
-		Zats.init("./src/main/webapp");
-	}
+	@ClassRule
+	public static AutoEnvironment env = new AutoEnvironment("./src/main/webapp");
 
-	@AfterClass
-	public static void end() {
-		Zats.end();
-	}
-
-	@After
-	public void after() {
-		Zats.cleanup();
-	}
+	@Rule
+	public AutoClient autoClient = env.autoClient();
 
 	@Test
 	public void test() throws Exception{
-	    Map<String, Object> args = new HashMap<String, Object>();
-	    args.put("message", "Hello world!");
-	    Client client = Zats.newClient();
-	    DesktopAgent desktop = client.connectAsIncluded("/essentials/included.zul", args);
+	    Client client = autoClient.getClient();
+	    DesktopAgent desktop = client.connectAsIncluded("/essentials/included.zul", Collections.<String, Object>singletonMap("message", "Hello world!"));
 	    Label msg = desktop.query("#msg").as(Label.class);
 	    Assert.assertEquals("Hello world!", msg.getValue());
 	}
-
-
-
 }

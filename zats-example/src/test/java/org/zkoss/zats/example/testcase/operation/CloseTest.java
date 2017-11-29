@@ -1,10 +1,8 @@
 package org.zkoss.zats.example.testcase.operation;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import org.zkoss.zats.junit.AutoClient;
+import org.zkoss.zats.junit.AutoEnvironment;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Zats;
@@ -12,26 +10,16 @@ import org.zkoss.zats.mimic.operation.CloseAgent;
 import org.zkoss.zk.ui.Component;
 
 public class CloseTest {
-	@BeforeClass
-	public static void init() {
-		Zats.init("./src/main/webapp"); // user can load by
-													// configuration file
-	}
+	@ClassRule
+	public static AutoEnvironment env = new AutoEnvironment("./src/main/webapp");
 
-	@AfterClass
-	public static void end() {
-		Zats.end();
-	}
-
-	@After
-	public void after() {
-		Zats.cleanup();
-	}
+	@Rule
+	public AutoClient autoClient = env.autoClient();
 
 	@Test
 	public void testAgent() {
-		DesktopAgent desktopAgent = Zats.newClient().connect("/close.zul");
-		
+		DesktopAgent desktopAgent = autoClient.connect("/close.zul");
+
 		ComponentAgent panel = desktopAgent.query("panel[title='closable']");
 		panel.as(CloseAgent.class).close();
 		Assert.assertNull(((Component)panel.getDelegatee()).getPage());

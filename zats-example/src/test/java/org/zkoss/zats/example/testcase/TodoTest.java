@@ -6,10 +6,9 @@ import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import org.zkoss.zats.junit.AutoClient;
+import org.zkoss.zats.junit.AutoEnvironment;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -20,25 +19,16 @@ import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Textbox;
 
 public class TodoTest {
-	@BeforeClass
-	public static void init() {
-		Zats.init("./src/main/webapp"); 
-	}
+	@ClassRule
+	public static AutoEnvironment env = new AutoEnvironment("./src/main/webapp");
 
-	@AfterClass
-	public static void end() {
-		Zats.end();
-	}
-
-	@After
-	public void after() {
-		Zats.cleanup();
-	}
+	@Rule
+	public AutoClient autoClient = env.autoClient();
 
 	@Test
 	public void test() {
 		//visit the target page
-		DesktopAgent desktop = Zats.newClient().connect("/todo.zul");
+		DesktopAgent desktop = autoClient.connect("/todo.zul");
 
 		//find components
 		ComponentAgent itemName = desktop.query("textbox");

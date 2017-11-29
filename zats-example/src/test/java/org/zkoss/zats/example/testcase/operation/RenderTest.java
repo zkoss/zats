@@ -2,10 +2,9 @@ package org.zkoss.zats.example.testcase.operation;
 
 import junit.framework.Assert;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import org.zkoss.zats.junit.AutoClient;
+import org.zkoss.zats.junit.AutoEnvironment;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Zats;
@@ -22,26 +21,15 @@ import org.zkoss.zul.Listcell;
  *
  */
 public class RenderTest {
-	@BeforeClass
-	public static void init() {
-		Zats.init("./src/main/webapp"); // user can load by
-													// configuration file
-	}
+	@ClassRule
+	public static AutoEnvironment env = new AutoEnvironment("./src/main/webapp");
 
-	@AfterClass
-	public static void end() {
-		Zats.end();
-	}
+	@Rule
+	public AutoClient autoClient = env.autoClient();
 
-	@After
-	public void after() {
-		Zats.cleanup();
-	}
-
-	
 	@Test
 	public void testAgent() {
-		DesktopAgent desktop = Zats.newClient().connect("/render.zul");
+		DesktopAgent desktop = autoClient.connect("/render.zul");
 
 		ComponentAgent listbox = desktop.query("#listbox");
 		Label itemData = desktop.query("#itemData").as(Label.class);

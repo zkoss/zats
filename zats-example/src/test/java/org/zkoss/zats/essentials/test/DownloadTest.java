@@ -1,41 +1,31 @@
 package org.zkoss.zats.essentials.test;
 
+import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.Test;
+import org.zkoss.zats.junit.AutoClient;
+import org.zkoss.zats.junit.AutoEnvironment;
+import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zats.mimic.Resource;
+import org.zkoss.zats.mimic.impl.Util;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-import junit.framework.Assert;
-
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zats.mimic.Resource;
-import org.zkoss.zats.mimic.Zats;
-import org.zkoss.zats.mimic.impl.Util;
-
 public class DownloadTest {
-	@BeforeClass
-	public static void init() {
-		Zats.init("./src/main/webapp");
-	}
+	@ClassRule
+	public static AutoEnvironment env = new AutoEnvironment("./src/main/webapp");
 
-	@AfterClass
-	public static void end() {
-		Zats.end();
-	}
-
-	@After
-	public void after() {
-		Zats.cleanup();
-	}
+	@Rule
+	public AutoClient autoClient = env.autoClient();
 
 	@Test
 	public void test() throws Exception{
-		DesktopAgent desktop = Zats.newClient().connect("/essentials/download.zul");
-		Assert. assertNull (desktop.getDownloadable());
+		DesktopAgent desktop = autoClient.connect("/essentials/download.zul");
+		Assert.assertNull (desktop.getDownloadable());
 		desktop.query("#btn").click();
 		Resource resource = desktop.getDownloadable();
 		Assert.assertNotNull(resource);

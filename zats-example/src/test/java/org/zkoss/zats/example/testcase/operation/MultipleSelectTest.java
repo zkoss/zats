@@ -2,11 +2,9 @@ package org.zkoss.zats.example.testcase.operation;
 
 import java.util.List;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import org.zkoss.zats.junit.AutoClient;
+import org.zkoss.zats.junit.AutoEnvironment;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Zats;
@@ -22,26 +20,15 @@ import org.zkoss.zul.Listbox;
  *
  */
 public class MultipleSelectTest {
-	@BeforeClass
-	public static void init() {
-		Zats.init("./src/main/webapp"); // user can load by
-													// configuration file
-	}
+	@ClassRule
+	public static AutoEnvironment env = new AutoEnvironment("./src/main/webapp");
 
-	@AfterClass
-	public static void end() {
-		Zats.end();
-	}
+	@Rule
+	public AutoClient autoClient = env.autoClient();
 
-	@After
-	public void after() {
-		Zats.cleanup();
-	}
-
-	
 	@Test
 	public void testAgent() {
-		DesktopAgent desktopAgent = Zats.newClient().connect("/multiple-select.zul");
+		DesktopAgent desktopAgent = autoClient.connect("/multiple-select.zul");
 
 		Label msg = desktopAgent.query("#msg").as(Label.class);
 		Assert.assertEquals("", msg.getValue());

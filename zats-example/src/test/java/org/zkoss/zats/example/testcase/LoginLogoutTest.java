@@ -4,11 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import javax.servlet.http.HttpSession;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.zkoss.zats.example.testcase.util.LoginOperation;
+import org.zkoss.zats.junit.AutoClient;
+import org.zkoss.zats.junit.AutoEnvironment;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -19,25 +18,15 @@ import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
 
 public class LoginLogoutTest {
-	@BeforeClass
-	public static void init() {
-		Zats.init("./src/main/webapp"); // user can load by
-													// configuration file
-	}
+	@ClassRule
+	public static AutoEnvironment env = new AutoEnvironment("./src/main/webapp");
 
-	@AfterClass
-	public static void end() {
-		Zats.end();
-	}
-
-	@After
-	public void after() {
-		Zats.cleanup();
-	}
+	@Rule
+	public AutoClient autoClient = env.autoClient();
 
 	@Test
 	public void test() {
-		DesktopAgent desktop = Zats.newClient().connect("/login.zul");
+		DesktopAgent desktop = autoClient.connect("/login.zul");
 
 		ComponentAgent account = desktop.query("#account");
 		ComponentAgent password = desktop.query("#password");
@@ -62,7 +51,7 @@ public class LoginLogoutTest {
 	
 	@Test
 	public void testLoginOperation() {
-		DesktopAgent desktop = Zats.newClient().connect("/login.zul");
+		DesktopAgent desktop = autoClient.connect("/login.zul");
 		assertEquals(false, LoginOperation.login(desktop, "hawk", "1111"));
 		assertEquals(true, LoginOperation.login(desktop, "hawk", "1234"));
 			

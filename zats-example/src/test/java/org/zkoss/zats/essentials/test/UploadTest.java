@@ -4,37 +4,25 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import org.zkoss.zats.junit.AutoClient;
+import org.zkoss.zats.junit.AutoEnvironment;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.operation.UploadAgent;
 import org.zkoss.zul.Label;
 
 public class UploadTest {
-	@BeforeClass
-	public static void init() {
-		Zats.init("./src/main/webapp"); // user can load by
-													// configuration file
-	}
+	@ClassRule
+	public static AutoEnvironment env = new AutoEnvironment("./src/main/webapp");
 
-	@AfterClass
-	public static void end() {
-		Zats.end();
-	}
-
-	@After
-	public void after() {
-		Zats.cleanup();
-	}
+	@Rule
+	public AutoClient autoClient = env.autoClient();
 
 	@Test
 	public void testUploadAttribute() throws Exception{
+		DesktopAgent desktop = autoClient.connect("/essentials/upload.zul");
 		File file = getFile();
-		DesktopAgent desktop = Zats.newClient().connect("/essentials/upload.zul");
 		UploadAgent agent = desktop.query("#btn").as(UploadAgent.class);
 		agent.upload(file, "text/plain");
 		agent.finish();
@@ -59,8 +47,8 @@ public class UploadTest {
 	
 	@Test
 	public void testUploadMethod() throws Exception{
+	    DesktopAgent desktop = autoClient.connect("/essentials/upload.zul");
 	    File[] files = getFiles();
-	    DesktopAgent desktop = Zats.newClient().connect("/essentials/upload.zul");
 	    desktop.query("#label2").click();
 	    UploadAgent agent = desktop.as(UploadAgent.class);
 	    agent.upload(files[0], "text/plain");
