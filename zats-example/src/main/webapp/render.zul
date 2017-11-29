@@ -1,7 +1,5 @@
-<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
 <zk>
-	<zscript>
-		<![CDATA[
+	<zscript><![CDATA[
 	ListModelList listmodel = new ListModelList();
 	for (int i = 0; i < 1000; ++i) {
 		listmodel.add("item" + i);
@@ -14,24 +12,25 @@
 			itemData.setValue("");
 		}
 	}
-]]>
-	</zscript>
+]]></zscript>
+
 	<label multiline="true">
 		When a listbox (or grid) uses live data and is not in paging
 		mold, it only preloads first few items. Other un-loaded items'
 		listcell only have empty children.
-
 	</label>
 	<listbox id="listbox" model="${listmodel}" width="600px"
 		height="200px" onSelect="showSelected(self.selectedItem)">
 		<listhead>
 			<listheader label="listheader" />
 		</listhead>
-		<listitem self="@{each='data'}">
-			<listcell>
-				<label value="@{data}" />
-			</listcell>
-		</listitem>
+		<template name="model">
+			<listitem>
+				<listcell>
+					<label value="${each}"/>
+				</listcell>
+			</listitem>
+		</template>
 	</listbox>
 	selected:
 	<label id="itemData" style="font-weight: bold;font-size:16px"/>

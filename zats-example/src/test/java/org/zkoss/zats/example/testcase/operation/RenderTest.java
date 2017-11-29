@@ -1,13 +1,13 @@
 package org.zkoss.zats.example.testcase.operation;
 
-import junit.framework.Assert;
-
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.Test;
 import org.zkoss.zats.junit.AutoClient;
 import org.zkoss.zats.junit.AutoEnvironment;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.operation.RenderAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zul.Label;
