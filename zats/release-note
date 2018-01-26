@@ -1,6 +1,8 @@
 ZATS Mimic 2.0.1
 * Features
 * Bugs
+  ZATS-69: Clients.clearBusy causes a NPE
+
 * Upgrade Notes
 
 	--------

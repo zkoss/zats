@@ -1,0 +1,11 @@
+<script class="z-runonce" type="text/javascript">
+zkmx(
+    [0,'qNBQ_',{dt:'z_pgz',cu:'',uu:'\x2Fzkau',ru:'\x2Fdummy.zul'},{},[]],
+    0,
+    [
+        'script','["dummy(\'test\');"]',
+        'clearBusy',null,
+        'script','["dummy(\'test\');"]'
+    ]
+);
+</script>

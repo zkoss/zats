@@ -171,7 +171,7 @@ public class AuUtility {
 				Object data = rawAuCmds.get(i + 1);
 				// check data type 
 				if (!(data instanceof JSONArray)) {
-					data = JSONValue.parseWithException(data.toString());
+					data = JSONValue.parseWithException(String.valueOf(data));
 				}
 				JSONArray a = new JSONArray();
 				a.add(cmd);
