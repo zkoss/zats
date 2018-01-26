@@ -16,7 +16,7 @@ bash ./upVer $ver-SNAPSHOT $pver
 
 cd zats
 mvn clean install -am
-mvn source:jar javadoc:jar repository:bundle-create --batch-mode -Dmaven.test.skip
+mvn source:jar javadoc:jar repository:bundle-create --batch-mode -Dmaven.test.skip -P disable-java8-doclint
 
 cd $maindir
 bash ./prepare-upload.sh $pver
