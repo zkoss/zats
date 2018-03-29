@@ -1,0 +1,23 @@
+<zk xmlns="http://www.zkoss.org/2005/zul">
+
+    <script type="text/javascript">
+        setTimeout('a()', 400);
+        setTimeout('b()', 400);
+
+        function getJSElement(zkId) {
+
+            // This is a comment
+
+            var jqId = '$' + zkId;
+            var zkEl = zk.Widget.$(jq(jqId));
+
+            return document.getElementById(zkEl.uuid);
+        }
+    </script>
+
+    <div height="100%">
+
+    </div>
+</zk>
+
+

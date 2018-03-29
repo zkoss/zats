@@ -15,6 +15,8 @@ import java.util.List;
 
 import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+
 /**
  * The desktop agent, represents a server-side ZK desktop
  * 
@@ -62,7 +64,15 @@ public interface DesktopAgent extends QueryAgent {
 	 * Gets the <code>Clients.log</code> results.
 	 *
 	 * @return Messages. An empty list if no message.
-	 * @since 2.0.1
+	 * @since 2.1.0
 	 */
 	List<String> getZkLog();
+
+	/**
+	 * Get the attached {@link Desktop} instance.
+	 *
+	 * @return the attached {@link Desktop} instance.
+	 * @since 2.1.0
+	 */
+	Desktop getDesktop();
 }

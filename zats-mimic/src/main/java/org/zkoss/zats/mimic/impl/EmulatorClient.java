@@ -164,8 +164,6 @@ public class EmulatorClient implements Client, ClientCtrl {
 			flush(desktopAgent.getId());
 
 			return desktopAgent;
-		} catch (Exception e) {
-			throw new ZatsException(e.getMessage(), e);
 		} catch (Throwable t) {
 			throw new ZatsException(t.getMessage(), t);
 		} finally {

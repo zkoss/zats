@@ -4,6 +4,7 @@ ZATS Mimic 2.1.0
 
 * Bugs
   ZATS-69: Clients.clearBusy causes a NPE
+  ZATS-70: JS Line comments parse errors
 
 * Upgrade Notes
 	+ Jetty dependency upped to 9.4.18

@@ -141,11 +141,11 @@ public class AuUtility {
 			Elements scripts = doc.getElementsByTag("script");
 			for (Element script : scripts) {
 				// fetch arguments of zkmx()
-				String text = script.html().replaceAll("[\\n\\r]", "");
+				String text = script.html();
 				// ZATS-34: layout response might have other client-side scripts
 				// using JS parser to fetch argument of zkmx()
 				if (text.contains("zkmx(")) {
-					zkmxArgs = fetchJavascriptFuntionArguments("zkmx", text);
+					zkmxArgs = fetchJavascriptFunctionArguments("zkmx", text);
 					if(zkmxArgs != null) {
 						break;	// find first
 					}
@@ -183,7 +183,7 @@ public class AuUtility {
 			return map;
 
 		} catch (Exception e) {
-			throw new ZatsException(e.getMessage(), e);
+			throw new ZatsException("Code could not be parsed:\n" + raw, e);
 		}
 	}
 	
@@ -191,7 +191,7 @@ public class AuUtility {
 	/**
 	 * @return an json array text contained specified function's arguments, or null otherwise.
 	 */
-	public static String fetchJavascriptFuntionArguments(final String funcName, String code) {
+	public static String fetchJavascriptFunctionArguments(final String funcName, String code) {
 		if (funcName == null || code == null) {
 			return null;
 		}
