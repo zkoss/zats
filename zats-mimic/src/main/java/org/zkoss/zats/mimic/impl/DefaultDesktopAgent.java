@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class DefaultDesktopAgent implements DesktopAgent, DesktopCtrl {
 	private Client client;
 	private Desktop desktop;
 	private Resource downloadable;
+	private List<String> log;
 
 	public DefaultDesktopAgent(Client client, Desktop desktop) {
 		this.client = client;
@@ -116,5 +118,17 @@ public class DefaultDesktopAgent implements DesktopAgent, DesktopCtrl {
 	public Resource getDownloadable() {
 		return downloadable;
 	}
-	
+
+	@Override
+	public List<String> getZkLog() {
+		return log == null ? Collections.<String>emptyList() : log;
+	}
+
+	@Override
+	public void appendZkLog(String message) {
+		if (log == null) {
+			log = new ArrayList<String>();
+		}
+		log.add(message);
+	}
 }

@@ -25,4 +25,11 @@ public interface DesktopCtrl {
 	 * @param downloadable a downloadable resouce or null indicated there is no downloadable currently.
 	 */
 	void setDownloadable(Resource downloadable);
+
+	/**
+	 * Append a debug message of AuLog to current desktop.
+	 * @param message a message.
+	 * @since 2.0.1
+	 */
+	void appendZkLog(String message);
 }
