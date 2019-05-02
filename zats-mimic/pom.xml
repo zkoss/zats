@@ -44,7 +44,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<zk.version>5.0.10</zk.version>
-		<jetty.version>9.4.7.v20170914</jetty.version>
+		<jetty.version>9.4.18.v20190429</jetty.version>
 	</properties>
 	<repositories>
 		<repository>
