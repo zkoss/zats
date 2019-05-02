@@ -57,4 +57,12 @@ public interface DesktopAgent extends QueryAgent {
 	 * @since 1.1.0
 	 */
 	Resource getDownloadable();
+
+	/**
+	 * Gets the <code>Clients.log</code> results.
+	 *
+	 * @return Messages. An empty list if no message.
+	 * @since 2.0.1
+	 */
+	List<String> getZkLog();
 }

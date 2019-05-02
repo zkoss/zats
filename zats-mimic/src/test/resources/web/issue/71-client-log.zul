@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+71-client-log.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr 29 18:13:23 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    Clients.log("Hello World onload");
+    ]]>
+    </zscript>
+    <button id="btn" label="Click" onClick='Clients.log("Hello World from btn")'/>
+    <button id="btn2" label="Click 2" onClick='Clients.log("Hello World from btn2")'/>
+</zk>

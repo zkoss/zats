@@ -229,4 +229,17 @@ public class IssuesTest {
 		DesktopAgent desktopAgent = Zats.newClient().connectWithContent("<div><label><![CDATA[<Div yM5Q2>]]></label></div>", null, null, null);
 		assertEquals(1, desktopAgent.queryAll("div").size());
 	}
+
+	@Test
+	public void testZATS71() {
+		DesktopAgent desktop = Zats.newClient().connect("/~./issue/71-client-log.zul");
+		desktop.query("#btn").as(ClickAgent.class).click();
+		desktop.query("#btn2").as(ClickAgent.class).click();
+
+		List<String> zkLog = desktop.getZkLog();
+		Assert.assertEquals(3, zkLog.size());
+		Assert.assertEquals("Hello World onload", zkLog.get(0));
+		Assert.assertEquals("Hello World from btn", zkLog.get(1));
+		Assert.assertEquals("Hello World from btn2", zkLog.get(2));
+	}
 }

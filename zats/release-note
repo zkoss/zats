@@ -1,5 +1,7 @@
 ZATS Mimic 2.0.1
 * Features
+  ZATS-71: Add AuLog Handler
+
 * Bugs
   ZATS-69: Clients.clearBusy causes a NPE
 
