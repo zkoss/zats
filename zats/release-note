@@ -1,3 +1,8 @@
+ZATS Mimic 2.1.1
+* Bugs
+  ZATS-72: deadlock when testing multiple pages
+
+	--------
 ZATS Mimic 2.1.0
 * Features
   ZATS-71: Add AuLog Handler
