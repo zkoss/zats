@@ -11,6 +11,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl.emulator;
 
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.NetworkConnector;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.HandlerCollection;
+import org.eclipse.jetty.util.component.LifeCycle.Listener;
+import org.eclipse.jetty.util.resource.Resource;
+import org.eclipse.jetty.util.resource.ResourceCollection;
+import org.eclipse.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
@@ -18,33 +34,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.InetSocketAddress;
 import java.text.MessageFormat;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.NetworkConnector;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.AbstractHandler;
-import org.eclipse.jetty.server.handler.HandlerCollection;
-import org.eclipse.jetty.util.component.LifeCycle.Listener;
-import org.eclipse.jetty.util.resource.Resource;
-import org.eclipse.jetty.util.resource.ResourceCollection;
-import org.eclipse.jetty.webapp.WebAppContext;
-import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
 
 /**
  * The emulator implementation in Jetty Server.
@@ -88,7 +83,18 @@ public class JettyEmulator implements Emulator {
 		try {
 			// create server
 			server = new Server(new InetSocketAddress(getHost(), 0));
-			final WebAppContext contextHandler = new WebAppContext();
+			final WebAppContext contextHandler = new WebAppContext() {
+				@Override
+				public void doHandle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+					try {
+						lock.lock();
+						super.doHandle(target, baseRequest, request, response);
+						handleAfter(request);
+					} finally {
+						lock.unlock();
+					}
+				}
+			};
 			ResourceCollection resourceCollection = new ResourceCollection(contentRoots);
 
 			contextHandler.setBaseResource(resourceCollection);
@@ -112,9 +118,9 @@ public class JettyEmulator implements Emulator {
 			
 			// observe request and get related ref.
 			HandlerCollection handlers = new HandlerCollection();
-			handlers.addHandler(new BeforeHandler());
+//			handlers.addHandler(new BeforeHandler());
 			handlers.addHandler(contextHandler);
-			handlers.addHandler(new AfterHandler());
+//			handlers.addHandler(new AfterHandler());
 			server.setHandler(handlers);
 
 			//enable websocket support
@@ -282,51 +288,31 @@ public class JettyEmulator implements Emulator {
 				});
 	}
 
-	/**
-	 * The handler before original handler. lock attributes access.
-	 * 
-	 * @author pao
-	 */
-	private class BeforeHandler extends AbstractHandler {
-		public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
-				throws IOException, ServletException {
-			// lock access of all attributes
-			lock.lock();
-		}
-	}
 
 	/**
-	 * The handler after original handler. Fetch attributes and release access
-	 * lock.
+	 * The handler after original handler. Fetch attributes.
 	 * 
 	 * @author pao
 	 */
-	private class AfterHandler extends AbstractHandler {
-		@SuppressWarnings("unchecked")
-		public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
-				throws IOException, ServletException {
-			try {
-				// copy attributes for test case
-				requestParameters = new HashMap<String, String[]>(request.getParameterMap());
-				HttpSession session = request.getSession(false);
-				sessionId = session != null ? session.getId() : null;
-				sessionAttributes = new HashMap<String, Object>();
-				if (session != null) {
-					Enumeration<String> names = session.getAttributeNames();
-					while (names.hasMoreElements()) {
-						String name = names.nextElement();
-						sessionAttributes.put(name, session.getAttribute(name));
-					}
-				}
-				requestAttributes = new HashMap<String, Object>();
-				Enumeration<String> names = request.getAttributeNames();
-				while (names.hasMoreElements()) {
-					String name = names.nextElement();
-					requestAttributes.put(name, request.getAttribute(name));
-				}
-			} finally {
-				lock.unlock();
+
+	private void handleAfter(HttpServletRequest request) {
+		// copy attributes for test case
+		requestParameters = new HashMap<String, String[]>(request.getParameterMap());
+		HttpSession session = request.getSession(false);
+		sessionId = session != null ? session.getId() : null;
+		sessionAttributes = new HashMap<String, Object>();
+		if (session != null) {
+			Enumeration<String> names = session.getAttributeNames();
+			while (names.hasMoreElements()) {
+				String name = names.nextElement();
+				sessionAttributes.put(name, session.getAttribute(name));
 			}
+		}
+		requestAttributes = new HashMap<String, Object>();
+		Enumeration<String> names = request.getAttributeNames();
+		while (names.hasMoreElements()) {
+			String name = names.nextElement();
+			requestAttributes.put(name, request.getAttribute(name));
 		}
 	}
 }

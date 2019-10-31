@@ -7,10 +7,11 @@ import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.junit.AutoClient;
 import org.zkoss.zats.junit.AutoEnvironment;
 import org.zkoss.zats.mimic.Client;
-import org.zkoss.zats.mimic.DesktopAgent;
 
-public class ZatsBlockingAfterError {
-
+/**
+ * https://tracker.zkoss.org/browse/ZATS-72
+ */
+public class BZats_72 {
 	@ClassRule
 	public static AutoEnvironment env = new AutoEnvironment(".");
 
@@ -19,10 +20,9 @@ public class ZatsBlockingAfterError {
 
 	@Test(expected = ZatsException.class)
 	public void testMultiplePagesWithError() {
-		DesktopAgent desktopAgent;
 		Client client = autoClient.getClient();
-		desktopAgent = client.connectWithContent("<zk>1</zk>", "zul", null, null);
-		desktopAgent = client.connectWithContent("<zk><parse error</zk>", "zul", null, null);
-		desktopAgent = client.connectWithContent("<zk>2</zk>", "zul", null, null);
+		client.connectWithContent("<zk>1</zk>", "zul", null, null);
+		client.connectWithContent("<zk><parse error</zk>", "zul", null, null);
+		client.connectWithContent("<zk>2</zk>", "zul", null, null);
 	}
 }
