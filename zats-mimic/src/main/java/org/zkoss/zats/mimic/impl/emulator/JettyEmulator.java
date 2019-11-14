@@ -118,9 +118,7 @@ public class JettyEmulator implements Emulator {
 			
 			// observe request and get related ref.
 			HandlerCollection handlers = new HandlerCollection();
-//			handlers.addHandler(new BeforeHandler());
 			handlers.addHandler(contextHandler);
-//			handlers.addHandler(new AfterHandler());
 			server.setHandler(handlers);
 
 			//enable websocket support
