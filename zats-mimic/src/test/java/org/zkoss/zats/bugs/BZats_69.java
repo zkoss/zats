@@ -1,13 +1,10 @@
 package org.zkoss.zats.bugs;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.zkoss.zats.common.json.JSONArray;
 import org.zkoss.zats.mimic.impl.au.AuUtility;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -15,10 +12,20 @@ import java.util.Map;
  */
 public class BZats_69 {
 
+	String rawResponse = "<script class=\"z-runonce\" type=\"text/javascript\">\n" +
+			"zkmx(\n" +
+			"    [0,'qNBQ_',{dt:'z_pgz',cu:'',uu:'\\x2Fzkau',ru:'\\x2Fdummy.zul'},{},[]],\n" +
+			"    0,\n" +
+			"    [\n" +
+			"        'script','[\"dummy(\\'test\\');\"]',\n" +
+			"        'clearBusy',null,\n" +
+			"        'script','[\"dummy(\\'test\\');\"]'\n" +
+			"    ]\n" +
+			");\n" +
+			"</script>";
+
 	@Test
-	public void parseClearBusyAuCommand() throws IOException {
-		InputStream response = BZats_69.class.getResourceAsStream("responseZATS_69");
-		String rawResponse = IOUtils.toString(response);
+	public void parseClearBusyAuCommand() {
 		Map<String, Object> parsedResponse = AuUtility.parseAuResponseFromLayout(rawResponse);
 		JSONArray parsedCommands = (JSONArray) parsedResponse.get("rs");
 		Assert.assertEquals(3, parsedCommands.size());
