@@ -1,6 +1,7 @@
 ZATS Mimic 2.2.0
 * Features
 * Bugs
+ ZATS-74: Date/Time type parsing changed after ZK 9.6.0
 
 	--------
 ZATS Mimic 2.1.1
