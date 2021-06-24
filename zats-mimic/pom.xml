@@ -76,6 +76,11 @@
 			<version>${jetty.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.31</version>
+		</dependency>
+		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zhtml</artifactId>
 			<version>${zk.version}</version>
@@ -128,9 +133,15 @@
 			<version>1.7.7</version>
 		</dependency>
 		<dependency>
-            <groupId>org.zkoss</groupId>
-            <artifactId>zsoup</artifactId>
-           <version>1.8.2.5</version>
+        	<groupId>org.zkoss</groupId>
+        	<artifactId>zsoup</artifactId>
+			<version>1.8.2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.31</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
