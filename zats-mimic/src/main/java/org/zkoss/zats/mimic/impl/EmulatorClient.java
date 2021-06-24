@@ -270,7 +270,6 @@ public class EmulatorClient implements Client, ClientCtrl {
 	@SuppressWarnings("unchecked")
 	public void flush(String desktopId) {
 		OutputStream os = null;
-		InputStream is = null;
 
 		// #ZATS-11: when post-flush, handlers process AU responses.
 		// They might require posting more AU requests immediately, so repeat posting.
@@ -336,7 +335,6 @@ public class EmulatorClient implements Client, ClientCtrl {
 				throw new ZatsException(t.getMessage(), t);
 			} finally {
 				close(os);
-				close(is);
 				//clear exceptions once thrown out
 				ZKExceptionHandler.getInstance().destroy();
 			}

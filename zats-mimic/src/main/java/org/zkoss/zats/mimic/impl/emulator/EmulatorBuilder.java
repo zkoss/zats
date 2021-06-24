@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.eclipse.jetty.util.URIUtil;
-import org.eclipse.jetty.util.resource.FileResource;
+import org.eclipse.jetty.util.resource.PathResource;
 import org.eclipse.jetty.util.resource.Resource;
 import org.zkoss.zats.ZatsException;
 
@@ -141,8 +143,8 @@ public class EmulatorBuilder {
 		
 		@Override
 		public boolean isContainedIn(Resource r) throws MalformedURLException {
-			URL wurl = webInf.getURL();
-			URL rurl = r.getURL();
+			URL wurl = webInf.getURI().toURL();
+			URL rurl = r.getURI().toURL();
 			if(wurl==null||rurl==null) return false;
 			String wp = wurl.toExternalForm();
 			String rp = rurl.toExternalForm();
@@ -174,18 +176,18 @@ public class EmulatorBuilder {
 		}
 
 		@Override
-		public URL getURL() {
-			URL wurl = webInf.getURL();
-			if(wurl==null) return null;
-			String wp = wurl.toExternalForm();
-			//the parent url
-			if(wp.endsWith("/")){
-				wp = wp.substring(0,wp.length()-1);
-			}
-			wp = wp.substring(0,wp.lastIndexOf('/')+1);
+		public URI getURI() {
 			try {
-				return new URL(wp);
-			} catch (MalformedURLException e) {
+				URI wuri = webInf.getURI();
+				if(wuri==null) return null;
+				String wp = wuri.toURL().toExternalForm();
+				//the parent url
+				if(wp.endsWith("/")){
+					wp = wp.substring(0,wp.length()-1);
+				}
+				wp = wp.substring(0,wp.lastIndexOf('/')+1);
+				return new URI(wp);
+			} catch (MalformedURLException | URISyntaxException e) {
 				logger.warning(e.getMessage());
 			}
 			return null;
@@ -193,7 +195,7 @@ public class EmulatorBuilder {
 
 		@Override
 		public File getFile() throws IOException {
-			URL url = getURL();
+			URL url = getURI().toURL();
 			File f = url==null?null:new File(url.getFile());
 			return f;
 		}
@@ -254,7 +256,7 @@ public class EmulatorBuilder {
 		Resource toNonExist(String path){
 			String tmpDir = System.getProperty("java.io.tmpdir", ".");
 			try {
-				return new FileResource(new File(tmpDir,"zats/non_exist/"+path).toURL());
+				return new PathResource(new File(tmpDir,"zats/non_exist/"+path).toURL());
 			} catch (Exception x) {
 				logger.warning(x.getMessage());
 				throw new EmulatorException(x.getMessage(),x);
@@ -262,7 +264,12 @@ public class EmulatorBuilder {
 		}
 		
 		public String toString(){
-			URL url = getURL();
+			URL url = null;
+			try {
+				url = getURI().toURL();
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
 			return url==null?super.toString():url.toExternalForm();
 		}
 		

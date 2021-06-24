@@ -16,11 +16,12 @@ import org.eclipse.jetty.server.NetworkConnector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerCollection;
+import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.util.component.LifeCycle.Listener;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.resource.ResourceCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
+import org.eclipse.jetty.websocket.javax.server.config.JavaxWebSocketServletContainerInitializer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -40,6 +41,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 /**
  * The emulator implementation in Jetty Server.
@@ -122,23 +124,29 @@ public class JettyEmulator implements Emulator {
 			server.setHandler(handlers);
 
 			//enable websocket support
-			WebSocketServerContainerInitializer.configureContext(contextHandler);
+			JavaxWebSocketServletContainerInitializer.configure(contextHandler, null);
 
 			// synchronize initial step
 			final BlockingQueue<Object> queue = new ArrayBlockingQueue<Object>(1, true);
-			contextHandler.addLifeCycleListener((Listener) Proxy.newProxyInstance(Thread.currentThread()
-					.getContextClassLoader(), new Class<?>[] { Listener.class }, new InvocationHandler() {
-				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-					if ("lifeCycleStarted".equals(method.getName()))
-						queue.add(method.getName());
-					return null;
+
+			contextHandler.addEventListener(new Listener() {
+				@Override
+				public void lifeCycleStarted(LifeCycle event) {
+					queue.add("lifeCycleStarted");
 				}
-			}));
+			});
 			// start server and wait for started
 			server.start();
 			queue.take();
 
 			// fetch the real port number
+			port = Stream.of(server.getConnectors())
+					.filter(NetworkConnector.class::isInstance).map(NetworkConnector.class::cast)
+					.map(connector -> connector.getLocalPort())
+					.filter(port -> port > 0)
+					.findFirst()
+					.orElseThrow(() -> new EmulatorException("No NetworkConnector/Port detected during init"));
+			;
 			for (Connector c : server.getConnectors()) {
 				if (c instanceof NetworkConnector) {
 					if (((NetworkConnector)c).getLocalPort() > 0) {
