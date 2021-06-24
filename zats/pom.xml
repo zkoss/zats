@@ -5,7 +5,7 @@
 	<artifactId>zats</artifactId>
 	<name>ZK Application Test Suite</name>
 	<description>ZK Application Test Suite</description>
-	<url>http://www.zkoss.org/zats</url>
+	<url>https://www.zkoss.org/zats</url>
 	<licenses>
 		<license>
 			<name>GNU GENERAL PUBLIC LICENSE, Version 2</name>
@@ -19,7 +19,7 @@
 	</scm>
 	<organization>
 		<name>Potix Corporation</name>
-		<url>http://www.zkoss.org</url>
+		<url>https://www.zkoss.org</url>
 	</organization>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,16 +29,16 @@
 			<id>zkteam</id>
 			<name>ZK Team</name>
 			<email>info@zkoss.org</email>
-			<url>http://www.zkoss.org</url>
+			<url>https://www.zkoss.org</url>
 			<organization>Potix Corporation</organization>
-			<organizationUrl>http://www.zkoss.org</organizationUrl>
+			<organizationUrl>https://www.zkoss.org</organizationUrl>
 			<roles>
 				<role>architect</role>
 				<role>developer</role>
 			</roles>
 			<timezone>8</timezone>
 			<properties>
-				<picUrl>http://www.zkoss.org</picUrl>
+				<picUrl>https://www.zkoss.org</picUrl>
 			</properties>
 		</developer>
 	</developers>

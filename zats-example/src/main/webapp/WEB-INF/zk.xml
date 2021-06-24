@@ -108,7 +108,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 	<!-- Turn on if the processing time is longer than 9000 miliseconds.
 		Default: -1 (turned off)
-		http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_client-config_Element#The_resend-delay_Element
+		https://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_client-config_Element#The_resend-delay_Element
 	<client-config>
 		<resend-delay>9000</resend-delay>
 	</client-config>
@@ -270,7 +270,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 		<!-- Uncomment it if you prefer to have a custom message.
 			Notice that, to make it work, timeout-uri shall be removed.
-			See http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_session-config_Element
+			See https://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_session-config_Element
 		<timeout-message></timeout-message>
 		-->
 
