@@ -3,7 +3,7 @@ package org.zkoss.zats.example.testcase;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.junit.*;
 import org.zkoss.zats.junit.AutoClient;

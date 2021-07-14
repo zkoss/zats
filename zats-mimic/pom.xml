@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.zats</groupId>
 	<artifactId>zats-mimic</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<name>ZK Application Test Suite - Mimic Library</name>
 	<description>ZK Application Test Suite - Mimic Library</description>
 	<url>https://www.zkoss.org/zats</url>
@@ -43,8 +43,9 @@
 	<packaging>jar</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<zk.version>5.0.10</zk.version>
-		<jetty.version>10.0.5</jetty.version>
+<!--		<zk.version>5.0.10</zk.version>-->
+		<zk.version>9.6.0-jakarta.FL.20210712-Eval</zk.version>
+		<jetty.version>11.0.5</jetty.version>
 		<maven.compiler.source>8</maven.compiler.source>
 		<maven.compiler.target>8</maven.compiler.target>
 	</properties>
@@ -72,7 +73,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty.websocket</groupId>
-			<artifactId>websocket-javax-server</artifactId>
+			<artifactId>websocket-jakarta-server</artifactId>
 			<version>${jetty.version}</version>
 		</dependency>
 		<dependency>
@@ -112,6 +113,12 @@
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zkplus</artifactId>
+			<version>${zk.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zkplus-legacy</artifactId>
 			<version>${zk.version}</version>
 			<scope>test</scope>
 		</dependency>

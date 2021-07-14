@@ -14,7 +14,7 @@ package org.zkoss.zats.mimic.impl.emulator;
 import java.io.Closeable;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 /**
  * The application server emulator interface. 
