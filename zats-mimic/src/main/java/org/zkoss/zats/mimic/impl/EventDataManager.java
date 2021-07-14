@@ -63,27 +63,25 @@ public class EventDataManager {
 	public EventDataManager() {
 		builders = new HashMap<Class<? extends Event>, EventDataBuilder<? extends Event>>();
 		
-
-		registerBuilder("5.0.0", "*", new MouseEventDataBuilder());
-		registerBuilder("5.0.0", "*", new InputEventDataBuilder());
-		registerBuilder("5.0.0", "*", new CheckEventDataBuilder());
-		registerBuilder("5.0.0", "*", new DefaultEventDataBuilder());
-		registerBuilder("5.0.0", "*", new OpenEventDataBuilder());
-		registerBuilder("5.0.0", "*", new SelectEventDataBuilder());
-		registerBuilder("5.0.0", "*", new KeyEventDataBuilder());
-		registerBuilder("5.0.0", "*", new RenderEventDataBuilder());
-		registerBuilder("5.0.0", "*", new MaximizeEventDataBuilder());
-		registerBuilder("5.0.0", "*", new MinimizeEventDataBuilder());
-		registerBuilder("5.0.0", "*", new DropEventDataBuilder());
-		registerBuilder("5.0.0", "*", new SelectionEventDataBuilder());
-		registerBuilder("5.0.0", "*", new SizeEventDataBuilder());
-		registerBuilder("5.0.0", "*", new PagingEventDataBuilder());
-		registerBuilder("5.0.0", "*", new BookmarkEventDataBuilder());
-		registerBuilder("5.0.0", "*", new ColSizeEventDataBuilder());
-		registerBuilder("5.0.0", "*", new SortEventDataBuilder());
-		registerBuilder("5.0.0", "*", new ScrollEventDataBuilder());
-		registerBuilder("5.0.0", "*", new MoveEventDataBuilder());
-		//TODO more
+		registerBuilder("9.6.0", "*", new MouseEventDataBuilder());
+		registerBuilder("9.6.0", "*", new InputEventDataBuilder());
+		registerBuilder("9.6.0", "*", new CheckEventDataBuilder());
+		registerBuilder("9.6.0", "*", new DefaultEventDataBuilder());
+		registerBuilder("9.6.0", "*", new OpenEventDataBuilder());
+		registerBuilder("9.6.0", "*", new SelectEventDataBuilder());
+		registerBuilder("9.6.0", "*", new KeyEventDataBuilder());
+		registerBuilder("9.6.0", "*", new RenderEventDataBuilder());
+		registerBuilder("9.6.0", "*", new MaximizeEventDataBuilder());
+		registerBuilder("9.6.0", "*", new MinimizeEventDataBuilder());
+		registerBuilder("9.6.0", "*", new DropEventDataBuilder());
+		registerBuilder("9.6.0", "*", new SelectionEventDataBuilder());
+		registerBuilder("9.6.0", "*", new SizeEventDataBuilder());
+		registerBuilder("9.6.0", "*", new PagingEventDataBuilder());
+		registerBuilder("9.6.0", "*", new BookmarkEventDataBuilder());
+		registerBuilder("9.6.0", "*", new ColSizeEventDataBuilder());
+		registerBuilder("9.6.0", "*", new SortEventDataBuilder());
+		registerBuilder("9.6.0", "*", new ScrollEventDataBuilder());
+		registerBuilder("9.6.0", "*", new MoveEventDataBuilder());
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })

@@ -23,6 +23,7 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.zkoss.util.media.ContentTypes;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.Zats;
@@ -201,7 +202,7 @@ public class BasicAgentTest {
 			Assert.assertEquals(textFile.getName(), desktop.query("#file1 .name").as(Label.class).getValue());
 			Assert.assertEquals("application/octet-stream", desktop.query("#file1 .contentType").as(Label.class)
 					.getValue());
-			Assert.assertEquals("octet-stream", desktop.query("#file1 .format").as(Label.class).getValue());
+			Assert.assertEquals(ContentTypes.getFormat("application/octet-stream"), desktop.query("#file1 .format").as(Label.class).getValue());
 			Assert.assertEquals(textBinary, desktop.query("#file1 .binary").as(Label.class).getValue());
 			Assert.assertEquals("", desktop.query("#file1 .text").as(Label.class).getValue());
 			Assert.assertEquals("", desktop.query("#file1 .width").as(Label.class).getValue());

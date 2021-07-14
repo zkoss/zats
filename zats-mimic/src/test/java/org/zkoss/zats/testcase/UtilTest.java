@@ -35,8 +35,8 @@ public class UtilTest {
 
 	@Test
 	public void testVersion() {
-		Assert.assertTrue(Util.isZKVersion(5));
-		Assert.assertFalse(Util.isZKVersion(6));
+		Assert.assertTrue(Util.isZKVersion(9));
+		Assert.assertFalse(Util.isZKVersion(10));
 	}
 
 	@Test
@@ -70,6 +70,8 @@ public class UtilTest {
 		assertEquals(Util.parseVersion("7.0.0"), Util.parseVersion("7.0.0-FL"));
 		assertEquals(Util.parseVersion("7.0.0"), Util.parseVersion("7.0.0.FL.1"));
 		assertEquals(Util.parseVersion("7.0.0"), Util.parseVersion("7.0.0.FL.123456789"));
+		assertEquals(Util.parseVersion("9.6.0"), Util.parseVersion("9.6.0-jakarta"));
+		assertEquals(Util.parseVersion("9.6.0"), Util.parseVersion("9.6.0-jakarta.FL.123456789"));
 
 		// test wrong cases
 		assertNull(Util.parseVersion("dfasdflj"));

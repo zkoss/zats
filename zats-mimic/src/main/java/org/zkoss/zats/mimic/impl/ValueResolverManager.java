@@ -36,7 +36,7 @@ public class ValueResolverManager {
 	public ValueResolverManager() {
 	
 		//ComponentAgent resolver
-		registerResolver("5.0.0","*", "agent", new ValueResolver(){
+		registerResolver("9.6.0","*", "agent", new ValueResolver(){
 			@SuppressWarnings("unchecked")
 			public <T> T resolve(Agent agent, Class<T> clazz) {
 				if (OperationAgent.class.isAssignableFrom(clazz)) {
@@ -50,7 +50,7 @@ public class ValueResolverManager {
 			}
 		});
 		//ZK native component resolver
-		registerResolver("5.0.0","*", "component", new ValueResolver(){
+		registerResolver("9.6.0","*", "component", new ValueResolver(){
 			@SuppressWarnings("unchecked")
 			public <T> T resolve(Agent agent, Class<T> clazz) {
 				if (clazz.isInstance(agent.getDelegatee())) {

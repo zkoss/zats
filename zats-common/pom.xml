@@ -44,6 +44,16 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	<repositories>
+		<repository>
+			<id>ZK CE</id>
+			<url>https://mavensync.zkoss.org/maven2</url>
+		</repository>
+		<repository>
+			<id>ZK EE Eval</id>
+			<url>https://mavensync.zkoss.org/eval/</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -54,7 +64,7 @@
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zul</artifactId>
-			<version>6.0.0</version>
+			<version>9.6.0-jakarta.FL.20210713-Eval</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

@@ -45,7 +45,7 @@
 		<maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
-		<zk.version>9.6.0-jakarta.FL.20210712-Eval</zk.version>
+		<zk.version>9.6.0-jakarta.FL.20210713-Eval</zk.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -70,7 +70,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
-			<artifactId>zats-mimic-ext96</artifactId>
+			<artifactId>zats-mimic</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
