@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<richlet>
+		<richlet-name>TestRichlet</richlet-name>
+		<richlet-class>org.zkoss.zats.testapp.TestRichlet</richlet-class>
+	</richlet>
+	<richlet-mapping>
+		<richlet-name>TestRichlet</richlet-name>
+		<url-pattern>/test</url-pattern>
+	</richlet-mapping>
+</zk>
