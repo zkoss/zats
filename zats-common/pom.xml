@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.zats</groupId>
 	<artifactId>zats-common</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<name>ZK Application Test Suite - Common</name>
 	<description>ZK Application Test Suite - Common</description>
 	<url>https://www.zkoss.org/zats</url>
@@ -44,6 +44,16 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	<repositories>
+		<repository>
+			<id>ZK CE</id>
+			<url>https://mavensync.zkoss.org/maven2</url>
+		</repository>
+		<repository>
+			<id>ZK EE Eval</id>
+			<url>https://mavensync.zkoss.org/eval/</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -54,7 +64,7 @@
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zul</artifactId>
-			<version>6.0.0</version>
+			<version>9.6.0-jakarta-Eval</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

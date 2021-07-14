@@ -21,13 +21,13 @@ import org.eclipse.jetty.util.component.LifeCycle.Listener;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.resource.ResourceCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.eclipse.jetty.websocket.javax.server.config.JavaxWebSocketServletContainerInitializer;
+import org.eclipse.jetty.websocket.jakarta.server.config.JakartaWebSocketServletContainerInitializer;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
@@ -124,7 +124,7 @@ public class JettyEmulator implements Emulator {
 			server.setHandler(handlers);
 
 			//enable websocket support
-			JavaxWebSocketServletContainerInitializer.configure(contextHandler, null);
+			JakartaWebSocketServletContainerInitializer.configure(contextHandler, null);
 
 			// synchronize initial step
 			final BlockingQueue<Object> queue = new ArrayBlockingQueue<Object>(1, true);

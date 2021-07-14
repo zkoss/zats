@@ -54,7 +54,7 @@ public class MiscTest {
 	
 	@Test
 	public void testVersion() {
-		Assert.assertTrue(Util.isZKVersion(7));
+		Assert.assertTrue(Util.isZKVersion(9));
 	}
 	
 	@Test

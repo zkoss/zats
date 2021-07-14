@@ -19,6 +19,7 @@ import java.util.Map;
 import org.zkoss.zats.mimic.impl.response.DownloadHandler;
 import org.zkoss.zats.mimic.impl.response.EchoEventHandler;
 import org.zkoss.zats.mimic.impl.response.AuLogHandler;
+import org.zkoss.zats.mimic.impl.response.EchoEventHandlerExt96;
 
 /**
  * The manager of response handler.
@@ -43,14 +44,14 @@ public class ResponseHandlerManager {
 		updateHandlers = new HashMap<String, UpdateResponseHandler>();
 
 		// layout response handler
-		registerHandler("5.0.0", "*", DownloadHandler.REGISTER_KEY, (LayoutResponseHandler)new DownloadHandler());
-		registerHandler("5.0.0", "5.*.*", EchoEventHandler.REGISTER_KEY, (LayoutResponseHandler)new EchoEventHandler());
-		registerHandler("5.0.0", "*", AuLogHandler.REGISTER_KEY, (LayoutResponseHandler)new AuLogHandler());
+		registerHandler("9.6.0", "*", DownloadHandler.REGISTER_KEY, (LayoutResponseHandler)new DownloadHandler());
+		registerHandler("9.6.0", "*", EchoEventHandler.REGISTER_KEY, (LayoutResponseHandler) new EchoEventHandlerExt96());
+		registerHandler("9.6.0", "*", AuLogHandler.REGISTER_KEY, (LayoutResponseHandler)new AuLogHandler());
 
 		// AU response handler
-		registerHandler("5.0.0", "*", DownloadHandler.REGISTER_KEY, (UpdateResponseHandler)new DownloadHandler());
-		registerHandler("5.0.0", "5.*.*", EchoEventHandler.REGISTER_KEY, (UpdateResponseHandler)new EchoEventHandler());
-		registerHandler("5.0.0", "*", AuLogHandler.REGISTER_KEY, (UpdateResponseHandler)new AuLogHandler());
+		registerHandler("9.6.0", "*", DownloadHandler.REGISTER_KEY, (UpdateResponseHandler)new DownloadHandler());
+		registerHandler("9.6.0", "*", EchoEventHandler.REGISTER_KEY, (UpdateResponseHandler) new EchoEventHandlerExt96());
+		registerHandler("9.6.0", "*", AuLogHandler.REGISTER_KEY, (UpdateResponseHandler)new AuLogHandler());
 	}
 
 	public void registerHandler(String startVersion, String endVersion, String key, String className) {
