@@ -1,3 +1,17 @@
+ZATS Mimic 4.0.0
+* Features
+  Support for JAKARTA EE 9.0 (ZK 9.6.0-jakarta+)
+  Dropped support for older ZK versions (before 9.6.0 = no jakarta support)
+* Bugs
+
+* Upgrade Notes
+	+ updated to jetty 11.0.5 (requires JDK 11+ to run Tests)
+	+ minimum version is zk 9.6.0-jakarta
+	+ the extension jars zats-mimic-ext6, zats-mimic-ext7, zats-mimic-ext96
+	  no longer exist -> use zats-mimic
+	  (future extensions might be added as zats-mimic-ext10)
+
+        --------
 ZATS Mimic 3.0.0
 * Features
 * Bugs
