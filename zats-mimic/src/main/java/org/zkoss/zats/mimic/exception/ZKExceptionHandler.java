@@ -1,40 +1,37 @@
 package org.zkoss.zats.mimic.exception;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ZKExceptionHandler {
-	private static ZKExceptionHandler currentHandler;
-	private static CopyOnWriteArrayList<Throwable> exceptions;
-	
+	private static final ThreadLocal<ZKExceptionHandler> _handler = new ThreadLocal<>();
+	private final List<Throwable> _exceptions = new ArrayList<>();
+
 	public static ZKExceptionHandler getInstance() {
-		if (currentHandler == null) {
-			synchronized(ZKExceptionHandler.class) {
-				if (currentHandler == null) {
-					currentHandler = new ZKExceptionHandler();
-					exceptions = new CopyOnWriteArrayList<Throwable>();
-				}
-			}
+		ZKExceptionHandler handler = _handler.get();
+		if (handler == null) {
+			handler = new ZKExceptionHandler();
+			_handler.set(handler);
 		}
-		return currentHandler;
+		return handler;
 	}
-	
-	private ZKExceptionHandler () {}
-	
+
+	private ZKExceptionHandler() {
+	}
+
 	public void setExceptions(List l) {
 		if (l == null || l.size() < 1)
 			return;
-		exceptions.addAll(l);
-	}
-	
-	public List getExceptions() {
-		return exceptions;
-	}
-	
-	public void destroy() {
-		if (exceptions != null && exceptions.size() > 0) {
-			exceptions.clear();
-		}
+		_exceptions.addAll(l);
 	}
 
+	public List getExceptions() {
+		return _exceptions;
+	}
+
+	public void destroy() {
+		if (_exceptions != null && _exceptions.size() > 0) {
+			_exceptions.clear();
+		}
+	}
 }
