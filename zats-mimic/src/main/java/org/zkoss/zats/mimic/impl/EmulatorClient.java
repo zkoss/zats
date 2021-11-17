@@ -131,8 +131,8 @@ public class EmulatorClient implements Client, ClientCtrl {
 			fetchCookies(huc);
 			
 			// check if there exists any exception during connect
-			List l;
-			if ((l = ZKExceptionHandler.getInstance().getExceptions()).size() > 0) {
+			List l = ZKExceptionHandler.getExceptions(zulPath);
+			if (l != null && l.size() > 0) {
 				//only throw the first exception, and clear all once thrown
 				throw (Throwable)l.get(0);
 			}
@@ -169,7 +169,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 		} finally {
 			close(is);
 			//clear exceptions once thrown out
-			ZKExceptionHandler.getInstance().destroy();
+			ZKExceptionHandler.destroy(zulPath);
 		}
 	}
 
@@ -274,6 +274,8 @@ public class EmulatorClient implements Client, ClientCtrl {
 		// #ZATS-11: when post-flush, handlers process AU responses.
 		// They might require posting more AU requests immediately, so repeat posting.
 		while(auQueues.containsKey(desktopId) && auQueues.get(desktopId).size() > 0) {
+			DesktopAgent desktopAgent = desktopAgents.get(desktopId);
+			String requestPath = desktopAgent.getDesktop().getRequestPath();
 			try {
 				// combine AU events from queue into single request
 				StringBuilder sb = new StringBuilder();
@@ -302,8 +304,8 @@ public class EmulatorClient implements Client, ClientCtrl {
 				fetchCookies(c);
 
 				// check if there exists any exception during auRequest
-				List l;
-				if ((l = ZKExceptionHandler.getInstance().getExceptions()).size() > 0) {
+				List l = ZKExceptionHandler.getExceptions(requestPath);
+				if (l != null && l.size() > 0) {
 					//only throw the first exception, but can check in ZKExceptionHandler
 					throw (Throwable)l.get(0);
 				}
@@ -317,7 +319,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 				List<UpdateResponseHandler> handlers = ResponseHandlerManager.getInstance().getUpdateResponseHandlers();
 				for (UpdateResponseHandler h : handlers) {
 					try {
-						h.process(desktopAgents.get(desktopId), json);
+						h.process(desktopAgent, json);
 					} catch (Throwable e) {
 						logger.log(Level.SEVERE, e.getMessage(), e);
 					}
@@ -336,7 +338,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 			} finally {
 				close(os);
 				//clear exceptions once thrown out
-				ZKExceptionHandler.getInstance().destroy();
+				ZKExceptionHandler.destroy(requestPath);
 			}
 		}
 	}

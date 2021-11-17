@@ -1,37 +1,25 @@
 package org.zkoss.zats.mimic.exception;
 
-import java.util.ArrayList;
+import org.zkoss.lang.Strings;
+
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class ZKExceptionHandler {
-	private static final ThreadLocal<ZKExceptionHandler> _handler = new ThreadLocal<>();
-	private final List<Throwable> _exceptions = new ArrayList<>();
+	private static final ConcurrentMap<String, List<Throwable>> _exceptions = new ConcurrentHashMap<>();
 
-	public static ZKExceptionHandler getInstance() {
-		ZKExceptionHandler handler = _handler.get();
-		if (handler == null) {
-			handler = new ZKExceptionHandler();
-			_handler.set(handler);
-		}
-		return handler;
-	}
-
-	private ZKExceptionHandler() {
-	}
-
-	public void setExceptions(List l) {
-		if (l == null || l.size() < 1)
+	public static void putExceptions(String url, List l) {
+		if (Strings.isEmpty(url) || l == null || l.size() < 1)
 			return;
-		_exceptions.addAll(l);
+		_exceptions.put(url, l);
 	}
 
-	public List getExceptions() {
-		return _exceptions;
+	public static List getExceptions(String url) {
+		return _exceptions.get(url);
 	}
 
-	public void destroy() {
-		if (_exceptions != null && _exceptions.size() > 0) {
-			_exceptions.clear();
-		}
+	public static void destroy(String url) {
+		_exceptions.remove(url);
 	}
 }
