@@ -35,12 +35,6 @@ if [ "$Zats" = "" ] ; then
 	if [ ! -d "./zats-mimic" ] ; then
 		echo "zats-mimic path is not found!!"
 	fi
-	if [ ! -d "./zats-mimic-ext6" ] ; then
-		echo "zats-mimic-ext6 path is not found!!"
-	fi
-	if [ ! -d "./zats-mimic-ext7" ] ; then
-		echo "zats-mimic-ext7 path is not found!!"
-	fi
 	if [ ! -d "./zats-mimic-ext96" ] ; then
 		echo "zats-mimic-ext96 path is not found!!"
 	fi
@@ -102,7 +96,5 @@ upVer zats
 upVer zats-common
 upVer zats-example
 upVer zats-mimic
-upVer zats-mimic-ext6
-upVer zats-mimic-ext7
 upVer zats-mimic-ext96
 upVer zats-example

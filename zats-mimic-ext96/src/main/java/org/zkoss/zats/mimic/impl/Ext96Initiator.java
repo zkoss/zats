@@ -1,4 +1,4 @@
-/* Ext7Initiator.java
+/* Ext96Initiator.java
 
 	Purpose:
 		
