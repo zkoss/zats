@@ -16,16 +16,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.eclipse.jetty.util.IO;
-import org.zkoss.lang.Strings;
-import org.zkoss.zats.common.util.MultiPartOutputStream;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -37,7 +31,6 @@ import org.zkoss.zats.mimic.operation.UploadAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.sys.DesktopCtrl;
 
 /**
  * The builder implementation of dialog upload agent
@@ -91,65 +84,11 @@ public class DialogUploadAgentBuilder implements OperationAgentBuilder<DesktopAg
 			if (dialog == null || fileupload == null)
 				throw new AgentException("There is no dialog for uploading.");
 
-			OutputStream os = null;
-			InputStream is = null;
-			try {
-				// parameters 
-				String param = "?uuid={0}&dtid={1}&sid={2}&maxsize=undefined";
-				param = MessageFormat.format(param, fileupload.getUuid(), desktop.getId(), String.valueOf(sid));
-				// open connection
-				String boundary = Util.generateRandomString(); // boundary for multipart
-				ClientCtrl cc = (ClientCtrl) getClient();
-				HttpURLConnection conn = cc.getConnection("/zkau/upload" + param, "POST");
-				conn.addRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-				conn.setDoInput(true);
-				conn.setDoOutput(true);
-				os = conn.getOutputStream();
-				MultiPartOutputStream multipartStream = new MultiPartOutputStream(os, boundary);
-				if (logger.isLoggable(Level.FINEST)) {
-					logger.finest("desktop: " + desktop.getId());
-					logger.finest("upload URL: " + conn.getURL().toString());
-				}
-
-				// additional headers
-				String contentDisposition = "Content-Disposition: form-data; name=\"file\"; filename=\"{0}\"";
-				contentDisposition = MessageFormat.format(contentDisposition, fileName);
-				String[] headers = new String[] { contentDisposition };
-				// upload multipart data
-				multipartStream.startPart(contentType != null ? contentType : "application/octet-stream", headers); // default content type
-				int b;
-				while ((b = content.read()) >= 0)
-					multipartStream.write(b);
-				Util.close(multipartStream); // close before get input stream
-				// read response
-				String respMsg = conn.getResponseMessage();
-				is = conn.getInputStream();
-				String resp = IO.toString(is);
-				if (logger.isLoggable(Level.FINEST)) {
-					logger.finest("response message: " + respMsg);
-					logger.finest("response content: " + resp);
-				}
-
-			} catch (IOException e) {
-				throw new AgentException(e.getMessage(), e);
-			} finally {
-				Util.close(os);
-				Util.close(is);
-			}
-
-			// get the correct key
-			int key = ((DesktopCtrl) desktop.getDelegatee()).getNextKey() - 1;
-			String contentId = Strings.encode(new StringBuffer(12).append("z__ul_"), key).toString(); // copy from AuUploader
-			// perform AU
-			String cmd = "updateResult";
-			String desktopId = desktop.getId();
-			Event event = new Event(cmd, (Component) fileupload.getDelegatee());
-			Map<String, Object> data = EventDataManager.getInstance().build(event);
-			data.put("wid", fileupload.getUuid());
-			data.put("contentId", contentId);
-			data.put("sid", String.valueOf(sid++)); // increase sid
-			((ClientCtrl) getClient()).postUpdate(desktopId, fileupload.getUuid(), cmd, data, false);
-			((ClientCtrl) getClient()).flush(desktopId);
+			Map data = new HashMap<>();
+			data.put("file", new AbstractUploadAgentBuilder.FileItem(fileName, content, contentType));
+			((ClientCtrl) target.getClient()).postUpdate(target.getId(), fileupload.getUuid(), Events.ON_UPLOAD, data,
+					false);
+			((ClientCtrl) target.getClient()).flush(target.getId());
 		}
 
 		public void finish() {
@@ -167,9 +106,6 @@ public class DialogUploadAgentBuilder implements OperationAgentBuilder<DesktopAg
 			data.put("", true);
 			((ClientCtrl) getClient()).postUpdate(desktopId, dialog.getUuid(), Events.ON_CLOSE, data, false);
 			((ClientCtrl) getClient()).flush(desktopId);
-
-			// reset
-			sid = 0;
 		}
 	}
 }

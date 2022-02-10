@@ -14,29 +14,25 @@ package org.zkoss.zats.mimic.impl.operation;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.eclipse.jetty.util.IO;
-import org.zkoss.lang.Strings;
+
 import org.zkoss.zats.common.util.MultiPartOutputStream;
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.impl.ClientCtrl;
-import org.zkoss.zats.mimic.impl.EventDataManager;
 import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
 import org.zkoss.zats.mimic.impl.Util;
 import org.zkoss.zats.mimic.operation.UploadAgent;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.event.Events;
 
 /**
  * The abstract builder of upload agent.
@@ -48,6 +44,36 @@ public abstract class AbstractUploadAgentBuilder implements OperationAgentBuilde
 
 	public Class<UploadAgent> getOperationClass() {
 		return UploadAgent.class;
+	}
+
+	public static class FileItem {
+		String contentType;
+		String fileName;
+		InputStream inputStream;
+
+		public FileItem(File file, String contentType) throws FileNotFoundException {
+			this.inputStream = new FileInputStream(file);
+			this.fileName = file.getName();
+			this.contentType = contentType;
+		}
+
+		public FileItem(String fileName, InputStream file, String contentType) {
+			this.fileName = fileName;
+			this.inputStream = file;
+			this.contentType = contentType;
+		}
+
+		public String getFileName() {
+			return fileName;
+		}
+
+		public String getContentType() {
+			return contentType;
+		}
+
+		public InputStream getInputStream() {
+			return inputStream;
+		}
 	}
 
 	abstract class AbstractUploadAgentImpl extends AgentDelegator<ComponentAgent> implements UploadAgent {
@@ -83,85 +109,14 @@ public abstract class AbstractUploadAgentBuilder implements OperationAgentBuilde
 			if (content == null)
 				throw new NullPointerException("content stream can't be null.");
 
-			// first time upload
-			if (multipartStream == null) {
-
-				// fetch and check upload flag
-				String flag = getUploadFlag();
-				if (flag == null || flag.length() == 0)
-					throw new AgentException("upload feature doesn't turn on.");
-				else {
-					Map<String, String> attr = new HashMap<String, String>();
-					for (String token : flag.split("\\s*,\\s*")) {
-						if (token.trim().length() <= 0)
-							continue;
-						String[] tokens = token.split("[\\s=]+");
-						if (tokens.length == 1)
-							attr.put("", tokens[0]);
-						else if (tokens.length >= 2)
-							attr.put(tokens[0], tokens[1]);
-					}
-					String value = attr.get("");
-					if ("false".equals(value))
-						throw new AgentException("upload feature doesn't turn on.");
-					isMultiple = Boolean.parseBoolean(attr.get("multiple"));
-				}
-
-				try {
-					// parameters 
-					String param = "?uuid={0}&dtid={1}&sid=0&maxsize=undefined";
-					param = MessageFormat.format(param, target.getUuid(), target.getDesktop().getId());
-					// open connection
-					String boundary = Util.generateRandomString(); // boundary for multipart
-					ClientCtrl cc = (ClientCtrl) getClient();
-					conn = cc.getConnection("/zkau/upload" + param, "POST");
-					conn.addRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-					conn.setDoInput(true);
-					conn.setDoOutput(true);
-					OutputStream os = conn.getOutputStream();
-					multipartStream = new MultiPartOutputStream(os, boundary);
-				} catch (IOException e) {
-					clean();
-					throw new AgentException(e.getMessage(), e);
-				}
-			} else if (!isMultiple) { // check allow of multiple
-				throw new AgentException("multiple upload feature doesn't turn on.");
-			}
-
-			try {
-				// additional headers
-				String contentDisposition = "Content-Disposition: form-data; name=\"file\"; filename=\"{0}\"";
-				contentDisposition = MessageFormat.format(contentDisposition, fileName);
-				String[] headers = new String[] { contentDisposition };
-				// upload multipart data
-				multipartStream.startPart(contentType != null ? contentType : "application/octet-stream", headers); // default content type
-				int b;
-				while ((b = content.read()) >= 0)
-					multipartStream.write(b);
-			} catch (IOException e) {
-				clean();
-				throw new AgentException(e.getMessage(), e);
-			}
+			Map data = new HashMap<>();
+			data.put("file", new FileItem(fileName, content, contentType));
+			((ClientCtrl) target.getClient()).postUpdate(target.getDesktop().getId(), target.getUuid(),
+					Events.ON_UPLOAD, data, false);
 		}
 
 		public void finish() {
-			if (multipartStream == null)
-				return;
-
-			// finish upload first and get the correct key
-			clean();
-			int key = ((DesktopCtrl) target.getDesktop().getDelegatee()).getNextKey() - 1;
-			String contentId = Strings.encode(new StringBuffer(12).append("z__ul_"), key).toString(); // copy from AuUploader
-			// perform AU
-			String cmd = "updateResult";
-			String desktopId = target.getDesktop().getId();
-			Event event = new Event(cmd, (Component) target.getDelegatee());
-			Map<String, Object> data = EventDataManager.getInstance().build(event);
-			data.put("wid", target.getUuid());
-			data.put("contentId", contentId);
-			data.put("sid", "0");
-			((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
-			((ClientCtrl) target.getClient()).flush(desktopId);
+			((ClientCtrl) target.getClient()).flush(target.getDesktop().getId());
 		}
 
 		private void clean() {

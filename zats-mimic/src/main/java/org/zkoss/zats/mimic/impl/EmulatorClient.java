@@ -22,8 +22,17 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +50,7 @@ import org.zkoss.zats.mimic.EchoEventMode;
 import org.zkoss.zats.mimic.exception.ZKExceptionHandler;
 import org.zkoss.zats.mimic.impl.au.AuUtility;
 import org.zkoss.zats.mimic.impl.emulator.Emulator;
+import org.zkoss.zats.mimic.impl.operation.AbstractUploadAgentBuilder;
 import org.zkoss.zk.ui.Desktop;
 
 /**
@@ -221,8 +231,25 @@ public class EmulatorClient implements Client, ClientCtrl {
 		// queue such AU event
 		queue.add(new UpdateEvent(targetUUID, command, data, ignorable));
 	}
-	
-	private String getCombinedEventString(String desktopId) {
+
+	private Map<String, Object> deconstructPacket(Map<String, Object> data, List<AbstractUploadAgentBuilder.FileItem> files) {
+		if (data.isEmpty()) {
+			return data;
+		}
+		Map newData = new LinkedHashMap(data.size());
+		for (Map.Entry<String, Object> me : data.entrySet()) {
+			if (me.getValue() instanceof AbstractUploadAgentBuilder.FileItem) {
+				newData.put(me.getKey(), org.zkoss.util.Maps.of("_placeholder", true, "num", files.size()));
+				files.add(
+						(AbstractUploadAgentBuilder.FileItem) me.getValue());
+			} else {
+				newData.put(me.getKey(), me.getValue());
+			}
+		}
+		return newData;
+	}
+
+	private String getCombinedEventString(String desktopId, List<AbstractUploadAgentBuilder.FileItem> files) {
 
 		// collect all events
 		List<UpdateEvent> queue = new LinkedList<UpdateEvent>();
@@ -250,7 +277,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 			}
 			// event data
 			if (event.data != null && event.data.size() > 0) {
-				String jsonData = UrlEncoded.encodeString(JSONValue.toJSONString(event.data));
+				String jsonData = UrlEncoded.encodeString(JSONValue.toJSONString(deconstructPacket(event.data, files)));
 				sb.append("&data_").append(index).append("=").append(jsonData);
 			}
 			// ignorable
@@ -279,32 +306,46 @@ public class EmulatorClient implements Client, ClientCtrl {
 		while(auQueues.containsKey(desktopId) && auQueues.get(desktopId).size() > 0) {
 			final String zatsID = UUID.randomUUID().toString();
 			zatsIDs.add(zatsID);
-			DesktopAgent desktopAgent = desktopAgents.get(desktopId);
-			String requestPath = desktopAgent.getDesktop().getRequestPath();
 			try {
-				// combine AU events from queue into single request
-				StringBuilder sb = new StringBuilder();
-				sb.append("dtid=").append(UrlEncoded.encodeString(desktopId)); // desktop ID.
-				String combinedEvents = getCombinedEventString(desktopId); // this will clean such desktop's event queue
+				// for fileupload
+				List<AbstractUploadAgentBuilder.FileItem> files = new ArrayList<>();
+				String combinedEvents = getCombinedEventString(desktopId, files); // this will clean such desktop's event queue
 				if (combinedEvents == null) { // do nothing
 					return;
 				}
-				final String content = sb.append(combinedEvents).toString();
-
 				// create http request and perform it
 				HttpURLConnection c = getConnection("/zkau", "POST");
 				c.setDoOutput(true);
 				c.setDoInput(true);
 				c.addRequestProperty("ZATS_ID", zatsID);
-				c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-				if (logger.isLoggable(Level.FINEST)) {
-					logger.finest("HTTP request header: " + c.getRequestProperties());
-					logger.finest("HTTP request content: " + content);
+
+				// combine AU events from queue into single request
+				StringBuilder sb = new StringBuilder();
+				sb.append("dtid=").append(UrlEncoded.encodeString(desktopId)); // desktop ID.
+				final String content = sb.append(combinedEvents).toString();
+
+				if (files.isEmpty()) {
+
+					c.setRequestProperty("Content-Type",
+							"application/x-www-form-urlencoded;charset=UTF-8");
+					if (logger.isLoggable(Level.FINEST)) {
+						logger.finest("HTTP request header: " + c.getRequestProperties());
+						logger.finest("HTTP request content: " + content);
+					}
+					c.connect();
+					os = c.getOutputStream();
+					os.write(content.getBytes("utf-8"));
+					close(os);
+				} else {
+					FormDataUtility formData = new FormDataUtility(c,
+							"utf-8");
+					formData.addFormField("data", content);
+					formData.addFormField("attachments", files.size() + "");
+					for (int i = 0, j = files.size(); i < j; i++) {
+						formData.addFilePart("files_" + i, files.get(i));
+					}
+					formData.finish();
 				}
-				c.connect();
-				os = c.getOutputStream();
-				os.write(content.getBytes("utf-8"));
-				close(os);
 
 				// read and parse response, and pass to response handlers
 				fetchCookies(c);
@@ -325,7 +366,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 				List<UpdateResponseHandler> handlers = ResponseHandlerManager.getInstance().getUpdateResponseHandlers();
 				for (UpdateResponseHandler h : handlers) {
 					try {
-						h.process(desktopAgent, json);
+						h.process(desktopAgents.get(desktopId), json);
 					} catch (Throwable e) {
 						logger.log(Level.SEVERE, e.getMessage(), e);
 					}
