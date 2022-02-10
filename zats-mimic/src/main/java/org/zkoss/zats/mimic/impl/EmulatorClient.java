@@ -121,18 +121,20 @@ public class EmulatorClient implements Client, ClientCtrl {
 		if(zulPath == null)
 			throw new IllegalArgumentException("the path of ZUL can't be null");
 		
+		final String zatsID = UUID.randomUUID().toString();
 		InputStream is = null;
 		try {
 			// load zul page
 			HttpURLConnection huc = getConnection(zulPath, "GET");
+			huc.addRequestProperty("ZATS_ID", zatsID);
 			huc.connect();
 			
 			// read response 
 			fetchCookies(huc);
 			
 			// check if there exists any exception during connect
-			List l = ZKExceptionHandler.getExceptions(zulPath);
-			if (l != null && l.size() > 0) {
+			List l;
+			if ((l = ZKExceptionHandler.getInstance(zatsID).getExceptions()).size() > 0) {
 				//only throw the first exception, and clear all once thrown
 				throw (Throwable)l.get(0);
 			}
@@ -169,7 +171,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 		} finally {
 			close(is);
 			//clear exceptions once thrown out
-			ZKExceptionHandler.destroy(zulPath);
+			ZKExceptionHandler.getInstance(zatsID).destroy();
 		}
 	}
 
@@ -271,9 +273,12 @@ public class EmulatorClient implements Client, ClientCtrl {
 	public void flush(String desktopId) {
 		OutputStream os = null;
 
+		List<String> zatsIDs = new ArrayList<>();
 		// #ZATS-11: when post-flush, handlers process AU responses.
 		// They might require posting more AU requests immediately, so repeat posting.
 		while(auQueues.containsKey(desktopId) && auQueues.get(desktopId).size() > 0) {
+			final String zatsID = UUID.randomUUID().toString();
+			zatsIDs.add(zatsID);
 			DesktopAgent desktopAgent = desktopAgents.get(desktopId);
 			String requestPath = desktopAgent.getDesktop().getRequestPath();
 			try {
@@ -290,6 +295,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 				HttpURLConnection c = getConnection("/zkau", "POST");
 				c.setDoOutput(true);
 				c.setDoInput(true);
+				c.addRequestProperty("ZATS_ID", zatsID);
 				c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 				if (logger.isLoggable(Level.FINEST)) {
 					logger.finest("HTTP request header: " + c.getRequestProperties());
@@ -304,8 +310,8 @@ public class EmulatorClient implements Client, ClientCtrl {
 				fetchCookies(c);
 
 				// check if there exists any exception during auRequest
-				List l = ZKExceptionHandler.getExceptions(requestPath);
-				if (l != null && l.size() > 0) {
+				List l;
+				if ((l = ZKExceptionHandler.getInstance(zatsID).getExceptions()).size() > 0) {
 					//only throw the first exception, but can check in ZKExceptionHandler
 					throw (Throwable)l.get(0);
 				}
@@ -338,7 +344,9 @@ public class EmulatorClient implements Client, ClientCtrl {
 			} finally {
 				close(os);
 				//clear exceptions once thrown out
-				ZKExceptionHandler.destroy(requestPath);
+				for (String zatsId : zatsIDs) {
+					ZKExceptionHandler.destroy(zatsId);
+				}
 			}
 		}
 	}

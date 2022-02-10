@@ -1,25 +1,46 @@
 package org.zkoss.zats.mimic.exception;
 
-import org.zkoss.lang.Strings;
-
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public class ZKExceptionHandler {
-	private static final ConcurrentMap<String, List<Throwable>> _exceptions = new ConcurrentHashMap<>();
+	private String zatsId;
+	private List<Throwable> exceptions = new ArrayList<>();
+	private static ConcurrentMap<String, ZKExceptionHandler> instances = new ConcurrentHashMap<>();
 
-	public static void putExceptions(String url, List l) {
-		if (Strings.isEmpty(url) || l == null || l.size() < 1)
+	public static ZKExceptionHandler getInstance(String zatsID) {
+		Objects.requireNonNull(zatsID);
+		return instances.computeIfAbsent(zatsID, key -> new ZKExceptionHandler(key));
+	}
+
+	public static void destroy(String zatsId) {
+		ZKExceptionHandler zkExceptionHandler = instances.get(zatsId);
+		if (zkExceptionHandler != null) {
+			zkExceptionHandler.destroy();
+		}
+	}
+
+	private ZKExceptionHandler(String zatsId) {
+		this.zatsId = zatsId;
+	}
+
+	public void setExceptions(List l) {
+		if (l == null || l.size() < 1)
 			return;
-		_exceptions.put(url, l);
+		exceptions.addAll(l);
 	}
 
-	public static List getExceptions(String url) {
-		return _exceptions.get(url);
+	public List getExceptions() {
+		return exceptions;
 	}
 
-	public static void destroy(String url) {
-		_exceptions.remove(url);
+	public void destroy() {
+		if (exceptions != null && exceptions.size() > 0) {
+			exceptions.clear();
+		}
+		instances.remove(zatsId);
 	}
 }
