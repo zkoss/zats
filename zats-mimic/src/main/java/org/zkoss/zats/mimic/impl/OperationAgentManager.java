@@ -51,6 +51,7 @@ import org.zkoss.zats.mimic.impl.operation.input.TimeInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.select.ComboitemSelectAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.select.LisitemSelectAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.select.ListitemMultipleSelectAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.select.SelectboxSelectByIndexAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.select.TabSelectAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.select.TreeSelectAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.select.TreeitemMultipleSelectAgentBuilder;
@@ -66,6 +67,7 @@ import org.zkoss.zul.Center;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Column;
 import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Combobutton;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Decimalbox;
@@ -88,6 +90,7 @@ import org.zkoss.zul.North;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Panel;
 import org.zkoss.zul.Popup;
+import org.zkoss.zul.Selectbox;
 import org.zkoss.zul.Slider;
 import org.zkoss.zul.South;
 import org.zkoss.zul.Spinner;
@@ -263,7 +266,11 @@ public class OperationAgentManager {
 		if(Util.hasClass(extClz)){
 			registerBuilder("5.0.0", "*", extClz,
 					"org.zkoss.zats.mimic.impl.operation.input.TextInputAgentBuilder");
-		} 
+		}
+
+		registerBuilder("7.0.0", "*", Toolbarbutton.class, new GenericCheckAgentBuilder());
+		registerBuilder("7.0.0", "*", Combobutton.class, new GenericOpenAgentBuilder());
+		registerBuilder("7.0.0", "*", Selectbox.class, new SelectboxSelectByIndexAgentBuilder());
 	}
 
 	/**

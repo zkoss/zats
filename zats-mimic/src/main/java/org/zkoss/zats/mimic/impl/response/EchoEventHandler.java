@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.zkoss.zats.common.json.JSONObject;
+import org.zkoss.zats.common.json.JSONValue;
 import org.zkoss.zats.mimic.Client;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.EchoEventMode;
@@ -61,7 +63,8 @@ public class EchoEventHandler implements UpdateResponseHandler, LayoutResponseHa
 	}
 
 	protected String parseUuid(Object object) {
-		return object.toString();
+		JSONObject json = (JSONObject) JSONValue.parse(object.toString());
+		return json.get("$u").toString();
 	}
 
 	public void process(DesktopAgent desktopAgent, String response) {

@@ -17,4 +17,4 @@ cp zats/target/zats-mimic-$VERSION.zip $BIN_FOLDER
 
 cp zats-common/target/zats-common-$VERSION-bundle.jar $MVN_FOLDER
 cp zats-mimic/target/zats-mimic-$VERSION-bundle.jar $MVN_FOLDER
-cp zats-mimic-ext96/target/zats-mimic-ext96-$VERSION-bundle.jar $MVN_FOLDER
+cp zats-mimic-ext96/target/zats-mimic-ext-$VERSION-bundle.jar $MVN_FOLDER

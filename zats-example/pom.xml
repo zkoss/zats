@@ -65,7 +65,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
-			<artifactId>zats-mimic-ext96</artifactId>
+			<artifactId>zats-mimic-ext</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

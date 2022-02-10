@@ -46,7 +46,7 @@
 	<modules>
 		<module>../zats-common</module>
 		<module>../zats-mimic</module>
-		<module>../zats-mimic-ext96</module>
+		<module>../zats-mimic-ext</module>
 		<module>../zats-example</module>
 	</modules>
 	<version>5.0.0-SNAPSHOT</version>

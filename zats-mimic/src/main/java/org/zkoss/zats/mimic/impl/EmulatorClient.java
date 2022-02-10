@@ -239,7 +239,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 		Map newData = new LinkedHashMap(data.size());
 		for (Map.Entry<String, Object> me : data.entrySet()) {
 			if (me.getValue() instanceof AbstractUploadAgentBuilder.FileItem) {
-				newData.put(me.getKey(), org.zkoss.util.Maps.of("_placeholder", true, "num", files.size()));
+				newData.put(me.getKey(), mapsOf("_placeholder", true, "num", files.size()));
 				files.add(
 						(AbstractUploadAgentBuilder.FileItem) me.getValue());
 			} else {
@@ -541,5 +541,16 @@ public class EmulatorClient implements Client, ClientCtrl {
 			this.data = data;
 			this.ignorable = ignorable;
 		}
+	}
+
+	/**
+	 * Returns a map containing the given mappings.
+	 */
+	public Map mapsOf(Object... args) {
+		Map<Object, Object> map = new HashMap<>(args.length / 2);
+		for (int i = 0; i < args.length; i += 2) {
+			map.put(args[i], args[i + 1]);
+		}
+		return map;
 	}
 }

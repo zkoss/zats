@@ -14,7 +14,10 @@ package org.zkoss.zats.mimic.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.zkoss.bind.Binder;
+import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.zats.mimic.Agent;
+import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
 import org.zkoss.zk.ui.event.Event;
 
@@ -24,25 +27,26 @@ import org.zkoss.zk.ui.event.Event;
  */
 public class ValueResolverManager {
 	private static ValueResolverManager instance;
-	
-	public static synchronized ValueResolverManager getInstance(){
-		if(instance==null){
-			instance = new ValueResolverManager(); 
+
+	public static synchronized ValueResolverManager getInstance() {
+		if (instance == null) {
+			instance = new ValueResolverManager();
 		}
 		return instance;
 	}
+
 	private Map<String, ValueResolver> resolvers = new HashMap<String, ValueResolver>();
 
 	public ValueResolverManager() {
-	
+
 		//ComponentAgent resolver
-		registerResolver("5.0.0","*", "agent", new ValueResolver(){
+		registerResolver("5.0.0", "*", "agent", new ValueResolver() {
 			@SuppressWarnings("unchecked")
 			public <T> T resolve(Agent agent, Class<T> clazz) {
 				if (OperationAgent.class.isAssignableFrom(clazz)) {
 					Class<OperationAgent> opc = (Class<OperationAgent>) clazz;
-					OperationAgentBuilder<Agent, OperationAgent> builder = OperationAgentManager.getInstance().getBuilder(
-							agent.getDelegatee(), opc);
+					OperationAgentBuilder<Agent, OperationAgent> builder = OperationAgentManager.getInstance()
+							.getBuilder(agent.getDelegatee(), opc);
 					if (builder != null)
 						return (T) builder.getOperation(agent);
 				}
@@ -50,7 +54,7 @@ public class ValueResolverManager {
 			}
 		});
 		//ZK native component resolver
-		registerResolver("5.0.0","*", "component", new ValueResolver(){
+		registerResolver("5.0.0", "*", "component", new ValueResolver() {
 			@SuppressWarnings("unchecked")
 			public <T> T resolve(Agent agent, Class<T> clazz) {
 				if (clazz.isInstance(agent.getDelegatee())) {
@@ -59,44 +63,62 @@ public class ValueResolverManager {
 				return null;
 			}
 		});
+
+		registerResolver("9.6.0", "*", "component", new ValueResolver() {
+			@SuppressWarnings("unchecked")
+			public <T> T resolve(Agent agent, Class<T> clazz) {
+				if (agent instanceof ComponentAgent) {
+					Object binder = ((ComponentAgent) agent).getAttribute(BinderImpl.BINDER);
+					if (binder != null && binder instanceof Binder) {
+						Object vm = ((Binder) binder).getViewModel();
+						if (vm != null && clazz.isInstance(vm)) {
+							return (T) vm;
+						}
+					}
+				}
+				return null;
+			}
+		});
 	}
-	
-	@SuppressWarnings({ "rawtypes"})
+
+	@SuppressWarnings({ "rawtypes" })
 	public void registerResolver(String startVersion, String endVersion, String key, String resolverClazz) {
 		if (startVersion == null || endVersion == null || resolverClazz == null)
 			throw new IllegalArgumentException();
-		
-		if(!Util.checkVersion(startVersion,endVersion)) return;
+
+		if (!Util.checkVersion(startVersion, endVersion))
+			return;
 		ValueResolver resolver = null;
-		try{
+		try {
 			Class buildClz = Class.forName(resolverClazz);
-			resolver = (ValueResolver)buildClz.newInstance();
-		}catch(Exception x){
-			throw new IllegalArgumentException(x.getMessage(),x);
+			resolver = (ValueResolver) buildClz.newInstance();
+		} catch (Exception x) {
+			throw new IllegalArgumentException(x.getMessage(), x);
 		}
-		
-		registerResolver(startVersion,endVersion, key, resolver);
+
+		registerResolver(startVersion, endVersion, key, resolver);
 	}
 
-	
-	public <T extends Event> 
-		void registerResolver(String startVersion, String endVersion, String key, ValueResolver resolver) {
-		
-		if (startVersion == null || endVersion == null || key == null || resolver==null)
+	public <T extends Event> void registerResolver(String startVersion, String endVersion, String key,
+			ValueResolver resolver) {
+
+		if (startVersion == null || endVersion == null || key == null || resolver == null)
 			throw new IllegalArgumentException();
 
-		if(!Util.checkVersion(startVersion,endVersion)) return;
+		if (!Util.checkVersion(startVersion, endVersion))
+			return;
 		// ZATS-11: note that, the key can be used for replacing previous one and prevent duplicate handlers
 		resolvers.put(key, resolver);
 	}
-	
+
 	/**
 	 * resolve the component agent to a object with registered value resolver
 	 */
-	public <T> T resolve(Agent agent, Class<T> clazz){
+	public <T> T resolve(Agent agent, Class<T> clazz) {
 		for (ValueResolver r : resolvers.values()) {
 			T obj = r.resolve(agent, clazz);
-			if(obj!=null) return obj;
+			if (obj != null)
+				return obj;
 		}
 		return null;
 	}

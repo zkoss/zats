@@ -11,9 +11,9 @@
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 <config>
-	<config-name>zats-mimic-ext96</config-name><!-- used to resolve dependency -->
+	<config-name>zats-mimic-ext</config-name><!-- used to resolve dependency -->
 	<depends>zul</depends>
 	<listener>
-		<listener-class>org.zkoss.zats.mimic.impl.Ext96Initiator</listener-class>
+		<listener-class>org.zkoss.zats.mimic.impl.ExtInitiator</listener-class>
 	</listener>
 </config>
