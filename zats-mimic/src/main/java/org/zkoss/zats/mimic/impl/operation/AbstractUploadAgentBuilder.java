@@ -100,7 +100,7 @@ public abstract class AbstractUploadAgentBuilder implements OperationAgentBuilde
 				Util.close(is);
 			}
 		}
-		
+
 		protected abstract String getUploadFlag();
 
 		public void upload(String fileName, InputStream content, String contentType) {

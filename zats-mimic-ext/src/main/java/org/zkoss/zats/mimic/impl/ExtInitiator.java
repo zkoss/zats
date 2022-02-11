@@ -1,4 +1,4 @@
-/* Ext96Initiator.java
+/* ExtInitiator.java
 
 	Purpose:
 		
@@ -18,7 +18,7 @@ import org.zkoss.zk.ui.util.WebAppInit;
  * @author dennis
  * @author jameschu
  */
-public class Ext96Initiator implements WebAppInit {
+public class ExtInitiator implements WebAppInit {
 
 	public void init(WebApp wapp) throws Exception {
 		//testcases and mimic server is in the same vm.

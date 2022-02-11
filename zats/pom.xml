@@ -49,7 +49,7 @@
 		<module>../zats-mimic-ext</module>
 		<module>../zats-example</module>
 	</modules>
-	<version>5.0.0-SNAPSHOT</version>
+	<version>10.0.0-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>

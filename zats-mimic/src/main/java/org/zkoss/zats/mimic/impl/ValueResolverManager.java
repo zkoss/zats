@@ -64,7 +64,7 @@ public class ValueResolverManager {
 			}
 		});
 
-		registerResolver("9.6.0", "*", "component", new ValueResolver() {
+		registerResolver("6.0.0", "*", "bind", new ValueResolver() {
 			@SuppressWarnings("unchecked")
 			public <T> T resolve(Agent agent, Class<T> clazz) {
 				if (agent instanceof ComponentAgent) {

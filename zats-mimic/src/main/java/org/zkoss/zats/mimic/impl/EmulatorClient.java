@@ -40,6 +40,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.jetty.util.UrlEncoded;
+
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.common.json.JSONValue;
 import org.zkoss.zats.common.json.parser.ParseException;
@@ -66,19 +67,19 @@ public class EmulatorClient implements Client, ClientCtrl {
 	private Map<String, List<UpdateEvent>> auQueues; // AU queues of desktops
 	private Map<String, List<UpdateEvent>> auQueues4piggyback; // AU queues for piggyback events
 	private EchoEventMode echoEventMode = EchoEventMode.IMMEDIATE;
-	
+
 	public EmulatorClient(Emulator emulator) {
 		this.emulator = emulator;
 		this.auQueues = new ConcurrentHashMap<String, List<UpdateEvent>>();
 		this.auQueues4piggyback = new ConcurrentHashMap<String, List<UpdateEvent>>();
 	}
-	
+
 	public DesktopAgent connectAsIncluded(String zulPath, Map<String, Object> args) {
-		if(zulPath == null)
+		if (zulPath == null)
 			throw new IllegalArgumentException("the path of ZUL can't be null");
 		if (args == null)
 			args = new HashMap<String, Object>();
-		
+
 		// generate key and map for transferring data into server side
 		String key = "zats_" + Long.toString(Thread.currentThread().getId(), 36);
 		Map<String, Object> data = new HashMap<String, Object>();
@@ -97,17 +98,15 @@ public class EmulatorClient implements Client, ClientCtrl {
 		return desktop;
 	}
 
-	public DesktopAgent connectWithContent(String content, String ext,
-			ComponentAgent parent, Map<String, Object> args) {
+	public DesktopAgent connectWithContent(String content, String ext, ComponentAgent parent,
+			Map<String, Object> args) {
 		if (content == null)
-			throw new IllegalArgumentException(
-					"the content of ZUL can't be null");
+			throw new IllegalArgumentException("the content of ZUL can't be null");
 		if (args == null)
 			args = new HashMap<String, Object>();
 
 		// generate key and map for transferring data into server side
-		String key = "zats_"
-				+ Long.toString(Thread.currentThread().getId(), 36);
+		String key = "zats_" + Long.toString(Thread.currentThread().getId(), 36);
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("content", content);
 		data.put("ext", ext);
@@ -128,9 +127,9 @@ public class EmulatorClient implements Client, ClientCtrl {
 	}
 
 	public DesktopAgent connect(String zulPath) {
-		if(zulPath == null)
+		if (zulPath == null)
 			throw new IllegalArgumentException("the path of ZUL can't be null");
-		
+
 		final String zatsID = UUID.randomUUID().toString();
 		InputStream is = null;
 		try {
@@ -138,26 +137,26 @@ public class EmulatorClient implements Client, ClientCtrl {
 			HttpURLConnection huc = getConnection(zulPath, "GET");
 			huc.addRequestProperty("ZATS_ID", zatsID);
 			huc.connect();
-			
+
 			// read response 
 			fetchCookies(huc);
-			
+
 			// check if there exists any exception during connect
 			List l;
 			if ((l = ZKExceptionHandler.getInstance(zatsID).getExceptions()).size() > 0) {
 				//only throw the first exception, and clear all once thrown
-				throw (Throwable)l.get(0);
+				throw (Throwable) l.get(0);
 			}
-			
+
 			is = huc.getInputStream();
 			String raw = getReplyString(is, huc.getContentEncoding());
-			
+
 			// get specified objects such as Desktop
 			Desktop desktop = (Desktop) emulator.getRequestAttributes().get("javax.zkoss.zk.ui.desktop");
 			// TODO, what if a non-zk(zul) page, throw exception?
 			DesktopAgent desktopAgent = new DefaultDesktopAgent(this, desktop);
 			desktopAgents.put(desktopAgent.getId(), desktopAgent);
-			
+
 			// pass layout response to response handlers
 			List<LayoutResponseHandler> handlers = ResponseHandlerManager.getInstance().getLayoutResponseHandlers();
 			for (LayoutResponseHandler h : handlers) {
@@ -171,7 +170,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 				logger.finest("HTTP response header: " + huc.getHeaderFields());
 				logger.finest("HTTP response content: " + raw);
 			}
-			
+
 			// ZATS-11: must flush AU requests after layout 
 			flush(desktopAgent.getId());
 
@@ -205,22 +204,25 @@ public class EmulatorClient implements Client, ClientCtrl {
 		postUpdate(desktopAgent.getId(), null, "rmDesktop", null, true);
 		flush(desktopAgent.getId());
 	}
-	
-	public void postUpdate(String desktopId, String targetUUID, String command, Map<String, Object> data, boolean ignorable) {
+
+	public void postUpdate(String desktopId, String targetUUID, String command, Map<String, Object> data,
+			boolean ignorable) {
 		postUpdate(desktopId, targetUUID, command, data, ignorable, false);
 	}
-	
-	public void postPiggyback(String desktopId, String targetUUID, String command, Map<String, Object> data, boolean ignorable) {
+
+	public void postPiggyback(String desktopId, String targetUUID, String command, Map<String, Object> data,
+			boolean ignorable) {
 		postUpdate(desktopId, targetUUID, command, data, ignorable, true);
 	}
-	
-	private void postUpdate(String desktopId, String targetUUID, String command, Map<String, Object> data, boolean ignorable, boolean piggyback) {
-		if(desktopId==null){
+
+	private void postUpdate(String desktopId, String targetUUID, String command, Map<String, Object> data,
+			boolean ignorable, boolean piggyback) {
+		if (desktopId == null) {
 			throw new IllegalArgumentException("desktop id is null");
-		}else if(command == null){
+		} else if (command == null) {
 			throw new IllegalArgumentException("command is null");
 		}
-		
+
 		// get or create AU queue
 		Map<String, List<UpdateEvent>> queues = piggyback ? auQueues4piggyback : auQueues;
 		List<UpdateEvent> queue = queues.get(desktopId);
@@ -232,7 +234,8 @@ public class EmulatorClient implements Client, ClientCtrl {
 		queue.add(new UpdateEvent(targetUUID, command, data, ignorable));
 	}
 
-	private Map<String, Object> deconstructPacket(Map<String, Object> data, List<AbstractUploadAgentBuilder.FileItem> files) {
+	private Map<String, Object> deconstructPacket(Map<String, Object> data,
+			List<AbstractUploadAgentBuilder.FileItem> files) {
 		if (data.isEmpty()) {
 			return data;
 		}
@@ -240,8 +243,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 		for (Map.Entry<String, Object> me : data.entrySet()) {
 			if (me.getValue() instanceof AbstractUploadAgentBuilder.FileItem) {
 				newData.put(me.getKey(), mapsOf("_placeholder", true, "num", files.size()));
-				files.add(
-						(AbstractUploadAgentBuilder.FileItem) me.getValue());
+				files.add((AbstractUploadAgentBuilder.FileItem) me.getValue());
 			} else {
 				newData.put(me.getKey(), me.getValue());
 			}
@@ -303,7 +305,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 		List<String> zatsIDs = new ArrayList<>();
 		// #ZATS-11: when post-flush, handlers process AU responses.
 		// They might require posting more AU requests immediately, so repeat posting.
-		while(auQueues.containsKey(desktopId) && auQueues.get(desktopId).size() > 0) {
+		while (auQueues.containsKey(desktopId) && auQueues.get(desktopId).size() > 0) {
 			final String zatsID = UUID.randomUUID().toString();
 			zatsIDs.add(zatsID);
 			try {
@@ -326,8 +328,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 
 				if (files.isEmpty()) {
 
-					c.setRequestProperty("Content-Type",
-							"application/x-www-form-urlencoded;charset=UTF-8");
+					c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 					if (logger.isLoggable(Level.FINEST)) {
 						logger.finest("HTTP request header: " + c.getRequestProperties());
 						logger.finest("HTTP request content: " + content);
@@ -337,8 +338,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 					os.write(content.getBytes("utf-8"));
 					close(os);
 				} else {
-					FormDataUtility formData = new FormDataUtility(c,
-							"utf-8");
+					FormDataUtility formData = new FormDataUtility(c, "utf-8");
 					formData.addFormField("data", content);
 					formData.addFormField("attachments", files.size() + "");
 					for (int i = 0, j = files.size(); i < j; i++) {
@@ -354,7 +354,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 				List l;
 				if ((l = ZKExceptionHandler.getInstance(zatsID).getExceptions()).size() > 0) {
 					//only throw the first exception, but can check in ZKExceptionHandler
-					throw (Throwable)l.get(0);
+					throw (Throwable) l.get(0);
 				}
 
 				String raw = getReplyString(c.getInputStream(), parseCharset(c));
@@ -393,10 +393,11 @@ public class EmulatorClient implements Client, ClientCtrl {
 	}
 
 	private static Pattern CHARSET_PATTERN = Pattern.compile("(?i)\\bcharset=\\s*\"?([^\\s;\"]*)");
+
 	private String parseCharset(HttpURLConnection c) {
 		Matcher matcher = CHARSET_PATTERN.matcher(c.getContentType());
 		String charset = null;
-		if(matcher.find() ) {
+		if (matcher.find()) {
 			charset = matcher.group(1).trim().toUpperCase(Locale.ENGLISH);
 		}
 		return charset;
@@ -422,14 +423,14 @@ public class EmulatorClient implements Client, ClientCtrl {
 			throw new ZatsException(e.getMessage(), e);
 		}
 	}
-	
+
 	public InputStream openConnection(String path) throws IOException {
 		HttpURLConnection c = getConnection(path, "GET");
 		c.setDoOutput(false);
 		c.setDoInput(true);
 		return c.getInputStream();
 	}
-	
+
 	private void close(Closeable c) {
 		try {
 			c.close();
@@ -463,8 +464,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 	}
 
 	@SuppressWarnings("deprecation")
-	private void fetchCookies(HttpURLConnection connection)
-	{
+	private void fetchCookies(HttpURLConnection connection) {
 		// fetch and parse cookies from connection
 		List<String> list = connection.getHeaderFields().get("Set-Cookie");
 		if (list == null)
@@ -498,11 +498,11 @@ public class EmulatorClient implements Client, ClientCtrl {
 			}
 		}
 	}
-	
+
 	public void setCookie(String key, String value) {
 		if (key == null || key.startsWith("$"))
-			throw new IllegalArgumentException(key == null ? "cookie key name can't be null"
-					: "cookie key name can't be start with '$'");
+			throw new IllegalArgumentException(
+					key == null ? "cookie key name can't be null" : "cookie key name can't be start with '$'");
 		if (value != null)
 			cookies.put(key, value);
 		else
@@ -520,7 +520,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 	}
 
 	public void setEchoEventMode(EchoEventMode mode) {
-		if(mode != null) {
+		if (mode != null) {
 			echoEventMode = mode;
 		}
 	}
@@ -528,13 +528,13 @@ public class EmulatorClient implements Client, ClientCtrl {
 	public EchoEventMode getEchoEventMode() {
 		return echoEventMode;
 	}
-	
+
 	private static class UpdateEvent {
 		String uuid;
 		String cmd;
 		Map<String, Object> data;
 		boolean ignorable = false;
-		
+
 		UpdateEvent(String uuid, String cmd, Map<String, Object> data, boolean ignorable) {
 			this.uuid = uuid;
 			this.cmd = cmd;

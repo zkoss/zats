@@ -62,8 +62,7 @@ public class DefaultComponentAgent implements ComponentAgent {
 	@SuppressWarnings("unchecked")
 	public List<ComponentAgent> getChildren() {
 		List<Component> children = comp.getChildren();
-		List<ComponentAgent> agents = new ArrayList<ComponentAgent>(
-				children.size());
+		List<ComponentAgent> agents = new ArrayList<ComponentAgent>(children.size());
 		for (Component child : children)
 			agents.add(new DefaultComponentAgent(pageAgent, child));
 		return agents;
@@ -72,11 +71,11 @@ public class DefaultComponentAgent implements ComponentAgent {
 	public ComponentAgent getFirstChild() {
 		return asAgent(comp.getFirstChild());
 	}
-	
+
 	public ComponentAgent getLastChild() {
 		return asAgent(comp.getLastChild());
 	}
-	
+
 	private ComponentAgent asAgent(Component child) {
 		return child != null ? new DefaultComponentAgent(pageAgent, child) : null;
 	}
@@ -84,19 +83,18 @@ public class DefaultComponentAgent implements ComponentAgent {
 	public ComponentAgent getNextSibling() {
 		return asAgent(comp.getNextSibling());
 	}
-	
+
 	public ComponentAgent getPreviousSibling() {
 		return asAgent(comp.getPreviousSibling());
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public ComponentAgent getChild(int index) {
 		List children = comp.getChildren();
 		if (index < 0 || children.size() <= index) {
-			throw new IndexOutOfBoundsException(
-					"Index: "+index+", Size: "+ children.size());
+			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + children.size());
 		}
-		return asAgent((Component)children.get(index));
+		return asAgent((Component) children.get(index));
 	}
 
 	public ComponentAgent getParent() {
@@ -117,13 +115,14 @@ public class DefaultComponentAgent implements ComponentAgent {
 
 	public <T> T as(Class<T> clazz) {
 		T obj = ValueResolverManager.getInstance().resolve(this, clazz);
-		if(obj!=null) return obj;
-		throw new AgentException("cannot resolve " + clazz.getName() +" for "+ getType());
+		if (obj != null)
+			return obj;
+		throw new AgentException("cannot resolve " + clazz.getName() + " for " + getType());
 	}
 
 	public <T> boolean is(Class<T> clazz) {
 		T obj = ValueResolverManager.getInstance().resolve(this, clazz);
-		return obj!=null;
+		return obj != null;
 	}
 
 	@Override
@@ -137,75 +136,68 @@ public class DefaultComponentAgent implements ComponentAgent {
 	}
 
 	public ComponentAgent query(String selector) {
-		return Searcher.find(this,selector);
+		return Searcher.find(this, selector);
 	}
 
 	public List<ComponentAgent> queryAll(String selector) {
-		return Searcher.findAll(this,selector);
+		return Searcher.findAll(this, selector);
 	}
-	
-	public String toString(){
-		return new StringBuilder().append(getClass().getSimpleName())
-			.append("@").append(Integer.toHexString(System.identityHashCode(this)))	
-			.append("[").append(comp.toString()).append("]")
-			.toString();
+
+	public String toString() {
+		return new StringBuilder().append(getClass().getSimpleName()).append("@")
+				.append(Integer.toHexString(System.identityHashCode(this))).append("[").append(comp.toString())
+				.append("]").toString();
 	}
-	
+
 	//for internal test only utility class
 	public void dump() {
 		StringBuilder sb = new StringBuilder();
-		dump(sb,this,0);
+		dump(sb, this, 0);
 		System.out.println(sb.toString());
 	}
-	private void dump(StringBuilder sb, ComponentAgent agent,int indent) {
+
+	private void dump(StringBuilder sb, ComponentAgent agent, int indent) {
 		List<ComponentAgent> children = agent.getChildren();
 		StringBuffer idt = new StringBuffer();
-		for(int i=0;i<indent;i++){
+		for (int i = 0; i < indent; i++) {
 			idt.append("  ");
 		}
 		sb.append(idt);
 		Component zkc = agent.as(Component.class);
-		String nm = zkc.getClass().getSimpleName(); 
+		String nm = zkc.getClass().getSimpleName();
 		sb.append("<");
 		sb.append(nm);
 		sb.append(" uuid=\"").append(zkc.getUuid()).append("\"");
-		
+
 		String id = zkc.getId();
-		if(id != null ){
+		if (id != null) {
 			sb.append(" id=\"").append(id).append("\"");
 		}
-		
-		if(children.size()>0){
+
+		if (children.size() > 0) {
 			sb.append(">\n");
-		}else{
+		} else {
 			sb.append(" />\n");
 		}
-		
-		for(ComponentAgent w:children){
-			dump(sb,w,indent+1);
+
+		for (ComponentAgent w : children) {
+			dump(sb, w, indent + 1);
 		}
-		
-		if(children.size()>0){
+
+		if (children.size() > 0) {
 			sb.append(idt);
 			sb.append("</").append(nm).append(">\n");
 		}
 	}
-	
+
 	public Object getDelegatee() {
 		return getOwner();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <T extends Component> T getOwner() {
 		return (T) comp;
 	}
-	
-	
-	
-	
-	
-	
-	
 	//================= the impl. of short-cut method
 
 	public void click() {
@@ -215,7 +207,7 @@ public class DefaultComponentAgent implements ComponentAgent {
 	public void type(String value) {
 		as(InputAgent.class).type(value);
 	}
-	
+
 	public void input(Object value) {
 		as(InputAgent.class).input(value);
 	}
@@ -223,7 +215,7 @@ public class DefaultComponentAgent implements ComponentAgent {
 	public void focus() {
 		as(FocusAgent.class).focus();
 	}
-	
+
 	public void blur() {
 		as(FocusAgent.class).blur();
 	}
@@ -233,9 +225,9 @@ public class DefaultComponentAgent implements ComponentAgent {
 	}
 
 	public void stroke(String key) {
-		as(KeyStrokeAgent.class).stroke(key);		
+		as(KeyStrokeAgent.class).stroke(key);
 	}
-	
+
 	public void select() {
 		as(SelectAgent.class).select();
 	}
