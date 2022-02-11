@@ -87,6 +87,18 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zkex</artifactId>
+			<version>${zk.version}-Eval</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zkmax</artifactId>
+			<version>${zk.version}-Eval</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.zkoss.zats</groupId>
 			<artifactId>zats-common</artifactId>
 			<version>${project.version}</version>

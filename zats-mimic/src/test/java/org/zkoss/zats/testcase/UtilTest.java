@@ -35,7 +35,7 @@ public class UtilTest {
 
 	@Test
 	public void testVersion() {
-		Assert.assertTrue(Util.isZKVersion(5));
+		Assert.assertTrue(Util.isZKVersion(9));
 		Assert.assertFalse(Util.isZKVersion(6));
 	}
 

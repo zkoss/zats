@@ -26,64 +26,64 @@ import org.zkoss.zats.ZatsException;
 public class Util {
 	private static Logger logger = Logger.getLogger(Util.class.getName());
 	private static BigInteger zkVersion; // current zk version
-	
+
 	static {
 		// load current zk version
 		try {
 			String version = Version.class.getField("UID").get(null).toString();
 			zkVersion = Util.parseVersion(version);
-			if(zkVersion == null) {
+			if (zkVersion == null) {
 				throw new Exception("failed to parse ZK version string: " + version);
 			}
 		} catch (Throwable e) {
 			throw new ZatsException("cannot load zk", e);
 		}
 	}
-	
+
 	public static BigInteger getZKVersion() {
 		return zkVersion;
 	}
-	
-	public static boolean isZKVersion(int primaryVer){
+
+	public static boolean isZKVersion(int primaryVer) {
 		byte[] ver = zkVersion.toByteArray();
-		if(ver!=null && ver.length>=3){
-			return ver[0]==primaryVer;
+		if (ver != null && ver.length >= 3) {
+			return ver[0] == primaryVer;
 		}
 		return false;
 	}
-	
-	public static boolean hasClass(String className){
-		try{
-			try{
+
+	public static boolean hasClass(String className) {
+		try {
+			try {
 				Util.class.getClassLoader().loadClass(className);
 				return true;
-			}catch(ClassNotFoundException x){
+			} catch (ClassNotFoundException x) {
 				return false;
 			}
-		}catch(Throwable x){
+		} catch (Throwable x) {
 			logger.warning(x.getMessage());
 		}
 		return false;
 	}
-	
+
 	/**
 	 * check the given version range is match current ZK version or not.
 	 * it accepts wildcard "*". e.g * or 5.0.* or 6.*.* 
 	 */
-	public static boolean checkVersion(String startVersion, String endVersion){
+	public static boolean checkVersion(String startVersion, String endVersion) {
 		// check version
 		// If current isn't between start and end version, ignore this register.
 		BigInteger start = "*".equals(startVersion.trim()) ? BigInteger.ZERO
 				: Util.parseVersion(startVersion.replaceAll("[*]", "0"));
-		BigInteger end = "*".equals(endVersion.trim()) ? BigInteger
-				.valueOf(Long.MAX_VALUE) : Util.parseVersion(endVersion.replaceAll("[*]", String.valueOf(Byte.MAX_VALUE)));
+		BigInteger end = "*".equals(endVersion.trim()) ? BigInteger.valueOf(Long.MAX_VALUE)
+				: Util.parseVersion(endVersion.replaceAll("[*]", String.valueOf(Byte.MAX_VALUE)));
 		if (start == null || end == null)
 			throw new IllegalArgumentException("wrong version format");
 		if (zkVersion.compareTo(start) < 0 || zkVersion.compareTo(end) > 0)
 			return false;
 		return true;
 	}
-	
+
 	/**
 	 * close resource without any exception.
 	 * @param r resource. If null, do nothing.
@@ -137,8 +137,9 @@ public class Util {
 			}
 		};
 	}
-	
+
 	public static String generateRandomString() {
-		return "zats-" + Integer.toHexString(System.identityHashCode(Util.class)) + new BigInteger(64, new Random()).abs().toString(36);
+		return "zats-" + Integer.toHexString(System.identityHashCode(Util.class))
+				+ new BigInteger(64, new Random()).abs().toString(36);
 	}
 }
