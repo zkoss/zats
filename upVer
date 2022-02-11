@@ -62,7 +62,6 @@ function upVer {
 
 upVer zats
 upVer zats-common
-upVer zats-example
 upVer zats-mimic
 upVer zats-mimic-ext
 upVer zats-example
