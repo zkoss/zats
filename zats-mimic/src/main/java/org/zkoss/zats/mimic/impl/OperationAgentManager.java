@@ -37,6 +37,7 @@ import org.zkoss.zats.mimic.impl.operation.ListheaderSortAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.MenuitemUploadAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.PagingAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.PanelSizeAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.RadioCheckAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.SliderInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.TextboxOpenAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.TreecolSortAgentBuilder;
@@ -90,6 +91,7 @@ import org.zkoss.zul.North;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Panel;
 import org.zkoss.zul.Popup;
+import org.zkoss.zul.Radio;
 import org.zkoss.zul.Selectbox;
 import org.zkoss.zul.Slider;
 import org.zkoss.zul.South;
@@ -271,6 +273,8 @@ public class OperationAgentManager {
 		registerBuilder("7.0.0", "*", Toolbarbutton.class, new GenericCheckAgentBuilder());
 		registerBuilder("7.0.0", "*", Combobutton.class, new GenericOpenAgentBuilder());
 		registerBuilder("7.0.0", "*", Selectbox.class, new SelectboxSelectByIndexAgentBuilder());
+
+		registerBuilder("10.0.0", "*", Radio.class, new RadioCheckAgentBuilder());
 	}
 
 	/**
