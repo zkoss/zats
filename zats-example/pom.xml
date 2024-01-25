@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.zats</groupId>
 	<artifactId>zats-example</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
+	<version>3.0.0</version>
 	<name>ZK Application Test Suite - Example</name>
 	<url>https://www.zkoss.org/zats</url>
 	<licenses>
@@ -43,9 +43,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
-		<maven.compiler.source>1.6</maven.compiler.source>
-		<maven.compiler.target>1.6</maven.compiler.target>
-		<zk.version>8.5.0</zk.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<zk.version>9.6.0</zk.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -64,8 +64,13 @@
 			<version>${zk.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>2.19.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.zkoss.zats</groupId>
-			<artifactId>zats-mimic-ext7</artifactId>
+			<artifactId>zats-mimic-ext96</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
