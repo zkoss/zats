@@ -1,3 +1,11 @@
+ZATS Mimic 10.0.0
+* Features
+* Bugs
+
+* Upgrade Notes
+	+ Upgrade jetty to 10.0.15
+
+	--------
 ZATS Mimic 3.0.0
 * Features
 * Bugs
@@ -5,7 +13,7 @@ ZATS Mimic 3.0.0
 * Upgrade Notes
 	+ updated to jetty 10.0.5 (requires JDK 11+ to run Tests)
 
-        --------
+	--------
 ZATS Mimic 2.2.0
 * Features
 * Bugs
