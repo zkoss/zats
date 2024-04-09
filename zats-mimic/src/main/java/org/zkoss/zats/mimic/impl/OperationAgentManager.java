@@ -43,12 +43,14 @@ import org.zkoss.zats.mimic.impl.operation.TextboxOpenAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.TreecolSortAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.WindowSizeAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.DateInputAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.input.DateTypeAgentBuilderZK96;
 import org.zkoss.zats.mimic.impl.operation.input.DecimalInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.DecimalStringInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.IntegerInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.IntegerStringInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.TextInputAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.input.TimeInputAgentBuilder;
+import org.zkoss.zats.mimic.impl.operation.input.TimeTypeAgentBuilderZK96;
 import org.zkoss.zats.mimic.impl.operation.select.ComboitemSelectAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.select.LisitemSelectAgentBuilder;
 import org.zkoss.zats.mimic.impl.operation.select.ListitemMultipleSelectAgentBuilder;
@@ -105,6 +107,7 @@ import org.zkoss.zul.Treecol;
 import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.West;
 import org.zkoss.zul.Window;
+import org.zkoss.zkmax.zul.Navitem;
 import org.zkoss.zul.impl.InputElement;
 
 /**
@@ -143,137 +146,147 @@ public class OperationAgentManager {
 		resolvedBuilders = Collections.synchronizedMap(new HashMap<OperationAgentManager.Key, OperationAgentBuilder<? extends Agent, ? extends OperationAgent>>());
 
 		//most common agents
-		registerBuilder("5.0.0", "*", Desktop.class, new DesktopBookmarkAgentBuilder());
+		registerBuilder("9.6.0", "*", Desktop.class, new DesktopBookmarkAgentBuilder());
 
-		registerBuilder("5.0.0", "*", AbstractComponent.class, new GenericClickAgentBuilder());
-		registerBuilder("5.0.0", "*", AbstractComponent.class, new GenericKeyStrokeAgentBuilder());
-		registerBuilder("5.0.0", "*", Component.class, new AuAgentBuilder());
+		registerBuilder("9.6.0", "*", AbstractComponent.class, new GenericClickAgentBuilder());
+		registerBuilder("9.6.0", "*", AbstractComponent.class, new GenericKeyStrokeAgentBuilder());
+		registerBuilder("9.6.0", "*", Component.class, new AuAgentBuilder());
 
 		// the focus
-		registerBuilder("5.0.0", "*", InputElement.class, new GenericFocusAgentBuilder());
-		registerBuilder("5.0.0", "*", A.class, new GenericFocusAgentBuilder());
-		registerBuilder("5.0.0", "*", Button.class, new GenericFocusAgentBuilder());
-		registerBuilder("5.0.0", "*", Checkbox.class, new GenericFocusAgentBuilder());
-		registerBuilder("5.0.0", "*", Listbox.class, new GenericFocusAgentBuilder());
-		registerBuilder("5.0.0", "*", Tree.class,new GenericFocusAgentBuilder());
+		registerBuilder("9.6.0", "*", InputElement.class, new GenericFocusAgentBuilder());
+		registerBuilder("9.6.0", "*", A.class, new GenericFocusAgentBuilder());
+		registerBuilder("9.6.0", "*", Button.class, new GenericFocusAgentBuilder());
+		registerBuilder("9.6.0", "*", Checkbox.class, new GenericFocusAgentBuilder());
+		registerBuilder("9.6.0", "*", Listbox.class, new GenericFocusAgentBuilder());
+		registerBuilder("9.6.0", "*", Tree.class,new GenericFocusAgentBuilder());
 		
 		// the inputs
-		registerBuilder("5.0.0", "*", InputElement.class, new TextInputAgentBuilder());
-		registerBuilder("5.0.0", "*", Intbox.class, new IntegerInputAgentBuilder());
-		registerBuilder("5.0.0", "*", Longbox.class, new IntegerStringInputAgentBuilder());
-		registerBuilder("5.0.0", "*", Spinner.class, new IntegerInputAgentBuilder());
+		registerBuilder("9.6.0", "*", InputElement.class, new TextInputAgentBuilder());
+		registerBuilder("9.6.0", "*", Intbox.class, new IntegerInputAgentBuilder());
+		registerBuilder("9.6.0", "*", Longbox.class, new IntegerStringInputAgentBuilder());
+		registerBuilder("9.6.0", "*", Spinner.class, new IntegerInputAgentBuilder());
 
-		registerBuilder("5.0.0", "*", Decimalbox.class, new DecimalStringInputAgentBuilder());
-		registerBuilder("5.0.0", "*", Doublebox.class, new DecimalInputAgentBuilder());
-		registerBuilder("5.0.0", "*", Doublespinner.class, new DecimalInputAgentBuilder());
+		registerBuilder("9.6.0", "*", Decimalbox.class, new DecimalStringInputAgentBuilder());
+		registerBuilder("9.6.0", "*", Doublebox.class, new DecimalInputAgentBuilder());
+		registerBuilder("9.6.0", "*", Doublespinner.class, new DecimalInputAgentBuilder());
 
-		registerBuilder("5.0.0", "*", Datebox.class, new DateInputAgentBuilder());
-		registerBuilder("5.0.0", "*", Timebox.class, new TimeInputAgentBuilder());
+		registerBuilder("9.6.0", "*", Datebox.class, new DateTypeAgentBuilderZK96());
+		registerBuilder("9.6.0", "*", Timebox.class, new TimeTypeAgentBuilderZK96());
 
 		// the check
-		registerBuilder("5.0.0", "*", Menuitem.class,new GenericCheckAgentBuilder());
+		registerBuilder("9.6.0", "*", Menuitem.class,new GenericCheckAgentBuilder());
 		// the check of check box and radio button
-		registerBuilder("5.0.0", "*", Checkbox.class, new GenericCheckAgentBuilder());
-		
+		registerBuilder("9.6.0", "*", Checkbox.class, new GenericCheckAgentBuilder());
+		registerBuilder("9.6.0", "*", Toolbarbutton.class, new GenericCheckAgentBuilder());
+
 		// the single select
-		registerBuilder("5.0.0", "*", Comboitem.class, new ComboitemSelectAgentBuilder());
-		registerBuilder("5.0.0", "*", Tab.class, new TabSelectAgentBuilder());
-		registerBuilder("5.0.0", "*", Listitem.class, new LisitemSelectAgentBuilder());
-		registerBuilder("5.0.0", "*", Treeitem.class, new TreeSelectAgentBuilder());
-		
+		registerBuilder("9.6.0", "*", Comboitem.class, new ComboitemSelectAgentBuilder());
+		registerBuilder("9.6.0", "*", Tab.class, new TabSelectAgentBuilder());
+		registerBuilder("9.6.0", "*", Listitem.class, new LisitemSelectAgentBuilder());
+		registerBuilder("9.6.0", "*", Treeitem.class, new TreeSelectAgentBuilder());
+
 		// the multiple select
-		registerBuilder("5.0.0", "*", Listitem.class, new ListitemMultipleSelectAgentBuilder());
-		registerBuilder("5.0.0", "*", Treeitem.class, new TreeitemMultipleSelectAgentBuilder());
-		
+		registerBuilder("9.6.0", "*", Listitem.class, new ListitemMultipleSelectAgentBuilder());
+		registerBuilder("9.6.0", "*", Treeitem.class, new TreeitemMultipleSelectAgentBuilder());
+
+		// select by index
+		registerBuilder("9.6.0", "*", Selectbox.class, new SelectboxSelectByIndexAgentBuilder());
+
 		// the open
-		registerBuilder("5.0.0", "*", Groupbox.class, new GenericOpenAgentBuilder());
-		registerBuilder("5.0.0", "*", Detail.class, new GenericOpenAgentBuilder());
-		registerBuilder("5.0.0", "*", Group.class, new GenericOpenAgentBuilder());
-		registerBuilder("5.0.0", "*", Listgroup.class, new GenericOpenAgentBuilder());
-		registerBuilder("5.0.0", "*", Treeitem.class, new GenericOpenAgentBuilder());
-		registerBuilder("5.0.0", "*", Window.class, new GenericOpenAgentBuilder());
-		registerBuilder("5.0.0", "*", Panel.class, new GenericOpenAgentBuilder());
-		registerBuilder("5.0.0", "*", Center.class, new GenericOpenAgentBuilder());
-		registerBuilder("5.0.0", "*", North.class, new GenericOpenAgentBuilder());
-		registerBuilder("5.0.0", "*", East.class, new GenericOpenAgentBuilder());
-		registerBuilder("5.0.0", "*", West.class, new GenericOpenAgentBuilder());
-		registerBuilder("5.0.0", "*", South.class, new GenericOpenAgentBuilder());
-		registerBuilder("5.0.0", "*", Splitter.class, new GenericOpenAgentBuilder());
-		registerBuilder("5.0.0", "*", Popup.class, new GenericOpenAgentBuilder());
+		registerBuilder("9.6.0", "*", Groupbox.class, new GenericOpenAgentBuilder());
+		registerBuilder("9.6.0", "*", Detail.class, new GenericOpenAgentBuilder());
+		registerBuilder("9.6.0", "*", Group.class, new GenericOpenAgentBuilder());
+		registerBuilder("9.6.0", "*", Listgroup.class, new GenericOpenAgentBuilder());
+		registerBuilder("9.6.0", "*", Treeitem.class, new GenericOpenAgentBuilder());
+		registerBuilder("9.6.0", "*", Window.class, new GenericOpenAgentBuilder());
+		registerBuilder("9.6.0", "*", Panel.class, new GenericOpenAgentBuilder());
+		registerBuilder("9.6.0", "*", Center.class, new GenericOpenAgentBuilder());
+		registerBuilder("9.6.0", "*", North.class, new GenericOpenAgentBuilder());
+		registerBuilder("9.6.0", "*", East.class, new GenericOpenAgentBuilder());
+		registerBuilder("9.6.0", "*", West.class, new GenericOpenAgentBuilder());
+		registerBuilder("9.6.0", "*", South.class, new GenericOpenAgentBuilder());
+		registerBuilder("9.6.0", "*", Splitter.class, new GenericOpenAgentBuilder());
+		registerBuilder("9.6.0", "*", Popup.class, new GenericOpenAgentBuilder());
 		
-		registerBuilder("5.0.0", "*", Bandbox.class, new TextboxOpenAgentBuilder());
-		registerBuilder("5.0.0", "*", Combobox.class, new TextboxOpenAgentBuilder());
-		
+		registerBuilder("9.6.0", "*", Bandbox.class, new TextboxOpenAgentBuilder());
+		registerBuilder("9.6.0", "*", Combobox.class, new TextboxOpenAgentBuilder());
+		registerBuilder("9.6.0", "*", Combobutton.class, new GenericOpenAgentBuilder());
+
 		// the close
-		registerBuilder("5.0.0", "*", Window.class,new GenericCloseAgentBuilder());
-		registerBuilder("5.0.0", "*", Panel.class, new GenericCloseAgentBuilder());
-		registerBuilder("5.0.0", "*", Tab.class,new GenericCloseAgentBuilder());
+		registerBuilder("9.6.0", "*", Window.class,new GenericCloseAgentBuilder());
+		registerBuilder("9.6.0", "*", Panel.class, new GenericCloseAgentBuilder());
+		registerBuilder("9.6.0", "*", Tab.class,new GenericCloseAgentBuilder());
 
 		// the render
-		registerBuilder("5.0.0", "*", Listbox.class, new ListboxRenderAgentBuilder());
-		registerBuilder("5.0.0", "*", Grid.class, new GridRenderAgentBuilder());
+		registerBuilder("9.6.0", "*", Listbox.class, new ListboxRenderAgentBuilder());
+		registerBuilder("9.6.0", "*", Grid.class, new GridRenderAgentBuilder());
 
 		// the resize
-		registerBuilder("5.0.0", "*", Window.class, new WindowSizeAgentBuilder());
-		registerBuilder("5.0.0", "*", Panel.class, new PanelSizeAgentBuilder());
-//		registerBuilder("5.0.0", "*", Column.class, new HeaderSizeAgentBuilder());
-//		registerBuilder("5.0.0", "*", Listheader.class, new HeaderSizeAgentBuilder());
-//		registerBuilder("5.0.0", "*", Treecol.class, new HeaderSizeAgentBuilder());
+		registerBuilder("9.6.0", "*", Window.class, new WindowSizeAgentBuilder());
+		registerBuilder("9.6.0", "*", Panel.class, new PanelSizeAgentBuilder());
+//		registerBuilder("9.6.0", "*", Column.class, new HeaderSizeAgentBuilder());
+//		registerBuilder("9.6.0", "*", Listheader.class, new HeaderSizeAgentBuilder());
+//		registerBuilder("9.6.0", "*", Treecol.class, new HeaderSizeAgentBuilder());
 
 		//drag & drop
-		registerBuilder("5.0.0", "*", HtmlBasedComponent.class, new GenericDragAgentBuilder());
+		registerBuilder("9.6.0", "*", HtmlBasedComponent.class, new GenericDragAgentBuilder());
 		
 		//hover
-		registerBuilder("5.0.0", "*", HtmlBasedComponent.class, new GenericHoverAgentBuilder());
+		registerBuilder("9.6.0", "*", HtmlBasedComponent.class, new GenericHoverAgentBuilder());
 		
 		//paging
-		registerBuilder("5.0.0", "*", Paging.class, new PagingAgentBuilder());
+		registerBuilder("9.6.0", "*", Paging.class, new PagingAgentBuilder());
 		
 		//group
-		registerBuilder("5.0.0", "*", Column.class, new GenericGroupAgentBuilder());
+		registerBuilder("9.6.0", "*", Column.class, new GenericGroupAgentBuilder());
 
 		//sort
-		registerBuilder("5.0.0", "*", Column.class, new ColumnSortAgentBuilder());
-		registerBuilder("5.0.0", "*", Listheader.class, new ListheaderSortAgentBuilder());
-		registerBuilder("5.0.0", "*", Treecol.class, new TreecolSortAgentBuilder());
+		registerBuilder("9.6.0", "*", Column.class, new ColumnSortAgentBuilder());
+		registerBuilder("9.6.0", "*", Listheader.class, new ListheaderSortAgentBuilder());
+		registerBuilder("9.6.0", "*", Treecol.class, new TreecolSortAgentBuilder());
 		
 		// the scroll
-		registerBuilder("5.0.0", "*", Slider.class, new SliderInputAgentBuilder());
+		registerBuilder("9.6.0", "*", Slider.class, new SliderInputAgentBuilder());
 		
 		// the move
-		registerBuilder("5.0.0", "*", Window.class, new GenericMoveAgentBuilder());
-		registerBuilder("5.0.0", "*", Panel.class, new GenericMoveAgentBuilder());
+		registerBuilder("9.6.0", "*", Window.class, new GenericMoveAgentBuilder());
+		registerBuilder("9.6.0", "*", Panel.class, new GenericMoveAgentBuilder());
 		
 		// upload
-		registerBuilder("5.0.0", "*", Button.class, new ButtonUploadAgentBuilder());
-		registerBuilder("5.0.0", "*", Fileupload.class, new ButtonUploadAgentBuilder());
-		registerBuilder("5.0.0", "*", Toolbarbutton.class, new ButtonUploadAgentBuilder());
-		registerBuilder("5.0.0", "*", Menuitem.class, new MenuitemUploadAgentBuilder());
-		registerBuilder("5.0.0", "*", Desktop.class, new DialogUploadAgentBuilder());
+		registerBuilder("9.6.0", "*", Button.class, new ButtonUploadAgentBuilder());
+		registerBuilder("9.6.0", "*", Fileupload.class, new ButtonUploadAgentBuilder());
+		registerBuilder("9.6.0", "*", Toolbarbutton.class, new ButtonUploadAgentBuilder());
+		registerBuilder("9.6.0", "*", Menuitem.class, new MenuitemUploadAgentBuilder());
+		registerBuilder("9.6.0", "*", Desktop.class, new DialogUploadAgentBuilder());
 		
 		//----------special case ---
-		
-		
-		String extClz; 
-		
-		//colorbox in zkex.jar which is optional
-		extClz = "org.zkoss.zkex.zul.Colorbox";
-		if(Util.hasClass(extClz)){
-			registerBuilder("5.0.0", "*", extClz,
-					"org.zkoss.zats.mimic.impl.operation.input.ColorboxInputAgentBuilder");
-		}
-		
-		// the ckeditor (optional)
-		extClz = "org.zkforge.ckez.CKeditor";
-		if(Util.hasClass(extClz)){
-			registerBuilder("5.0.0", "*", extClz,
-					"org.zkoss.zats.mimic.impl.operation.input.TextInputAgentBuilder");
+
+		if (Util.hasClass("org.zkoss.bind.Binder")) { // zkbind
+			ValueResolverManager.getInstance().registerResolver("9.6.0", "*", "bind",
+					"org.zkoss.zats.mimic.impl.BindValueResolver");
 		}
 
+		String colorboxClassName = "org.zkoss.zkex.zul.Colorbox"; // zkex
+		if(Util.hasClass(colorboxClassName)){
+			registerBuilder("9.6.0", "*", colorboxClassName,
+					"org.zkoss.zats.mimic.impl.operation.input.ColorboxInputAgentBuilder");
+		}
+
+		String navitemClassName = "org.zkoss.zkmax.zul.Navitem"; // zkmax only
+		if(Util.hasClass(navitemClassName)){
+			registerBuilder("9.6.0", "*", navitemClassName,
+					"org.zkoss.zats.mimic.impl.operation.select.NavitemSelectAgentBuilder");
+		}
+
+		// the ckeditor (optional)
+		String ckeditorClassName = "org.zkforge.ckez.CKeditor";
+		if(Util.hasClass(ckeditorClassName)){
+			registerBuilder("9.6.0", "*", ckeditorClassName,
+					"org.zkoss.zats.mimic.impl.operation.input.TextInputAgentBuilder");
+		}
 		registerBuilder("7.0.0", "*", Toolbarbutton.class, new GenericCheckAgentBuilder());
 		registerBuilder("7.0.0", "*", Combobutton.class, new GenericOpenAgentBuilder());
 		registerBuilder("7.0.0", "*", Selectbox.class, new SelectboxSelectByIndexAgentBuilder());
-
 		registerBuilder("10.0.0", "*", Radio.class, new RadioCheckAgentBuilder());
 	}
 
