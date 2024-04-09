@@ -4,10 +4,15 @@ maindir="$(pwd)"
 ver=$(head -1 version)
 stamp=$(date +%Y%m%d%H)
 target=$1
-if [ "$target" == "official" ] ; then
-	pver=$ver
-else
-	pver=$ver-FL-$stamp
+isJakarta=$2
+echo "is jakarta?$pver"
+if [ "$isJakarta" = "true" ] ; then
+	pver=$ver-jakarta
+fi
+echo $pver
+
+if [ "$target" = "FL" ] ; then
+	pver=$pver-FL-$stamp
 fi
 
 echo $pver

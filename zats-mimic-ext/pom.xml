@@ -43,7 +43,7 @@
 	<packaging>jar</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<zk.version>9.6.0-Eval</zk.version>
+		<zk.version>10.0.0-jakarta</zk.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -61,6 +61,19 @@
 	</repositories>
 	<dependencies>
 		<dependency>
+			<groupId>org.zkoss.zats</groupId>
+			<artifactId>zats-mimic</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zats</groupId>
+			<artifactId>zats-mimic</artifactId>
+			<version>${project.version}</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.13.1</version>
@@ -68,37 +81,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zhtml</artifactId>
-			<version>${zk.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zkbind</artifactId>
-			<version>${zk.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zkmax</artifactId>
-			<version>${zk.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.zats</groupId>
-			<artifactId>zats-mimic</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.zkforge</groupId>
-			<artifactId>ckez</artifactId>
-			<version>4.17.1.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zul</artifactId>
-			<version>${zk.version}</version>
+			<version>${zk.version}-Eval</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

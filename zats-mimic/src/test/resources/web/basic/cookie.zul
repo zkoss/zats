@@ -11,19 +11,19 @@
 	</vbox>
 	<zscript><![CDATA[
 	public void setCookie() {
-		javax.servlet.http.HttpServletResponse resp = (javax.servlet.http.HttpServletResponse)Executions.getCurrent().getNativeResponse();
-		resp.addCookie(new javax.servlet.http.Cookie("myCookie", myCookie.getValue()));
+		jakarta.servlet.http.HttpServletResponse resp = (jakarta.servlet.http.HttpServletResponse)Executions.getCurrent().getNativeResponse();
+		resp.addCookie(new jakarta.servlet.http.Cookie("myCookie", myCookie.getValue()));
 	}
 	public void eraseCookie() {
-		javax.servlet.http.HttpServletResponse resp = (javax.servlet.http.HttpServletResponse)Executions.getCurrent().getNativeResponse();
-		javax.servlet.http.Cookie cookie = new javax.servlet.http.Cookie("myCookie", null);
+		jakarta.servlet.http.HttpServletResponse resp = (jakarta.servlet.http.HttpServletResponse)Executions.getCurrent().getNativeResponse();
+		jakarta.servlet.http.Cookie cookie = new jakarta.servlet.http.Cookie("myCookie", null);
 		cookie.setMaxAge(0);
 		resp.addCookie(cookie);
 	}
 	public void showCookies() {
-		javax.servlet.http.HttpServletRequest req = (javax.servlet.http.HttpServletRequest)Executions.getCurrent().getNativeRequest();
+		jakarta.servlet.http.HttpServletRequest req = (jakarta.servlet.http.HttpServletRequest)Executions.getCurrent().getNativeRequest();
 		StringBuilder sb = new StringBuilder();
-		for(javax.servlet.http.Cookie c : req.getCookies())
+		for(jakarta.servlet.http.Cookie c : req.getCookies())
 			sb.append(c.getName()).append("=").append(c.getValue()).append(";");
 		msg.setValue(sb.toString());
 	}

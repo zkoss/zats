@@ -1,7 +1,7 @@
 package org.zkoss.zats.example.testcase.util;
 
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.Zats;
