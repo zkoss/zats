@@ -1,9 +1,9 @@
 /* AuUtility.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		2012/3/22 Created by dennis
 
@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstNode;
@@ -42,7 +44,7 @@ import org.zkoss.zsoup.select.Elements;
 
 /**
  * A utility for AU.
- * 
+ *
  * @author dennis
  * @author jumperchen
  */
@@ -83,7 +85,7 @@ public class AuUtility {
 		if(comp==null) return;
 		data.put("reference", comp.getUuid());
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	static private Object toSafeJsonObject(Object obj){
 		if(obj instanceof Set){
@@ -95,9 +97,9 @@ public class AuUtility {
 		}
 		return obj;
 	}
-	
+
 	/**
-	 * convert JSON object of AU. response to AuResponse list. 
+	 * convert JSON object of AU. response to AuResponse list.
 	 * @param jsonObject AU. response. If null, throw null point exception.
 	 * @return list of AuResponse if the format of object is valid, or null if otherwise.
 	 */
@@ -130,7 +132,35 @@ public class AuUtility {
 		}
 		return list;
 	}
-	
+
+	// Support ZK 10.1.0 with Java Encoder APIs.
+	public static String decodeHexEscapes(String input) {
+		// Pattern matches hexadecimal escape sequences
+		String regex = "\\\\x([0-9A-F]{2})";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(input);
+
+		StringBuffer sb = new StringBuffer();
+
+		while (matcher.find()) {
+			String hex = matcher.group(1);
+			String replacement;
+			if (hex.equals("5C")) {  // Special case for backslash
+				replacement = "\\\\";
+			} else if (hex.equals("27")) {  // Special case for backslash
+				replacement = "\\\\'";
+			} else {  // General case for other hex values
+				int charCode = Integer.parseInt(hex, 16);
+				replacement = Character.toString((char) charCode);
+			}
+			matcher.appendReplacement(sb, replacement);
+		}
+		matcher.appendTail(sb);
+
+		return sb.toString();
+	}
+
+
 	public static Map<String, Object> parseAuResponseFromLayout(String raw) {
 		try {
 			String zkmxArgs = null;
@@ -155,9 +185,12 @@ public class AuUtility {
 				return null;
 			}
 
+			// Support ZK 10.1.0 with Java Encoder APIs.
+			zkmxArgs = decodeHexEscapes(zkmxArgs);
+
 			// ZATS-25: filter non-JSON part (i.e. real JS code)
 			String json = filterNonJSON(zkmxArgs);
-			
+
 			// parse to JSON and wrap to map
 			JSONArray layoutCmds = (JSONArray) JSONValue.parseWithException(json);
 			if (layoutCmds.size() < 3) {
@@ -169,7 +202,7 @@ public class AuUtility {
 			for (int i = 0; i < rawAuCmds.size(); i += 2) {
 				Object cmd = rawAuCmds.get(i);
 				Object data = rawAuCmds.get(i + 1);
-				// check data type 
+				// check data type
 				if (!(data instanceof JSONArray)) {
 					data = JSONValue.parseWithException(String.valueOf(data));
 				}
@@ -179,15 +212,15 @@ public class AuUtility {
 				auCmds.add(a);
 			}
 			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("rs", auCmds); // compatible with AU response 
+			map.put("rs", auCmds); // compatible with AU response
 			return map;
 
 		} catch (Exception e) {
 			throw new ZatsException("Code could not be parsed:\n" + raw, e);
 		}
 	}
-	
-	
+
+
 	/**
 	 * @return an json array text contained specified function's arguments, or null otherwise.
 	 */
@@ -231,14 +264,14 @@ public class AuUtility {
 		}
 		int start = lp + call.getAbsolutePosition() + 1;
 		int end = rp + call.getAbsolutePosition();
-		return "[" + code.substring(start, end) + "]"; 
+		return "[" + code.substring(start, end) + "]";
 	}
-	
+
 	public static String filterNonJSON(String json) {
 		// prefix for valid js code
 		String prefix = "var tmp = ";
 		StringBuilder src = new StringBuilder(prefix).append(json);
-		
+
 		// parse js
 		Parser parser = new Parser();
 		AstRoot root = parser.parse(src.toString(), null, 0);
@@ -257,7 +290,7 @@ public class AuUtility {
 
 		// sort and make sure ordered
 		Collections.sort(functions);
-		
+
 		// filter function declaration by replacing functions (last to first)
 		for(int i = functions.size() - 1 ; i >= 0 ; --i) {
 			FunctionNode func = functions.get(i);
