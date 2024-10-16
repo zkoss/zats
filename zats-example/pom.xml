@@ -1,92 +1,111 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.zkoss.zats</groupId>
-	<artifactId>zats-example</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
-	<name>ZK Application Test Suite - Example</name>
-	<url>https://www.zkoss.org/zats</url>
-	<licenses>
-		<license>
-			<name>GNU GENERAL PUBLIC LICENSE, Version 2</name>
-			<url>http://www.gnu.org/licenses/gpl-2.0.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-	<scm>
-		<url>https://github.com/zkoss/zats</url>
-		<connection>scm:git:https://github.com/zkoss/zats</connection>
-	</scm>
-	<organization>
-		<name>Potix Corporation</name>
-		<url>https://www.zkoss.org</url>
-	</organization>
-	<developers>
-		<developer>
-			<id>zkteam</id>
-			<name>ZK Team</name>
-			<email>info@zkoss.org</email>
-			<url>https://www.zkoss.org</url>
-			<organization>Potix Corporation</organization>
-			<organizationUrl>https://www.zkoss.org</organizationUrl>
-			<roles>
-				<role>architect</role>
-				<role>developer</role>
-			</roles>
-			<timezone>8</timezone>
-			<properties>
-				<picUrl>https://www.zkoss.org</picUrl>
-			</properties>
-		</developer>
-	</developers>
-	<packaging>war</packaging>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
-		<maven.compiler.source>1.6</maven.compiler.source>
-		<maven.compiler.target>1.6</maven.compiler.target>
-		<zk.version>8.5.0</zk.version>
-	</properties>
-	<repositories>
-		<repository>
-			<id>zk repository</id>
-			<url>https://mavensync.zkoss.org/maven2</url>
-		</repository>
-		<repository>
-			<id>ZK EE Evaluation</id>
-			<url>https://mavensync.zkoss.org/zk/ee-eval</url>
-		</repository>
-	</repositories>
-	<dependencies>
-		<dependency>
-			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zhtml</artifactId>
-			<version>${zk.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.zats</groupId>
-			<artifactId>zats-mimic-ext7</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13.1</version>
-			<scope>test</scope>
-		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>org.testng</groupId>-->
-			<!--<artifactId>testng</artifactId>-->
-			<!--<version>6.1.1</version>-->
-			<!--<scope>test</scope>-->
-		<!--</dependency>-->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
-	<description>Examples code for ZATS Essentials and other examples.</description>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.zkoss.zats</groupId>
+    <artifactId>zats-example</artifactId>
+    <version>3.0.0</version>
+    <name>ZK Application Test Suite - Example</name>
+    <url>https://www.zkoss.org/zats</url>
+    <licenses>
+        <license>
+            <name>GNU GENERAL PUBLIC LICENSE, Version 2</name>
+            <url>http://www.gnu.org/licenses/gpl-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/zkoss/zats</url>
+        <connection>scm:git:https://github.com/zkoss/zats</connection>
+    </scm>
+    <organization>
+        <name>Potix Corporation</name>
+        <url>https://www.zkoss.org</url>
+    </organization>
+    <developers>
+        <developer>
+            <id>zkteam</id>
+            <name>ZK Team</name>
+            <email>info@zkoss.org</email>
+            <url>https://www.zkoss.org</url>
+            <organization>Potix Corporation</organization>
+            <organizationUrl>https://www.zkoss.org</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>8</timezone>
+            <properties>
+                <picUrl>https://www.zkoss.org</picUrl>
+            </properties>
+        </developer>
+    </developers>
+    <packaging>war</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.6</maven.compiler.target>
+        <zk.version>7.0.3</zk.version>
+    </properties>
+    <repositories>
+        <repository>
+            <id>zk repository</id>
+            <url>https://mavensync.zkoss.org/maven2</url>
+        </repository>
+        <repository>
+            <id>ZK EE Evaluation</id>
+            <url>https://mavensync.zkoss.org/zk/ee-eval</url>
+        </repository>
+    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>org.zkoss.zk</groupId>
+            <artifactId>zhtml</artifactId>
+            <version>${zk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zkoss.zats</groupId>
+            <artifactId>zats-mimic-ext7</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>test</scope>
+        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.testng</groupId>-->
+        <!--<artifactId>testng</artifactId>-->
+        <!--<version>6.1.1</version>-->
+        <!--<scope>test</scope>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    <description>Examples code for ZATS Essentials and other examples.</description>
+    <build>
+        <plugins>
+            <!-- Run with Jetty -->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.2.22.v20170606</version>
+                <configuration>
+                    <webAppConfig>
+                        <contextPath>/${project.artifactId}</contextPath>
+                        <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
+                        <webInfIncludeJarPattern>^$</webInfIncludeJarPattern>
+                        <containerIncludeJarPattern>^$</containerIncludeJarPattern>
+                    </webAppConfig>
+                    <scanIntervalSeconds>5</scanIntervalSeconds>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

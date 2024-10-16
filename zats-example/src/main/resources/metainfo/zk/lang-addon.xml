@@ -1,0 +1,13 @@
+<language-addon >
+    <addon-name>custom</addon-name>
+    <depends>zul</depends>
+    <language-name>xul/html</language-name>
+    <component>
+        <component-name>emailbox</component-name>
+        <extends>textbox</extends>
+        <property>
+            <property-name>constraint</property-name>
+            <property-value>/^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/</property-value>
+        </property>
+    </component>
+</language-addon>
