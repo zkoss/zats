@@ -44,12 +44,12 @@ public class ResponseHandlerManager {
 
 		// layout response handler
 		registerHandler("5.0.0", "*", DownloadHandler.REGISTER_KEY, (LayoutResponseHandler)new DownloadHandler());
-		registerHandler("5.0.0", "5.*.*", EchoEventHandler.REGISTER_KEY, (LayoutResponseHandler)new EchoEventHandler());
+		registerHandler("5.0.0", "10.*.*", EchoEventHandler.REGISTER_KEY, (LayoutResponseHandler)new EchoEventHandler());
 		registerHandler("5.0.0", "*", AuLogHandler.REGISTER_KEY, (LayoutResponseHandler)new AuLogHandler());
 
 		// AU response handler
 		registerHandler("5.0.0", "*", DownloadHandler.REGISTER_KEY, (UpdateResponseHandler)new DownloadHandler());
-		registerHandler("5.0.0", "5.*.*", EchoEventHandler.REGISTER_KEY, (UpdateResponseHandler)new EchoEventHandler());
+		registerHandler("5.0.0", "10.*.*", EchoEventHandler.REGISTER_KEY, (UpdateResponseHandler)new EchoEventHandler());
 		registerHandler("5.0.0", "*", AuLogHandler.REGISTER_KEY, (UpdateResponseHandler)new AuLogHandler());
 	}
 
