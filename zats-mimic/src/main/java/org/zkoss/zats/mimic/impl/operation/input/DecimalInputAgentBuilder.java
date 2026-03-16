@@ -42,10 +42,16 @@ public class DecimalInputAgentBuilder extends AbstractInputAgentBuilder {
 			}else{
 				Object comp = target.getDelegatee();
 				String f = ((FormatInputElement) comp).getFormat();
-				if (f != null)
-					data.put("value", parseNumber(f, raw.trim()));
-				else
-					data.put("value", new BigDecimal(raw.trim()));
+				String val = raw.trim();
+				Object number = f != null ? parseNumber(f, val) : new BigDecimal(val.replaceAll(",", ""));
+				
+				// Ensure it's a BigDecimal or Double to avoid ClassCastException in ZK 10
+				if (number instanceof Integer || number instanceof Long) {
+					number = new BigDecimal(number.toString());
+				}
+				
+				data.put("value", number);
+				data.put("raw", val); // ZK 10 might need this
 			}
 		}
 		

@@ -20,7 +20,7 @@ import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zul.impl.FormatInputElement;
 
 /**
- * Build the InputAgent object for ZK components that accept Double input. 
+ * 
  * @author dennis
  *
  */
@@ -42,10 +42,11 @@ public class DecimalStringInputAgentBuilder extends AbstractInputAgentBuilder {
 			}else{
 				Object comp = target.getDelegatee();
 				String f = ((FormatInputElement) comp).getFormat();
-				if (f != null)
-					data.put("value", parseNumber(f, raw.trim()).toString());
-				else
-					data.put("value", new BigDecimal(raw.trim()).toString()); // decimalbox
+				String val = raw.trim();
+				Object number = f != null ? parseNumber(f, val) : new BigDecimal(val.replaceAll(",", ""));
+				System.err.println("Decimalbox input: " + val + " parsed: " + number + " format: " + f);
+				data.put("value", number.toString());
+				data.put("raw", val); // ZK 10 might need this
 			}
 		}
 		

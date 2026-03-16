@@ -40,6 +40,13 @@ public class GenericCheckAgentBuilder implements OperationAgentBuilder<Component
 			Map<String, Object> data = EventDataManager.getInstance().build(new CheckEvent(Events.ON_CHECK, (Component)target.getDelegatee(),
 					checked));
 			ClientCtrl cctrl = (ClientCtrl) target.getClient();
+			
+			// For Menuitem, we might need onClick to trigger the check state change in ZK 10
+			if (target.getDelegatee() instanceof org.zkoss.zul.Menuitem) {
+				Map<String, Object> clickData = EventDataManager.getInstance().build(new org.zkoss.zk.ui.event.MouseEvent(Events.ON_CLICK, (Component)target.getDelegatee()));
+				cctrl.postUpdate(desktopId, target.getUuid(), Events.ON_CLICK, clickData, false);
+			}
+			
 			cctrl.postUpdate(desktopId, target.getUuid(), Events.ON_CHECK, data, false);
 			cctrl.flush(desktopId);
 		}

@@ -1,151 +1,87 @@
 <zk>
-	<vbox>
-		<hbox>
-			<label>Event:</label>
-			<label id="target"></label>
-			<label id="eventName"></label>
-		</hbox>
-		<hbox id="comps">
-			<vbox id="essential">
-				<a label="a"></a>
-				<applet msg="applet" width="100px" height="50px" />
-				<button label="button" />
-				<captcha width="100px" height="50px" />
-				<!-- zk6
-					<combobutton label="combobutton" />
-				-->
-				<fileupload label="fileupload" />
-				<fisheyebar itemWidth="40" itemHeight="40" itemMaxHeight="80" itemMaxWidth="80">
-					<fisheye label="fisheye" />
-				</fisheyebar>
-				<html><![CDATA[ <h3>html</h3> ]]></html>
-				<iframe style="border: 1px solid gray" width="100px" height="100px"
-					src="https://www.zkoss.org/">
-				</iframe>
-				<include style="width: 50px; height: 50px; border: 1px solid gray" />
-				<image src="https://www.zkoss.org/zkdemo/images/top_zk_logo.png" />
-				<imagemap src="https://www.zkoss.org/zkdemo/images/top_zk_logo.png" />
-				<menubar>
-					<menu label="menu">
-						<menupopup>
-							<menuitem label="menuitem" />
-							<menuseparator />
-						</menupopup>
-					</menu>
-				</menubar>
-				<label value="label for popup" popup="popup, position=end_before" />
-				<popup id="popup" width="100px" height="50px"></popup>
-				<progressmeter value="50" />
-				<!-- zk6 
-					<selectbox /> 
-				-->
-				<separator orient="horizontal" bar="true" />
-				<space orient="horizontal" bar="true" />
-				<toolbar width="200px">
-					<toolbarbutton label="toolbarbutton" />
-				</toolbar>
-			</vbox>
-			<vbox id="input">
-				<bandbox></bandbox>
-				<colorbox></colorbox>
-				<combobox>
-					<comboitem label="comboitem"></comboitem>
-				</combobox>
-				<datebox></datebox>
-				<decimalbox></decimalbox>
-				<doublebox></doublebox>
-				<doublespinner></doublespinner>
-				<intbox></intbox>
-				<longbox></longbox>
-				<spinner></spinner>
-				<textbox></textbox>
-				<timebox></timebox>
-				<checkbox label="checkbox"></checkbox>
-				<radiogroup style="border: 1px solid gray">
-					<radio label="radio"></radio>
-				</radiogroup>
-				<radio label="radio"></radio>
-				<slider></slider>
-			</vbox>
-			<vbox id="container">
-				<div width="100px" height="50px" style="border: 1px solid gray"></div>
-				<groupbox closable="false" width="100px" height="100px" mold="3d">
-					<caption label="caption"></caption>
-				</groupbox>
-				<!-- zk6 
-					<idspace></idspace>
-				-->
-				<panel title="panel" width="100px" height="50px" border="normal">
-					<panelchildren></panelchildren>
-				</panel>
-				<span width="100px" height="50px" style="border: 1px solid gray; display: block"></span>
-				<tabbox width="100px">
-					<tabs>
-						<tab label="tab" />
-					</tabs>
-					<tabpanels>
-						<tabpanel></tabpanel>
-					</tabpanels>
-				</tabbox>
-				<window title="window" width="100px" height="50px" border="normal"></window>
-				<grid width="100px" height="100px">
-					<rows>
-						<row>
-							<detail>detail</detail>
-						</row>
-						<group>group</group>
-					</rows>
-				</grid>
-				<listbox width="100px" height="100px">
-					<listgroup label="listgroup"></listgroup>
-					<listitem>
-						<listcell label="listcell"></listcell>
-					</listitem>
-				</listbox>
-				<tree width="100px" height="100px">
-					<treecols>
-						<treecol label="treecol"></treecol>
-					</treecols>
-					<treechildren>
-						<treeitem>
-							<treerow>
-								<treecell label="treecell"></treecell>
-							</treerow>
-							<treechildren>
-								<treeitem>
-									<treerow>
-										<treecell label="treecell"></treecell>
-									</treerow>
-								</treeitem>
-							</treechildren>
-						</treeitem>
-					</treechildren>
-				</tree>
-			</vbox>
-		</hbox>
-	</vbox>
 	<zscript><![CDATA[
-	EventListener listener = new EventListener() {
-		public void onEvent(Event event) {
-			target.setValue(event.getTarget().getDefinition().getName());
-			eventName.setValue(event.getName());
-		}
-	};
-	void listen(Component container) {
-		LinkedList queue = new LinkedList(container.getChildren());
-		while(!queue.isEmpty()) {
-			AbstractComponent comp = (AbstractComponent)queue.remove();
-			queue.addAll(comp.getChildren());
-			comp.addEventListener(Events.ON_CLICK, listener);
-			comp.addEventListener(Events.ON_DOUBLE_CLICK, listener);
-			comp.addEventListener(Events.ON_RIGHT_CLICK, listener);
-			comp.addEventListener(Events.ON_MOUSE_OVER, listener);
-			comp.addEventListener(Events.ON_MOUSE_OUT, listener);
-		}
+	void show(Event event) {
+		String name = event.getName();
+		String id = event.getTarget().getId();
+		if (id == null || id.isEmpty()) id = event.getTarget().getDefinition().getName();
+		history.value = history.value + name + ":" + id + ";";
 	}
-	listen(essential);
-	listen(input);
-	listen(container);
-]]>
-	</zscript>
+	]]></zscript>
+	<vbox id="comps">
+		<label id="history" value="" />
+		<a id="a" label="a" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<button id="button" label="button" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<captcha id="captcha" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<fileupload id="fileupload" label="fileupload" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<div id="html" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">html</div>
+		<include id="include" src="~./basic/hello.zul" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<image id="image" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<imagemap id="imagemap" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<label id="label" value="label" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<menubar id="menubar" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">
+			<menu id="menu" label="menu" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">
+				<menupopup id="menupopup" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">
+					<menuitem id="menuitem" label="menuitem" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+					<menuseparator id="menuseparator" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+				</menupopup>
+			</menu>
+		</menubar>
+		<popup id="popup" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">popup</popup>
+		<progressmeter id="progressmeter" value="50" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<separator id="separator" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<space id="space" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<toolbar id="toolbar">
+			<toolbarbutton id="toolbarbutton" label="toolbarbutton" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		</toolbar>
+		<bandbox id="bandbox" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<colorbox id="colorbox" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<combobox id="combobox" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">
+			<comboitem id="comboitem" label="comboitem" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		</combobox>
+		<datebox id="datebox" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<decimalbox id="decimalbox" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<doublebox id="doublebox" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<doublespinner id="doublespinner" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<intbox id="intbox" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<longbox id="longbox" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<spinner id="spinner" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<textbox id="textbox" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<timebox id="timebox" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<checkbox id="checkbox" label="checkbox" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<radiogroup id="radiogroup" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">
+			<radio id="radio" label="radio" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		</radiogroup>
+		<slider id="slider" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		<groupbox id="groupbox" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">
+			<caption id="caption" label="caption" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		</groupbox>
+		<div id="div" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">div</div>
+		<panel id="panel" title="panel" maximizable="true" minimizable="true" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">
+			<panelchildren id="panelchildren" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">panelchildren</panelchildren>
+		</panel>
+		<span id="span" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">span</span>
+		<tabbox id="tabbox" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">
+			<tabs id="tabs" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">
+				<tab id="tab" label="tab" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+			</tabs>
+		</tabbox>
+		<window id="window" title="window" border="normal" width="200px" height="200px" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">window</window>
+		<grid id="grid" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">
+			<rows id="rows" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">
+				<row id="row" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">
+					<detail id="detail" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">detail</detail>
+				</row>
+				<group id="group" label="group" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+			</rows>
+		</grid>
+		<listbox id="listbox" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">
+			<listitem id="listitem" label="listitem" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+			<listgroup id="listgroup" label="listgroup" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+		</listbox>
+		<tree id="tree" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">
+			<treechildren id="treechildren" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">
+				<treeitem id="treeitem" label="treeitem" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
+			</treechildren>
+		</tree>
+	</vbox>
 </zk>

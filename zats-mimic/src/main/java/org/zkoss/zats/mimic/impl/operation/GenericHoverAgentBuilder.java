@@ -48,7 +48,7 @@ public class GenericHoverAgentBuilder implements OperationAgentBuilder<Component
 		public void moveOver() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_MOUSE_OVER;
-			Map<String, Object> data = EventDataManager.getInstance().build(new MouseEvent(cmd, (Component)target.getDelegatee()));
+			Map<String, Object> data = EventDataManager.getInstance().build(new MouseEvent(cmd, (Component)target.getDelegatee(), 0, 0, 0, 0, 0));
 			((ClientCtrl)target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
 			((ClientCtrl) getClient()).flush(desktopId);
 		}
@@ -56,7 +56,7 @@ public class GenericHoverAgentBuilder implements OperationAgentBuilder<Component
 		public void moveOut() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_MOUSE_OUT;
-			Map<String, Object> data = EventDataManager.getInstance().build(new MouseEvent(cmd, (Component)target.getDelegatee()));
+			Map<String, Object> data = EventDataManager.getInstance().build(new MouseEvent(cmd, (Component)target.getDelegatee(), 0, 0, 0, 0, 0));
 			((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
 			((ClientCtrl) getClient()).flush(desktopId);
 		}

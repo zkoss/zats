@@ -53,7 +53,7 @@ public abstract class AbstractSizeAgentBuilder implements OperationAgentBuilder<
 			}
 			HtmlBasedComponent comp = target.as(HtmlBasedComponent.class);
 			String cmd = Events.ON_MAXIMIZE;
-			MaximizeEvent event = new MaximizeEvent(cmd, comp, "", "", comp.getWidth(), comp.getHeight(), maximized);
+			MaximizeEvent event = new MaximizeEvent(cmd, comp, "", "", "", "", maximized);
 			Map<String, Object> data = EventDataManager.getInstance().build(event);
 			String desktopId = target.getDesktop().getId();
 			((ClientCtrl) getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
@@ -66,7 +66,7 @@ public abstract class AbstractSizeAgentBuilder implements OperationAgentBuilder<
 			}
 			HtmlBasedComponent comp = target.as(HtmlBasedComponent.class);
 			String cmd = Events.ON_MINIMIZE;
-			MinimizeEvent event = new MinimizeEvent(cmd, comp, "", "", comp.getWidth(), comp.getHeight(), minimized);
+			MinimizeEvent event = new MinimizeEvent(cmd, comp, "", "", "", "", minimized);
 			Map<String, Object> data = EventDataManager.getInstance().build(event);
 			String desktopId = target.getDesktop().getId();
 			((ClientCtrl) getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);

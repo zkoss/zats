@@ -39,6 +39,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.jetty.util.MultiMap;
 import org.eclipse.jetty.util.UrlEncoded;
 
 import org.zkoss.zats.ZatsException;
@@ -274,12 +275,12 @@ public class EmulatorClient implements Client, ClientCtrl {
 			sb.append("&cmd_").append(index).append("=").append(event.cmd);
 			// UUID
 			if (event.uuid != null) {
-				String uuid = UrlEncoded.encodeString(event.uuid);
+				String uuid = encode(event.uuid);
 				sb.append("&uuid_").append(index).append("=").append(uuid);
 			}
 			// event data
 			if (event.data != null && event.data.size() > 0) {
-				String jsonData = UrlEncoded.encodeString(JSONValue.toJSONString(deconstructPacket(event.data, files)));
+				String jsonData = encode(JSONValue.toJSONString(deconstructPacket(event.data, files)));
 				sb.append("&data_").append(index).append("=").append(jsonData);
 			}
 			// ignorable
@@ -296,6 +297,13 @@ public class EmulatorClient implements Client, ClientCtrl {
 		}
 
 		return sb.toString();
+	}
+
+	private String encode(String value) {
+		MultiMap<String> mm = new MultiMap<>();
+		mm.add("v", value);
+		String encoded = UrlEncoded.encode(mm, StandardCharsets.UTF_8, true);
+		return encoded.substring(2); // remove "v="
 	}
 
 	@SuppressWarnings("unchecked")
@@ -323,7 +331,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 
 				// combine AU events from queue into single request
 				StringBuilder sb = new StringBuilder();
-				sb.append("dtid=").append(UrlEncoded.encodeString(desktopId)); // desktop ID.
+				sb.append("dtid=").append(encode(desktopId)); // desktop ID.
 				final String content = sb.append(combinedEvents).toString();
 
 				if (files.isEmpty()) {
@@ -358,6 +366,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 				}
 
 				String raw = getReplyString(c.getInputStream(), parseCharset(c));
+				System.err.println("AU Response: " + raw);
 
 				// ZATS-25: filter non-JSON part (i.e. real JS code)
 				raw = AuUtility.filterNonJSON(raw);

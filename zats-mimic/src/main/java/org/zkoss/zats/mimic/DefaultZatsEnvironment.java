@@ -67,7 +67,7 @@ public class DefaultZatsEnvironment implements ZatsEnvironment{
 
 	public void init(String resourceRoot){
 		if(emulator!=null) {
-			throw new ZatsException("already started up");
+			destroy();
 		}
 		if(webInfPathOrUrl==null){
 			URL weburl = EmulatorClient.class.getResource("WEB-INF/web.xml");

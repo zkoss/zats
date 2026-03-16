@@ -63,7 +63,7 @@
 					doublebox
 					<doublebox id="inp5" width="100px"
 						constraint="no negative"
-						onChange='l5.setValue(""+self.getValue())'
+						onChange='l5.setValue(""+self.getValue().doubleValue())'
 						onSelection="showSelectedText(event,l5)" />
 					(no negative)
 				</hbox>

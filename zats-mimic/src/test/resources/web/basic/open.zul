@@ -2,73 +2,43 @@
 	<zscript><![CDATA[
 	void show(Event event) {
 		boolean opened = ((OpenEvent)event).isOpen();
-		String id = event.getTarget().getId();
-		if(opened)
-			open.setValue(id);
-		else
-			close.setValue(id);
+		eventName.setValue(event.getName());
+		target.setValue(event.getTarget().getDefinition().getName());
+		flag.setValue("" + opened);
 	}
-	ListModel listmodel = new ListModelList(Arrays.asList(new String[]{ "data 1", "data 2", "data 3" }));
 ]]></zscript>
-	<vbox width="600px">
+	<vbox>
 		<hbox>
-			<label>open:</label>
-			<label id="open" />
+			<label id="eventName" />
+			<label id="target" />
+			<label id="flag" />
 		</hbox>
-		<hbox>
-			<label>close:</label>
-			<label id="close" />
-		</hbox>
-		<bandbox id="aBandbox" onOpen="show(event);">
-			<bandpopup>
-				<label>bandbox content</label>
-			</bandpopup>
-		</bandbox>
-		<combobox id="aCombobox" onOpen="show(event);" model="${listmodel }"></combobox>
-		<groupbox id="aGroupbox" onOpen="show(event);" closable="true" mold="3d">
-			<caption>aGroupbox</caption>
-			<label>groupbox content</label>
+		<bandbox id="bandbox" onOpen="show(event);" />
+		<combobox id="combobox" onOpen="show(event);" />
+		<groupbox id="groupbox" onOpen="show(event);">
+			<caption>caption</caption>
 		</groupbox>
-		<grid id="aGrid" fixedLayout="true">
-			<columns>
-				<column width="150px">column 1</column>
-				<column>column 2</column>
-			</columns>
+		<grid id="aGrid">
 			<rows>
-				<row>
-					<label value="row content" />
-					<detail id="aDetail" onOpen="show(event);">
+				<row id="aRow">
+					<detail id="detail" onOpen="show(event);">
 						<label value="detail content" />
 					</detail>
 				</row>
-				<group id="aGroup" onOpen="show(event);">
+				<group id="group" onOpen="show(event);">
 					<label value="group" />
 				</group>
 				<row>
-					<label value="group content 1-1" />
-					<label value="group content 1-2" />
-				</row>
-				<row>
-					<label value="group content 2-1" />
-					<label value="group content 2-2" />
+					<label value="row" />
 				</row>
 			</rows>
 		</grid>
 		<listbox id="aListbox">
-			<listhead>
-				<listheader>column 1</listheader>
-				<listheader>column 2</listheader>
-			</listhead>
-			<listgroup id="aListgroup" onOpen="show(event);">
-				<listcell label="group" />
+			<listgroup id="listgroup" onOpen="show(event);">
+				<listcell label="listgroup" />
 			</listgroup>
 			<listitem>
-				<listcell label="group content 1-1" />
-				<listcell label="group content 1-2" />
-			</listitem>
-			<listitem>
-				<listcell label="group content 2-1" />
-				<listcell label="group content 2-2" />
+				<listcell label="listitem" />
 			</listitem>
 		</listbox>
 		<tree id="aTree">
@@ -81,38 +51,25 @@
 						<treecell label="treeitem 1" />
 					</treerow>
 					<treechildren>
-						<treeitem id="treeitem1-1">
-							<treerow>
-								<treecell label="treeitem 1-1" />
-							</treerow>
-						</treeitem>
 						<treeitem id="treeitem1-2" onOpen="show(event);">
 							<treerow>
 								<treecell label="treeitem 1-2" />
 							</treerow>
-							<treechildren>
-								<treeitem id="treeitem1-2-1">
-									<treerow>
-										<treecell label="treeitem 1-2-1" />
-									</treerow>
-								</treeitem>
-							</treechildren>
 						</treeitem>
 					</treechildren>
 				</treeitem>
 			</treechildren>
 		</tree>
-		<window id="window" onOpen="show(event)"/>
-		<panel id="panel" onOpen="show(event)"/>
-		<borderlayout>
-			<north id="north" onOpen="show(event)"></north>
+		<borderlayout height="200px" width="200px">
 			<west id="west" onOpen="show(event)"></west>
-			<center id="center" onOpen="show(event)"></center>
+			<center></center>
 			<east id="east" onOpen="show(event)"></east>
 			<south id="south" onOpen="show(event)"></south>
 		</borderlayout>
 		<splitter id="splitter" onOpen="show(event)"></splitter>
 		<popup id="popup" onOpen="show(event)"></popup>
 		
+		<window id="win" maximizable="true" minimizable="true" onOpen="show(event)"></window>
+		<panel id="pane" maximizable="true" minimizable="true" onOpen="show(event)"></panel>
 	</vbox>
 </zk>

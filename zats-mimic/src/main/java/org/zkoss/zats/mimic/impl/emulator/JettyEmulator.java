@@ -12,21 +12,21 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.impl.emulator;
 
 import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.NetworkConnector;
 import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.Response;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.HandlerCollection;
+import org.eclipse.jetty.util.Callback;
 import org.eclipse.jetty.util.component.LifeCycle;
-import org.eclipse.jetty.util.component.LifeCycle.Listener;
 import org.eclipse.jetty.util.resource.Resource;
-import org.eclipse.jetty.util.resource.ResourceCollection;
-import org.eclipse.jetty.webapp.WebAppContext;
-import org.eclipse.jetty.websocket.jakarta.server.config.JakartaWebSocketServletContainerInitializer;
+import org.eclipse.jetty.util.resource.ResourceFactory;
+import org.eclipse.jetty.ee10.webapp.WebAppContext;
+import org.eclipse.jetty.ee10.websocket.jakarta.server.config.JakartaWebSocketServletContainerInitializer;
+import org.eclipse.jetty.ee10.servlet.ServletHolder;
 
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletException;
+import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
@@ -85,25 +85,16 @@ public class JettyEmulator implements Emulator {
 		try {
 			// create server
 			server = new Server(new InetSocketAddress(getHost(), 0));
-			final WebAppContext contextHandler = new WebAppContext() {
-				@Override
-				public void doHandle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-					try {
-						lock.lock();
-						super.doHandle(target, baseRequest, request, response);
-						handleAfter(request);
-					} finally {
-						lock.unlock();
-					}
-				}
-			};
-			ResourceCollection resourceCollection = new ResourceCollection(contentRoots);
+			final WebAppContext contextHandler = new WebAppContext();
+			
+			Resource baseResource = contentRoots.length == 1 ? contentRoots[0] : ResourceFactory.combine(Arrays.asList(contentRoots));
 
-			contextHandler.setBaseResource(resourceCollection);
+			contextHandler.setBaseResource(baseResource);
 			if (descriptor != null) {
 				contextHandler.setDescriptor(descriptor);
 			}
 			contextHandler.setContextPath(this.contextPath);
+			contextHandler.setClassLoader(Thread.currentThread().getContextClassLoader());
 
 			contextHandler.setParentLoaderPriority(true);
 			// fix issue: the jetty temp. directory is always the same according the configuration of emulator
@@ -118,10 +109,24 @@ public class JettyEmulator implements Emulator {
 			else
 				tmpDir = null;
 			
-			// observe request and get related ref.
-			HandlerCollection handlers = new HandlerCollection();
-			handlers.addHandler(contextHandler);
-			server.setHandler(handlers);
+			// use listener for locking and attribute capturing
+			contextHandler.addEventListener(new ServletRequestListener() {
+				@Override
+				public void requestInitialized(ServletRequestEvent sre) {
+					lock.lock();
+				}
+
+				@Override
+				public void requestDestroyed(ServletRequestEvent sre) {
+					try {
+						handleAfter((HttpServletRequest) sre.getServletRequest());
+					} finally {
+						lock.unlock();
+					}
+				}
+			});
+
+			server.setHandler(contextHandler);
 
 			//enable websocket support
 			JakartaWebSocketServletContainerInitializer.configure(contextHandler, null);
@@ -129,9 +134,24 @@ public class JettyEmulator implements Emulator {
 			// synchronize initial step
 			final BlockingQueue<Object> queue = new ArrayBlockingQueue<Object>(1, true);
 
-			contextHandler.addEventListener(new Listener() {
+			contextHandler.addEventListener(new LifeCycle.Listener() {
 				@Override
 				public void lifeCycleStarted(LifeCycle event) {
+                    try {
+                        System.err.println("DEBUG: ClassLoader for WebAppContext: " + contextHandler.getClassLoader());
+                        Class<?> clazz = contextHandler.getClassLoader().loadClass("org.apache.commons.io.function.IOIterator");
+                        System.err.println("DEBUG: Loaded IOIterator from: " + clazz.getProtectionDomain().getCodeSource().getLocation());
+                    } catch (Throwable t) {
+                        System.err.println("DEBUG: Failed to load IOIterator:");
+                        t.printStackTrace();
+                    }
+					// Apply multipart config to all servlets
+					MultipartConfigElement config = new MultipartConfigElement(tmpDir.getAbsolutePath());
+					System.err.println("Applying MultipartConfig to servlets...");
+					for (ServletHolder holder : contextHandler.getServletHandler().getServlets()) {
+						System.err.println("  Servlet: " + holder.getName());
+						holder.getRegistration().setMultipartConfig(config);
+					}
 					queue.add("lifeCycleStarted");
 				}
 			});
@@ -156,7 +176,7 @@ public class JettyEmulator implements Emulator {
 				}
 			}
 			// get servlet context and synchronize access
-			context = getWrappedContext(contextHandler.getServletHandler().getServletContext());
+			context = getWrappedContext(contextHandler.getServletContext());
 		} catch (Exception e) {
 			throw new EmulatorException("", e);
 		}
