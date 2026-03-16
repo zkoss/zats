@@ -14,9 +14,8 @@ package org.zkoss.zats.mimic.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.nio.charset.StandardCharsets;
 
 import org.zkoss.zats.mimic.impl.operation.AbstractUploadAgentBuilder;
 
@@ -27,7 +26,6 @@ public class FormDataUtility {
 	private HttpURLConnection httpConn;
 	private String charset;
 	private OutputStream outputStream;
-	private PrintWriter writer;
 
 	public FormDataUtility(HttpURLConnection httpConn, String charset) throws IOException {
 		this.charset = charset;
@@ -37,27 +35,29 @@ public class FormDataUtility {
 		this.httpConn = httpConn;
 		httpConn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
 		outputStream = httpConn.getOutputStream();
-		writer = new PrintWriter(new OutputStreamWriter(outputStream, charset), true);
 	}
 
-	public void addFormField(String name, String value) {
-		writer.append("--" + boundary).append(LINE_FEED);
-		writer.append("Content-Disposition: form-data; name=\"" + name + "\"").append(LINE_FEED);
-		writer.append("Content-Type: text/plain; charset=" + charset).append(LINE_FEED);
-		writer.append(LINE_FEED);
-		writer.append(value).append(LINE_FEED);
-		writer.flush();
+	private void write(String s) throws IOException {
+		outputStream.write(s.getBytes(charset));
+	}
+
+	public void addFormField(String name, String value) throws IOException {
+		write("--" + boundary + LINE_FEED);
+		write("Content-Disposition: form-data; name=\"" + name + "\"" + LINE_FEED);
+		write("Content-Type: text/plain; charset=" + charset + LINE_FEED);
+		write(LINE_FEED);
+		write(value + LINE_FEED);
+		outputStream.flush();
 	}
 
 	public void addFilePart(String fieldName, AbstractUploadAgentBuilder.FileItem uploadFile) throws IOException {
 		String fileName = uploadFile.getFileName();
-		writer.append("--" + boundary).append(LINE_FEED);
-		writer.append("Content-Disposition: form-data; name=\"" + fieldName + "\"; filename=\"" + fileName + "\"")
-				.append(LINE_FEED);
-		writer.append("Content-Type: " + uploadFile.getContentType()).append(LINE_FEED);
-		writer.append("Content-Transfer-Encoding: binary").append(LINE_FEED);
-		writer.append(LINE_FEED);
-		writer.flush();
+		write("--" + boundary + LINE_FEED);
+		write("Content-Disposition: form-data; name=\"" + fieldName + "\"; filename=\"" + fileName + "\"" + LINE_FEED);
+		write("Content-Type: " + uploadFile.getContentType() + LINE_FEED);
+		write("Content-Transfer-Encoding: binary" + LINE_FEED);
+		write(LINE_FEED);
+		outputStream.flush();
 
 		InputStream inputStream = uploadFile.getInputStream();
 		byte[] buffer = new byte[4096];
@@ -67,15 +67,13 @@ public class FormDataUtility {
 		}
 		outputStream.flush();
 		inputStream.close();
-
-		writer.append(LINE_FEED);
-		writer.flush();
+		write(LINE_FEED);
+		outputStream.flush();
 	}
 
-	public void finish() {
-		writer.append(LINE_FEED).flush();
-		writer.append("--" + boundary + "--").append(LINE_FEED);
-		writer.close();
+	public void finish() throws IOException {
+		write("--" + boundary + "--" + LINE_FEED);
+		outputStream.flush();
 		try {
 			outputStream.close();
 		} catch (IOException e) {

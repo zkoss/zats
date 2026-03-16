@@ -1,67 +1,69 @@
-<zk>
-	<hbox id="theRoot" onUpload="upload(event);">
-		<vbox width="200px">
-			<fileupload id="btn0" label="fileupload comp." onUpload="upload(event);" />
-			<button id="btn1" label="button" upload="true" onUpload="upload(event);" />
-			<menubar>
-				<menuitem id="btn2" label="menuitem" upload="true" onUpload="upload(event);" />
-			</menubar>
-			<toolbar>
-				<toolbarbutton id="btn3" label="toolbarbutton" upload="true" onUpload="upload(event);" />
-			</toolbar>
-			<label id="btn4" value="label with fileupload.get()" onClick="Fileupload.get();" />
-			<label id="btn5" value="label with multiple upload" onClick="Fileupload.get(3);" />
-		</vbox>
-		<separator orient="vertical" />
-		<vbox>
-			<button id="clean" label="clean" upload="false" onClick="results.getChildren().clear();" />
-			<vbox id="results"></vbox>
-		</vbox>
-	</hbox>
-	<zscript>
-		<![CDATA[
-	public void upload(Event event) {
-		results.getChildren().clear();
-		org.zkoss.util.media.Media[] medias = event.getMedias();
-		if(medias != null) {
-			for(int i = 0; i < medias.length; ++i)
-				show(i, medias[i]);
+<zk xmlns:h="native">
+	<vbox id="results" />
+	<label id="resultsCount" value="0" />
+	<zscript><![CDATA[
+		int count = 0;
+		void handle(UploadEvent event) {
+			org.zkoss.util.media.Media[] medias = event.getMedias();
+			if (medias == null) return;
+			for (org.zkoss.util.media.Media media : medias) {
+				Vbox vbox = new Vbox();
+				vbox.setId("file" + count);
+				vbox.setSclass("file");
+				new Label(media.getName()).setParent(vbox);
+				((Label)vbox.getLastChild()).setSclass("name");
+				new Label(media.getContentType()).setParent(vbox);
+				((Label)vbox.getLastChild()).setSclass("contentType");
+				new Label(media.getFormat()).setParent(vbox);
+				((Label)vbox.getLastChild()).setSclass("format");
+				
+				String binary = "";
+				String text = "";
+				if (media.isBinary()) {
+					byte[] bs = media.getByteData();
+					binary = org.zkoss.zats.testcase.BasicAgentTest.toHexString(bs).toUpperCase();
+					text = new String(bs, "utf-8");
+				} else {
+					text = media.getStringData();
+					binary = org.zkoss.zats.testcase.BasicAgentTest.toHexString(text.getBytes("utf-8")).toUpperCase();
+				}
+				new Label(binary).setParent(vbox);
+				((Label)vbox.getLastChild()).setSclass("binary");
+				new Label(text).setParent(vbox);
+				((Label)vbox.getLastChild()).setSclass("text");
+				
+				if (media instanceof org.zkoss.image.Image) {
+					org.zkoss.image.Image img = (org.zkoss.image.Image) media;
+					new Label(img.getWidth() + "px").setParent(vbox);
+					((Label)vbox.getLastChild()).setSclass("width");
+					new Label(img.getHeight() + "px").setParent(vbox);
+					((Label)vbox.getLastChild()).setSclass("height");
+				}
+				
+				vbox.setParent(results);
+				count++;
+				resultsCount.setValue("" + count);
+			}
 		}
-	}
-	public String get(String value) {
-		return value != null ? value : "NULL";
-	}
-	public void label(Component container, String key, String value) {
-		Hbox box = new Hbox();
-		box.setParent(container);
-		new Label(key + ": ").setParent(box);
-		Label label = new Label(value);
-		label.setClass(key);
-		label.setParent(box);
-	}
-	public void show(int index, org.zkoss.util.media.Media media) {
-		System.out.println("received: " + media.getName());
-
-		Vbox box = new Vbox();
-		box.setId("file" + index);
-		box.setStyle("border: 1px solid black; padding: 3px;");
-		box.setParent(results);
-
-		label(box, "name", get(media.getName()));
-		label(box, "contentType", get(media.getContentType()));
-		label(box, "format", get(media.getFormat()));
-		label(box, "binary", media.isBinary() ? new java.math.BigInteger(1, media.getByteData()).toString(16).toUpperCase() : "");
-		label(box, "text", media.isBinary() ? "" : media.getStringData());
-		if(media instanceof org.zkoss.image.AImage) {
-			org.zkoss.image.AImage image = media;
-			label(box, "width", image.getWidth() + "px");
-			label(box, "height", image.getHeight() + "px");
+		void clean() {
+			results.getChildren().clear();
+			count = 0;
+			resultsCount.setValue("0");
 		}
-		else {
-			label(box, "width", "");
-			label(box, "height", "");
+	]]></zscript>
+	<button id="btn0" label="upload" upload="true" onUpload="handle(event)" />
+	<button id="btn1" label="upload multiple" upload="true,multiple=true" onUpload="handle(event)" />
+	<button id="btn2" label="upload maxsize" upload="true,maxsize=10" onUpload="handle(event)" />
+	<button id="btn3" label="upload native" upload="true,native=true" onUpload="handle(event)" />
+	<button id="btn4" label="upload dialog" onClick='Fileupload.get(1, new org.zkoss.zk.ui.event.EventListener(){
+		public void onEvent(Event event) {
+			if (event instanceof UploadEvent) handle((UploadEvent)event);
 		}
-	}
-]]>
-	</zscript>
+	})' />
+	<button id="btn5" label="upload dialog multiple" onClick='Fileupload.get(3, new org.zkoss.zk.ui.event.EventListener(){
+		public void onEvent(Event event) {
+			if (event instanceof UploadEvent) handle((UploadEvent)event);
+		}
+	})' />
+	<button id="clean" label="clean" onClick="clean()" />
 </zk>

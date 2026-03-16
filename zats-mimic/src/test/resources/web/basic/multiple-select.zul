@@ -1,96 +1,24 @@
 <zk>
-	<window id="win">
-		<vbox>
-			<hbox>
-				<label value="selected: " />
-				<label id="msg" />
-			</hbox>
-			<hbox id="lbcb">
-				<checkbox label="multiple" onCheck="lb.multiple = self.checked" checked="true" />
-				<checkbox label="checkable" onCheck="lb.checkmark = self.checked" checked="false" />
-			</hbox>
-			<listbox id="lb" width="250px" multiple="true" onSelect="doListboxSelect()">
-				<listhead>
-					<listheader>col1</listheader>
-					<listheader>col2</listheader>
-				</listhead>
-				<listitem id="i0">
-					<listcell>
-						<label value="i0" />
-					</listcell>
-					<listcell>
-						<label value="i0" />
-					</listcell>
-				</listitem>
-				<listitem id="i1">
-					<listcell>
-						<label value="i1" />
-					</listcell>
-					<listcell>
-						<label value="i1" />
-					</listcell>
-				</listitem>
-				<listitem id="i2">
-					<listcell>
-						<label value="i2" />
-					</listcell>
-					<listcell>
-						<label value="i2" />
-					</listcell>
-				</listitem>
-			</listbox>
-			<hbox id="tcb">
-				<checkbox label="multiple" onCheck="t.multiple = self.checked" checked="true" />
-				<checkbox label="checkable" onCheck="t.checkmark = self.checked" checked="false" />
-			</hbox>
-			<tree id="t" multiple="true" onSelect="doTreeSelect()">
-				<treecols>
-					<treecol label="col1" />
-				</treecols>
-				<treechildren>
-					<treeitem id="ti1">
-						<treerow>
-							<treecell>
-								<label>ti1</label>
-							</treecell>
-						</treerow>
-						<treechildren>
-							<treeitem id="ti1-1">
-								<treerow>
-									<treecell>ti1-1</treecell>
-								</treerow>
-							</treeitem>
-							<treeitem id="ti1-2">
-								<treerow>
-									<treecell>ti1-2</treecell>
-								</treerow>
-							</treeitem>
-						</treechildren>
-					</treeitem>
-				</treechildren>
-			</tree>
-		</vbox>
-	</window>
-	<zscript>
-		<![CDATA[
-	void doListboxSelect() {
-		Label msg = (Label)win.getFellow("msg");
-		Listbox lb = (Listbox)win.getFellow("lb");
-		ArrayList list = new ArrayList();
-		for(Object o : lb.getSelectedItems())
-			list.add(((Listitem)o).getId());
-		Collections.sort(list);
-		msg.setValue(list.toString());
-	}
-	void doTreeSelect() {
-		Label msg = (Label)win.getFellow("msg");
-		Tree tree = (Tree)win.getFellow("t");
-		ArrayList list = new ArrayList();
-		for(Object o : tree.getSelectedItems())
-			list.add(((Treeitem)o).getId());
-		Collections.sort(list);
-		msg.setValue(list.toString());
-	}
-]]>
-	</zscript>
+	<vbox>
+		<label id="msg" />
+		<listbox id="lb1" multiple="true" onSelect='java.util.Set s = self.getSelectedItems(); StringBuilder sb = new StringBuilder(""); boolean first = true; for (Object o : s) { if (!first) sb.append(","); sb.append(((org.zkoss.zul.Listitem)o).getId()); first = false; } msg.setValue(sb.toString())'>
+			<listitem id="li1" label="li1" />
+			<listitem id="li2" label="li2" />
+			<listitem id="li3" label="li3" />
+		</listbox>
+		<tree id="t1" multiple="true" onSelect='java.util.Set s = self.getSelectedItems(); StringBuilder sb = new StringBuilder(""); boolean first = true; for (Object o : s) { if (!first) sb.append(","); sb.append(((org.zkoss.zul.Treeitem)o).getId()); first = false; } msg.setValue(sb.toString())'>
+			<treechildren>
+				<treeitem id="ti1" label="ti1" />
+				<treeitem id="ti2" label="ti2" />
+				<treeitem id="ti3" label="ti3" />
+			</treechildren>
+		</tree>
+		<tabbox id="tb1" onSelect='msg.setValue(self.getSelectedTab().getId())'>
+			<tabs>
+				<tab id="tab1" label="tab1" />
+				<tab id="tab2" label="tab2" />
+				<tab id="tab3" label="tab3" />
+			</tabs>
+		</tabbox>
+	</vbox>
 </zk>

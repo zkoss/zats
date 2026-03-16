@@ -68,7 +68,7 @@ public abstract class AbstractUploadAgentBuilder implements OperationAgentBuilde
 		}
 
 		public String getContentType() {
-			return contentType;
+			return contentType != null ? contentType : "application/octet-stream";
 		}
 
 		public InputStream getInputStream() {
@@ -90,14 +90,11 @@ public abstract class AbstractUploadAgentBuilder implements OperationAgentBuilde
 			if (file == null)
 				throw new NullPointerException("file can't be null.");
 
-			InputStream is = null;
 			try {
-				is = new BufferedInputStream(new FileInputStream(file));
+				InputStream is = new BufferedInputStream(new FileInputStream(file));
 				upload(file.getName(), is, contentType);
 			} catch (IOException e) {
 				throw new AgentException(e.getMessage(), e);
-			} finally {
-				Util.close(is);
 			}
 		}
 

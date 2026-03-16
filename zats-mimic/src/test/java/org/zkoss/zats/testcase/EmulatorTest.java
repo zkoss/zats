@@ -46,9 +46,9 @@ public class EmulatorTest extends HttpServlet {
 		dir1.mkdirs();
 		dir2.mkdirs();
 		String html = "<html><body>hello</body></html>";
-		copy(new ByteArrayInputStream(html.getBytes("ISO-8859-1")), new File(dir2, "index.html"));
-		emulator = new EmulatorBuilder().addContentRoot(dir1.getAbsolutePath()).setDescriptor(EmulatorTest.class.getResource("web.xml").toString())
-				.addContentRoot(dir2.getAbsolutePath()).create();
+		copy(new ByteArrayInputStream(html.getBytes("ISO-8859-1")), new File(dir1, "index.html"));
+		emulator = new EmulatorBuilder().addContentRoot(dir1.getCanonicalPath()).setDescriptor(EmulatorTest.class.getResource("web.xml").toString())
+				.create();
 
 		Emulator e = emulator;
 		URL url = new URL(e.getAddress() + "/echo");

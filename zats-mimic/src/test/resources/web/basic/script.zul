@@ -1,6 +1,6 @@
 <zk xmlns="http://www.zkoss.org/2005/zul">
 
-    <script type="text/javascript">
+    <script>
         setTimeout('a()', 400);
         setTimeout('b()', 400);
 

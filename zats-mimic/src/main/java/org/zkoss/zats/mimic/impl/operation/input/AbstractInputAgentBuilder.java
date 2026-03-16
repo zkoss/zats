@@ -12,8 +12,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zats.mimic.impl.operation.input;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.AgentException;
@@ -116,7 +118,10 @@ public abstract class AbstractInputAgentBuilder implements OperationAgentBuilder
 	
 	protected static Number parseNumber(String format, String value) {
 		try {
-			return new DecimalFormat(format).parse(value);
+			DecimalFormat df = new DecimalFormat(format, DecimalFormatSymbols.getInstance(Locale.US));
+			df.setParseBigDecimal(true);
+			df.setGroupingUsed(true);
+			return df.parse(value.trim());
 		} catch (Exception e) {
 			throw new AgentException(e.getMessage(),e);
 		}

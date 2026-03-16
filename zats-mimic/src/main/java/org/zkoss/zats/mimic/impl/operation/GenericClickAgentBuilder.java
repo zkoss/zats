@@ -11,6 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zats.mimic.impl.operation;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.zkoss.zats.mimic.ComponentAgent;
@@ -42,25 +43,40 @@ public class GenericClickAgentBuilder implements OperationAgentBuilder<Component
 		public void click() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_CLICK;
-			Map<String, Object> data = EventDataManager.getInstance().build(new MouseEvent(cmd, (Component)target.getDelegatee()));
-			((ClientCtrl)target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
-			((ClientCtrl)target.getClient()).flush(desktopId);
+			Component comp = (Component)target.getDelegatee();
+			Map<String, Object> data = EventDataManager.getInstance().build(new MouseEvent(cmd, comp, 0, 0, 0, 0, 0));
+			ClientCtrl cctrl = (ClientCtrl)target.getClient();
+			cctrl.postUpdate(desktopId, target.getUuid(), cmd, data, false);
+			
+			// For Menuitem with autocheck, ZK might expect an onCheck event alongside onClick
+			if (comp instanceof org.zkoss.zul.Menuitem) {
+				org.zkoss.zul.Menuitem mi = (org.zkoss.zul.Menuitem) comp;
+				if (mi.isAutocheck()) {
+					boolean checked = !mi.isChecked();
+					Map<String, Object> checkData = EventDataManager.getInstance().build(new org.zkoss.zk.ui.event.CheckEvent(Events.ON_CHECK, mi, checked));
+					cctrl.postUpdate(desktopId, target.getUuid(), Events.ON_CHECK, checkData, false);
+				}
+			}
+			
+			cctrl.flush(desktopId);
 		}
 
 		public void doubleClick() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_DOUBLE_CLICK;
-			Map<String, Object> data = EventDataManager.getInstance().build(new MouseEvent(cmd, (Component)target.getDelegatee()));
-			((ClientCtrl)target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
-			((ClientCtrl)target.getClient()).flush(desktopId);
+			Map<String, Object> data = EventDataManager.getInstance().build(new MouseEvent(cmd, (Component)target.getDelegatee(), 0, 0, 0, 0, 0));
+			ClientCtrl cctrl = (ClientCtrl)target.getClient();
+			cctrl.postUpdate(desktopId, target.getUuid(), cmd, data, false);
+			cctrl.flush(desktopId);
 		}
 
 		public void rightClick() {
 			String desktopId = target.getDesktop().getId();
 			String cmd = Events.ON_RIGHT_CLICK;
-			Map<String, Object> data = EventDataManager.getInstance().build(new MouseEvent(cmd, (Component)target.getDelegatee()));
-			((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
-			((ClientCtrl) getClient()).flush(desktopId);
+			Map<String, Object> data = EventDataManager.getInstance().build(new MouseEvent(cmd, (Component)target.getDelegatee(), 0, 0, 0, 0, 0));
+			ClientCtrl cctrl = (ClientCtrl) target.getClient();
+			cctrl.postUpdate(desktopId, target.getUuid(), cmd, data, false);
+			cctrl.flush(desktopId);
 		}
 	}
 }

@@ -59,7 +59,8 @@ public class ColorboxInputAgentBuilder implements OperationAgentBuilder<Componen
 			if (value.matches(COLOR_PATTERN)){
 				String cmd = Events.ON_CHANGE;
 				Map<String, Object> data = new HashMap<String, Object>();
-				data.put("color",value); // parse value and put into data collection
+				data.put("color", value);
+				data.put("value", value); // ZK 10 might expect 'value'
 				String desktopId = target.getDesktop().getId();
 				((ClientCtrl) target.getClient()).postUpdate(desktopId, target.getUuid(), cmd, data, false);
 				((ClientCtrl) getClient()).flush(desktopId);
