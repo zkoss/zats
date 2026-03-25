@@ -39,7 +39,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.jetty.util.MultiMap;
 import org.eclipse.jetty.util.UrlEncoded;
 
 import org.zkoss.zats.ZatsException;
@@ -300,10 +299,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 	}
 
 	private String encode(String value) {
-		MultiMap<String> mm = new MultiMap<>();
-		mm.add("v", value);
-		String encoded = UrlEncoded.encode(mm, StandardCharsets.UTF_8, true);
-		return encoded.substring(2); // remove "v="
+		return java.net.URLEncoder.encode(value, StandardCharsets.UTF_8);
 	}
 
 	@SuppressWarnings("unchecked")

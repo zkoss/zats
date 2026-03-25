@@ -5,10 +5,10 @@
 	Description:
 		
 	History:
-		Mar 20, 2012 Created by pao
+		2012/3/22 Created by dennis
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
- */
+*/
 package org.zkoss.zats.testcase;
 
 import static org.junit.Assert.assertEquals;
