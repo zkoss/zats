@@ -138,18 +138,17 @@ public class JettyEmulator implements Emulator {
 				@Override
 				public void lifeCycleStarted(LifeCycle event) {
                     try {
-                        System.err.println("DEBUG: ClassLoader for WebAppContext: " + contextHandler.getClassLoader());
+                        logger.fine("ClassLoader for WebAppContext: " + contextHandler.getClassLoader());
                         Class<?> clazz = contextHandler.getClassLoader().loadClass("org.apache.commons.io.function.IOIterator");
-                        System.err.println("DEBUG: Loaded IOIterator from: " + clazz.getProtectionDomain().getCodeSource().getLocation());
+                        logger.fine("Loaded IOIterator from: " + clazz.getProtectionDomain().getCodeSource().getLocation());
                     } catch (Throwable t) {
-                        System.err.println("DEBUG: Failed to load IOIterator:");
-                        t.printStackTrace();
+                        logger.log(Level.WARNING, "Failed to load IOIterator", t);
                     }
 					// Apply multipart config to all servlets
 					MultipartConfigElement config = new MultipartConfigElement(tmpDir.getAbsolutePath());
-					System.err.println("Applying MultipartConfig to servlets...");
+					logger.fine("Applying MultipartConfig to servlets...");
 					for (ServletHolder holder : contextHandler.getServletHandler().getServlets()) {
-						System.err.println("  Servlet: " + holder.getName());
+						logger.fine("  Servlet: " + holder.getName());
 						holder.getRegistration().setMultipartConfig(config);
 					}
 					queue.add("lifeCycleStarted");
