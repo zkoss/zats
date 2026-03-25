@@ -30,7 +30,7 @@
 		<progressmeter id="progressmeter" value="50" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
 		<separator id="separator" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
 		<space id="space" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
-		<toolbar id="toolbar">
+		<toolbar id="toolbar" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)">
 			<toolbarbutton id="toolbarbutton" label="toolbarbutton" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>
 		</toolbar>
 		<bandbox id="bandbox" onClick="show(event)" onDoubleClick="show(event)" onRightClick="show(event)" onMouseOver="show(event)" onMouseOut="show(event)"/>

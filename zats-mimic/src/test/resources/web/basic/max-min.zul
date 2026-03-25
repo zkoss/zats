@@ -35,7 +35,6 @@
 				flagVal = ((MinimizeEvent)event).isMinimized();
 			}
 			
-			System.err.println("onEvent: " + event.getName() + " target: " + event.getTarget().getId() + " flag: " + flagVal);
 			flag.value = "" + flagVal;
 		}
 	};
