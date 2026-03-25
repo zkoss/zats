@@ -51,7 +51,7 @@ public class DecimalInputAgentBuilder extends AbstractInputAgentBuilder {
 				}
 				
 				data.put("value", number);
-				data.put("raw", val); // ZK 10 might need this
+				data.put("rawValue", val);
 			}
 		}
 		

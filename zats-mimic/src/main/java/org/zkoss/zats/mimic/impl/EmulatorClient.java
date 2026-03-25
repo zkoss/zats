@@ -362,7 +362,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 				}
 
 				String raw = getReplyString(c.getInputStream(), parseCharset(c));
-				System.err.println("AU Response: " + raw);
+				logger.fine("AU Response: " + raw);
 
 				// ZATS-25: filter non-JSON part (i.e. real JS code)
 				raw = AuUtility.filterNonJSON(raw);

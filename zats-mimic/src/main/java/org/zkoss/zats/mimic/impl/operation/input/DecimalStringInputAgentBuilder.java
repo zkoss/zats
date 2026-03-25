@@ -13,6 +13,7 @@ package org.zkoss.zats.mimic.impl.operation.input;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.zats.mimic.ComponentAgent;
@@ -25,6 +26,7 @@ import org.zkoss.zul.impl.FormatInputElement;
  *
  */
 public class DecimalStringInputAgentBuilder extends AbstractInputAgentBuilder {
+	private static final Logger logger = Logger.getLogger(DecimalStringInputAgentBuilder.class.getName());
 	public InputAgent getOperation(ComponentAgent agent) {
 		return new InputAgentImpl(agent);
 	}
@@ -44,9 +46,9 @@ public class DecimalStringInputAgentBuilder extends AbstractInputAgentBuilder {
 				String f = ((FormatInputElement) comp).getFormat();
 				String val = raw.trim();
 				Object number = f != null ? parseNumber(f, val) : new BigDecimal(val.replaceAll(",", ""));
-				System.err.println("Decimalbox input: " + val + " parsed: " + number + " format: " + f);
+				logger.fine("Decimalbox input: " + val + " parsed: " + number + " format: " + f);
 				data.put("value", number.toString());
-				data.put("raw", val); // ZK 10 might need this
+				data.put("rawValue", val);
 			}
 		}
 		
