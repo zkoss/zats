@@ -13,6 +13,7 @@ package org.zkoss.zats.testcase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
@@ -189,6 +190,60 @@ public class EnvironmentTest {
 		}
 	}
 	
+	@Test
+	public void testEncodeSpecialCharacters() {
+		// Verify that special characters survive the AU request encode/decode round-trip.
+		// encode() is used internally for URL-encoding AU payloads; this test ensures
+		// characters like space, +, %, &, and Unicode are handled correctly.
+		Zats.init(".");
+		try {
+			String[] testValues = {
+				"hello world",       // space
+				"a+b",              // plus sign
+				"100%done",         // percent
+				"key=val&foo=bar",  // equals and ampersand
+				"\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc", // German umlauts
+				"\u4f60\u597d",     // Chinese characters
+			};
+			for (String value : testValues) {
+				DesktopAgent desktop = Zats.newClient().connect("/~./basic/type1.zul");
+				Label label = desktop.query("#l10").as(Label.class);
+				assertEquals("", label.getValue());
+				desktop.query("#inp10").as(InputAgent.class).type(value);
+				assertEquals("Failed for: " + value, value, label.getValue());
+			}
+		} finally {
+			Zats.cleanup();
+			Zats.end();
+		}
+	}
+
+	@Test
+	public void testReInit() {
+		// Verify that calling init() on an already-initialized environment
+		// implicitly destroys the previous instance and re-initializes cleanly.
+		DefaultZatsEnvironment ctx = new DefaultZatsEnvironment();
+		try {
+			ctx.init("./src/test/resources/web");
+			Client client1 = ctx.newClient();
+			DesktopAgent desktop1 = client1.connect("/basic/click.zul");
+			assertNotNull(desktop1);
+
+			// Re-init without explicit destroy — should succeed, not throw
+			ctx.init("./src/test/resources/web");
+			Client client2 = ctx.newClient();
+			DesktopAgent desktop2 = client2.connect("/basic/click.zul");
+			assertNotNull(desktop2);
+
+			// The new environment should be fully functional
+			assertEquals("Hello World!", desktop2.query("#msg").as(Label.class).getValue());
+			desktop2.query("#btn").as(ClickAgent.class).click();
+			assertEquals("Welcome", desktop2.query("#msg").as(Label.class).getValue());
+		} finally {
+			ctx.destroy();
+		}
+	}
+
 	@Test
 	public void testCookies() {
 		Zats.init(".");
