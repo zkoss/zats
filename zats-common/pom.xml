@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.zats</groupId>
 	<artifactId>zats-common</artifactId>
-	<version>10.1.0-SNAPSHOT</version>
+	<version>10.2.1-SNAPSHOT</version>
 	<name>ZK Application Test Suite - Common</name>
 	<description>ZK Application Test Suite - Common</description>
 	<url>https://www.zkoss.org/zats</url>
@@ -42,6 +42,7 @@
 	</developers>
 	<packaging>jar</packaging>
 	<properties>
+		<zk.version>10.2.1-jakarta</zk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<repositories>
@@ -64,7 +65,7 @@
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zul</artifactId>
-			<version>10.0.0-jakarta</version>
+			<version>${zk.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

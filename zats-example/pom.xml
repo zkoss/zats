@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.zats</groupId>
 	<artifactId>zats-example</artifactId>
-	<version>10.1.0-SNAPSHOT</version>
+	<version>10.2.1-SNAPSHOT</version>
 	<name>ZK Application Test Suite - Example</name>
 	<url>https://www.zkoss.org/zats</url>
 	<licenses>
@@ -45,7 +45,7 @@
 		<maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
-		<zk.version>10.0.0-jakarta-Eval</zk.version>
+		<zk.version>10.2.1-jakarta</zk.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -53,8 +53,8 @@
 			<url>https://mavensync.zkoss.org/maven2</url>
 		</repository>
 		<repository>
-			<id>ZK EE Evaluation</id>
-			<url>https://mavensync.zkoss.org/zk/ee-eval</url>
+			<id>ZK EE Eval</id>
+			<url>https://mavensync.zkoss.org/eval/</url>
 		</repository>
 	</repositories>
 	<dependencies>
@@ -66,7 +66,7 @@
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zkex</artifactId>
-			<version>${zk.version}</version>
+			<version>${zk.version}-Eval</version>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
@@ -89,7 +89,7 @@
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
 			<artifactId>jakarta.servlet-api</artifactId>
-			<version>5.0.0</version>
+			<version>6.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

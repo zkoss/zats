@@ -1,10 +1,39 @@
+ZATS Mimic 10.2.1-jakarta
+* Features
+  ZATS-79: Modernize ZATS for ZK 10 Jakarta and Jetty 12 compatibility (contributed by Michael Szediwy)
+  + Upgraded to Jetty 12 (ee10) with full Jakarta EE 10 / Servlet 6.0 support
+  + ZatsEnvironment.init() now automatically destroys any existing emulator before re-initializing,
+    preventing cascading "already started up" failures across test suites
+  + Multipart/file-upload support restored via MultipartConfigElement applied at Jetty startup
+  + EmulatorBuilder refactored to use canonical paths for content roots (macOS/Jetty 12 compatibility)
+  + URL encoding in AU requests simplified to use URLEncoder directly
+  + Decimal and colorbox input agents fixed: use correct "rawValue" field name for ZK 10
+  + MaximizeEvent/MinimizeEvent restored to use comp.getWidth()/getHeight()
+  + JSON parser now leniently handles unrecognized escape sequences (e.g. \- from Java Encoder API),
+    fixing download URL parsing when Filedownload.save() is called during doAfterCompose()
+  + Download URL ;jsessionid= path parameter stripped before fetching, for Jetty 12 compatibility
+
+* Bugs
+  + Fixed: download triggered in doAfterCompose() fails with FileNotFoundException under Jetty 12
+  + Fixed: re-init of ZatsEnvironment without prior destroy caused emulator startup failure
+  + Fixed: EmulatorTest static resource serving broken on macOS with Jetty 12 (canonical path fix)
+  + Fixed: special characters (space, +, %, &, Unicode) lost in AU request encode/decode round-trip
+
+* Upgrade Notes
+  + Requires ZK 10.2.1-jakarta (or compatible)
+  + Requires JDK 11+
+  + Upgraded Jetty from 11 to 12.0.10 (ee10); Jakarta EE 10 / Servlet 6.0 API required
+  + commons-io harmonized to 2.16.1 across all modules (Multi-Release JAR support)
+
+  Thanks to Michael Szediwy for contributing the Modernization for ZK 10 Jakarta and Jetty 12 support.
+	--------
 ZATS Mimic 10.1.0-jakarta
 * Features
 * Bugs
 
 * Upgrade Notes
 	+ Support for ZK v10.1.0 with Java Encoder APIs.
-
+	--------
 ZATS Mimic 10.0.0-jakarta
 * Features
 * Bugs

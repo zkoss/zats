@@ -52,7 +52,8 @@ public class DownloadHandler implements UpdateResponseHandler, LayoutResponseHan
 		// get path and create downloadable file
 		if (download != null) {
 			Object[] data = download.getRawData();
-			String path = data[0].toString().replaceAll("\\\\", ""); // remove unnecessary char.
+			String path = data[0].toString().replaceAll("\\\\", "") // remove unnecessary char.
+					.replaceAll(";jsessionid=[^;?#]*", ""); // strip URL-based session ID (Jetty 12 doesn't strip it from servlet path)
 			if (logger.isLoggable(Level.FINEST))
 				logger.finest("download event: " + path);
 			Resource downloadable = new DownloadableImpl(desktop, path);
