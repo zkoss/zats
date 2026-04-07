@@ -50,11 +50,11 @@ fi
 function upVer {
 	if [ "$isFL" == "FL" ] ; then
 		sed -i "/version>/,/<\//s/>$oldVersion.*<\//>$newVersion-SNAPSHOT<\//" $1/pom.xml
-		echo "$1 pom.xml"
+		echo "$1 $oldVersion -> $newVersion-SNAPSHOT pom.xml"
 		grep -n --color=auto $newVersion"-SNAPSHOT" $1/pom.xml
 	else
 		sed -i "/version>/,/<\//s/>$oldVersion.*<\//>$newVersion<\//" $1/pom.xml
-		echo "$1 pom.xml"
+		echo "$1 $oldVersion -> $newVersion pom.xml"
 		grep -n --color=auto $newVersion $1/pom.xml
 	fi
 	
