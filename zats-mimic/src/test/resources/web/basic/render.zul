@@ -1,4 +1,3 @@
-<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
 <zk>
 	<zscript>
 		<![CDATA[
@@ -44,17 +43,24 @@
 			<listhead>
 				<listheader label="listheader" />
 			</listhead>
-			<listitem self="@{each='data' }">
-				<listcell>
-					<label value="@{data }" />
-				</listcell>
-			</listitem>
+			<template name="model">
+				<listitem>
+					<listcell>
+						<label value="${each}" />
+					</listcell>
+				</listitem>
+			</template>
 		</listbox>
 		<separator />
 		<grid id="grid" model="${listmodel }" width="600px" height="200px">
 			<columns>
 				<column label="column" />
 			</columns>
+			<template name="model">
+				<row>
+					<label value="${each}" />
+				</row>
+			</template>
 		</grid>
 	</vbox>
 </zk>

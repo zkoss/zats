@@ -413,6 +413,8 @@ public class JSONParserStream {
 					sb.append(readUnicode());
 					break;
 				default:
+					// Lenient: append the literal character for unrecognized escapes (e.g. \- from Java Encoder)
+					sb.append((char) c);
 					break;
 				}
 				break;

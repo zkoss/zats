@@ -90,14 +90,10 @@ public abstract class AbstractUploadAgentBuilder implements OperationAgentBuilde
 			if (file == null)
 				throw new NullPointerException("file can't be null.");
 
-			InputStream is = null;
 			try {
-				is = new BufferedInputStream(new FileInputStream(file));
-				upload(file.getName(), is, contentType);
+				upload(file.getName(), new BufferedInputStream(new FileInputStream(file)), contentType);
 			} catch (IOException e) {
 				throw new AgentException(e.getMessage(), e);
-			} finally {
-				Util.close(is);
 			}
 		}
 

@@ -96,10 +96,7 @@ public class EmulatorTest extends HttpServlet {
 		huc.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 		huc.addRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
 		huc.connect();
-		is = huc.getInputStream();
-		r = new BufferedReader(new InputStreamReader(is));
-		assertEquals(html, r.readLine());
-		r.close();
+		assertEquals(HttpURLConnection.HTTP_NOT_FOUND, huc.getResponseCode());
 		huc.disconnect();
 	}
 

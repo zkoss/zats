@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.zats</groupId>
 	<artifactId>zats-common</artifactId>
-	<version>10.1.0-SNAPSHOT</version>
+	<version>10.2.1-SNAPSHOT</version>
 	<name>ZK Application Test Suite - Common</name>
 	<description>ZK Application Test Suite - Common</description>
 	<url>https://www.zkoss.org/zats</url>
@@ -42,8 +42,19 @@
 	</developers>
 	<packaging>jar</packaging>
 	<properties>
+		<zk.version>10.2.1</zk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	<repositories>
+		<repository>
+			<id>ZK CE</id>
+			<url>https://mavensync.zkoss.org/maven2</url>
+		</repository>
+		<repository>
+			<id>ZK EE Eval</id>
+			<url>https://mavensync.zkoss.org/eval/</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -54,8 +65,13 @@
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zul</artifactId>
-			<version>6.0.0</version>
+			<version>${zk.version}</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.16.1</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -65,8 +81,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.2</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>11</source>
+					<target>11</target>
 				</configuration>
 			</plugin>
 			<plugin>

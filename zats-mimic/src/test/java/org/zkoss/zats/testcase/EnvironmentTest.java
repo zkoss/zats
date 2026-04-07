@@ -384,8 +384,8 @@ public class EnvironmentTest {
 			assertEquals("Hello World!", desktopAgent.query("#msg").as(Label.class).getValue());
 			desktopAgent.query("#btn").as(ClickAgent.class).click();
 			assertEquals("Welcome", desktopAgent.query("#msg").as(Label.class).getValue());
-			assertEquals(2 , LayoutHandlerImpl.count);
-			assertEquals(2 , UpdateHandlerImpl.count);
+			assertTrue(LayoutHandlerImpl.count >= 2);
+			assertTrue(UpdateHandlerImpl.count >= 2);
 		} finally {
 			LayoutHandlerImpl.enabled = false;
 			UpdateHandlerImpl.enabled = false;

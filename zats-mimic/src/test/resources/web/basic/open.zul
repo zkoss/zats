@@ -29,7 +29,7 @@
 			<caption>aGroupbox</caption>
 			<label>groupbox content</label>
 		</groupbox>
-		<grid id="aGrid" fixedLayout="true">
+		<grid id="aGrid">
 			<columns>
 				<column width="150px">column 1</column>
 				<column>column 2</column>

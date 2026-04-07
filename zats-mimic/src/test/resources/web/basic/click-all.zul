@@ -8,7 +8,6 @@
 		<hbox id="comps">
 			<vbox id="essential">
 				<a label="a"></a>
-				<applet msg="applet" width="100px" height="50px" />
 				<button label="button" />
 				<captcha width="100px" height="50px" />
 				<!-- zk6

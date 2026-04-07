@@ -49,7 +49,7 @@
 		<module>../zats-mimic-ext</module>
 		<module>../zats-example</module>
 	</modules>
-	<version>10.1.0-SNAPSHOT</version>
+	<version>10.2.1-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
@@ -117,6 +117,14 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.2.2</version>
+				<configuration>
+					<useManifestOnlyJar>false</useManifestOnlyJar>
+				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>

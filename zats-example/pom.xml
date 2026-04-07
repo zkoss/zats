@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.zats</groupId>
 	<artifactId>zats-example</artifactId>
-	<version>10.1.0-SNAPSHOT</version>
+	<version>10.2.1-SNAPSHOT</version>
 	<name>ZK Application Test Suite - Example</name>
 	<url>https://www.zkoss.org/zats</url>
 	<licenses>
@@ -43,9 +43,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<zk.version>8.5.0</zk.version>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+		<zk.version>10.2.1</zk.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -53,8 +53,8 @@
 			<url>https://mavensync.zkoss.org/maven2</url>
 		</repository>
 		<repository>
-			<id>ZK EE Evaluation</id>
-			<url>https://mavensync.zkoss.org/zk/ee-eval</url>
+			<id>ZK EE Eval</id>
+			<url>https://mavensync.zkoss.org/eval/</url>
 		</repository>
 	</repositories>
 	<dependencies>
@@ -86,6 +86,12 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.31</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<description>Examples code for ZATS Essentials and other examples.</description>

@@ -1,3 +1,14 @@
+ZATS Mimic 10.2.1
+* Features
+
+* Bugs
+  Refined ZATS Mimic compatibility tests for ZK 10.2.1 component behavior changes.
+  Fixed Colorbox input AU request handling for ZK 10.2.1.
+  Fixed UploadAgent file upload stream handling during multipart requests.
+
+* Upgrade Notes
+	+ Support for ZK v10.2.1.
+
 ZATS Mimic 10.1.0
 * Features
 * Bugs
