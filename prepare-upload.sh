@@ -3,7 +3,7 @@ VERSION=$1
 
 rm -rf ./target/to_upload
 
-UPLOAD_FOLDER=./target/to_upload/$VERSION
+UPLOAD_FOLDER=./target/to_upload/
 mkdir -p $UPLOAD_FOLDER
 
 
